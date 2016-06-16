@@ -1,0 +1,30 @@
+{% extends "material/base.html" %}
+
+{% block content %}
+<h2>Snapshot</h2>
+<form method="POST" enctype="multipart/form-data">
+    <div class="mdl-grid mdl-grid--no-spacing">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="title" name="title">
+        <label class="mdl-textfield__label" for="title">제목</label>
+      </div>
+  </div>
+    <div class="mdl-grid mdl-grid--no-spacing">
+      <div class="mdl-textfield mdl-js-textfield">
+        <textarea class="mdl-textfield__input" type="text" rows="3" maxrows="6" id="content" name="content"></textarea>
+        <label class="mdl-textfield__label" for="content">내용</label>
+      </div>
+  </div>
+    <div class="mdl-grid mdl-grid--no-spacing">
+      <div class="mdl-textfield mdl-js-textfield">
+          <input type="file" id="photo" name="photo" />
+      </div>
+  </div>
+    <div class="mdl-grid mdl-grid--no-spacing">
+      <div class="btn-group">
+        <button type="reset" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">취소</button>
+        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">등록</button>
+      </div>
+  </div>
+</form>
+{% endblock %}
