@@ -6,22 +6,29 @@
     <!-- Card Projects -->
     <div class="card">
         <div class="card-image">
-            <img class="img-responsive" src="{{ url_for('static', filename='data/' + post.filename) }}">
+            <a href="{{ url_for('main.post_detail', post_id=post.id) }}"><img class="img-responsive" src="{{ url_for('static', filename='data/' + post.filename) }}"></a>
             <span class="card-title">{{ post.title }}</span>
         </div>
 
         <div class="card-content">
-            <p>{{ post.content }}</p>
+            <p>{{ post.content[:70] }}</p>
         </div>
 
-        <div class="card-action">
-            <a href="#" target="new_blank">Link</a>
-            <a href="#" target="new_blank">Link</a>
-            <a href="#" target="new_blank">Link</a>
-            <a href="#" target="new_blank">Link</a>
-            <a href="#" target="new_blank">Link</a>
+        <div class="card-action btn-group btn-group-justified">
+            <a href="#" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
+            <a href="#" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
+            <a href="#" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
         </div>
     </div>
     {% endfor %}
 </div>
+<script src="https://cdn.jsdelivr.net/masonry/4.1.0/masonry.pkgd.min.js"></script>
+<script>
+$('.cards').masonry({
+  // options
+  itemSelector: '.card',
+  columnWidth: 300,
+  gutter: 20,
+});
+</script>
 {% endblock %}

@@ -42,6 +42,14 @@ def post_new():
     return render_template(TEMPLATE + '/main/post_edit.html')
 
 
+@main.route('/post/<post_id>')
+def post_detail(post_id):
+    post = db.session.query(Post.id, Post.title, Post.content, Photo.filename)\
+        .join(Photo, Photo.post_id == Post.id)\
+        .filter(Post.id == post_id).first()
+    return render_template(TEMPLATE + '/main/post_detail.html', post=post)
+
+
 @main.route('/join', methods=['GET','POST'])
 def join():
     form = JoinForm(request.form)

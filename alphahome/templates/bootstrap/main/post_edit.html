@@ -1,45 +1,52 @@
-{% extends "bootstrap/base.html" %}
+{% extends 'bootstrap/base.html' %}
 
 {% block content %}
-<h2>스냅샷</h2>
-<div class="well bs-component">
+<div class="well bs-component col-lg-8">
     <form method="POST" class="form-horizontal" enctype="multipart/form-data">
         <fieldset>
-            <legend>공간 인테리어 사진을 등록해주세요.</legend>
+            <legend>공간 사진을 등록해주세요.</legend>
+
             <div class="form-group">
-              <label for="inputTitle" class="col-lg-2 control-label">제목</label>
-              <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputTitle" name="title" placeholder="제목">
-              </div>
+                <div id="photoPreview"></div>
             </div>
+
             <div class="form-group">
-              <label for="textArea" class="col-lg-2 control-label">내용</label>
-              <div class="col-lg-10">
-                <textarea class="form-control" rows="3" id="textArea" name="content"></textarea>
-                <span class="help-block">이미지에 대한 설명을 등록해주세요.</span>
-              </div>
+                <div class="col-lg-10 col-lg-offset-1">
+                    <input type="text" class="form-control" id="inputTitle" name="title" placeholder="제목">
+                </div>
             </div>
+
             <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                  <input type="file" id="photo" name="photo" />
-              </div>
+                <div class="col-lg-10 col-lg-offset-1">
+                    <textarea class="form-control" rows="3" id="textArea" name="content" placeholder="내용"></textarea>
+                    <span class="help-block">이미지에 대한 설명을 등록해주세요.</span>
+                </div>
             </div>
+
             <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                <button type="reset" class="btn btn-default">취소</button>
-                <button type="submit" class="btn btn-primary">등록</button>
-              </div>
+                <div class="col-lg-10 col-lg-offset-1">
+                    <input type="file" id="photo" name="photo" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <button type="reset" class="btn btn-default">취소</button>
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </div>
             </div>
         </fieldset>
     </form>
 </div>
 
 <script>
-/*
 var photo = document.getElementById('photo'),
     preview = document.getElementById('photoPreview');
 
 photo.addEventListener('change', function() {
+    while (preview.firstChild) {
+        preview.removeChild(preview.firstChild);
+    }
     loadPhoto(photo);
 });
 
@@ -49,14 +56,12 @@ function loadPhoto(dataURL) {
     reader.onload = function (e) {
         var img = new Image();
         img.src = e.target.result;
-        img.width = preview.offsetWidth;
+        img.height = preview.offsetHeight;
         img.onload = function() {
             preview.appendChild(this);
-            //preview.style.backgroundImage = 'url(' + this.src + ')';
-            //preview.style.height = preview.offsetWidth * (this.height / this.width);
+            preview.style.width = preview.offsetHeight * (this.width / this.height);
         };
     }
 }
-*/
 </script>
 {% endblock %}
