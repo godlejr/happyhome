@@ -1,12 +1,10 @@
-from flask import render_template, request, flash, redirect, url_for
-from alphahome.forms import JoinForm
-from alphahome.main import main
-from alphahome.models import User, Post, Photo, db
-import werkzeug
 
-import os
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from alphahome.forms import JoinForm
+from alphahome.models import User, Post, Photo, db
 
 TEMPLATE = 'bootstrap'
+main = Blueprint('main', __name__)
 
 
 @main.route('/')
@@ -34,3 +32,4 @@ def join():
 @main.route('/users')
 def user_list():
     return render_template(TEMPLATE + '/main/user_list.html', users=User.query.all())
+

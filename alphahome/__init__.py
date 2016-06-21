@@ -1,8 +1,9 @@
+import os
+
+import config
+from alphahome.models import db
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
-from alphahome.models import db
-import config
-import os
 
 
 def create_app():
@@ -22,11 +23,11 @@ def create_app():
     toolbar.init_app(app)
 
     # Application Blueprints
-    from alphahome.main import main as main_blueprint
-    from alphahome.snapshot import snapshot as snapshot_blueprint
+    from alphahome.views.main import main as main_blueprint
+    from alphahome.views.snapshot import snapshot as snapshot_blueprint
 
     app.register_blueprint(main_blueprint)
-    app.register_blueprint(snapshot_blueprint)
+    app.register_blueprint(snapshot_blueprint, url_prefix='/snapshot')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
 
