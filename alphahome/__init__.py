@@ -23,8 +23,10 @@ def create_app():
 
     # Application Blueprints
     from alphahome.main import main as main_blueprint
+    from alphahome.snapshot import snapshot as snapshot_blueprint
 
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(snapshot_blueprint)
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
 
