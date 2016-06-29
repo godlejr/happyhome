@@ -2,7 +2,7 @@ import os
 
 import boto3
 import shortuuid
-from alphahome.models import db, Snapshot, Photo
+from happyathome.models import db, Snapshot, Photo
 from flask import Blueprint, render_template, request, redirect, url_for, abort
 from werkzeug.utils import secure_filename
 

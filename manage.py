@@ -1,5 +1,5 @@
 from flask_script import Manager
-from alphahome import create_app
+from happyathome import create_app
 
 app = create_app()
 manager = Manager(app)

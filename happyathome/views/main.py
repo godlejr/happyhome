@@ -1,7 +1,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from alphahome.forms import JoinForm
-from alphahome.models import db, User, Snapshot
+from happyathome.forms import JoinForm
+from happyathome.models import db, User, Snapshot
 
 TEMPLATE = 'bootstrap'
 main = Blueprint('main', __name__)

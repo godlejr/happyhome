@@ -1,7 +1,7 @@
 import os
 
 import config
-from alphahome.models import db
+from happyathome.models import db
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -25,10 +25,10 @@ def create_app():
     toolbar.init_app(app)
 
     # Application Blueprints
-    from alphahome.views.main import main as main_blueprint
-    from alphahome.views.interior import interior as interior_blueprint
-    from alphahome.views.snapshot import snapshot as snapshot_blueprint
-    from alphahome.views.magazine import magazine as magazine_blueprint
+    from happyathome.views.main import main as main_blueprint
+    from happyathome.views.interior import interior as interior_blueprint
+    from happyathome.views.snapshot import snapshot as snapshot_blueprint
+    from happyathome.views.magazine import magazine as magazine_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(interior_blueprint, url_prefix='/interior')

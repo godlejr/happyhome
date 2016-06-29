@@ -3,7 +3,7 @@ import os
 import boto3
 import html2text
 import shortuuid
-from alphahome.models import db, Magazine, Photo, Interior
+from happyathome.models import db, Magazine, Photo, Interior
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for
 from werkzeug.utils import secure_filename
 
