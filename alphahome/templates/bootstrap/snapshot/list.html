@@ -1,35 +1,64 @@
-{% extends "bootstrap/base.html" %}
+{% extends "bootstrap/snapshot/base.html" %}
 
 {% block content %}
-<div class="cards">
+<div id="sidebar">
+    <div id="sidebar-title">
+        스냅샷
+    </div>
+    <div id="sidebar-body">
+        <ul>
+            <li class="cat-title">주거</li>
+            <li><a href="">아파트</a></li>
+            <li><a href="">빌라</a></li>
+            <li><a href="">주택</a></li>
+            <li><a href="">원룸</a></li>
+        </ul>
+        <ul>
+            <li class="cat-title">공간</li>
+            <li><a href="">침실</a></li>
+            <li><a href="">거실</a></li>
+            <li><a href="">주방</a></li>
+            <li><a href="">서재</a></li>
+            <li><a href="">현관</a></li>
+            <li><a href="">베란다</a></li>
+        </ul>
+        <ul>
+            <li class="cat-title">스타일</li>
+            <li>모던</li>
+            <li>엔틱</li>
+            <li>북유럽</li>
+        </ul>
+    </div>
+</div>
+
+<div id="content">
     {% for post in posts %}
-    <!-- Card Projects -->
     <div class="card">
-        <div class="card-image">
-            <a href="{{ url_for('snapshot.detail', post_id=post.id) }}"><img class="img-responsive" src="{{ url_for('static', filename='data/' + post.filename) }}"></a>
-            <span class="card-title">{{ post.title }}</span>
+        <div class="card-photo">
+            <a href="{{ url_for('snapshot.detail', snapshot_id=post.id) }}"><img src="http://s3.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}"></a>
         </div>
 
         <div class="card-content">
-            <p>{{ post.content[:70] }}</p>
+            <p>{{ post.content[:77] }}</p>
         </div>
 
         <div class="card-action btn-group btn-group-justified">
-            <a href="#" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
-            <a href="#" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
-            <a href="#" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
+            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
+            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
+            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
         </div>
     </div>
     {% endfor %}
 </div>
-<script src="https://cdn.jsdelivr.net/masonry/4.1.0/masonry.pkgd.min.js"></script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
 <script>
-$('.cards').masonry({
-  itemSelector: '.card',
-  fitWidth: true,
-  columnWidth: 300,
-  gutter: 20,
-  transitionDuration: '0.9s'
+$('#content').masonry({
+    itemSelector: '.card',
+    fitWidth: true,
+    columnWidth: 300,
+    gutter: 20,
+    transitionDuration: '0.8s'
 });
 </script>
 {% endblock %}

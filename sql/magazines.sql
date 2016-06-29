@@ -1,4 +1,4 @@
-CREATE TABLE `magazine` (
+CREATE TABLE `magazines` (
 	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '매거진ID',
 	`title` VARCHAR(255) NOT NULL COMMENT '제목' COLLATE 'utf8mb4_unicode_ci',
 	`content` TEXT NOT NULL COMMENT '내용' COLLATE 'utf8mb4_unicode_ci',

@@ -8,8 +8,9 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'secret'
     TEMPLATE = 'bootstrap'
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:4447@localhost/alphahome'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:1miglobal@inotone.cjj0w56trea4.ap-northeast-2.rds.amazonaws.com/happyathome'
 
 
 class ProductionConfig(Config):
@@ -23,6 +24,7 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
     DEVELOPMENT = True
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 class TestingConfig(Config):
     TESTING = True

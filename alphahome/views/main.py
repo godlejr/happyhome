@@ -1,7 +1,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from alphahome.forms import JoinForm
-from alphahome.models import User, Post, Photo, db
+from alphahome.models import db, User, Snapshot
 
 TEMPLATE = 'bootstrap'
 main = Blueprint('main', __name__)
@@ -9,7 +9,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    posts = db.session.query(Post.id, Post.title, Post.content, Photo.filename).join(Photo, Photo.post_id == Post.id).all()
+    posts = db.session.query(Snapshot).all()
     return render_template(TEMPLATE + '/main/index.html', posts=posts)
 
 

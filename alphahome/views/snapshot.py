@@ -1,8 +1,10 @@
 import os
 
-import werkzeug
-from alphahome.models import Post, Photo, db
-from flask import Blueprint, render_template, request, redirect
+import boto3
+import shortuuid
+from alphahome.models import db, Snapshot, Photo
+from flask import Blueprint, render_template, request, redirect, url_for, abort
+from werkzeug.utils import secure_filename
 
 TEMPLATE = 'bootstrap'
 snapshot = Blueprint('snapshot', __name__)
@@ -10,40 +12,44 @@ snapshot = Blueprint('snapshot', __name__)
 
 @snapshot.route('')
 def list():
-    posts = db.session.query(Post.id, Post.title, Post.content, Photo.filename).join(Photo, Photo.post_id == Post.id).all()
+    posts = db.session.query(Snapshot).order_by(Snapshot.id.desc()).all()
     return render_template(TEMPLATE + '/snapshot/list.html', posts=posts)
 
 
 @snapshot.route('/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
-        post = Post()
-        post.user_id = '1'
-        post.title = request.form['title']
-        post.content = request.form['content']
-        db.session.add(post)
-        db.session.flush()
-
         file = request.files['photo']
-        filename = werkzeug.secure_filename(file.filename)
-        filepath = os.path.join('/data/alphahome', filename)
-        print(filepath)
-        file.save(filepath)
+        file_blob = file.read()
+        file_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(file.filename)[1])))
+
+        s3 = boto3.resource('s3')
+        s3.Object('s3.inotone.co.kr', 'data/img/%s' % file_name).put(Body=file_blob, ContentType=file.content_type)
 
         photo = Photo()
-        photo.post_id = post.id
-        photo.filename = filename
-        photo.filesize = 0
-        db.session.add(photo)
+        photo.filename = file_name
+        photo.filesize = len(file_blob)
+
+        post = Snapshot()
+        post.user_id = '1'
+        post.photos = photo
+        post.content = request.form['content']
+        db.session.add(post)
         db.session.commit()
 
-        return redirect('/')
+        return redirect(url_for('snapshot.list'))
     return render_template(TEMPLATE + '/snapshot/edit.html')
 
 
-@snapshot.route('/<post_id>')
-def detail(post_id):
-    post = db.session.query(Post.id, Post.title, Post.content, Photo.filename)\
-        .join(Photo, Photo.post_id == Post.id)\
-        .filter(Post.id == post_id).first()
-    return render_template(TEMPLATE + '/snapshot/detail.html', post=post)
+@snapshot.route('/<snapshot_id>')
+def detail(snapshot_id):
+    try:
+        post = db.session.query(Snapshot).filter_by(id=snapshot_id).first()
+        posts = db.session.query(Snapshot) \
+            .filter(Snapshot.user_id == post.user_id) \
+            .filter(Snapshot.id != post.id) \
+            .order_by(Snapshot.id.desc()) \
+            .all()
+        return render_template(TEMPLATE + '/snapshot/detail.html', post=post, posts=posts)
+    except:
+        abort(404)
