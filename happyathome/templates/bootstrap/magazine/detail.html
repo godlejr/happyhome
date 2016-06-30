@@ -10,11 +10,10 @@
     <div class="col-md-3">
         <div class="row">
             <div class="content-relative">
-                <div class="cr-title">다른 사진</div>
                 <ul>
-                    {% for post in posts %}
-                        <li><a href="{{ url_for('interior.detail', interior_id=post.id) }}"><img src="http://static.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}" width="72.5" height="72.5" /></a></li>
-                    {% endfor %}
+                {% for post in posts %}
+                    <li><a href="{{ url_for('interior.detail', interior_id=post.id) }}"><img src="http://static.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}" width="85" height="85" /></a></li>
+                {% endfor %}
                 </ul>
             </div>
         </div>

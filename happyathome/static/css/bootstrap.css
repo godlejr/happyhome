@@ -298,6 +298,7 @@ code {
 .content-photo {
     width: 100%;
     overflow: hidden;
+    text-align: center;
 }
 .content-photo img {
     max-width: 100%;
