@@ -200,6 +200,7 @@ code {
     bottom: 0;
     color: #ffffff;
     padding: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 .interior-info .avatar {
     width: 45px;
@@ -267,37 +268,45 @@ code {
 
 
 #photoPreview {
-  width: 600px;
-  height: 400px;
+  width: 640px;
+  height: 360px;
   cursor: pointer;
   margin: 0 auto;
   text-align: center;
+  vertical-align: middle;
   background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 #photoPreview .message {
     text-align: center;
 }
 #photoPreview img {
-    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
 }
 
 
 .content-detail {
-    position: relative;
-    float: left;
-    width: 100%;
+    display: flex;
+    margin: 0 auto;
+    width: 1020px;
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .content-photo {
     width: 100%;
     overflow: hidden;
-    text-align: center;
-    margin: 0 auto;
 }
 .content-photo img {
     max-width: 100%;
     height: auto;
+}
+#content-photo-360 {
+    width: 765px;
+    height: 430px;
+    margin: 0 auto;
 }
 .content-title {
     width: 100%;
@@ -313,19 +322,16 @@ code {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
+.content-relative {
+    display: flex;
+}
 .content-relative ul {
-    position: relative;
     list-style: none;
+    margin: 0;
     padding: 0;
 }
 .content-relative ul li {
     float:left;
-}
-.content-relative .cr-title {
-    padding-left: 10px;
-    color: #030303;
-    font-size: 15px;
-    font-weight: 700;
 }
 .content-controls {
     width: 100%;

@@ -56,7 +56,7 @@
             {% for post in posts %}
             <div class="card">
                 <div class="card-image">
-                    <a href="{{ url_for('snapshot.detail', snapshot_id=post.id) }}"><img class="img-responsive" src="http://s3.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}"></a>
+                    <a href="{{ url_for('snapshot.detail', snapshot_id=post.id) }}"><img class="img-responsive" src="http://static.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}"></a>
                 </div>
 
                 <div class="card-content">
