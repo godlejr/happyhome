@@ -24,7 +24,7 @@ def new():
         file_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(file.filename)[1])))
 
         s3 = boto3.resource('s3')
-        s3.Object('s3.inotone.co.kr', 'data/img/%s' % file_name).put(Body=file_blob, ContentType=file.content_type)
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % file_name).put(Body=file_blob, ContentType=file.content_type)
 
         photo = Photo()
         photo.filename = file_name
