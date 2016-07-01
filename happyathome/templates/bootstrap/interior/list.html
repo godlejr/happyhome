@@ -34,7 +34,7 @@
 <div id="content">
     {% for post in posts %}
     <div class="interior-card">
-        <div class="interior-photo" style="background-image:url('http://static.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}')" onclick="location.href='{{ url_for('interior.detail', interior_id=post.id) }}'">
+        <div class="interior-photo" style="background-image:url('http://static.inotone.co.kr/data/img/{{ post.photos.filename }}')" onclick="location.href='{{ url_for('interior.detail', interior_id=post.id) }}'">
             <div class="interior-info">
                 <div class="avatar"><img src="http://autokadabra.ru/system/uploads/users/20/20303/small.png?1319912650" /></div>
                 <div class="title">{{ post.title }}</div>

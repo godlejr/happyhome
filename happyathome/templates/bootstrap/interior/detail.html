@@ -7,7 +7,7 @@
     <div class="col-md-9">
         <div class="row">
             <div class="content-photo">
-                <img src="http://static.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}" />
+                <img src="http://static.inotone.co.kr/data/img/{{ post.photos.filename }}" />
             </div>
             <div id="content-photo-360">
             </div>
@@ -21,7 +21,7 @@
             <div class="content-relative">
                 <ul>
                 {% for post in posts %}
-                    <li><a href="{{ url_for('interior.detail', interior_id=post.id) }}"><img src="http://static.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/{{ post.photos.filename }}" width="85" height="85" /></a></li>
+                    <li><a href="{{ url_for('interior.detail', interior_id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.photos.filename }}" width="85" height="85" /></a></li>
                 {% endfor %}
                 </ul>
             </div>
@@ -36,7 +36,7 @@
 <script>
 pannellum.viewer('content-photo-360', {
     "type": "equirectangular",
-    "panorama": "http://static.inotone.co.kr.s3.ap-northeast-2.amazonaws.com/data/img/360/sample.jpg",
+    "panorama": "http://static.inotone.co.kr/data/img/360/sample.jpg",
     "autoLoad": true,
     "hfov": 100,
     "autoRotate": -0.5,
