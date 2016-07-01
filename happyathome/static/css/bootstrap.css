@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
-@import url(http://fonts.googleapis.com/css?family=Montez|Quicksand);
+@import url(http://fonts.googleapis.com/css?family=Mogra|Quicksand);
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -46,8 +46,7 @@ a:hover {
     color: #ffffff;
     background-color: #008ec9;
     font-size: 18px;
-    font-weight: 500;
-    font-family: 'Montez';
+    font-family: 'Mogra';
     height: 43px;
 }
 .navbar-header .navbar-brand:hover {
@@ -232,7 +231,7 @@ code {
 }
 .card {
     width: 300px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .card .card-photo {
@@ -352,7 +351,7 @@ code {
     height: 200px;
     display: block;
     background-color: #ffffff;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .magazine .magazine-image {
