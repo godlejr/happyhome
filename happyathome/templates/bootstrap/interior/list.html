@@ -44,4 +44,16 @@
     </div>
     {% endfor %}
 </div>
+
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
+<script>
+$('#content').masonry({
+    itemSelector: '.interior-card',
+    fitWidth: true,
+    columnWidth: 300,
+    gutter: 10,
+    transitionDuration: '0.8s'
+});
+</script>
 {% endblock %}
