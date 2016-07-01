@@ -58,13 +58,16 @@ a:hover {
     padding: 4px 4px;
 }
 .navbar-default .navbar-toggle {
-    margin: 4px 15px;
+    margin: 4px 0;
     border-radius: 0;
 }
 .navbar-default .navbar-toggle .icon-bar {
     background-color: #ffffff;
 }
-.nav.navbar-nav li a {
+.nav.navbar-nav li a,
+.nav.navbar-nav li a:link,
+.nav.navbar-nav li a:active,
+.nav.navbar-nav li a:visited {
     color: #ffffff;
     padding: 10px;
     font-weight: 500;
@@ -385,6 +388,11 @@ code {
     }
     #content {
         margin: 0 auto;
+    }
+}
+@media (min-width: 768px) {
+    #nav-container {
+        display: none;
     }
 }
 
