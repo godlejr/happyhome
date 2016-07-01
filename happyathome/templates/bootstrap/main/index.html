@@ -34,11 +34,11 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand brand-logo" href="/">HAPPY@HOME</a>
+                <div class="navbar-controls">
+                    {{ func.render_new(active_new) }}
+                </div>
             </div>
             <div id="navbar" class="collapse navbar-collapse navbar-right">
-                <form class="navbar-form navbar-left" role="search">
-                    {{ func.render_new(active_new) }}
-                </form>
                 <ul class="nav navbar-nav">
                     {{ func.render_menu('interior.list', 'Interiors', active=active_list) }}
                     {{ func.render_menu('snapshot.list', 'Snapshots', active=active_list) }}
