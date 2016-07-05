@@ -1,0 +1,61 @@
+{% extends 'bootstrap/snapshot/base.html' %}
+
+{% block content %}
+<div class="well bs-component">
+    <form method="POST" class="form-horizontal" enctype="multipart/form-data">
+        <fieldset>
+            <legend>공간 사진을 등록해주세요.</legend>
+
+            <div class="form-group">
+                <div id="photoPreview"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <textarea class="form-control" rows="3" id="textArea" name="content" placeholder="이미지에 대한 설명을 등록해주세요."></textarea>
+                    <span class="help-block">이미지에 대한 설명을 등록해주세요.</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <input type="file" id="photo" name="photo" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <button type="reset" class="btn btn-default">취소</button>
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+var photo = document.getElementById('photo'),
+    preview = document.getElementById('photoPreview');
+
+photo.addEventListener('change', function() {
+    while (preview.firstChild) {
+        preview.removeChild(preview.firstChild);
+    }
+    loadPhoto(photo);
+});
+
+function loadPhoto(dataURL) {
+    var reader = new FileReader();
+    reader.readAsDataURL(photo.files[0]);
+    reader.onload = function (e) {
+        var img = new Image();
+        img.src = e.target.result;
+        img.height = preview.offsetHeight;
+        img.onload = function() {
+            preview.appendChild(this);
+            preview.style.width = preview.offsetHeight * (this.width / this.height);
+        };
+    }
+}
+</script>
+{% endblock %}

@@ -28,9 +28,9 @@ class User(db.Model, BaseMixin):
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
-    interiors = db.relationship('Interior', backref='interior_users')
-    snapshots = db.relationship('Snapshot', backref='snapshot_users')
-    magazines = db.relationship('Magazine', backref='magazine_users')
+    interiors = db.relationship('Interior', backref='interior_user')
+    snapshots = db.relationship('Snapshot', backref='snapshot_user')
+    magazines = db.relationship('Magazine', backref='magazine_user')
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""

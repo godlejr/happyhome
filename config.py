@@ -7,7 +7,7 @@ class Config(object):
     DEVELOPMENT = False
     CSRF_ENABLED = True
     SECRET_KEY = 'secret'
-    TEMPLATE = 'bootstrap'
+    TEMPLATE_THEME = 'bootstrap'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'mysql://root:1miglobal@inotone.cjj0w56trea4.ap-northeast-2.rds.amazonaws.com/happyathome'

@@ -1,4 +1,4 @@
-{% extends "material/snapshot/base.html" %}
+{% extends "material/interior/base.html" %}
 
 {% block content %}
 <div class="section">
@@ -8,7 +8,7 @@
                 <div class="sidebar">
                     <div class="sidebar-body">
                         <ul class="collection with-header z-depth-1">
-                            <li class="collection-header"><h5>공간</h5></li>
+                            <li class="collection-header"><h5>프로젝트</h5></li>
                             <li class="collection-item"><a href="">침실</a></li>
                             <li class="collection-item"><a href="">거실</a></li>
                             <li class="collection-item"><a href="">주방</a></li>
@@ -33,43 +33,27 @@
             </div>
 
             <div class="col s12 m8 l9">
-                <div class="cards">
+                <div class="row">
                 {% for post in posts %}
-                    <div class="card snapshot">
-                        <div class="card-image-bg waves-effect waves-block waves-light" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.photos.filename }})">
+                    <div class="col s12 m4 l4">
+                        <div class="card card-image-bg waves-effect waves-block waves-light" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.photos.filename }})">
                             <div class="card-info right">
                                 <div class="material-icons white-text">favorite_border</div>
                                 <div class="love-count white-text">1,234</div>
                             </div>
-                        </div>
-                        <div class="card-content">
-                            <p>{{ post.content[:34] }}...</p>
-                        </div>
-                        <div class="card-action">
-                            <div class="chip">
-                                <img src="http://autokadabra.ru/system/uploads/users/20/20303/small.png">
-                                {{ post.snapshot_user.name }}
-                            </div>
-                            <div class="card-button right">
-                                <i class="material-icons grey-text text-lighten-2">favorite_border</i>
+                            <div class="card-title trans-bottom">
+                                <div class="card-title-image">
+                                    <img src="http://autokadabra.ru/system/uploads/users/20/20303/small.png" class="circle">
+                                </div>
+                                <div class="card-title-info">
+                                    <div class="info-title white-text">{{ post.title }}</div>
+                                    <div class="info-author white-text">{{ post.interior_user.name }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-                </div>
-            </div>
         </div>
     </div>
 </div>
-
-<script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
-<script>
-var $cards = $('.cards').masonry({
-    itemSelector: '.card',
-    fitWidth: true,
-    columnWidth: 300,
-    gutter: 20,
-    transitionDuration: 0
-});
-</script>
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'material/magazine/base.html' %}
+
+{% block content %}
+<div class="content-detail">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="content-body">{{ post.content }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="row">
+            <div class="content-relative">
+                <ul>
+                {% for post in posts %}
+                    <li><a href="{{ url_for('interior.detail', interior_id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.photos.filename }}" width="85" height="85" /></a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

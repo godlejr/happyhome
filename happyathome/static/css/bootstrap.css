@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
-@import url(http://fonts.googleapis.com/css?family=Mogra|Quicksand);
+@import url(http://fonts.googleapis.com/css?family=Unica+One|Quicksand);
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -17,7 +17,7 @@ body {
   font-family: 'Nanum Gothic', 'Noto Sans KR', sans-serif;
 }
 a:hover {
-    background-color: #008ec9;
+    background-color: #008ec9 !important;
 }
 #navbar {
     background-color: #000000;
@@ -43,13 +43,9 @@ a:hover {
 }
 .navbar-header .navbar-brand {
     padding: 10px 15px;
-    color: #ffffff;
-    background-color: #008ec9;
-    font-size: 18px;
-    font-family: 'Mogra';
     height: 43px;
-}
-.navbar-header .navbar-brand:hover {
+    font-size: 18px;
+    font-family: 'Unica One';
     color: #ffffff;
     background-color: #008ec9;
 }
@@ -57,38 +53,33 @@ a:hover {
     float: left;
     padding: 4px 4px;
 }
-.navbar-default .navbar-toggle {
+.navbar-header .navbar-toggle {
     margin: 4px 0;
     border-radius: 0;
 }
-.navbar-default .navbar-toggle .icon-bar {
+.navbar-header .navbar-toggle .icon-bar {
     background-color: #ffffff;
 }
-.nav.navbar-nav li a,
-.nav.navbar-nav li a:link,
-.nav.navbar-nav li a:active,
-.nav.navbar-nav li a:visited {
-    color: #ffffff;
+.nav.navbar-nav>li>a {
     padding: 10px;
+    color: #ffffff;
+    background-color: #000000;
     font-weight: 500;
     font-family: 'Quicksand', 'Nanum Gothic', 'Noto Sans KR', sans-serif;
 }
-.nav.navbar-nav li a:hover,
-.nav.navbar-nav li.active a,
-.nav.navbar-nav li.active a:hover{
-    color: #ffffff;
+.nav.navbar-nav>li.active>a {
     background-color: #008ec9;
 }
 .breadcrumb {
     border-radius: 0;
 }
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 65px;
-  background-color: #008ec9;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 65px;
+    background-color: #008ec9;
 }
 
 
