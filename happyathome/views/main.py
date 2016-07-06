@@ -1,9 +1,7 @@
-
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from happyathome.forms import JoinForm
 from happyathome.models import db, User, Snapshot
 
-TEMPLATE = 'bootstrap'
 main = Blueprint('main', __name__)
 
 

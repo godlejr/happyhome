@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-{% import "_func.html" as func %}
-{% if not active_new %}
-    {% set active_new = "interior.new" %}
-{% endif %}
-
+{%- import "_func.html" as func %}
+{%- if not active_new %}{% set active_new = "interior.new" %}{% endif %}
 <html lang="ko">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="description" content="">
+    <meta name="description" content="인테리어 O2O 서비스">
+    <meta name="keywords" content="해피앳홈, 이노톤, 인테리어, 홈스타일링, 아파트, 원룸, 신혼집, 이쁜집, 예쁜집, 북유럽, 모던, interior">
     <meta name="author" content="INOTONE">
-    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
     <title>Happy@home</title>
-    <!-- Bootstrap core CSS -->
+
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/paper/bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
 
@@ -28,11 +26,11 @@
         <div class="container">
             <div class="navbar-header">
                 <div id="nav-container">
-                  <div class="toggle-icon" data-toggle="collapse" data-target="#navbar">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                  </div><!-- /toggle-icon -->
+                    <div class="toggle-icon" data-toggle="collapse" data-target="#navbar">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div><!-- /toggle-icon -->
                 </div><!-- /nav-container -->
                 <a class="navbar-brand brand-logo" href="/">HAPPY@home</a>
                 <div class="navbar-controls">
@@ -76,12 +74,12 @@
             </div>
         </div>
     </footer>
-</body>
 
-<script>
-$(".toggle-icon").click(function() {
-  $('#nav-container').toggleClass("pushed");
-});
-</script>
+    <script>
+    $(".toggle-icon").click(function() {
+      $('#nav-container').toggleClass("pushed");
+    });
+    </script>
+</body>
 
 </html>

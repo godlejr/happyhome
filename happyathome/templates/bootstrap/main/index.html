@@ -1,108 +1,35 @@
-<!DOCTYPE html>
-{% import "_func.html" as func %}
-{% if not active_new %}
-    {% set active_new = "interior.new" %}
-{% endif %}
+{% extends "bootstrap/base.html" %}
 
-<html lang="ko">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="description" content="">
-    <meta name="author" content="INOTONE">
-    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-
-    <title>Happy@home</title>
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/paper/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-</head>
-
-<body>
-    <nav class="navbar navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand brand-logo" href="/">HAPPY@home</a>
-                <div class="navbar-controls">
-                    {{ func.render_new(active_new) }}
-                </div>
+{% block content %}
+<div class="container" style="width:100%;">
+    <div class="cards">
+        {% for post in posts %}
+        <div class="card">
+            <div class="card-image">
+                <a href="{{ url_for('snapshot.detail', snapshot_id=post.id) }}"><img class="img-responsive" src="http://static.inotone.co.kr/data/img/{{ post.photos.filename }}"></a>
             </div>
-            <div id="navbar" class="collapse navbar-collapse navbar-right">
-                <ul class="nav navbar-nav">
-                    {{ func.render_menu('interior.list', 'Interiors', active=active_list) }}
-                    {{ func.render_menu('snapshot.list', 'Snapshots', active=active_list) }}
-                    {{ func.render_menu('magazine.list', 'Magazines', active=active_list) }}
-                    <li><a href="#professionals">Professionals</a></li>
-                    <li><a href="#products">Products</a></li>
-                </ul>
+
+            <div class="card-content">
+                <p>{{ post.content[:70] }}</p>
+            </div>
+
+            <div class="card-action btn-group btn-group-justified">
+                <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
+                <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
+                <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
             </div>
         </div>
-    </nav>
-
-    <!-- Begin page content -->
-    <div class="container" style="width:100%;">
-        <div class="cards">
-            {% for post in posts %}
-            <div class="card">
-                <div class="card-image">
-                    <a href="{{ url_for('snapshot.detail', snapshot_id=post.id) }}"><img class="img-responsive" src="http://static.inotone.co.kr/data/img/{{ post.photos.filename }}"></a>
-                </div>
-
-                <div class="card-content">
-                    <p>{{ post.content[:70] }}</p>
-                </div>
-
-                <div class="card-action btn-group btn-group-justified">
-                    <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
-                    <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
-                    <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
-        <script>
-        $('.cards').masonry({
-            itemSelector: '.card',
-            fitWidth: true,
-            columnWidth: 300,
-            gutter: 10,
-            transitionDuration: '0.9s'
-        });
-        </script>
+        {% endfor %}
     </div>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="dropup">
-                        <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            Family <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="http://www.hmglobal.com" target="_blank">㈜한미글로벌</a></li>
-                            <li><a href="http://www.ikukbo.com" target="_blank">㈜국보디자인</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <p class="text-muted">Copyright ⓒ 2016 by Inotone Co,. LTD. All Rights Reserved</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-</body>
-
-</html>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
+    <script>
+    $('.cards').masonry({
+        itemSelector: '.card',
+        fitWidth: true,
+        columnWidth: 300,
+        gutter: 10,
+        transitionDuration: '0.9s'
+    });
+    </script>
+</div>
+{% endblock %}

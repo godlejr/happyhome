@@ -4,17 +4,16 @@ import boto3
 import html2text
 import shortuuid
 from happyathome.models import db, Magazine, Photo, Interior
-from flask import Blueprint, render_template, request, redirect, jsonify, url_for
+from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
 from werkzeug.utils import secure_filename
 
-TEMPLATE = 'bootstrap'
 magazine = Blueprint('magazine', __name__)
 
 
 @magazine.route('')
 def list():
     magazines = db.session.query(Magazine).order_by(Magazine.id.desc()).all()
-    return render_template(TEMPLATE + '/magazine/list.html', magazines=magazines)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazine/list.html', magazines=magazines)
 
 
 @magazine.route('/image/upload', methods=['POST'])
@@ -57,7 +56,7 @@ def new():
         db.session.commit()
 
         return redirect(url_for('magazine.list'))
-    return render_template(TEMPLATE + '/magazine/edit.html')
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazine/edit.html')
 
 
 @magazine.route('/<magazine_id>')
@@ -67,4 +66,4 @@ def detail(magazine_id):
         .filter(Interior.user_id == post.user_id) \
         .order_by(Interior.id.desc()) \
         .all()
-    return render_template(TEMPLATE + '/magazine/detail.html', post=post, posts=posts)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazine/detail.html', post=post, posts=posts)
