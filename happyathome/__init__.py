@@ -26,14 +26,12 @@ def create_app():
 
     # Application Blueprints
     from happyathome.views.main import main as main_blueprint
-    from happyathome.views.interior import interior as interior_blueprint
-    from happyathome.views.snapshot import snapshot as snapshot_blueprint
-    from happyathome.views.magazine import magazine as magazine_blueprint
+    from happyathome.views.photos import photos as photos_blueprint
+    from happyathome.views.magazines import magazines as magazines_blueprint
 
     app.register_blueprint(main_blueprint)
-    app.register_blueprint(interior_blueprint, url_prefix='/interior')
-    app.register_blueprint(snapshot_blueprint, url_prefix='/snapshot')
-    app.register_blueprint(magazine_blueprint, url_prefix='/magazine')
+    app.register_blueprint(magazines_blueprint, url_prefix='/magazines')
+    app.register_blueprint(photos_blueprint, url_prefix='/photos')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
 

@@ -1,0 +1,51 @@
+{% extends 'bootstrap/photos/base.html' %}
+
+{% block content %}
+<div class="content-detail">
+    <div class="col-md-9">
+        <div class="row">
+        {% if post.file.type == 2 %}
+            <link href="http://cdn.pannellum.org/2.2/pannellum.css" rel="stylesheet" />
+
+            <div class="content-photo-360">
+                <div id="photo360"></div>
+            </div>
+
+            <script src="http://cdn.pannellum.org/2.2/pannellum.js"></script>
+            <script>
+            pannellum.viewer('photo360', {
+                "type": "equirectangular",
+                "panorama": "http://static.inotone.co.kr/data/img/{{ post.file.name }}",
+                "autoLoad": true,
+                "hfov": 100,
+                "autoRotate": -0.5,
+                "zoom-controlls": false,
+            });
+            $('.pnlm-controls').hide();
+            </script>
+        {% else %}
+            <div class="content-photo">
+                <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+            </div>
+        {% endif %}
+        </div>
+        <div class="row">
+            <div class="content-body">{{ post.content }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="row">
+            <div class="content-relative">
+                <ul>
+                {% for post in posts %}
+                    <li><a href="{{ url_for('photos.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" width="85" height="85" /></a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

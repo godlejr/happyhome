@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-{%- import "_func.html" as func %}
-{%- if not active_new %}{% set active_new = "interior.new" %}{% endif %}
+<!DOCTYPE html>{%- import "_func.html" as func %}
 <html lang="ko">
 
 <head>
@@ -11,7 +9,7 @@
     <meta name="keywords" content="해피앳홈, 이노톤, 인테리어, 홈스타일링, 아파트, 원룸, 신혼집, 이쁜집, 예쁜집, 북유럽, 모던, interior">
     <meta name="author" content="INOTONE">
 
-    <title>Happy@home</title>
+    <title>HAPPY@HOME</title>
 
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/paper/bootstrap.min.css" rel="stylesheet">
@@ -34,16 +32,15 @@
                 </div><!-- /nav-container -->
                 <a class="navbar-brand brand-logo" href="/">HAPPY@home</a>
                 <div class="navbar-controls">
+                    {%- if not active_new %}{% set active_new = "magazines.new" %}{% endif %}
                     {{ func.render_new(active_new) }}
                 </div>
             </div>
             <div id="navbar" class="collapse navbar-collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    {{ func.render_menu('interior.list', 'Interiors', active=active_list) }}
-                    {{ func.render_menu('snapshot.list', 'Snapshots', active=active_list) }}
-                    {{ func.render_menu('magazine.list', 'Magazines', active=active_list) }}
+                    {{ func.render_menu('magazines.list', 'Magazines', active=active_list) }}
+                    {{ func.render_menu('photos.list', 'Photos', active=active_list) }}
                     <li><a href="#professionals">Professionals</a></li>
-                    <li><a href="#products">Products</a></li>
                 </ul>
             </div>
         </div>

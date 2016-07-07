@@ -1,13 +1,13 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from happyathome.forms import JoinForm
-from happyathome.models import db, User, Snapshot
+from happyathome.models import db, User, Photo
 
 main = Blueprint('main', __name__)
 
 
 @main.route('/')
 def index():
-    posts = db.session.query(Snapshot).all()
+    posts = db.session.query(Photo).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html', posts=posts)
 
 

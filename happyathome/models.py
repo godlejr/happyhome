@@ -28,50 +28,50 @@ class User(db.Model, BaseMixin):
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
-    interiors = db.relationship('Interior', backref='interior_user')
-    snapshots = db.relationship('Snapshot', backref='snapshot_user')
-    magazines = db.relationship('Magazine', backref='magazine_user')
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""
         return self.authenticated
 
 
+class Category(db.Model, BaseMixin):
+    """카테고리 정보"""
+    __tablename__ = 'categories'
+
+    name = db.Column(db.Unicode(255), nullable=False)
+
+
+class File(db.Model, BaseMixin):
+    """파일 정보"""
+    __tablename__ = 'files'
+
+    type = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.Unicode(255), nullable=False)
+    ext = db.Column(db.Unicode(255), nullable=False)
+    size = db.Column(db.Integer, nullable=False)
+
+
 class Photo(db.Model, BaseMixin):
     """사진 정보"""
     __tablename__ = 'photos'
 
-    filename = db.Column(db.Unicode(255), nullable=False)
-    filesize = db.Column(db.Integer, nullable=False)
-
-
-class Interior(db.Model, BaseMixin):
-    """포스트 정보"""
-    __tablename__ = 'interiors'
-
-    title = db.Column(db.Unicode(255), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
-    photos = db.relationship('Photo', backref='interior_photos')
-
-
-class Snapshot(db.Model, BaseMixin):
-    """포스트 정보"""
-    __tablename__ = 'snapshots'
-
-    content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
-    photos = db.relationship('Photo', backref='snapshot_photos')
+    file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
+    user = db.relationship('User', backref='user_photos')
+    file = db.relationship('File', backref='file_photos')
 
 
 class Magazine(db.Model, BaseMixin):
     """매거진 정보"""
     __tablename__ = 'magazines'
 
-    title = db.Column(db.Unicode(255), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    content_txt = db.Column(db.Text, nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    photos = db.relationship('Photo', secondary=magazine_photos, backref='magazines')
+    file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
+    title = db.Column(db.Unicode(255), nullable=False)
+    content = db.Column(db.Text)
+    photos = db.relationship('Photo', secondary=magazine_photos, backref='magazine_photos')
+    user = db.relationship('User', backref='user_magazines')
+    category = db.relationship('Category', backref='category_magazines')
+    file = db.relationship('File', backref='file_magazines')

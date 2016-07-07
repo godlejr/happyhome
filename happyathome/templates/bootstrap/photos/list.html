@@ -1,15 +1,15 @@
-{% extends "bootstrap/base.html" %}
+{% extends "bootstrap/photos/base.html" %}
 
 {% block content %}
 <div class="cards">
     {% for post in posts %}
     <div class="card">
-        <div class="card-image">
-            <a href="{{ url_for('photos.detail', id=post.id) }}"><img class="img-responsive" src="http://static.inotone.co.kr/data/img/{{ post.file.name }}"></a>
+        <div class="card-photo">
+            <a href="{{ url_for('photos.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}"></a>
         </div>
 
         <div class="card-content">
-            <p>{{ post.content[:70] }}</p>
+            <p>{{ post.content[:77] }}</p>
         </div>
 
         <div class="card-action btn-group btn-group-justified">
@@ -21,14 +21,14 @@
     {% endfor %}
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
 <script>
 $('.cards').masonry({
     itemSelector: '.card',
     fitWidth: true,
     columnWidth: 300,
     gutter: 20,
-    transitionDuration: 0
+    transitionDuration: '0.8s'
 });
 </script>
 {% endblock %}

@@ -3,20 +3,20 @@ import os
 import boto3
 import html2text
 import shortuuid
-from happyathome.models import db, Magazine, Photo, Interior
+from happyathome.models import db, Magazine, Photo, File
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
 from werkzeug.utils import secure_filename
 
-magazine = Blueprint('magazine', __name__)
+magazines = Blueprint('magazines', __name__)
 
 
-@magazine.route('')
+@magazines.route('')
 def list():
-    magazines = db.session.query(Magazine).order_by(Magazine.id.desc()).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazine/list.html', magazines=magazines)
+    posts = db.session.query(Magazine).order_by(Magazine.id.desc()).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html', posts=posts)
 
 
-@magazine.route('/image/upload', methods=['POST'])
+@magazines.route('/image/upload', methods=['POST'])
 def image_upload():
     file = request.files['imageUpload']
     file_blob = file.read()
@@ -25,20 +25,21 @@ def image_upload():
     s3 = boto3.resource('s3')
     s3.Object('static.inotone.co.kr', 'data/img/%s' % file_name).put(Body=file_blob, ContentType=file.content_type)
 
-    photo = Photo()
-    photo.filename = file_name
-    photo.filesize = len(file_blob)
-    db.session.add(photo)
+    file = File()
+    file.name = file_name
+    file.size = len(file_blob)
+
+    db.session.add(file)
     db.session.commit()
 
     return jsonify({
         'status': '200',
         'message': 'Done',
-        'url': '/static/data/sample.jpg'
+        'url': 'https://static.inotone.co.kr/data/img/%s' % file_name
     })
 
 
-@magazine.route('/new', methods=['GET', 'POST'])
+@magazines.route('/new', methods=['GET', 'POST'])
 def new():
     if request.method == 'POST':
         h = html2text.HTML2Text()
@@ -56,14 +57,14 @@ def new():
         db.session.commit()
 
         return redirect(url_for('magazine.list'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazine/edit.html')
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html')
 
 
-@magazine.route('/<magazine_id>')
-def detail(magazine_id):
-    post = db.session.query(Magazine).filter_by(id=magazine_id).first()
-    posts = db.session.query(Interior) \
-        .filter(Interior.user_id == post.user_id) \
-        .order_by(Interior.id.desc()) \
+@magazines.route('/<id>')
+def detail(id):
+    post = db.session.query(Magazine).filter_by(id=id).first()
+    posts = db.session.query(Magazine) \
+        .filter(Magazine.user_id == post.user_id) \
+        .order_by(Magazine.id.desc()) \
         .all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazine/detail.html', post=post, posts=posts)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post, posts=posts)
