@@ -23,6 +23,7 @@ class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
+
 class TestingConfig(Config):
     TESTING = True
 
