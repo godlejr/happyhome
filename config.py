@@ -1,6 +1,3 @@
-import os
-
-
 class Config(object):
     DEBUG = False
     TESTING = False
@@ -30,10 +27,10 @@ class TestingConfig(Config):
     TESTING = True
 
 
-def init_app(app):
+def init_app(app, config_name):
     app.config.from_object({
         'testing': TestingConfig,
         'production': ProductionConfig,
         'development': DevelopmentConfig,
         'default': DevelopmentConfig
-    }[os.getenv('FLASK_CONFIG') or 'default']())
+    }[config_name]())

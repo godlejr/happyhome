@@ -1,12 +1,11 @@
 import os
-
 import config
 from happyathome.models import db
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 
 
-def create_app():
+def create_app(config_name):
     """
     :return: Flask App
 
@@ -18,7 +17,7 @@ def create_app():
     app = Flask(__name__, template_folder=template_folder)
     app.jinja_env.auto_reload = True
     app.jinja_env.autoescape = False
-    config.init_app(app)
+    config.init_app(app, config_name)
     db.init_app(app)
 
     toolbar = DebugToolbarExtension()
