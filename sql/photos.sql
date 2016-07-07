@@ -1,9 +1,13 @@
-CREATE   TABLE  photos
-(        id             INT               NOT NULL AUTO_INCREMENT COMMENT '일련번호'
-,        post_id        INT               NOT NULL COMMENT '포스트ID'
-,        filename       VARCHAR  ( 255)   NOT NULL COMMENT '파일이름'
-,        filesize       INT               NOT NULL COMMENT '파일크기'
-,        created_at     DATETIME          NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일시'
-,        updated_at     DATETIME          NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일시'
-,        PRIMARY KEY (id)
-) COMMENT='포스트내역';
+CREATE TABLE `photos` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '일련번호',
+	`user_id` INT(11) UNSIGNED NOT NULL COMMENT '사용자ID',
+	`file_id` INT(11) UNSIGNED NOT NULL COMMENT '사진ID',
+	`content` TEXT NOT NULL COMMENT '내용' COLLATE 'utf8mb4_unicode_ci',
+	`created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록일시',
+	`updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '수정일시',
+	PRIMARY KEY (`id`)
+)
+COMMENT='포토'
+COLLATE='utf8mb4_unicode_ci'
+ENGINE=InnoDB
+;
