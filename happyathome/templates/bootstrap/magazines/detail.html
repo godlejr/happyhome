@@ -5,50 +5,54 @@
 
 <script src="http://cdn.pannellum.org/2.2/pannellum.js"></script>
 
-<div class="content-detail">
+<div class="content">
     <div class="row">
         <div class="col-md-9">
-            <div class="content-photo">
-                <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
-            </div>
-            <div class="content-title">{{ post.title }}</div>
-            <div class="content-body">{{ post.content }}</div>
-            <div class="content-photos">
-                {% for subpost in post.photos %}
-                    {% if subpost.magazine_photo.file.type == 2 %}
-                        <div class="content-photo-360">
-                            <div id="photo360-{{ subpost.magazine_photo.id }}"></div>
-                        </div>
+            <div class="content-detail">
+                <div class="content-photo">
+                    <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+                </div>
+                <div class="content-title">{{ post.title }}</div>
+                <div class="content-body">{{ post.content }}</div>
+                <div class="content-photos">
+                    {% for subpost in post.photos %}
+                        {% if subpost.magazine_photo.file.type == 2 %}
+                            <div class="content-photo-360">
+                                <div id="photo360-{{ subpost.magazine_photo.id }}"></div>
+                            </div>
 
-                        <script>
-                        pannellum.viewer('photo360-{{ subpost.magazine_photo.id }}', {
-                            "type": "equirectangular",
-                            "panorama": "http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}",
-                            "autoLoad": true,
-                            "hfov": 100,
-                            "autoRotate": -0.5,
-                            "zoom-controlls": false,
-                        });
-                        $('.pnlm-controls').hide();
-                        </script>
-                    {% else %}
-                        <div class="content-photo">
-                            <img src="http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}" />
-                        </div>
-                    {% endif %}
-                    <div class="content-body">{{ subpost.magazine_photo.content }}</div>
-                {% endfor %}
+                            <script>
+                            pannellum.viewer('photo360-{{ subpost.magazine_photo.id }}', {
+                                "type": "equirectangular",
+                                "panorama": "http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}",
+                                "autoLoad": true,
+                                "hfov": 100,
+                                "autoRotate": -0.5,
+                                "zoom-controlls": false,
+                            });
+                            $('.pnlm-controls').hide();
+                            </script>
+                        {% else %}
+                            <div class="content-photo">
+                                <img src="http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}" />
+                            </div>
+                        {% endif %}
+                        <div class="content-body">{{ subpost.magazine_photo.content }}</div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="content-relative">
-                <ul>
-                {% for post in posts %}
-                    <li><a href="{{ url_for('magazines.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" width="85" height="85" /></a></li>
-                {% endfor %}
-                </ul>
+            <div class="content-sidebar">
+                <div class="content-relative">
+                    <ul>
+                    {% for post in posts %}
+                        <li><a href="{{ url_for('magazines.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" width="85" height="85" /></a></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <div class="content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
             </div>
-            <div class="col-md-3 content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
         </div>
     </div>
 </div>
