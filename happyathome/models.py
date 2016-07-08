@@ -57,7 +57,7 @@ class Photo(db.Model, BaseMixin):
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
     user = db.relationship('User', backref='user_photos')
     file = db.relationship('File', backref='file_photos')
-    magazines = db.relationship('MagazinesPhotos', back_populates="photo")
+    magazines = db.relationship('MagazinesPhotos', backref="magazine_photo")
 
 
 class Magazine(db.Model, BaseMixin):
@@ -73,7 +73,7 @@ class Magazine(db.Model, BaseMixin):
     user = db.relationship('User', backref='user_magazines')
     category = db.relationship('Category', backref='category_magazines')
     file = db.relationship('File', backref='file_magazines')
-    photos = db.relationship('MagazinesPhotos', order_by=asc('magazines_photos.photo_id'), back_populates="magazine")
+    photos = db.relationship('MagazinesPhotos', order_by=asc('magazines_photos.photo_id'), backref="photo_magazine")
 
 
 class MagazinesPhotos(db.Model, BaseMixin):
@@ -82,6 +82,3 @@ class MagazinesPhotos(db.Model, BaseMixin):
 
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
     photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
-
-    magazine = db.relationship('Magazine', back_populates='photos')
-    photo = db.relationship('Photo', back_populates='magazines')

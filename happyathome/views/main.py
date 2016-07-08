@@ -30,4 +30,3 @@ def join():
 @main.route('/users')
 def user_list():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/user_list.html', users=User.query.all())
-
