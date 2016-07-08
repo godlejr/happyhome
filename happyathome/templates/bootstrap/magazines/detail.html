@@ -34,7 +34,7 @@
                             </script>
                         {% else %}
                             <div class="content-photo">
-                                <img src="http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}" />
+                                <a href="{{ url_for('photos.detail', id=subpost.magazine_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}" /></a>
                             </div>
                         {% endif %}
                         <div class="content-body">{{ subpost.magazine_photo.content }}</div>
