@@ -1,10 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import asc
 
 db = SQLAlchemy()
-magazine_photos = db.Table('magazine_photos', db.metadata,
-                           db.Column('magazine_id', db.Integer, db.ForeignKey('magazines.id')),
-                           db.Column('photo_id', db.Integer, db.ForeignKey('photos.id'))
-                           )
 
 
 class BaseMixin(object):
@@ -60,6 +57,7 @@ class Photo(db.Model, BaseMixin):
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
     user = db.relationship('User', backref='user_photos')
     file = db.relationship('File', backref='file_photos')
+    magazines = db.relationship('MagazinesPhotos', back_populates="photo")
 
 
 class Magazine(db.Model, BaseMixin):
@@ -71,7 +69,19 @@ class Magazine(db.Model, BaseMixin):
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
     title = db.Column(db.Unicode(255), nullable=False)
     content = db.Column(db.Text)
-    photos = db.relationship('Photo', secondary=magazine_photos, backref='magazine_photos')
+
     user = db.relationship('User', backref='user_magazines')
     category = db.relationship('Category', backref='category_magazines')
     file = db.relationship('File', backref='file_magazines')
+    photos = db.relationship('MagazinesPhotos', order_by=asc('magazines_photos.photo_id'), back_populates="magazine")
+
+
+class MagazinesPhotos(db.Model, BaseMixin):
+    """매거진-포토 연결고리"""
+    __tablename__ = 'magazines_photos'
+
+    magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
+    photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
+
+    magazine = db.relationship('Magazine', back_populates='photos')
+    photo = db.relationship('Photo', back_populates='magazines')

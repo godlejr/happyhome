@@ -3,7 +3,7 @@ import os
 import boto3
 import html2text
 import shortuuid
-from happyathome.models import db, Magazine, Photo, File
+from happyathome.models import db, Magazine, Photo, File, MagazinesPhotos
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
 from werkzeug.utils import secure_filename
 
@@ -65,6 +65,7 @@ def detail(id):
     post = db.session.query(Magazine).filter_by(id=id).first()
     posts = db.session.query(Magazine) \
         .filter(Magazine.user_id == post.user_id) \
+        .filter(Magazine.id != post.id) \
         .order_by(Magazine.id.desc()) \
         .all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post, posts=posts)

@@ -7,7 +7,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    posts = db.session.query(Photo).all()
+    posts = db.session.query(Photo).order_by(Photo.id.desc()).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html', posts=posts)
 
 

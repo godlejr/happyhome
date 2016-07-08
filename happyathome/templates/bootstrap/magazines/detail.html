@@ -14,16 +14,16 @@
             <div class="content-title">{{ post.title }}</div>
             <div class="content-body">{{ post.content }}</div>
             <div class="content-photos">
-                {% for photo in post.photos %}
-                    {% if photo.file.type == 2 %}
+                {% for subpost in post.photos %}
+                    {% if subpost.photo.file.type == 2 %}
                         <div class="content-photo-360">
-                            <div id="photo360-{{ photo.id }}"></div>
+                            <div id="photo360-{{ subpost.photo.id }}"></div>
                         </div>
 
                         <script>
-                        pannellum.viewer('photo360-{{ photo.id }}', {
+                        pannellum.viewer('photo360-{{ subpost.photo.id }}', {
                             "type": "equirectangular",
-                            "panorama": "http://static.inotone.co.kr/data/img/{{ photo.file.name }}",
+                            "panorama": "http://static.inotone.co.kr/data/img/{{ subpost.photo.file.name }}",
                             "autoLoad": true,
                             "hfov": 100,
                             "autoRotate": -0.5,
@@ -33,10 +33,10 @@
                         </script>
                     {% else %}
                         <div class="content-photo">
-                            <img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" />
+                            <img src="http://static.inotone.co.kr/data/img/{{ subpost.photo.file.name }}" />
                         </div>
                     {% endif %}
-                    <div class="content-body">{{ photo.content }}</div>
+                    <div class="content-body">{{ subpost.photo.content }}</div>
                 {% endfor %}
             </div>
         </div>
