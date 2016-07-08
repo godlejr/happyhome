@@ -87,7 +87,8 @@ a:hover {
 /* Not required for template or sticky footer method. */
 
 body > .container {
-  padding: 80px 5px;
+  width: 100%;
+  padding: 80px 0;
 }
 .container .text-muted {
   margin: 20px 0;
@@ -107,20 +108,22 @@ code {
 
 .cards {
     margin: 0 auto;
+    max-width: 1240px;
 }
 .card {
-    width: 300px;
-    margin-bottom: 20px;
+    float: left;
+    width: 290px;
+    margin: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .card .card-photo {
-    width: 300px;
-    height: 300px;
+    width: 290px;
+    height: 290px;
     overflow: hidden;
 }
 .card .card-photo img {
-    max-width: 300px;
-    min-height: 300px;
+    max-width: 290px;
+    min-height: 290px;
     transform: scale(1.05);
     transition: .3s ease-in-out;
 }
@@ -174,7 +177,7 @@ code {
 .content-detail {
     display: flex;
     margin: 0 auto;
-    width: 1020px;
+    width: 1165px;
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
@@ -192,10 +195,14 @@ code {
     height: 430px;
     margin: 0 auto;
 }
+.content-photos {
+    margin: 0 auto;
+    width: 75%;
+}
 .content-title {
     width: 100%;
+    padding: 20px;
     font-size: 26px;
-    font-family: 'Lobster', cursive;
 }
 .content-body {
     width: 100%;
@@ -222,98 +229,18 @@ code {
 }
 
 
-
-@media (max-width: 768px) {
-    #sidebar {
-        display: none;
-    }
-    #content {
-        margin: 0 auto;
+@media only screen and (max-width: 1257px) {
+    .cards {
+        max-width: 930px;
     }
 }
-@media (min-width: 768px) {
-    #nav-container {
-        display: none;
+@media only screen and (max-width: 947px) {
+    .cards {
+        max-width: 620px;
     }
 }
-
-
-
-/*toggle-icon*/
-#nav-container{
-	position: absolute;
-	float: right;
-	font-size: 9px;
-	top: 50%;
-	right: 0;
-}
-.toggle-icon {
-	display: block;
-	position: relative;
-	width: 100%;
-	margin: -2.2em auto 0 0.2em;
-	-webkit-transition: margin 600ms;
-	-moz-transition: margin 600ms;
-	transition: margin 600ms;
-	cursor: pointer;
-}
-.toggle-icon .bar {
-	display: block;
-	width: 3.8em;
-	height: 0.2em;
-	margin: 0.9em;
-	border-right: 2.8em solid #fff;
-	border-left: 0.6em solid #d6d6d6;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	-webkit-transition-property: -webkit-transform, margin, border-right-color, box-shadow;
-	-moz-transition-property: -moz-transform, margin, border-right-color, box-shadow;
-	transition-property: transform, margin, border-right-color, box-shadow;
-	-webkit-transition-duration: 600ms;
-	-moz-transition-duration: 600ms;
-	transition-duration: 600ms;
-}
-.toggle-icon .bar:nth-of-type(1) {
-    -webkit-transition: opacity 300ms;
-    -moz-transition: opacity 300ms;
-    transition: opacity 300ms;
-}
-.toggle-icon .bar:nth-of-type(2) {
-    -webkit-transform: rotate(-180deg);
-    -moz-transform: rotate(-180deg);
-    -ms-transform: rotate(-180deg);
-    -o-transform: rotate(-180deg);
-    transform: rotate(-180deg);
-}
-/*pushed*/
-.pushed .toggle-icon {
-	margin: -3.2em 0 0 0.7em;
-}
-.pushed .bar:nth-of-type(1) {
-    opacity: 0;
-}
-.pushed .bar:nth-of-type(2) {
-    margin-left: 1.4em;
-    -webkit-transform: rotate(-137deg) translateY(-1.5em);
-    -moz-transform: rotate(-137deg) translateY(-1.5em);
-    -ms-transform: rotate(-137deg) translateY(-1.5em);
-    -o-transform: rotate(-137deg) translateY(-1.5em);
-    transform: rotate(-137deg) translateY(-1.5em);
-}
-.pushed .bar:nth-of-type(3) {
-    margin-left: 0.5em;
-    -webkit-transform: rotate(-42deg);
-    -moz-transform: rotate(-42deg);
-    -ms-transform: rotate(-42deg);
-    -o-transform: rotate(-42deg);
-    transform: rotate(-42deg);
-}
-.pushed .toggle-icon:hover .bar:nth-of-type(2) {
-	border-right-color: #e9b8b9;
-	box-shadow: 0.4em 0 0.6em 0.1em rgba(205,40,44,0.75);
-}
-.pushed .toggle-icon:hover .bar:nth-of-type(3) {
-	border-right-color: #ddf1da;
-	box-shadow: 0.4em 0 0.6em 0.1em rgba(83,228,68,0.65);
+@media only screen and (max-width: 637px) {
+    .cards {
+        max-width: 310px;
+    }
 }
