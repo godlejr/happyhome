@@ -43,13 +43,6 @@ def new():
 
 @photos.route('/<id>')
 def detail(id):
-    try:
-        post = db.session.query(Photo).filter_by(id=id).first()
-        posts = db.session.query(Photo) \
-            .filter(Photo.user_id == post.user_id) \
-            .filter(Photo.id != post.id) \
-            .order_by(Photo.id.desc()) \
-            .all()
-        return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html', post=post, posts=posts)
-    except Exception as e:
-        abort(404)
+    post = db.session.query(Photo).filter_by(id=id).first()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html', post=post)
+

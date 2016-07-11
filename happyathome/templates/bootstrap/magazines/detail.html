@@ -2,7 +2,6 @@
 
 {% block content %}
 <link href="http://cdn.pannellum.org/2.2/pannellum.css" rel="stylesheet" />
-
 <script src="http://cdn.pannellum.org/2.2/pannellum.js"></script>
 
 <div class="content">
@@ -13,43 +12,106 @@
                     <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
                 </div>
                 <div class="content-title">{{ post.title }}</div>
+                <div class="content-author">
+                    {{ post.user.name }}
+                </div>
                 <div class="content-body">{{ post.content }}</div>
                 <div class="content-photos">
-                    {% for subpost in post.photos %}
-                        {% if subpost.magazine_photo.file.type == 2 %}
-                            <div class="content-photo-360">
-                                <div id="photo360-{{ subpost.magazine_photo.id }}"></div>
-                            </div>
+                {% for subpost in post.photos %}
+                    {% if subpost.photo.file.type == 2 %}
+                        <div class="content-photo-360">
+                            <div id="photo360-{{ subpost.photo.id }}"></div>
+                        </div>
 
-                            <script>
-                            pannellum.viewer('photo360-{{ subpost.magazine_photo.id }}', {
-                                "type": "equirectangular",
-                                "panorama": "http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}",
-                                "autoLoad": true,
-                                "hfov": 100,
-                                "autoRotate": -0.5,
-                                "zoom-controlls": false,
-                            });
-                            $('.pnlm-controls').hide();
-                            </script>
-                        {% else %}
-                            <div class="content-photo">
-                                <a href="{{ url_for('photos.detail', id=subpost.magazine_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ subpost.magazine_photo.file.name }}" /></a>
-                            </div>
-                        {% endif %}
-                        <div class="content-body">{{ subpost.magazine_photo.content }}</div>
-                    {% endfor %}
+                        <script>
+                        pannellum.viewer('photo360-{{ subpost.photo.id }}', {
+                            "type": "equirectangular",
+                            "panorama": "http://static.inotone.co.kr/data/img/{{ subpost.photo.file.name }}",
+                            "autoLoad": true,
+                            "hfov": 100,
+                            "autoRotate": -0.5,
+                            "zoom-controlls": false,
+                        });
+                        $('.pnlm-controls').hide();
+                        </script>
+                    {% else %}
+                        <div class="content-photo">
+                            <a href="{{ url_for('photos.detail', id=subpost.photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ subpost.photo.file.name }}" /></a>
+                        </div>
+                    {% endif %}
+                    <div class="content-body">{{ subpost.photo.content }}</div>
+                {% endfor %}
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="content-sidebar">
                 <div class="content-relative">
-                    <ul>
-                    {% for post in posts %}
-                        <li><a href="{{ url_for('magazines.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" width="85" height="85" /></a></li>
-                    {% endfor %}
+                    {{ post.category.name }}
+                </div>
+                <hr />
+                <div class="content-relative">
+                    <ul class="relative-post magazines">
+                        <li class="relative-title">{{ post.category.name }} 매거진</li>
+                        {% for category_magazine in post.category.category_magazines %}
+                            {% if category_magazine.id != post.id %}
+                            <li>
+                                <div class="relative-list">
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ category_magazine.file.name }}" width="60" height="60" /></a></div>
+                                    <div class="relative-body">
+                                        <p>{{ category_magazine.user.name }}</p>
+                                        <p>{{ category_magazine.title }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
+                    <hr />
+                    <ul class="relative-post magazines">
+                        <li class="relative-title">{{ post.user.name }} 매거진</li>
+                        {% for user_magazine in post.user.user_magazines %}
+                            {% if user_magazine.id != post.id %}
+                            <li>
+                                <div class="relative-list">
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_magazine.file.name }}" width="60" height="60" /></a></div>
+                                    <div class="relative-body">
+                                        <p>{{ user_magazine.category.name }}</p>
+                                        <p>{{ user_magazine.title }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <hr />
+                <div class="content-comment">
+                    <div class="comment-title">
+                        댓글/QnA
+                    </div>
+                    <div class="comment-list">
+                        <ul>
+                            {% if post.comments %}
+                                {% for comment in post.comments %}
+                                    <li>
+                                        <div class="comment-author">{{ comment.user.name }}</div>
+                                        <div class="comment-content">
+                                            {% if comment.type == 'Q' %}Q.{% endif %}
+                                            {{ comment.content }}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li>댓글이 없습니다.</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="comment-form">
+                        <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
+                        <button class="btn btn-primary">댓글달기</button>
+                        <button class="btn btn-danger">질문하기</button>
+                    </div>
                 </div>
                 <div class="content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
             </div>

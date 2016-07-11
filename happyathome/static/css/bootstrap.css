@@ -15,6 +15,9 @@ body {
   font-size: 14px;
   font-family: 'Nanum Gothic', sans-serif;
 }
+hr {
+    margin: 10px 0;
+}
 a:hover {
     background-color: #008ec9 !important;
 }
@@ -180,6 +183,7 @@ code {
     width: 1165px;
 }
 .content-detail {
+    width: 866px;
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
@@ -219,8 +223,12 @@ code {
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
+.content-controls {
+    width: 100%;
+    margin: 10px auto;
+}
 .content-relative {
-    display: flex;
+    display: table;
     width: 255px;
     margin: 0 auto;
 }
@@ -229,12 +237,34 @@ code {
     margin: 0;
     padding: 0;
 }
-.content-relative ul li {
-    float:left;
+.content-relative ul.photos-relative li {
+    float: left;
 }
-.content-controls {
-    width: 100%;
-    margin: 10px auto;
+.content-relative .relative-title {
+    font-weight: 700;
+}
+.content-relative .relative-list {
+    display: flex;
+}
+.content-relative .relative-body {
+    padding: 7px 0 0 7px;
+    line-height: 170%;
+}
+.content-relative .relative-body p {
+    margin: 0;
+    font-size: 12px;
+}
+
+
+.content-comment {
+    padding: 10px;
+}
+.comment-list {
+    margin-top: 10px;
+    border: 1px solid #eeeeee;
+}
+.comment-list ul {
+    list-style: none;
 }
 
 

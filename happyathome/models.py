@@ -55,9 +55,23 @@ class Photo(db.Model, BaseMixin):
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
+
     user = db.relationship('User', backref='user_photos')
     file = db.relationship('File', backref='file_photos')
-    magazines = db.relationship('MagazinesPhotos', backref="magazine_photo")
+    comments = db.relationship('Comments', backref='comment_photo')
+    magazines = db.relationship('MagazinesPhotos', back_populates="photo")
+
+
+class Comments(db.Model, BaseMixin):
+    """사진 정보"""
+    __tablename__ = 'comments'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
+    type = db.Column(db.Unicode(1), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+
+    user = db.relationship('User', backref='user_comments')
 
 
 class Magazine(db.Model, BaseMixin):
@@ -73,7 +87,7 @@ class Magazine(db.Model, BaseMixin):
     user = db.relationship('User', backref='user_magazines')
     category = db.relationship('Category', backref='category_magazines')
     file = db.relationship('File', backref='file_magazines')
-    photos = db.relationship('MagazinesPhotos', order_by=asc('magazines_photos.photo_id'), backref="photo_magazine")
+    photos = db.relationship('MagazinesPhotos', order_by=asc('magazines_photos.photo_id'), back_populates="magazine")
 
 
 class MagazinesPhotos(db.Model, BaseMixin):
@@ -82,3 +96,6 @@ class MagazinesPhotos(db.Model, BaseMixin):
 
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
     photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
+
+    magazine = db.relationship("Magazine", back_populates="photos")
+    photo = db.relationship("Photo", back_populates="magazines")
