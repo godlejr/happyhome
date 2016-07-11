@@ -54,6 +54,7 @@ def comment_new(id):
     if request.method == 'POST':
         comment = Comment()
         comment.user_id = '1'
+        comment.type = request.form['type']
         comment.content = request.form['comment']
 
         photo_comment = PhotoComment()

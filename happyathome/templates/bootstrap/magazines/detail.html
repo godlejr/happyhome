@@ -101,7 +101,7 @@
                                     <li>
                                         <div class="comment-author">{{ magazine_comment.comment.user.name }}</div>
                                         <div class="comment-content">
-                                            {% if magazine_comment.comment.type == 'Q' %}Q.{% endif %}
+                                            {{ magazine_comment.comment.type }}.
                                             {{ magazine_comment.comment.content }}
                                         </div>
                                     </li>
@@ -114,8 +114,8 @@
                     <div class="comment-form">
                         <form method="POST" name="comment_form" action="{{ url_for('magazines.comment_new', id=post.id) }}">
                             <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
-                            <button type="submit" class="btn btn-primary">댓글달기</button>
-                            <button class="btn btn-danger">질문하기</button>
+                            <button name="type" type="submit" value="C" class="btn btn-primary">댓글달기</button>
+                            <button name="type" type="submit" value="Q" class="btn btn-danger">질문하기</button>
                         </form>
                     </div>
                 </div>
