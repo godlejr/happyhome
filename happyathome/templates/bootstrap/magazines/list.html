@@ -5,7 +5,7 @@
     {% for post in posts %}
     <div class="card">
         <div class="card-photo">
-            <a href="{{ url_for('magazines.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}"></a>
+            <a href="{{ url_for('magazines.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.photos[0].photo.file.name }}"></a>
         </div>
 
         <div class="card-content">
