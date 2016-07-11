@@ -62,7 +62,7 @@
                 <hr />
                 {% for magazine_photo in post.magazines %}
                 <div class="content-relative">
-                    <div class="relative-title">{{ magazine_photo.magazine.title }}의 다른 포토</div>
+                    <div class="relative-title"><a href="{{ url_for('magazines.detail', id=magazine_photo.magazine.id) }}">{{ magazine_photo.magazine.title }}</a>의 다른 포토</div>
                     <ul class="relative-author photos-relative">
                         {% for mp in magazine_photo.magazine.photos %}
                             {% if mp.photo.id != post.id %}
