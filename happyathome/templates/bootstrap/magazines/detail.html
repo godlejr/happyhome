@@ -8,14 +8,13 @@
     <div class="row">
         <div class="col-md-9">
             <div class="content-detail">
-                <div class="content-photo">
-                    <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+                <div class="magazine-body">
+                    <div class="magazine-title">{{ post.title }}</div>
+                    <div class="magazine-user">
+                        {{ post.user.name }}
+                    </div>
+                    <div class="magazine-content">{{ post.content }}</div>
                 </div>
-                <div class="content-title">{{ post.title }}</div>
-                <div class="content-author">
-                    {{ post.user.name }}
-                </div>
-                <div class="content-body">{{ post.content }}</div>
                 <div class="content-photos">
                 {% for subpost in post.photos %}
                     {% if subpost.photo.file.type == 2 %}
@@ -58,7 +57,7 @@
                             {% if category_magazine.id != post.id %}
                             <li>
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ category_magazine.file.name }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ category_magazine.photos[0].photo.file.name }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>{{ category_magazine.user.name }}</p>
                                         <p>{{ category_magazine.title }}</p>
@@ -77,7 +76,7 @@
                             {% if user_magazine.id != post.id %}
                             <li>
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_magazine.file.name }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_magazine.photos[0].photo.file.name }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>{{ user_magazine.category.name }}</p>
                                         <p>{{ user_magazine.title }}</p>

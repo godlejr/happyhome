@@ -48,7 +48,7 @@ class File(db.Model, BaseMixin):
 
 
 class Comment(db.Model, BaseMixin):
-    """사진 정보"""
+    """댓글 내역"""
     __tablename__ = 'comments'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -91,13 +91,11 @@ class Magazine(db.Model, BaseMixin):
 
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
     title = db.Column(db.Unicode(255), nullable=False)
     content = db.Column(db.Text)
 
     user = db.relationship('User', backref='user_magazines')
     category = db.relationship('Category', backref='category_magazines')
-    file = db.relationship('File', backref='file_magazines')
     photos = db.relationship('MagazinePhoto', order_by=db.asc('magazine_photos.photo_id'), back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
 

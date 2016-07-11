@@ -187,6 +187,24 @@ code {
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
+.magazine-body {
+    width: 75%;
+    margin: 0 auto;
+    padding: 15px 5px;
+    text-align: justify;
+}
+.magazine-body .magazine-title {
+    font-size: 24px;
+    font-weight: 700;
+}
+.magazine-body .magazine-user {
+    font-size: 18px;
+    font-weight: 500;
+}
+.magazine-body .magazine-content {
+    font-size: 15px;
+    margin-top: 20px;
+}
 .content-photo {
     width: 100%;
     overflow: hidden;
@@ -217,6 +235,10 @@ code {
     padding: 15px 5px;
     font-size: 15px;
     word-wrap: break-word;
+}
+.magazine-body {
+    width: 75%;
+    maring: 0 auto;
 }
 .content-sidebar {
     padding: 5px;
