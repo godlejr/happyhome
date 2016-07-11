@@ -32,44 +32,42 @@
 </div>
 
 <script>
-var photo = document.getElementById('photoFile'),
-    preview = document.getElementById('photoPreview');
+var $photoFile = $('#photoFile'),
+    $photoPreview = $('#photoPreview');
 
-photo.addEventListener('change', function() {
-    while (preview.firstChild) {
-        preview.removeChild(preview.firstChild);
-    }
+$photoPreview.click(function(e) {
+    e.preventDefault();
+
+    $photoFile.click();
 });
 
-function loadPhoto(dataURL) {
+$photoFile.change(function() {
+    $photoPreview.children().remove();
+
+    var ext = $(this).val().split('.').pop().toLowerCase();
+    if (ext.length > 0) {
+        if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+            alert('사진 파일(gif, png, jpg)만 업로드 할수 있습니다.');
+            $(this).val('');
+            return false;
+        }
+    }
+    loadPhoto($photoPreview[0], $photoFile[0]);
+});
+
+function loadPhoto(photoPreview, dataURL) {
     var reader = new FileReader();
-    reader.readAsDataURL(photo.files[0]);
+
+    reader.readAsDataURL(dataURL.files[0]);
     reader.onload = function (e) {
         var img = new Image();
         img.src = e.target.result;
-        img.height = preview.offsetHeight;
+        img.height = photoPreview.offsetHeight;
         img.onload = function() {
-            preview.appendChild(this);
-            preview.style.width = preview.offsetHeight * (this.width / this.height);
+            photoPreview.appendChild(this);
+            photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
         };
     }
 }
-
-$('#photoPreview').click(function(e) {
-    e.preventDefault();
-
-    var $photoFile = $("#photoFile");
-    $photoFile.click();
-    var ext = $photoFile.val().split(".").pop().toLowerCase();
-    if (ext.length > 0) {
-        if ($.inArray(ext, ["gif", "png", "jpg", "jpeg"]) == -1) {
-            alert("사진 파일(gif, png, jpg)만 업로드 할수 있습니다.");
-            return false;
-        }
-
-        loadPhoto(photo);
-    }
-    $photoFile.val();
-});
 </script>
 {% endblock %}
