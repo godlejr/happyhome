@@ -2,8 +2,8 @@ import os
 
 import boto3
 import shortuuid
-from happyathome.models import db, Photo, File
-from flask import Blueprint, render_template, request, redirect, url_for, abort, current_app
+from happyathome.models import db, Photo, File, User
+from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from werkzeug.utils import secure_filename
 
 photos = Blueprint('photos', __name__)
@@ -18,23 +18,25 @@ def list():
 @photos.route('/new', methods=['GET','POST'])
 def new():
     if request.method == 'POST':
-        file = request.files['photo_file']
-        file_blob = file.read()
-        file_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(file.filename)[1])))
+        photo_file = request.files['photo_file']
+        photo_blob = photo_file.read()
+        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1])))
 
         s3 = boto3.resource('s3')
-        s3.Object('static.inotone.co.kr', 'data/img/%s' % file_name).put(Body=file_blob, ContentType=file.content_type)
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob, ContentType=photo_file.content_type)
 
         file = File()
-        file.name = file_name
-        file.size = len(file_blob)
+        file.type = 1
+        file.name = photo_name
+        file.ext = photo_name.split('.')[1]
+        file.size = len(photo_blob)
 
-        post = Photo()
-        post.user_id = '1'
-        post.files = file
-        post.content = request.form['content']
+        photo = Photo()
+        photo.user_id = '1'
+        photo.file = file
+        photo.content = request.form['content']
 
-        db.session.add(post)
+        db.session.add(photo)
         db.session.commit()
 
         return redirect(url_for('photos.list'))

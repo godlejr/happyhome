@@ -1,35 +1,34 @@
 {% extends 'bootstrap/photos/base.html' %}
 
 {% block content %}
-<div class="well bs-component">
-    <form method="POST" class="form-horizontal" enctype="multipart/form-data">
-        <fieldset>
-            <legend>공간 사진을 등록해주세요.</legend>
+<div class="cards">
+    <div class="well bs-component">
+        <form method="POST" class="form-horizontal" enctype="multipart/form-data">
+            <fieldset>
+                <legend>사진을 등록해주세요.</legend>
 
-            <div class="form-group">
-                <div id="photoPreview"></div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <textarea class="form-control" rows="3" id="textArea" name="content" placeholder="이미지에 대한 설명을 등록해주세요."></textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-1">
+                <div class="form-group">
+                    <div id="photoPreview">
+                        <span class="glyphicon glyphicon-open"></span>
+                    </div>
                     <input type="file" id="photoFile" name="photo_file" />
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <button type="reset" class="btn btn-default">취소</button>
-                    <button type="submit" class="btn btn-primary">등록</button>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <textarea class="form-control" rows="5" id="textArea" name="content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-    </form>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <button type="reset" class="btn btn-default">취소</button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
 <script>
@@ -56,5 +55,20 @@ function loadPhoto(dataURL) {
         };
     }
 }
+
+$('#photoPreview').click(function(e) {
+    e.preventDefault();
+
+    var $photoFile = $("#photoFile");
+    $photoFile.click();
+    var ext = $photoFile.val().split(".").pop().toLowerCase();
+    if (ext.length > 0) {
+        if ($.inArray(ext, ["gif", "png", "jpg", "jpeg"]) == -1) {
+            alert("gif, png, jpg 파일만 업로드 할수 있습니다.");
+            return false;
+        }
+    }
+    $photoFile.val();
+});
 </script>
 {% endblock %}

@@ -155,7 +155,9 @@ code {
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
 
-
+#photoFile {
+    display: none;
+}
 #photoPreview {
   width: 640px;
   height: 360px;
@@ -166,8 +168,9 @@ code {
   background-color: #ffffff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
-#photoPreview .message {
-    text-align: center;
+#photoPreview span {
+    margin-top: 20%;
+    font-size: 90px;
 }
 #photoPreview img {
     max-width: 100%;

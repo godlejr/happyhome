@@ -1,5 +1,4 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import asc
 
 db = SQLAlchemy()
 
@@ -42,7 +41,7 @@ class File(db.Model, BaseMixin):
     """파일 정보"""
     __tablename__ = 'files'
 
-    type = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.Integer, nullable=False, default=1)
     name = db.Column(db.Unicode(255), nullable=False)
     ext = db.Column(db.Unicode(255), nullable=False)
     size = db.Column(db.Integer, nullable=False)
@@ -87,7 +86,7 @@ class Magazine(db.Model, BaseMixin):
     user = db.relationship('User', backref='user_magazines')
     category = db.relationship('Category', backref='category_magazines')
     file = db.relationship('File', backref='file_magazines')
-    photos = db.relationship('MagazinesPhotos', order_by=asc('magazines_photos.photo_id'), back_populates="magazine")
+    photos = db.relationship('MagazinesPhotos', order_by=db.asc('magazines_photos.photo_id'), back_populates="magazine")
 
 
 class MagazinesPhotos(db.Model, BaseMixin):

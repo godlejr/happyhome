@@ -51,6 +51,7 @@
                 </div>
                 <hr />
                 <div class="content-relative">
+                    {% if post.category.category_magazines|length > 1 %}
                     <ul class="relative-post magazines">
                         <li class="relative-title">{{ post.category.name }} 매거진</li>
                         {% for category_magazine in post.category.category_magazines %}
@@ -67,9 +68,11 @@
                             {% endif %}
                         {% endfor %}
                     </ul>
+                    {% endif %}
+                    {% if post.user.user_magazines|length > 1 %}
                     <hr />
                     <ul class="relative-post magazines">
-                        <li class="relative-title">{{ post.user.name }} 매거진</li>
+                        <li class="relative-title">{{ post.user.name }}의 매거진</li>
                         {% for user_magazine in post.user.user_magazines %}
                             {% if user_magazine.id != post.id %}
                             <li>
@@ -84,6 +87,7 @@
                             {% endif %}
                         {% endfor %}
                     </ul>
+                    {% endif %}
                 </div>
                 <hr />
                 <div class="content-comment">
