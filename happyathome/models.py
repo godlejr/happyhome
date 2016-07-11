@@ -47,6 +47,19 @@ class File(db.Model, BaseMixin):
     size = db.Column(db.Integer, nullable=False)
 
 
+class Comment(db.Model, BaseMixin):
+    """사진 정보"""
+    __tablename__ = 'comments'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    type = db.Column(db.Unicode(1), nullable=False, default='C')
+    content = db.Column(db.Text, nullable=False)
+
+    user = db.relationship('User', backref='user_comments')
+    photos = db.relationship('PhotoComment', back_populates='comment')
+    magazines = db.relationship('MagazineComment', back_populates='comment')
+
+
 class Photo(db.Model, BaseMixin):
     """사진 정보"""
     __tablename__ = 'photos'
@@ -57,20 +70,19 @@ class Photo(db.Model, BaseMixin):
 
     user = db.relationship('User', backref='user_photos')
     file = db.relationship('File', backref='file_photos')
-    comments = db.relationship('Comments', backref='comment_photo')
-    magazines = db.relationship('MagazinesPhotos', back_populates="photo")
+    comments = db.relationship('PhotoComment', back_populates='photo')
+    magazines = db.relationship('MagazinePhoto', back_populates='photo')
 
 
-class Comments(db.Model, BaseMixin):
-    """사진 정보"""
-    __tablename__ = 'comments'
+class PhotoComment(db.Model, BaseMixin):
+    """포토-댓글 연결고리"""
+    __tablename__ = 'photo_comments'
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
-    type = db.Column(db.Unicode(1), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
 
-    user = db.relationship('User', backref='user_comments')
+    photo = db.relationship('Photo', back_populates='comments')
+    comment = db.relationship('Comment', back_populates='photos')
 
 
 class Magazine(db.Model, BaseMixin):
@@ -86,15 +98,27 @@ class Magazine(db.Model, BaseMixin):
     user = db.relationship('User', backref='user_magazines')
     category = db.relationship('Category', backref='category_magazines')
     file = db.relationship('File', backref='file_magazines')
-    photos = db.relationship('MagazinesPhotos', order_by=db.asc('magazines_photos.photo_id'), back_populates="magazine")
+    photos = db.relationship('MagazinePhoto', order_by=db.asc('magazine_photos.photo_id'), back_populates='magazine')
+    comments = db.relationship('MagazineComment', back_populates='magazine')
 
 
-class MagazinesPhotos(db.Model, BaseMixin):
+class MagazinePhoto(db.Model, BaseMixin):
     """매거진-포토 연결고리"""
-    __tablename__ = 'magazines_photos'
+    __tablename__ = 'magazine_photos'
 
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
     photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
 
-    magazine = db.relationship("Magazine", back_populates="photos")
-    photo = db.relationship("Photo", back_populates="magazines")
+    magazine = db.relationship('Magazine', back_populates='photos')
+    photo = db.relationship('Photo', back_populates='magazines')
+
+
+class MagazineComment(db.Model, BaseMixin):
+    """매거진-댓글 연결고리"""
+    __tablename__ = 'magazine_comments'
+
+    magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'))
+
+    magazine = db.relationship('Magazine', back_populates='comments')
+    comment = db.relationship('Comment', back_populates='magazines')

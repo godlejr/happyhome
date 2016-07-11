@@ -3,7 +3,7 @@ import os
 import boto3
 import html2text
 import shortuuid
-from happyathome.models import db, Magazine, Photo, File, MagazinesPhotos
+from happyathome.models import db, File, Magazine, MagazinePhoto, Comment, MagazineComment
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
 from werkzeug.utils import secure_filename
 
@@ -64,3 +64,19 @@ def new():
 def detail(id):
     post = db.session.query(Magazine).filter_by(id=id).first()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post)
+
+
+@magazines.route('/<id>/comments/new', methods=['POST'])
+def comment_new(id):
+    if request.method == 'POST':
+        comment = Comment()
+        comment.user_id = '1'
+        comment.content = request.form['comment']
+
+        magazine_comment = MagazineComment()
+        magazine_comment.magazine_id = id
+        magazine_comment.comment = comment
+
+        db.session.add(magazine_comment)
+        db.session.commit()
+    return redirect(url_for('magazines.detail', id=id))
