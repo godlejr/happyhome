@@ -1,4 +1,8 @@
+from flask_admin.contrib import sqla
 from flask_sqlalchemy import SQLAlchemy
+import flask_admin as admin
+from manage import app
+
 
 db = SQLAlchemy()
 
@@ -24,7 +28,7 @@ class User(db.Model, BaseMixin):
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
-
+    accesscode = db.Column(db.Unicode(255), nullable=False,unique=True)
     def is_authenticated(self):
         """Email 인증 여부 확인"""
         return self.authenticated
@@ -120,3 +124,19 @@ class MagazineComment(db.Model, BaseMixin):
 
     magazine = db.relationship('Magazine', back_populates='comments')
     comment = db.relationship('Comment', back_populates='magazines')
+
+
+class Social( db.Model,BaseMixin):
+    __tablename__ = 'social'
+    social_id = db.Column(db.String(64), nullable=False, primary_key=True)
+    nickname = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(64), nullable=True)
+
+
+#admin class
+class UserAdmin(sqla.ModelView):
+    column_display_pk = True
+    form_columns = ['name', 'email','authenticated','accesscode']
+
+admin = admin.Admin(app, name='happy at home', template_mode='bootstrap3')
+admin.add_view(UserAdmin(User, db.session))

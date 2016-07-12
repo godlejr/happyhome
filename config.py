@@ -8,6 +8,10 @@ class Config(object):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'mysql://root:1miglobal@inotone.cjj0w56trea4.ap-northeast-2.rds.amazonaws.com/happyathome'
+    SOCIAL_FACEBOOK = {
+        'consumer_key': '1743693419236952',
+        'consumer_secret': '8462ffb5095aad6600f6acc6ad4146ea'
+    }
 
 
 class ProductionConfig(Config):
