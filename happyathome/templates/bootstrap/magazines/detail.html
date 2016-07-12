@@ -127,26 +127,23 @@
                 {% endif %}
 
                 <div class="content-comment">
-                    <div class="comment-title">
-                        Q & A
-                    </div>
+                    <div class="comment-title">Q & A</div>
+
+                    {% if post.comments %}
                     <div class="comment-list">
                         <ul>
-                            {% if post.comments %}
-                                {% for magazine_comment in post.comments %}
-                                    <li>
-                                        <div class="comment-author">{{ magazine_comment.comment.user.name }}</div>
-                                        <div class="comment-content">
-                                            {{ magazine_comment.comment.content }}
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            {% endif %}
+                            {% for magazine_comment in post.comments %}
+                                <li>
+                                    <div class="comment-author">{{ magazine_comment.comment.user.name }}</div>
+                                    <div class="comment-content">{{ magazine_comment.comment.content }}</div>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
+                    {% endif %}
 
                     <div class="comment-form">
-                        <form method="POST" name="comment_form" action="{{ url_for('magazines.comment_new', id=post.id) }}">
+                        <form method="POST" action="{{ url_for('magazines.comment_new', id=post.id) }}">
                             <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
                             <button type="submit" class="btn btn-primary">질문하기</button>
                         </form>
