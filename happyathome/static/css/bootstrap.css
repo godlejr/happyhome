@@ -131,7 +131,7 @@ code {
 	transform: scale(1);
 }
 .card .card-content {
-    height: 90px;
+    height: 100px;
     padding: 12px;
     font-size: 13px;
     text-align: justify;
@@ -143,8 +143,15 @@ code {
     margin: 0;
     color: #030303;
 }
-.card .card-content span.card-title {
-    line-height: 48px;
+.card .card-content a {
+    font-weight: 700;
+}
+.card .card-content .card-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+.card .card-content .card-user {
+    font-size: 14px;
 }
 .card .card-action {
     height: 44px;
@@ -244,10 +251,6 @@ code {
     padding: 5px;
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-.content-sidebar a {
-    color: #030303;
-    text-decoration: underline;
 }
 .content-controls {
     width: 100%;
