@@ -62,7 +62,6 @@ class Comment(db.Model, BaseMixin):
     __tablename__ = 'comments'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    type = db.Column(db.Unicode(1), nullable=False, default='C')
     content = db.Column(db.Text, nullable=False)
 
     user = db.relationship('User', backref=backref('user_comments'))
@@ -109,7 +108,7 @@ class Magazine(db.Model, BaseMixin):
     category = db.relationship('Category', backref=backref('category_magazines'))
     residence = db.relationship('Residence', backref=backref('residence_magazines'))
     photos = db.relationship('MagazinePhoto', order_by=db.asc('magazine_photos.photo_id'), back_populates='magazine')
-    comments = db.relationship('MagazineComment', back_populates='magazine', lazy='dynamic')
+    comments = db.relationship('MagazineComment', back_populates='magazine')
 
 
 class MagazinePhoto(db.Model, BaseMixin):

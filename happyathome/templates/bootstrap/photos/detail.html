@@ -34,23 +34,23 @@
                     <div class="comment-form">
                         <form method="POST" name="comment_form" action="{{ url_for('photos.comment_new', id=post.id) }}">
                             <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
-                            <button name="type" type="submit" value="C" class="btn btn-primary">댓글달기</button>
-                            <button name="type" type="submit" value="Q" class="btn btn-danger">질문하기</button>
+                            <button type="submit" class="btn btn-primary">질문하기</button>
                         </form>
                     </div>
+                    {% if post.comments %}
                     <div class="comment-list">
                         <ul>
                         {% for photo_comment in post.comments %}
                             <li>
                                 <div class="comment-author">{{ photo_comment.comment.user.name }}</div>
                                 <div class="comment-content">
-                                    {{ photo_comment.comment.type }}.
                                     {{ photo_comment.comment.content }}
                                 </div>
                             </li>
                         {% endfor %}
                         </ul>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
