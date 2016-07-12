@@ -1,0 +1,60 @@
+{% extends "bootstrap/base.html" %}
+{% from "bootstrap/main/_formhelpers.html" import render_field %}
+
+{% block content %}
+{% macro show_provider_button(provider_id, display_name, conn, show_update_form=True) %}
+<div class="contentwrap">
+    <article class="container">
+        <div class="page-header">
+            <h1>{{ display_name }}</h1>
+        </div>
+        {% if conn %}
+        {% if show_update_form %}
+        <form action="{{ url_for('social_post', provider_id=provider_id) }}" method="POST" class="form-horizontal">
+            <fieldset>
+                <div class="form-group">
+                    <div class="col-sm-4">
+
+                        <textarea class="input-xlarge" name="message"
+                                  rows="3">Hello from Flask-Social-Example!</textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-large"><i class="icon-share icon-white"></i> Post
+                    Update
+                </button>
+            </fieldset>
+        </form>
+        {% endif %}
+        <form action="{{ url_for('social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}?__METHOD_OVERRIDE__=DELETE"
+              method="POST" class="form-horizontal">
+            <div class="col-sm-4">
+
+                <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Remove {{
+                    display_name }}
+                    Connection
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <form action="{{ url_for('social.connect', provider_id=provider_id) }}" method="POST" class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-success btn-large"><i class="icon-share icon-white"></i>
+                        Connect with {{ display_name }}
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+    </article>
+</div>
+{% endmacro %}
+
+{% for user in users %}
+<h4>{{ user.email }}</h4>
+{% endfor %}
+
+{{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
+{{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+
+{% end block %}
