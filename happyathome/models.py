@@ -62,7 +62,6 @@ class Comment(db.Model, BaseMixin):
     __tablename__ = 'comments'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    type = db.Column(db.Unicode(1), nullable=False, default='C')
     content = db.Column(db.Text, nullable=False)
 
     user = db.relationship('User', backref=backref('user_comments'))

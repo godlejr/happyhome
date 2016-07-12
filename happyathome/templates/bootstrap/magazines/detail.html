@@ -128,7 +128,7 @@
 
                 <div class="content-comment">
                     <div class="comment-title">
-                        댓글/QnA
+                        Q & A
                     </div>
                     <div class="comment-list">
                         <ul>
@@ -137,13 +137,10 @@
                                     <li>
                                         <div class="comment-author">{{ magazine_comment.comment.user.name }}</div>
                                         <div class="comment-content">
-                                            {{ magazine_comment.comment.type }}.
                                             {{ magazine_comment.comment.content }}
                                         </div>
                                     </li>
                                 {% endfor %}
-                            {% else %}
-                                <li>댓글이 없습니다.</li>
                             {% endif %}
                         </ul>
                     </div>
@@ -151,8 +148,7 @@
                     <div class="comment-form">
                         <form method="POST" name="comment_form" action="{{ url_for('magazines.comment_new', id=post.id) }}">
                             <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
-                            <button name="type" type="submit" value="C" class="btn btn-primary">댓글달기</button>
-                            <button name="type" type="submit" value="Q" class="btn btn-danger">질문하기</button>
+                            <button type="submit" class="btn btn-primary">질문하기</button>
                         </form>
                     </div>
                 </div>
