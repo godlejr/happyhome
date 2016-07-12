@@ -1,6 +1,6 @@
 from flask_admin.contrib import sqla
 from flask_sqlalchemy import SQLAlchemy
-
+from sqlalchemy.orm import backref
 
 db = SQLAlchemy()
 
@@ -26,7 +26,8 @@ class User(db.Model, BaseMixin):
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
-    accesscode = db.Column(db.Unicode(255), nullable=False,unique=True)
+    accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
+
     def is_authenticated(self):
         """Email 인증 여부 확인"""
         return self.authenticated
@@ -35,6 +36,13 @@ class User(db.Model, BaseMixin):
 class Category(db.Model, BaseMixin):
     """카테고리 정보"""
     __tablename__ = 'categories'
+
+    name = db.Column(db.Unicode(255), nullable=False)
+
+
+class Residence(db.Model, BaseMixin):
+    """거주지 정보"""
+    __tablename__ = 'residences'
 
     name = db.Column(db.Unicode(255), nullable=False)
 
@@ -57,7 +65,7 @@ class Comment(db.Model, BaseMixin):
     type = db.Column(db.Unicode(1), nullable=False, default='C')
     content = db.Column(db.Text, nullable=False)
 
-    user = db.relationship('User', backref='user_comments')
+    user = db.relationship('User', backref=backref('user_comments'))
     photos = db.relationship('PhotoComment', back_populates='comment')
     magazines = db.relationship('MagazineComment', back_populates='comment')
 
@@ -70,8 +78,8 @@ class Photo(db.Model, BaseMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
 
-    user = db.relationship('User', backref='user_photos')
-    file = db.relationship('File', backref='file_photos')
+    user = db.relationship('User', backref=backref('user_photos'))
+    file = db.relationship('File', backref=backref('file_photos'))
     comments = db.relationship('PhotoComment', back_populates='photo')
     magazines = db.relationship('MagazinePhoto', back_populates='photo')
 
@@ -92,14 +100,16 @@ class Magazine(db.Model, BaseMixin):
     __tablename__ = 'magazines'
 
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    residence_id = db.Column(db.Integer, db.ForeignKey('residences.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.Unicode(255), nullable=False)
     content = db.Column(db.Text)
 
-    user = db.relationship('User', backref='user_magazines')
-    category = db.relationship('Category', backref='category_magazines')
+    user = db.relationship('User', backref=backref('user_magazines'))
+    category = db.relationship('Category', backref=backref('category_magazines'))
+    residence = db.relationship('Residence', backref=backref('residence_magazines'))
     photos = db.relationship('MagazinePhoto', order_by=db.asc('magazine_photos.photo_id'), back_populates='magazine')
-    comments = db.relationship('MagazineComment', back_populates='magazine')
+    comments = db.relationship('MagazineComment', back_populates='magazine', lazy='dynamic')
 
 
 class MagazinePhoto(db.Model, BaseMixin):
@@ -124,8 +134,9 @@ class MagazineComment(db.Model, BaseMixin):
     comment = db.relationship('Comment', back_populates='magazines')
 
 
-class Social( db.Model,BaseMixin):
-    __tablename__ = 'social'
+class Social(db.Model, BaseMixin):
+    __tablename__ = 'socials'
+
     social_id = db.Column(db.String(64), nullable=False, primary_key=True)
     nickname = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)

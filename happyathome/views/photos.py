@@ -2,7 +2,7 @@ import os
 
 import boto3
 import shortuuid
-from happyathome.models import db, Photo, File, Comment, PhotoComment
+from happyathome.models import db, Photo, File, Comment, PhotoComment, Magazine, MagazinePhoto
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from werkzeug.utils import secure_filename
 
@@ -45,8 +45,15 @@ def new():
 
 @photos.route('/<id>')
 def detail(id):
-    post = db.session.query(Photo).filter_by(id=id).first()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html', post=post)
+    sub_photos = []
+    vr_photos = []
+    photo = db.session.query(Photo)
+    post = photo.filter(Photo.id == id).first()
+    if len(post.magazines):
+        magazines = photo.filter(Photo.magazines.any(magazine_id=post.magazines[0].magazine_id))
+        vr_photos = magazines.filter(Photo.file.has(type=2)).all()
+        sub_photos = magazines.filter(Photo.file.has(type=1)).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html', post=post, sub_photos=sub_photos, vr_photos=vr_photos)
 
 
 @photos.route('/<id>/comments/new', methods=['POST'])

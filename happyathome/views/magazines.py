@@ -11,8 +11,15 @@ magazines = Blueprint('magazines', __name__)
 
 
 @magazines.route('')
-def list():
-    posts = db.session.query(Magazine).order_by(Magazine.id.desc()).all()
+@magazines.route('/categories/<category_id>')
+@magazines.route('/residences/<residence_id>')
+def list(category_id=None, residence_id=None):
+    posts = db.session.query(Magazine)
+    if category_id:
+        posts = posts.filter(Magazine.category_id == category_id)
+    if residence_id:
+        posts = posts.filter(Magazine.residence_id == residence_id)
+    posts = posts.order_by(Magazine.id.desc()).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html', posts=posts)
 
 

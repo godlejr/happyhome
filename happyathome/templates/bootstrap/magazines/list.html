@@ -9,7 +9,7 @@
         </div>
 
         <div class="card-content">
-            <p>{{ post.category.name }}</p>
+            <p><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a></p>
             <p>{{ post.title }}</p>
             <p>{{ post.user.name}}</p>
         </div>

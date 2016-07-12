@@ -243,10 +243,6 @@ code {
     font-size: 15px;
     word-wrap: break-word;
 }
-.magazine-body {
-    width: 75%;
-    maring: 0 auto;
-}
 .content-sidebar {
     padding: 5px;
     background-color: #ffffff;
