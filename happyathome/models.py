@@ -1,7 +1,5 @@
 from flask_admin.contrib import sqla
 from flask_sqlalchemy import SQLAlchemy
-import flask_admin as admin
-from manage import app
 
 
 db = SQLAlchemy()
@@ -136,7 +134,4 @@ class Social( db.Model,BaseMixin):
 #admin class
 class UserAdmin(sqla.ModelView):
     column_display_pk = True
-    form_columns = ['name', 'email','authenticated','accesscode']
-
-admin = admin.Admin(app, name='happy at home', template_mode='bootstrap3')
-admin.add_view(UserAdmin(User, db.session))
+    form_columns = ['name', 'email', 'authenticated', 'accesscode']

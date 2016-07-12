@@ -1,5 +1,6 @@
 import os
 import config
+from flask_admin import Admin
 from happyathome.models import db
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
@@ -23,16 +24,16 @@ def create_app(config_name):
     toolbar = DebugToolbarExtension()
     toolbar.init_app(app)
 
+    admin = Admin(app, name='Happy@Home', template_mode='bootstrap3')
+
     # Application Blueprints
     from happyathome.views.main import main as main_blueprint
     from happyathome.views.photos import photos as photos_blueprint
     from happyathome.views.magazines import magazines as magazines_blueprint
-    from happyathome.views.admin import admin as admin_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(magazines_blueprint, url_prefix='/magazines')
     app.register_blueprint(photos_blueprint, url_prefix='/photos')
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
 
