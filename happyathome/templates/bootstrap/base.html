@@ -17,70 +17,66 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 </head>
 
 <body>
-<nav class="navbar navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <div id="nav-container">
-                <div class="toggle-icon" data-toggle="collapse" data-target="#navbar">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div><!-- /toggle-icon -->
-            </div><!-- /nav-container -->
-            <a class="navbar-brand brand-logo" href="/">HAPPY@home</a>
-            <div class="navbar-controls">
-                {%- if not active_new %}{% set active_new = "magazines.new" %}{% endif %}
-                {{ func.render_new(active_new) }}
-            </div>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse navbar-right">
-            <ul class="nav navbar-nav">
-                {{ func.render_menu('magazines.list', 'Magazines', active=active_list) }}
-                {{ func.render_menu('photos.list', 'Photos', active=active_list) }}
-                <li><a href="#professionals">Professionals</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<!-- Begin page content -->
-<div class="container">
-    {% block content %}{% endblock %}
-</div>
-
-<footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="dropup">
-                    <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        Family <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="http://www.hmglobal.com" target="_blank">㈜한미글로벌</a></li>
-                        <li><a href="http://www.ikukbo.com" target="_blank">㈜국보디자인</a></li>
-                    </ul>
+    <nav class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <div id="nav-container">
+                    <div class="toggle-icon" data-toggle="collapse" data-target="#navbar">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div><!-- /toggle-icon -->
+                </div><!-- /nav-container -->
+                <a class="navbar-brand brand-logo" href="/">HAPPY@home</a>
+                <div class="navbar-controls">
+                    {%- if not active_new %}{% set active_new = "magazines.new" %}{% endif %}
+                    {{ func.render_new(active_new) }}
                 </div>
             </div>
-            <div class="col-md-8">
-                <p class="text-muted">Copyright ⓒ 2016 by Inotone Co,. LTD. All Rights Reserved</p>
+            <div id="navbar" class="collapse navbar-collapse navbar-right">
+                <ul class="nav navbar-nav">
+                    {{ func.render_menu('magazines.list', 'Magazines', active=active_list) }}
+                    {{ func.render_menu('photos.list', 'Photos', active=active_list) }}
+                    <li><a href="#professionals">Professionals</a></li>
+                </ul>
             </div>
         </div>
-    </div>
-</footer>
+    </nav>
 
-<script>
+    <!-- Begin page content -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="dropup">
+                        <a href="#" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            Family <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="http://www.hmglobal.com" target="_blank">㈜한미글로벌</a></li>
+                            <li><a href="http://www.ikukbo.com" target="_blank">㈜국보디자인</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <p class="text-muted">Copyright ⓒ 2016 by Inotone Co,. LTD. All Rights Reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
     $(".toggle-icon").click(function() {
       $('#nav-container').toggleClass("pushed");
     });
-</script>
+    </script>
 </body>
-
-
 
 </html>
