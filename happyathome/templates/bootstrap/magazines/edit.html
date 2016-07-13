@@ -17,7 +17,7 @@
                             {% endfor %}
                         </div>
 
-                        <div class="btn-group" data-toggle="buttons">
+                        <div class="btn-group pull-right" data-toggle="buttons">
                             {% for residence in residences %}
                             <label class="btn btn-primary">
                                 <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
@@ -61,7 +61,7 @@
 
                 <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-1">
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="submit" class="btn btn-danger">등록</button>
                         <button class="btn" id="addBtnPhoto" type="button" value="1">사진 추가</button>
                     </div>
                 </div>
@@ -74,7 +74,9 @@
 var $photoFile,
     $photoPreview;
 
-$('#photos').on('click', '.photo-preview', function(e) {
+$('#photos').on('click', '.photo-room', function() {
+    $('#photoRoom-' + $(this).attr('id-value')).val($(this).attr('value'));
+}).on('click', '.photo-preview', function(e) {
     e.preventDefault();
 
     $photoFile = $('#photoFile-' + $(this).attr('id-value'))
@@ -119,6 +121,14 @@ function photoFileTmpl(id) {
                 '<span class="glyphicon glyphicon-open"></span>' +
             '</div>' +
             '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
+            '<input type="hidden" id="photoRoom-' + id + '" name="room_id" value="" />' +
+            '<div class="btn-group col-lg-10 col-lg-offset-2" data-toggle="buttons">' +
+                {%- for room in rooms %}
+                '<label class="btn btn-primary photo-room" id-value="' + id + '" value="{{ room.id }}">' +
+                    '<input type="radio" value="{{ room.id }}" id-value="' + id + '"> {{ room.name }}' +
+                '</label>' +
+                {%- endfor %}
+            '</div>' +
             '<textarea class="form-control" rows="3" name="photo_content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
         '</div>' +
     '</div>';

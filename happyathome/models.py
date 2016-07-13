@@ -37,14 +37,21 @@ class Category(db.Model, BaseMixin):
     """카테고리 정보"""
     __tablename__ = 'categories'
 
-    name = db.Column(db.Unicode(255), nullable=False)
+    name = db.Column(db.Unicode(50), nullable=False)
 
 
 class Residence(db.Model, BaseMixin):
     """거주지 정보"""
     __tablename__ = 'residences'
 
-    name = db.Column(db.Unicode(255), nullable=False)
+    name = db.Column(db.Unicode(50), nullable=False)
+
+
+class Room(db.Model, BaseMixin):
+    """공간 정보"""
+    __tablename__ = 'rooms'
+
+    name = db.Column(db.Unicode(50), nullable=False)
 
 
 class File(db.Model, BaseMixin):
@@ -76,9 +83,11 @@ class Photo(db.Model, BaseMixin):
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
+    room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
 
     user = db.relationship('User', backref=backref('user_photos'))
     file = db.relationship('File', backref=backref('file_photos'))
+    room = db.relationship('File', backref=backref('room_photos'))
     comments = db.relationship('PhotoComment', back_populates='photo')
     magazines = db.relationship('MagazinePhoto', back_populates='photo')
 

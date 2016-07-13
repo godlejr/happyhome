@@ -2,7 +2,7 @@ import os
 
 import boto3
 import shortuuid
-from happyathome.models import db, Photo, File, Comment, PhotoComment, Magazine, MagazinePhoto
+from happyathome.models import db, Photo, File, Comment, PhotoComment, Magazine, MagazinePhoto, Room
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from werkzeug.utils import secure_filename
 
@@ -32,15 +32,18 @@ def new():
         file.size = len(photo_blob)
 
         photo = Photo()
-        photo.user_id = '1'
         photo.file = file
+        photo.user_id = '1'
+        photo.room_id = request.form['room_id']
         photo.content = request.form['content']
 
         db.session.add(photo)
         db.session.commit()
 
         return redirect(url_for('photos.list'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html')
+
+    rooms = db.session.query(Room).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html', rooms=rooms)
 
 
 @photos.route('/<id>')

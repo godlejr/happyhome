@@ -137,7 +137,7 @@
                 {% endif %}
 
                 <div class="content-comment">
-                    <div class="comment-title">Q & A</div>
+                    <div class="comment-title">Q n A</div>
 
                     {% if post.comments %}
                     <div class="comment-list">
@@ -155,7 +155,7 @@
                     <div class="comment-form">
                         <form method="POST" action="{{ url_for('magazines.comment_new', id=post.id) }}">
                             <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
-                            <button type="submit" class="btn btn-primary">질문하기</button>
+                            <button type="submit" class="btn btn-danger">질문하기</button>
                         </form>
                     </div>
                 </div>

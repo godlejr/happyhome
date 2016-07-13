@@ -3,7 +3,8 @@ import os
 import boto3
 import html2text
 import shortuuid
-from happyathome.models import db, File, Magazine, MagazinePhoto, Comment, MagazineComment, Category, Residence, Photo
+from happyathome.models import db, File, Magazine, MagazinePhoto, Comment, MagazineComment, Category, Residence, Photo, \
+    Room
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
 from werkzeug.utils import secure_filename
 
@@ -82,8 +83,9 @@ def new():
             file.size = len(photo_blob)
 
             photo = Photo()
-            photo.user_id = '1'
             photo.file = file
+            photo.user_id = '1'
+            photo.room_id = request.form.getlist('room_id')[idx]
             photo.content = request.form.getlist('photo_content')[idx]
 
             magazine_photo = MagazinePhoto();
@@ -96,7 +98,11 @@ def new():
 
     categories = db.session.query(Category).all()
     residences = db.session.query(Residence).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html', categories=categories, residences=residences)
+    rooms = db.session.query(Room).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html',
+                           categories=categories,
+                           residences=residences,
+                           rooms=rooms)
 
 
 @magazines.route('/<id>')
