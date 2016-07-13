@@ -1,66 +1,136 @@
 {% extends 'bootstrap/magazines/base.html' %}
 
 {% block content %}
-<div class="well bs-component">
-    <form method="POST" class="form-horizontal" enctype="multipart/form-data">
-        <fieldset>
-            <legend>매거진을 등록해주세요.</legend>
+<div class="cards">
+    <div class="well">
+        <form method="POST" class="form-horizontal" enctype="multipart/form-data">
+            <fieldset>
+                <legend>스토리를 등록해주세요.</legend>
 
-            <div class="form-group">
-                <div id="photoPreview"></div>
-            </div>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <div class="btn-group" data-toggle="buttons">
+                            {% for category in categories %}
+                            <label class="btn btn-primary">
+                                <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
+                            </label>
+                            {% endfor %}
+                        </div>
 
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <input class="form-control" id="inputTitle" name="title" placeholder="제목" />
+                        <div class="btn-group" data-toggle="buttons">
+                            {% for residence in residences %}
+                            <label class="btn btn-primary">
+                                <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <textarea class="form-control" rows="3" id="textArea" name="content" placeholder="이미지에 대한 설명을 등록해주세요."></textarea>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <input class="form-control" name="title" placeholder="제목" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <input type="file" id="photo" name="photo" />
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <input class="form-control" name="size" placeholder="평수" />
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-1">
-                    <button type="reset" class="btn btn-default">취소</button>
-                    <button type="submit" class="btn btn-primary">등록</button>
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <input class="form-control" name="location" placeholder="위치" />
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-    </form>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <input class="form-control" name="cost" placeholder="비용" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <textarea class="form-control" rows="3" name="content" placeholder="내용"></textarea>
+                    </div>
+                </div>
+
+                <div id="photos"></div>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button class="btn" id="addBtnPhoto" type="button" value="1">사진 추가</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </div>
 
 <script>
-var photo = document.getElementById('photo'),
-    preview = document.getElementById('photoPreview');
+var $photoFile,
+    $photoPreview;
 
-photo.addEventListener('change', function() {
-    while (preview.firstChild) {
-        preview.removeChild(preview.firstChild);
+$('#photos').on('click', '.photo-preview', function(e) {
+    e.preventDefault();
+
+    $photoFile = $('#photoFile-' + $(this).attr('id-value'))
+    $photoPreview = $('#photoPreview-' + $(this).attr('id-value'));
+    $photoFile.click();
+}).on('change', '.photo-file', function() {
+    $photoPreview.children().remove();
+
+    var ext = $(this).val().split('.').pop().toLowerCase();
+    if (ext.length > 0) {
+        if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+            alert('사진 파일(gif, png, jpg)만 업로드 할수 있습니다.');
+            $(this).val('');
+            return false;
+        }
     }
-    loadPhoto(photo);
+
+    loadPhoto($photoPreview[0], $photoFile[0]);
 });
 
-function loadPhoto(dataURL) {
+function loadPhoto(photoPreview, dataURL) {
     var reader = new FileReader();
-    reader.readAsDataURL(photo.files[0]);
+
+    reader.readAsDataURL(dataURL.files[0]);
     reader.onload = function (e) {
         var img = new Image();
         img.src = e.target.result;
-        img.height = preview.offsetHeight;
+        img.height = photoPreview.offsetHeight;
         img.onload = function() {
-            preview.appendChild(this);
-            preview.style.width = preview.offsetHeight * (this.width / this.height);
+            photoPreview.appendChild(this);
+            photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
         };
     }
 }
+
+
+function photoFileTmpl(id) {
+    var tmpl =
+    '<div class="form-group">' +
+        '<div class="col-lg-10 col-lg-offset-1">' +
+            '<div class="photo-preview" id="photoPreview-' + id + '" id-value="' + id + '">' +
+                '<span class="glyphicon glyphicon-open"></span>' +
+            '</div>' +
+            '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
+            '<textarea class="form-control" rows="3" name="photo_content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
+        '</div>' +
+    '</div>';
+
+    return tmpl;
+}
+
+$('#addBtnPhoto').click(function() {
+    $('#addBtnPhoto').val(parseInt($('#addBtnPhoto').val()) + 1);
+     $(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
+});
+
+$(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
 </script>
 {% endblock %}

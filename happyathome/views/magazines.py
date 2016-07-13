@@ -3,7 +3,7 @@ import os
 import boto3
 import html2text
 import shortuuid
-from happyathome.models import db, File, Magazine, MagazinePhoto, Comment, MagazineComment
+from happyathome.models import db, File, Magazine, MagazinePhoto, Comment, MagazineComment, Category, Residence, Photo
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
 from werkzeug.utils import secure_filename
 
@@ -54,17 +54,49 @@ def new():
         h.ignore_images = True
         h.ignore_emphasis = True
 
-        mz = Magazine()
-        mz.user_id = '1'
-        mz.title = request.form['title']
-        mz.content = request.form['content']
-        mz.content_txt = h.handle(request.form['content'])
+        magazine = Magazine()
+        magazine.user_id = '1'
+        magazine.category_id = request.form['category_id']
+        magazine.residence_id = request.form['residence_id']
+        magazine.title = request.form['title']
+        magazine.size = request.form['size']
+        magazine.location = request.form['location']
+        magazine.cost = request.form['cost']
+        magazine.content = request.form['content']
+        magazine.content_txt = h.handle(request.form['content'])
 
-        db.session.add(mz)
+        photo_files = request.files.getlist('photo_file')
+
+        for idx, photo_file in enumerate(photo_files):
+            photo_blob = photo_file.read()
+            photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1])))
+
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob,
+                                                                              ContentType=photo_file.content_type)
+
+            file = File()
+            file.type = 1
+            file.name = photo_name
+            file.ext = photo_name.split('.')[1]
+            file.size = len(photo_blob)
+
+            photo = Photo()
+            photo.user_id = '1'
+            photo.file = file
+            photo.content = request.form.getlist('photo_content')[idx]
+
+            magazine_photo = MagazinePhoto();
+            magazine_photo.photo = photo
+            magazine_photo.magazine = magazine
+            db.session.add(magazine_photo)
         db.session.commit()
 
-        return redirect(url_for('magazine.list'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html')
+        return redirect(url_for('magazines.list'))
+
+    categories = db.session.query(Category).all()
+    residences = db.session.query(Residence).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html', categories=categories, residences=residences)
 
 
 @magazines.route('/<id>')

@@ -8,13 +8,23 @@
     <div class="row">
         <div class="col-md-9">
             <div class="content-detail">
+
                 <div class="magazine-body">
                     <div class="magazine-title">{{ post.title }}</div>
-                    <div class="magazine-user">
-                        {{ post.user.name }}
+                    <div class="magazine-user">{{ post.user.name }}</div>
+                    <div class="magazine-content">
+                        <div class="panel panel-default">
+                            <table class="table">
+                                <tr><th class="col-md-2 text-center">건물</th><td>{{ post.residence.name }}</td></tr>
+                                <tr><th class="col-md-2 text-center">크기</th><td>{{ post.size or '' }}</td></tr>
+                                <tr><th class="col-md-2 text-center">위치</th><td>{{ post.location or '' }}</td></tr>
+                                <tr><th class="col-md-2 text-center">비용</th><td>{{ post.cost or '' }}</td></tr>
+                            </table>
+                        </div>
+                        {{ post.content }}
                     </div>
-                    <div class="magazine-content">{{ post.content }}</div>
                 </div>
+
                 <div class="content-photos">
                 {% for subpost in post.photos %}
                     {% if subpost.photo.file.type == 2 %}
@@ -41,13 +51,13 @@
                     <div class="content-body">{{ subpost.photo.content }}</div>
                 {% endfor %}
                 </div>
+
             </div>
         </div>
         <div class="col-md-3">
             <div class="content-sidebar">
                 <div class="content-relative">
-                    <a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a> |
-                    <a href="{{ url_for('magazines.list', residence_id=post.residence_id) }}">{{ post.residence.name }}</a>
+                    <a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a>
                 </div>
                 <hr />
 

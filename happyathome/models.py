@@ -102,12 +102,15 @@ class Magazine(db.Model, BaseMixin):
     residence_id = db.Column(db.Integer, db.ForeignKey('residences.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     title = db.Column(db.Unicode(255), nullable=False)
+    size = db.Column(db.Unicode(255))
+    location = db.Column(db.Unicode(255))
+    cost = db.Column(db.Unicode(255))
     content = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_magazines'))
     category = db.relationship('Category', backref=backref('category_magazines'))
     residence = db.relationship('Residence', backref=backref('residence_magazines'))
-    photos = db.relationship('MagazinePhoto', order_by=db.asc('magazine_photos.photo_id'), back_populates='magazine')
+    photos = db.relationship('MagazinePhoto', back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
 
 
