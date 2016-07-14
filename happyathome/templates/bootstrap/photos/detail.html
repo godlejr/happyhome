@@ -19,6 +19,7 @@
                     "panorama": "http://static.inotone.co.kr/data/img/{{ post.file.name }}",
                     "autoLoad": true,
                     "hfov": 100,
+                    "yaw": -100,
                     "autoRotate": -0.5,
                     "zoom-controlls": false,
                 });
@@ -83,6 +84,21 @@
                         </ul>
                     </div>
                     <hr />
+                {% endif %}
+
+
+                {% if post.room %}
+                <div class="content-relative">
+                    <div class="relative-title"><a href="{{ url_for('photos.list', room_id=post.room_id) }}">{{ post.room.name }}</a>의 다른 포토</div>
+                    <ul class="relative-author photos-relative">
+                    {% for room_photo in post.room.room_photos %}
+                        {% if room_photo.id != post.id %}
+                            <li><a href="{{ url_for('photos.detail', id=room_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ room_photo.file.name }}" width="85" height="85" /></a></li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
+                <hr />
                 {% endif %}
 
                 <div class="content-relative">

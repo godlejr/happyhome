@@ -11,17 +11,24 @@ from werkzeug.utils import secure_filename
 magazines = Blueprint('magazines', __name__)
 
 
-@magazines.route('')
-@magazines.route('/categories/<category_id>')
-@magazines.route('/residences/<residence_id>')
-def list(category_id=None, residence_id=None):
+@magazines.route('/')
+def list():
     posts = db.session.query(Magazine)
+    category_id = request.args.get('category_id') or ''
+    residence_id = request.args.get('residence_id') or ''
     if category_id:
         posts = posts.filter(Magazine.category_id == category_id)
     if residence_id:
         posts = posts.filter(Magazine.residence_id == residence_id)
     posts = posts.order_by(Magazine.id.desc()).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html', posts=posts)
+    categories = db.session.query(Category).all()
+    residences = db.session.query(Residence).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
+                           posts=posts,
+                           categories=categories,
+                           residences=residences,
+                           category_id=category_id,
+                           residence_id=residence_id)
 
 
 @magazines.route('/image/upload', methods=['POST'])

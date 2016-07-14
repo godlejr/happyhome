@@ -9,10 +9,15 @@ from werkzeug.utils import secure_filename
 photos = Blueprint('photos', __name__)
 
 
-@photos.route('')
+@photos.route('/')
 def list():
-    posts = db.session.query(Photo).order_by(Photo.id.desc()).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html', posts=posts)
+    posts = db.session.query(Photo)
+    room_id = request.args.get('room_id') or ''
+    if room_id:
+        posts = posts.filter(Photo.room_id == room_id)
+    posts = posts.order_by(Photo.id.desc()).all()
+    rooms = db.session.query(Room).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html', posts=posts, rooms=rooms, room_id=room_id)
 
 
 @photos.route('/new', methods=['GET', 'POST'])

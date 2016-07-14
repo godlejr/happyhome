@@ -18,6 +18,16 @@ body {
 hr {
     margin: 10px 0;
 }
+pre {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    white-space: pre-wrap;
+    font-size: 15px;
+    font-family: 'Nanum Gothic', sans-serif;
+}
 #navbar {
     background-color: #000000;
 }

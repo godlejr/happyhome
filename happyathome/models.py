@@ -87,7 +87,7 @@ class Photo(db.Model, BaseMixin):
 
     user = db.relationship('User', backref=backref('user_photos'))
     file = db.relationship('File', backref=backref('file_photos'))
-    room = db.relationship('File', backref=backref('room_photos'))
+    room = db.relationship('Room', backref=backref('room_photos'))
     comments = db.relationship('PhotoComment', back_populates='photo')
     magazines = db.relationship('MagazinePhoto', back_populates='photo')
 

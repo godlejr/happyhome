@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
 from happyathome.forms import JoinForm, LoginForm
-from happyathome.models import db, User, Photo
+from happyathome.models import db, User, Magazine, Category, Residence
 from sqlalchemy.dialects.postgresql import json
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -9,8 +9,22 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    posts = db.session.query(Photo).order_by(Photo.id.desc()).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html', posts=posts)
+    posts = db.session.query(Magazine)
+    category_id = request.args.get('category_id') or ''
+    residence_id = request.args.get('residence_id') or ''
+    if category_id:
+        posts = posts.filter(Magazine.category_id == category_id)
+    if residence_id:
+        posts = posts.filter(Magazine.residence_id == residence_id)
+    posts = posts.order_by(Magazine.id.desc()).all()
+    categories = db.session.query(Category).all()
+    residences = db.session.query(Residence).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
+                           posts=posts,
+                           categories=categories,
+                           residences=residences,
+                           category_id=category_id,
+                           residence_id=residence_id)
 
 
 @main.route('/login', methods=['GET', 'POST'])

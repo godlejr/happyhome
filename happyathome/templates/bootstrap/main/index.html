@@ -2,29 +2,36 @@
 
 {% block content %}
 <div class="cards">
+    <div class="well well-sm">
+        <div class="btn-group" data-toggle="buttons">
+            {% for category in categories %}
+            <label class="btn btn-primary category {% if category.id == category_id|int %}active{% endif %}">
+                <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <div class="btn-group" data-toggle="buttons">
+            {% for residence in residences %}
+            <label class="btn btn-primary residence {% if residence.id == residence_id|int %}active{% endif %}">
+                <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
     {% for post in posts %}
     <div class="card">
-        <div class="card-image">
-            <a href="{{ url_for('photos.detail', id=post.id) }}"><img class="img-responsive" src="http://static.inotone.co.kr/data/img/{{ post.file.name }}"></a>
+        <div class="card-photo">
+            <a href="{{ url_for('magazines.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.photos[0].photo.file.name }}"></a>
         </div>
 
         <div class="card-content">
-            <p>{{ post.content[:70] }}</p>
-        </div>
-
-        <div class="card-action btn-group btn-group-justified">
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
+            <p><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a></p>
+            <p>{{ post.title }}</p>
+            <p>{{ post.user.name}}</p>
         </div>
     </div>
     {% endfor %}
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.1.0/masonry.pkgd.min.js"></script>
-<script>
-$('.cards').masonry({
-    itemSelector: '.card'
-});
-</script>
 {% endblock %}

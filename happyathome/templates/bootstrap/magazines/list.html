@@ -2,6 +2,30 @@
 
 {% block content %}
 <div class="cards">
+    <div class="well well-sm">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn category {% if not category_id %}active{% endif %}">
+                <input type="radio" name="category_id" value=""> 전체
+            </label>
+            {% for category in categories %}
+            <label class="btn btn-primary category {% if category.id == category_id|int %}active{% endif %}">
+                <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn residence {% if not residence_id %}active{% endif %}">
+                <input type="radio" name="residence_id" value=""> 전체
+            </label>
+            {% for residence in residences %}
+            <label class="btn btn-primary residence {% if residence.id == residence_id|int %}active{% endif %}">
+                <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
     {% for post in posts %}
     <div class="card">
         <div class="card-photo">
@@ -13,13 +37,25 @@
             <p>{{ post.title }}</p>
             <p>{{ post.user.name}}</p>
         </div>
-
-        <div class="card-action btn-group btn-group-justified">
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
-        </div>
     </div>
     {% endfor %}
 </div>
+
+<script>
+$('.category').click(function() {
+    var category_id = $(this).find('input[name=category_id]').val();
+
+    document.location.href = "{{ url_for('magazines.list') }}" +
+                             "?category_id=" + category_id +
+                             "&residence_id={{ residence_id }}";
+});
+
+$('.residence').click(function() {
+    var residence_id = $(this).find('input[name=residence_id]').val();
+
+    document.location.href = "{{ url_for('magazines.list') }}" +
+                             "?category_id={{ category_id }}" +
+                             "&residence_id=" + residence_id;
+});
+</script>
 {% endblock %}

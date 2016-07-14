@@ -11,7 +11,7 @@
                     <div class="col-lg-10 col-lg-offset-1">
                         <div class="btn-group" data-toggle="buttons">
                             {% for category in categories %}
-                            <label class="btn btn-primary">
+                            <label class="btn btn-warning">
                                 <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
                             </label>
                             {% endfor %}
@@ -19,7 +19,7 @@
 
                         <div class="btn-group pull-right" data-toggle="buttons">
                             {% for residence in residences %}
-                            <label class="btn btn-primary">
+                            <label class="btn btn-success">
                                 <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
                             </label>
                             {% endfor %}

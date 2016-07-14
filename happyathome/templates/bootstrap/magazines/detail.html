@@ -21,7 +21,7 @@
                                 <tr><th class="col-md-2 text-center">비용</th><td>{{ post.cost or '' }}</td></tr>
                             </table>
                         </div>
-                        {{ post.content }}
+                        <pre>{{ post.content }}</pre>
                     </div>
                 </div>
 
@@ -38,6 +38,7 @@
                             "panorama": "http://static.inotone.co.kr/data/img/{{ subpost.photo.file.name }}",
                             "autoLoad": true,
                             "hfov": 100,
+                            "yaw": -100,
                             "autoRotate": -0.5,
                             "zoom-controlls": false,
                         });
@@ -48,7 +49,7 @@
                             <a href="{{ url_for('photos.detail', id=subpost.photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ subpost.photo.file.name }}" /></a>
                         </div>
                     {% endif %}
-                    <div class="content-body">{{ subpost.photo.content }}</div>
+                    <div class="content-body"><pre>{{ subpost.photo.content }}</pre></div>
                 {% endfor %}
                 </div>
 
