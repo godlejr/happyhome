@@ -62,11 +62,11 @@
                 </div>
                 <hr />
 
-                {% if vr_photos %}
+                {% if magazine_vrs %}
                     <div class="content-relative">
                         <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazines[0].magazine_id) }}">{{ post.magazines[0].magazine.title }}</a>의 VR</div>
                         <ul class="relative-author photos-relative">
-                            {% for photo in vr_photos %}
+                            {% for photo in magazine_vrs %}
                                 <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="85" height="85" /></a></li>
                             {% endfor %}
                         </ul>
@@ -74,11 +74,11 @@
                     <hr />
                 {% endif %}
 
-                {% if sub_photos %}
+                {% if magazine_photos %}
                     <div class="content-relative">
                         <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazines[0].magazine_id) }}">{{ post.magazines[0].magazine.title }}</a>의 포토</div>
                         <ul class="relative-author photos-relative">
-                            {% for photo in sub_photos %}
+                            {% for photo in magazine_photos %}
                                 <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="85" height="85" /></a></li>
                             {% endfor %}
                         </ul>
@@ -86,32 +86,29 @@
                     <hr />
                 {% endif %}
 
-
-                {% if post.room %}
-                <div class="content-relative">
-                    <div class="relative-title"><a href="{{ url_for('photos.list', room_id=post.room_id) }}">{{ post.room.name }}</a>의 다른 포토</div>
-                    <ul class="relative-author photos-relative">
-                    {% for room_photo in post.room.room_photos %}
-                        {% if room_photo.id != post.id %}
+                {% if room_photos %}
+                    <div class="content-relative">
+                        <div class="relative-title"><a href="{{ url_for('photos.list', room_id=post.room_id) }}">{{ post.room.name }}</a>의 다른 포토</div>
+                        <ul class="relative-author photos-relative">
+                        {% for room_photo in room_photos %}
                             <li><a href="{{ url_for('photos.detail', id=room_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ room_photo.file.name }}" width="85" height="85" /></a></li>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
-                </div>
-                <hr />
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <hr />
                 {% endif %}
 
-                <div class="content-relative">
-                    <div class="relative-title">{{ post.user.name }}의 다른 포토</div>
-                    <ul class="relative-author photos-relative">
-                    {% for user_photo in post.user.user_photos %}
-                        {% if user_photo.id != post.id %}
+                {% if user_photos %}
+                    <div class="content-relative">
+                        <div class="relative-title">{{ post.user.name }}의 다른 포토</div>
+                        <ul class="relative-author photos-relative">
+                        {% for user_photo in user_photos %}
                             <li><a href="{{ url_for('photos.detail', id=user_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_photo.file.name }}" width="85" height="85" /></a></li>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
-                </div>
-                <hr />
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <hr />
+                {% endif %}
 
                 <div class="content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
             </div>
