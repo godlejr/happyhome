@@ -10,9 +10,6 @@ class BaseMixin(object):
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
-    def __repr__(self):
-        return self.__dict__
-
 
 class User(db.Model, BaseMixin):
     """사용자 계정 정보
