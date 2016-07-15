@@ -44,7 +44,6 @@ def detail(id):
 
 
 @photos.route('/new', methods=['GET', 'POST'])
-@login_required
 def new():
     if request.method == 'POST':
         photo_file = request.files['photo_file']

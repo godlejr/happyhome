@@ -3,15 +3,13 @@
 {% block content %}
 <div class="content">
     <div class="well well-sm">
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn room {% if not room_id %}active{% endif %}">
-                <input type="radio" name="room_id" value=""> 전체
-            </label>
-            {% for room in rooms %}
-            <label class="btn btn-primary room {% if room.id == room_id|int %}active{% endif %}">
-                <input type="radio" name="room_id" value="{{ room.id }}"> {{ room.name }}
-            </label>
-            {% endfor %}
+        <div class="dropdown">
+            <select id="rooms" class="form-control">
+                <option value="">공간</option>
+                {% for room in rooms %}
+                    <option value="{{ room.id }}" {% if room.id == room_id|int %}selected{% endif %}>{{ room.name }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 
@@ -34,10 +32,9 @@
 </div>
 
 <script>
-$('.room').click(function() {
-    var room_id = $(this).find('input[name=room_id]').val();
-
-    document.location.href = "{{ url_for('photos.list') }}?room_id=" + room_id;
+$('select.form-control').change(function() {
+    document.location.href = "{{ url_for('photos.list') }}" +
+                             "?room_id=" + $('#rooms').val();
 });
 
 $('.card-photo').click(function() {
