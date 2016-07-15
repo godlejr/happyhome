@@ -1,7 +1,7 @@
 {% extends "bootstrap/photos/base.html" %}
 
 {% block content %}
-<div class="cards">
+<div class="content">
     <div class="well well-sm">
         <div class="btn-group" data-toggle="buttons">
             <label class="btn room {% if not room_id %}active{% endif %}">
@@ -15,23 +15,22 @@
         </div>
     </div>
 
+    <div class="cards">
     {% for post in posts %}
-    <div class="card">
-        <div class="card-photo">
-            <a href="{{ url_for('photos.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}"></a>
-        </div>
+        <div class="card">
+            <div class="card-photo" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.file.name }})">
+                <div class="card-author">
+                    <div class="card-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
+                    <div class="card-user">{{ post.user.name }}</div>
+                </div>
+            </div>
 
-        <div class="card-content">
-            <p>{{ post.content[:77] }}</p>
+            <div class="card-content">
+                <div class="card-content-text">{{ post.content[:75] }}</div>
+            </div>
         </div>
-
-        <div class="card-action btn-group btn-group-justified">
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-heart"></i></a>
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-bookmark"></i></a>
-            <a href="" target="_blank" class="btn btn-link"><i class="glyphicon glyphicon-share-alt"></i></a>
-        </div>
-    </div>
     {% endfor %}
+    </div>
 </div>
 
 <script>

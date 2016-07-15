@@ -1,8 +1,8 @@
 import os
-
 import boto3
 import shortuuid
-from happyathome.models import db, Photo, File, Comment, PhotoComment, Magazine, MagazinePhoto, Room
+from flask_login import login_required
+from happyathome.models import db, Photo, File, Comment, PhotoComment, Room
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from werkzeug.utils import secure_filename
 
@@ -20,7 +20,31 @@ def list():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html', posts=posts, rooms=rooms, room_id=room_id)
 
 
+@photos.route('/<id>')
+def detail(id):
+    magazine_photos = []
+    magazine_vrs = []
+    room_photos = []
+    photo = db.session.query(Photo)
+    post = photo.filter(Photo.id == id).first()
+    others = photo.filter(Photo.id != id).filter(Photo.file.has(type=1))
+    user_photos = others.filter(Photo.user_id == post.user_id).order_by(Photo.id.desc()).limit(6).all()
+    if post.room_id:
+        room_photos = others.filter(Photo.room_id == post.room_id).order_by(Photo.id.desc()).limit(6).all()
+    if len(post.magazines):
+        magazine = photo.filter(Photo.magazines.any(magazine_id=post.magazines[0].magazine_id))
+        magazine_vrs = magazine.filter(Photo.file.has(type=2)).all()
+        magazine_photos = magazine.filter(Photo.file.has(type=1)).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html',
+                           post=post,
+                           room_photos=room_photos,
+                           user_photos=user_photos,
+                           magazine_vrs=magazine_vrs,
+                           magazine_photos=magazine_photos)
+
+
 @photos.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     if request.method == 'POST':
         photo_file = request.files['photo_file']
@@ -51,30 +75,8 @@ def new():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html', rooms=rooms)
 
 
-@photos.route('/<id>')
-def detail(id):
-    magazine_photos = []
-    magazine_vrs = []
-    room_photos = []
-    photo = db.session.query(Photo)
-    post = photo.filter(Photo.id == id).first()
-    others = photo.filter(Photo.id != id).filter(Photo.file.has(type=1))
-    user_photos = others.filter(Photo.user_id == post.user_id).order_by(Photo.id.desc()).limit(6).all()
-    if post.room_id:
-        room_photos = others.filter(Photo.room_id == post.room_id).order_by(Photo.id.desc()).limit(6).all()
-    if len(post.magazines):
-        magazine = photo.filter(Photo.magazines.any(magazine_id=post.magazines[0].magazine_id))
-        magazine_vrs = magazine.filter(Photo.file.has(type=2)).all()
-        magazine_photos = magazine.filter(Photo.file.has(type=1)).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html',
-                           post=post,
-                           room_photos=room_photos,
-                           user_photos=user_photos,
-                           magazine_vrs=magazine_vrs,
-                           magazine_photos=magazine_photos)
-
-
 @photos.route('/<id>/comments/new', methods=['POST'])
+@login_required
 def comment_new(id):
     if request.method == 'POST':
         comment = Comment()

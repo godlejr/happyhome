@@ -1,61 +1,55 @@
 {% extends "bootstrap/magazines/base.html" %}
 
 {% block content %}
-<div class="cards">
+<div class="content">
     <div class="well well-sm">
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn category {% if not category_id %}active{% endif %}">
-                <input type="radio" name="category_id" value=""> 전체
-            </label>
-            {% for category in categories %}
-            <label class="btn btn-primary category {% if category.id == category_id|int %}active{% endif %}">
-                <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
-            </label>
-            {% endfor %}
+        <div class="dropdown">
+            <select id="categories" class="form-control">
+                <option value="">테마</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == category_id|int %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
         </div>
 
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn residence {% if not residence_id %}active{% endif %}">
-                <input type="radio" name="residence_id" value=""> 전체
-            </label>
-            {% for residence in residences %}
-            <label class="btn btn-primary residence {% if residence.id == residence_id|int %}active{% endif %}">
-                <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
-            </label>
-            {% endfor %}
+        <div class="dropdown">
+            <select id="residences" class="form-control">
+                <option value="">주거</option>
+                {% for residence in residences %}
+                    <option value="{{ residence.id }}" {% if residence.id == residence_id|int %}selected{% endif %}>{{ residence.name }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 
-    {% for post in posts %}
-    <div class="card">
-        <div class="card-photo">
-            <a href="{{ url_for('magazines.detail', id=post.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ post.photos[0].photo.file.name }}"></a>
-        </div>
+    <div class="cards">
+        {% for post in posts %}
+        <div class="card">
+            <div class="card-photo" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.photos[0].photo.file.name }})">
+                <div class="card-author">
+                    <div class="card-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
+                    <div class="card-user">{{ post.user.name }}</div>
+                </div>
+            </div>
 
-        <div class="card-content">
-            <p><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a></p>
-            <p>{{ post.title }}</p>
-            <p>{{ post.user.name}}</p>
+            <div class="card-content">
+                <div class="card-category"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a></div>
+                <div class="card-title"><a href="{{ url_for('magazines.detail', id=post.id) }}">{{ post.title }}</a></div>
+            </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
 <script>
-$('.category').click(function() {
-    var category_id = $(this).find('input[name=category_id]').val();
-
+$('select.form-control').change(function() {
     document.location.href = "{{ url_for('magazines.list') }}" +
-                             "?category_id=" + category_id +
-                             "&residence_id={{ residence_id }}";
+                             "?category_id=" + $('#categories').val() +
+                             "&residence_id=" + $('#residences').val();
 });
 
-$('.residence').click(function() {
-    var residence_id = $(this).find('input[name=residence_id]').val();
-
-    document.location.href = "{{ url_for('magazines.list') }}" +
-                             "?category_id={{ category_id }}" +
-                             "&residence_id=" + residence_id;
+$('.card-photo').click(function() {
+    document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
 });
 </script>
 {% endblock %}

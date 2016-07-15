@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
+from flask_login import login_user
 from happyathome.forms import JoinForm, LoginForm
 from happyathome.models import db, User, Magazine, Category, Residence
 from sqlalchemy.dialects.postgresql import json
@@ -19,7 +20,7 @@ def index():
     posts = posts.order_by(Magazine.id.desc()).all()
     categories = db.session.query(Category).all()
     residences = db.session.query(Residence).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html',
                            posts=posts,
                            categories=categories,
                            residences=residences,
@@ -32,18 +33,23 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST':
         if form.validate():
-            user = db.session.query(User).filter_by(email = form.email.data).one()
+            user = db.session.query(User).filter_by(email=form.email.data).one()
             if user:
                 if not check_password_hash(user.password, form.password.data):
                     flash('password is wrong')
                 else:
-                    session['user_id'] = user.email
-                    # flash('Successfully logged in as %s' % form.user.username)
+                    login_user(user)
                     return redirect(url_for('main.index'))
             else:
                 flash('there is no your ID')
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/login.html', form=form)
+
+
+@main.route('/logout')
+def logout():
+    session.pop('user_email', None)
+    return redirect(url_for('main.index'))
 
 
 @main.route('/join', methods=['GET', 'POST'])
