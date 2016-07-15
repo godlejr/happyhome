@@ -64,7 +64,7 @@
 
                 {% if magazine_vrs %}
                     <div class="content-relative">
-                        <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazines[0].magazine_id) }}">{{ post.magazines[0].magazine.title }}</a>의 VR</div>
+                        <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 VR</div>
                         <ul class="relative-author photos-relative">
                             {% for photo in magazine_vrs %}
                                 <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="85" height="85" /></a></li>
@@ -76,7 +76,7 @@
 
                 {% if magazine_photos %}
                     <div class="content-relative">
-                        <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazines[0].magazine_id) }}">{{ post.magazines[0].magazine.title }}</a>의 포토</div>
+                        <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 포토</div>
                         <ul class="relative-author photos-relative">
                             {% for photo in magazine_photos %}
                                 <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="85" height="85" /></a></li>

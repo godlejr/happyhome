@@ -39,5 +39,9 @@ $('.room').click(function() {
 
     document.location.href = "{{ url_for('photos.list') }}?room_id=" + room_id;
 });
+
+$('.card-photo').click(function() {
+    document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('id');
+});
 </script>
 {% endblock %}

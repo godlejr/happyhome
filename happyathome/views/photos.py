@@ -31,8 +31,8 @@ def detail(id):
     user_photos = others.filter(Photo.user_id == post.user_id).order_by(Photo.id.desc()).limit(6).all()
     if post.room_id:
         room_photos = others.filter(Photo.room_id == post.room_id).order_by(Photo.id.desc()).limit(6).all()
-    if len(post.magazines):
-        magazine = photo.filter(Photo.magazines.any(magazine_id=post.magazines[0].magazine_id))
+    if post.magazine_id:
+        magazine = photo.filter(Photo.magazine_id == post.magazine_id)
         magazine_vrs = magazine.filter(Photo.file.has(type=2)).all()
         magazine_photos = magazine.filter(Photo.file.has(type=1)).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html',

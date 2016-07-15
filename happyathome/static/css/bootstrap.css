@@ -130,6 +130,9 @@ code {
 .well {
     background-color: transparent;
 }
+select.form-control {
+    width: 140px;
+}
 
 .cards {
     width: 100%;

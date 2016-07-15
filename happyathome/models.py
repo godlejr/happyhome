@@ -81,12 +81,13 @@ class Photo(db.Model, BaseMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
+    magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
 
     user = db.relationship('User', backref=backref('user_photos'))
     file = db.relationship('File', backref=backref('file_photos'))
     room = db.relationship('Room', backref=backref('room_photos'))
+    magazine = db.relationship('Magazine', backref=backref('magazine_photos'))
     comments = db.relationship('PhotoComment', back_populates='photo')
-    magazines = db.relationship('MagazinePhoto', back_populates='photo')
 
 
 class PhotoComment(db.Model, BaseMixin):
@@ -116,19 +117,7 @@ class Magazine(db.Model, BaseMixin):
     user = db.relationship('User', backref=backref('user_magazines'))
     category = db.relationship('Category', backref=backref('category_magazines'))
     residence = db.relationship('Residence', backref=backref('residence_magazines'))
-    photos = db.relationship('MagazinePhoto', back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
-
-
-class MagazinePhoto(db.Model, BaseMixin):
-    """매거진-포토 연결고리"""
-    __tablename__ = 'magazine_photos'
-
-    magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
-    photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
-
-    magazine = db.relationship('Magazine', back_populates='photos')
-    photo = db.relationship('Photo', back_populates='magazines')
 
 
 class MagazineComment(db.Model, BaseMixin):
@@ -150,7 +139,7 @@ class Social(db.Model, BaseMixin):
     email = db.Column(db.String(64), nullable=True)
 
 
-#admin class
+# Admin Class
 class UserAdmin(sqla.ModelView):
     column_display_pk = True
     form_columns = ['name', 'email', 'authenticated', 'accesscode']

@@ -10,22 +10,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    posts = db.session.query(Magazine)
-    category_id = request.args.get('category_id') or ''
-    residence_id = request.args.get('residence_id') or ''
-    if category_id:
-        posts = posts.filter(Magazine.category_id == category_id)
-    if residence_id:
-        posts = posts.filter(Magazine.residence_id == residence_id)
-    posts = posts.order_by(Magazine.id.desc()).all()
-    categories = db.session.query(Category).all()
-    residences = db.session.query(Residence).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html',
-                           posts=posts,
-                           categories=categories,
-                           residences=residences,
-                           category_id=category_id,
-                           residence_id=residence_id)
+    return redirect(url_for('magazines.list'))
 
 
 @main.route('/login', methods=['GET', 'POST'])

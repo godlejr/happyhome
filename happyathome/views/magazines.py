@@ -1,11 +1,9 @@
 import os
-
 import boto3
 import html2text
 import shortuuid
-from happyathome.models import db, File, Magazine, MagazinePhoto, Comment, MagazineComment, Category, Residence, Photo, \
-    Room
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
+from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
@@ -14,44 +12,28 @@ magazines = Blueprint('magazines', __name__)
 @magazines.route('/')
 def list():
     posts = db.session.query(Magazine)
+    media = request.args.get('media') or ''
     category_id = request.args.get('category_id') or ''
     residence_id = request.args.get('residence_id') or ''
+
+    if media:
+        posts = posts.filter(Magazine.magazine_photos.any(Photo.file.has(type=media)))
     if category_id:
         posts = posts.filter(Magazine.category_id == category_id)
     if residence_id:
         posts = posts.filter(Magazine.residence_id == residence_id)
+
     posts = posts.order_by(Magazine.id.desc()).all()
     categories = db.session.query(Category).all()
     residences = db.session.query(Residence).all()
+
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
                            posts=posts,
+                           media=media,
                            categories=categories,
                            residences=residences,
                            category_id=category_id,
                            residence_id=residence_id)
-
-
-@magazines.route('/image/upload', methods=['POST'])
-def image_upload():
-    file = request.files['imageUpload']
-    file_blob = file.read()
-    file_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(file.filename)[1])))
-
-    s3 = boto3.resource('s3')
-    s3.Object('static.inotone.co.kr', 'data/img/%s' % file_name).put(Body=file_blob, ContentType=file.content_type)
-
-    file = File()
-    file.name = file_name
-    file.size = len(file_blob)
-
-    db.session.add(file)
-    db.session.commit()
-
-    return jsonify({
-        'status': '200',
-        'message': 'Done',
-        'url': 'https://static.inotone.co.kr/data/img/%s' % file_name
-    })
 
 
 @magazines.route('/new', methods=['GET', 'POST'])
@@ -95,10 +77,8 @@ def new():
             photo.room_id = request.form.getlist('room_id')[idx]
             photo.content = request.form.getlist('photo_content')[idx]
 
-            magazine_photo = MagazinePhoto();
-            magazine_photo.photo = photo
-            magazine_photo.magazine = magazine
-            db.session.add(magazine_photo)
+            magazine.magazine_photos.append(photo)
+        db.session.add(magazine)
         db.session.commit()
 
         return redirect(url_for('magazines.list'))
