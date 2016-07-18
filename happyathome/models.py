@@ -1,5 +1,6 @@
 from flask_admin.contrib import sqla
 from flask_sqlalchemy import SQLAlchemy
+from markupsafe import Markup
 from sqlalchemy.orm import backref
 
 db = SQLAlchemy()
@@ -29,12 +30,17 @@ class User(db.Model, BaseMixin):
         """Email 인증 여부 확인"""
         return self.authenticated
 
+    def __repr__(self):
+        return "%s(%s)" %(self.name,self.email)
 
 class Category(db.Model, BaseMixin):
     """카테고리 정보"""
     __tablename__ = 'categories'
 
     name = db.Column(db.Unicode(50), nullable=False)
+
+    def __repr__(self):
+        return self.name
 
 
 class Residence(db.Model, BaseMixin):
@@ -59,6 +65,9 @@ class File(db.Model, BaseMixin):
     name = db.Column(db.Unicode(255), nullable=False)
     ext = db.Column(db.Unicode(255), nullable=False)
     size = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+       return Markup('<img src="http://static.inotone.co.kr/data/img/%s" / width="100" height="100">') %self.name
 
 
 class Comment(db.Model, BaseMixin):
@@ -139,7 +148,4 @@ class Social(db.Model, BaseMixin):
     email = db.Column(db.String(64), nullable=True)
 
 
-# Admin Class
-class UserAdmin(sqla.ModelView):
-    column_display_pk = True
-    form_columns = ['name', 'email', 'authenticated', 'accesscode']
+
