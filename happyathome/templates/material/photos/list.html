@@ -1,4 +1,4 @@
-{% extends "material/interior/base.html" %}
+{% extends "material/photos/base.html" %}
 
 {% block content %}
 <div class="section">
@@ -36,7 +36,7 @@
                 <div class="row">
                 {% for post in posts %}
                     <div class="col s12 m4 l4">
-                        <div class="card card-image-bg waves-effect waves-block waves-light" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.photos.filename }})">
+                        <div class="card card-image-bg waves-effect waves-block waves-light" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.file.name }})">
                             <div class="card-info right">
                                 <div class="material-icons white-text">favorite_border</div>
                                 <div class="love-count white-text">1,234</div>
@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="card-title-info">
                                     <div class="info-title white-text">{{ post.title }}</div>
-                                    <div class="info-author white-text">{{ post.interior_user.name }}</div>
+                                    <div class="info-author white-text">{{ post.user.name }}</div>
                                 </div>
                             </div>
                         </div>

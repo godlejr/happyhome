@@ -1,4 +1,4 @@
-{% extends "material/magazine/base.html" %}
+{% extends "material/magazines/base.html" %}
 
 {% block content %}
 <div class="section">
@@ -26,17 +26,17 @@
 
             <div class="col s12 m8 l9">
                 <div class="row">
-                    {% for magazine in magazines %}
+                    {% for magazine in posts %}
                     <!-- Card Projects -->
                     <div class="col">
                         <div class="card magazine">
                             <div class="card-image waves-effect waves-block waves-light">
-                                <a href="{{ url_for('magazine.detail', magazine_id=magazine.id) }}"><img class="img-responsive" src="http://lorempixel.com/400/400/city/{{ magazine.id }}"></a>
+                                <a href="{{ url_for('magazines.detail', id=magazine.id) }}"><img class="img-responsive" src="http://lorempixel.com/400/400/city/{{ magazine.id }}"></a>
                             </div>
 
                             <div class="card-content">
                                 <h5>{{ magazine.title }}</h5>
-                                <p>{{ magazine.content_txt[:180]|safe }}</p>
+                                <p>{{ magazine.content[:180]|safe }}</p>
                             </div>
                         </div>
                     </div>
