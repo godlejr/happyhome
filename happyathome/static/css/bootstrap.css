@@ -124,9 +124,9 @@ code {
 
 .content {
     margin: 0 auto;
-    width: 1206px;
+    width: 100%;
+    max-width: 1206px;
 }
-
 
 select.form-control {
     width: 140px;
@@ -136,28 +136,37 @@ select.form-control {
     width: 100%;
 }
 .card {
+    position: relative;
+    cursor: pointer;
     float: left;
-    width: 380px;
-    height: 370px;
+    width: 33.333%;
+    max-width: 380px;
+    max-height: 380px;
     margin: 0 11px 22px 11px;
     border: 1px solid #eeeeee;
     background-color: #ffffff;
-}
-.card .card-photo {
-    position: relative;
-    cursor: pointer;
-    width: 100%;
-    height: 285px;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+.card:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+ }
+.card .card-info {
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    width: 100%;
+    height: 120px;
 }
 .card .card-author {
     position: absolute;
     display: flex;
     float: left;
-    bottom: 0px;
-    padding: 5px 20px;
+    top: 0px;
+    padding: 6px 20px;
     width: 100%;
     color: #ffffff;
     background-color: rgba(0, 0, 0, 0.4);
@@ -177,18 +186,21 @@ select.form-control {
     padding-left: 6px;
 }
 .card .card-content {
+    position: absolute;
     display: inline-block;
+    bottom: 0;
     width: 100%;
     height: 84px;
     padding: 10px 51px;
+    background-color: #ffffff;
 }
-.card .card-content-text {
-    line-height: 180%;
+.card .card-title {
     font-size: 13px;
     overflow: hidden;
     text-align: justify;
     text-overflow: ellipsis;
     word-wrap: break-word;
+    white-space: nowrap;
 }
 .card .card-content a {
     color: #030303;
@@ -336,13 +348,33 @@ input[type=file] {
 }
 
 
-@media only screen and (max-width: 1230px) {
+@media only screen and (min-width: 830px) and (max-width: 1230px) {
     .content {
         max-width: 804px;
     }
+    .card {
+        width: 50%;
+    }
 }
-@media only screen and (max-width: 830px) {
+@media only screen and (min-width:768px) and (max-width: 829px) {
     .content {
+        max-width: 760px;
+    }
+    .card {
+        width: 50%;
+        max-width: 358px;
+    }
+}
+@media only screen and (max-width:767px) {
+    .content {
+        max-width: 402px;
+    }
+    .well {
+        padding: 0;
+    }
+    .card {
+        width: 100%;
+        margin: 0 0 20px 0;
         max-width: 402px;
     }
 }

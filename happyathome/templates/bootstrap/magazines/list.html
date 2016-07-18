@@ -34,17 +34,16 @@
     <div class="cards">
         {% for post in posts %}
             {% if post.magazine_photos %}
-            <div class="card">
-                <div class="card-photo" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.magazine_photos[0].file.name }})">
+            <div class="card" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.magazine_photos[0].file.name }})">
+                <div class="card-info">
                     <div class="card-author">
                         <div class="card-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
                         <div class="card-user">{{ post.user.name }}</div>
                     </div>
-                </div>
-
-                <div class="card-content">
-                    <div class="card-category"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a></div>
-                    <div class="card-title"><a href="{{ url_for('magazines.detail', id=post.id) }}">{{ post.title }}</a></div>
+                    <div class="card-content">
+                        <div class="card-category"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a></div>
+                        <div class="card-title"><a href="{{ url_for('magazines.detail', id=post.id) }}">{{ post.title }}</a></div>
+                    </div>
                 </div>
             </div>
             {% endif %}
@@ -60,7 +59,7 @@ $('select.form-control').change(function() {
                              "&media=" + $('#media').val();
 });
 
-$('.card-photo').click(function() {
+$('.card').click(function() {
     document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
 });
 </script>
