@@ -40,7 +40,7 @@ def create_app(config_name):
     from happyathome.views.main import main as main_blueprint
     from happyathome.views.photos import photos as photos_blueprint
     from happyathome.views.magazines import magazines as magazines_blueprint
-    from happyathome.views.professionals import pros as pros_blueprint
+    from happyathome.views.professionals import professionals as pros_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(magazines_blueprint, url_prefix='/magazines')
