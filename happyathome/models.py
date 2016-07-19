@@ -25,6 +25,8 @@ class User(db.Model, BaseMixin):
     password = db.Column(db.Unicode(255), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
     accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
+    level =  db.Column(db.Integer)
+    cover =  db.Column(db.Unicode(255))
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""
@@ -147,5 +149,16 @@ class Social(db.Model, BaseMixin):
     nickname = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
 
+class Professional(db.Model, BaseMixin):
+    """전문가 정보"""
+    __tablename__ = 'professionals'
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    business_no = db.Column(db.Unicode(15), nullable = False)
+    phone = db.Column(db.Unicode(15))
+    address = db.Column(db.Unicode(255))
+    homepage = db.Column(db.Unicode(45))
+    greeting = db.Column(db.Text)
+
+    user = db.relationship('User', backref=backref('user_professionals'))
 

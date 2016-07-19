@@ -40,10 +40,12 @@ def create_app(config_name):
     from happyathome.views.main import main as main_blueprint
     from happyathome.views.photos import photos as photos_blueprint
     from happyathome.views.magazines import magazines as magazines_blueprint
+    from happyathome.views.professionals import pros as pros_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(magazines_blueprint, url_prefix='/magazines')
     app.register_blueprint(photos_blueprint, url_prefix='/photos')
+    app.register_blueprint(pros_blueprint, url_prefix='/professionals')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
 
