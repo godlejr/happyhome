@@ -81,7 +81,7 @@ def unload():
 @photos.route('/new', methods=['GET', 'POST'])
 def new():
     if request.method == 'POST':
-        if request.form['content_type'] == '2':
+        if request.form.getlist('content_type'):
             db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
 
         photo = Photo()

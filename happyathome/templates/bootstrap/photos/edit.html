@@ -51,8 +51,23 @@
 <script>
 var $photoFile = $('#photoFile'),
     $photoPreview = $('#photoPreview'),
-    $photoPreviewLoading = $('.photo-preview-loading')
+    $photoPreviewLoading = $('.photo-preview-loading');
 
+
+$('#contentType').click(function() {
+    var $photo = $photoPreview.find('img');
+    if ($(this).is(':checked')) {
+        if ($photo[0]) {
+            if ($photo[0].naturalWidth / $photo[0].naturalHeight != 2) {
+                $(this).prop('checked', false);
+                alert('VR360 사진이 아닙니다.\n\n가로:세로 비율이 2:1 인 경우만 VR360 사진으로 등록할 수 있습니다.\n\n(추천 해상도: 4098x2048)');
+            }
+        } else {
+            $(this).prop('checked', false);
+            alert('사진을 등록해주세요.');
+        }
+    }
+});
 
 $('#photoForm').submit(function() {
     window.onunload = window.onbeforeunload = undefined;
@@ -78,6 +93,8 @@ $photoPreview.click(function(e) {
 });
 
 $photoFile.change(function() {
+    photosUnload();
+
     var ext = $(this).val().split('.').pop().toLowerCase();
 
     if (ext.length > 0) {
@@ -87,7 +104,6 @@ $photoFile.change(function() {
             return false;
         }
 
-        photosUnload();
         $photoPreviewLoading.show();
 
         var reader = new FileReader();
@@ -120,6 +136,7 @@ $photoFile.change(function() {
 
 function photosUnload() {
     $photoPreview.children().remove();
+    $('#contentType').prop('checked', false);
 
     var $photoFileId = $('#photoFileId'),
         $photoFileName = $('#photoFileName');
