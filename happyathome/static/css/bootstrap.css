@@ -18,6 +18,9 @@ body {
 hr {
     margin: 10px 0;
 }
+label {
+    cursor: pointer;
+}
 pre {
     padding: 0;
     margin: 0;
@@ -291,25 +294,43 @@ select.form-control {
 input[type=file] {
     display: none;
 }
-.photo-preview {
-  width: 600px;
-  height: 400px;
-  cursor: pointer;
-  margin: 0 auto;
-  text-align: center;
-  vertical-align: middle;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+.photo-file-form {
+    position: relative;
 }
-.photo-preview span {
-    margin-top: 25%;
-    font-size: 90px;
+.photo-preview {
+    width: 600px;
+    height: 400px;
+    line-height: 400px;
+    cursor: pointer;
+    margin: 0 auto;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #ffffff;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/btn_upload.png');
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 .photo-preview img {
-    max-width: 100%;
-    max-height: 100%;
     width: auto;
     height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+}
+.photo-preview-loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 400px;
+    margin: -200px 0 0 -300px;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/ripple.gif');
 }
 
 

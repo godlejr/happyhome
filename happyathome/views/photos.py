@@ -1,9 +1,10 @@
+import base64
 import os
 import boto3
 import shortuuid
 from flask_login import login_required
 from happyathome.models import db, Photo, File, Comment, PhotoComment, Room
-from flask import Blueprint, render_template, request, redirect, url_for, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from werkzeug.utils import secure_filename
 
 photos = Blueprint('photos', __name__)
@@ -43,25 +44,49 @@ def detail(id):
                            magazine_photos=magazine_photos)
 
 
-@photos.route('/new', methods=['GET', 'POST'])
-def new():
-    if request.method == 'POST':
-        photo_file = request.files['photo_file']
-        photo_blob = photo_file.read()
-        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1])))
-
-        s3 = boto3.resource('s3')
-        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob, ContentType=photo_file.content_type)
+@photos.route('/upload', methods=['POST'])
+def upload():
+    if request.method == "POST":
+        photo_data = request.form.get('file_data').split(',')[1]
+        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
 
         file = File()
         file.type = 1
         file.name = photo_name
         file.ext = photo_name.split('.')[1]
-        file.size = len(photo_blob)
+        file.size = (len(photo_data) * 3) / 4
+
+        db.session.add(file)
+        db.session.flush()
+        db.session.commit()
+
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data),
+                                                                          ContentType='image/jpeg')
+        return jsonify({
+            'file_id': file.id,
+            'file_name': photo_name
+        })
+
+
+@photos.route('/unload', methods=['POST'])
+def unload():
+    s3 = boto3.resource('s3')
+    s3.Object('static.inotone.co.kr', 'data/img/%s' % request.form.get('file_name')).delete()
+    return jsonify({
+        'file_name': request.form.get('file_name')
+    })
+
+
+@photos.route('/new', methods=['GET', 'POST'])
+def new():
+    if request.method == 'POST':
+        if request.form.getlist('content_type'):
+            db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
 
         photo = Photo()
-        photo.file = file
         photo.user_id = '1'
+        photo.file_id = request.form['file_id']
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
 

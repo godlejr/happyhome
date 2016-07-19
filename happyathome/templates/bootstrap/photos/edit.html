@@ -2,20 +2,27 @@
 
 {% block content %}
 <div class="content">
-    <div class="well bs-component">
-        <form method="POST" class="form-horizontal" enctype="multipart/form-data">
+    <div class="well">
+        <form method="POST" id="photoForm" class="form-horizontal">
             <fieldset>
                 <legend>사진을 등록해주세요.</legend>
 
-                <div class="form-group">
-                    <div class="photo-preview" id="photoPreview">
-                        <span class="glyphicon glyphicon-open"></span>
-                    </div>
+                <div class="form-group photo-file-form">
+                    <div class="photo-preview" id="photoPreview"></div>
+                    <div class="photo-preview-loading"></div>
                     <input type="file" class="photo-file" id="photoFile" name="photo_file" />
+                    <input type="hidden" id="photoFileId" name="file_id" />
+                    <input type="hidden" id="photoFileName" name="file_name" />
                 </div>
 
                 <div class="form-group">
-                    <div class="btn-group col-lg-10 col-lg-offset-1" data-toggle="buttons">
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <input type="checkbox" id="contentType" name="content_type" value="2"><label for="contentType">360 VR 이미지입니다.</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="btn-group col-lg-10 col-lg-offset-1 rooms" data-toggle="buttons">
                         {% for room in rooms %}
                         <label class="btn btn-primary">
                             <input type="radio" name="room_id" value="{{ room.id }}"> {{ room.name }}
@@ -43,7 +50,45 @@
 
 <script>
 var $photoFile = $('#photoFile'),
-    $photoPreview = $('#photoPreview');
+    $photoPreview = $('#photoPreview'),
+    $photoPreviewLoading = $('.photo-preview-loading');
+
+
+$('#contentType').click(function() {
+    var $photo = $photoPreview.find('img');
+    if ($(this).is(':checked')) {
+        if ($photo[0]) {
+            if ($photo[0].naturalWidth / $photo[0].naturalHeight != 2) {
+                $(this).prop('checked', false);
+                alert('VR360 사진이 아닙니다.\n\n가로:세로 비율이 2:1 인 경우만 VR360 사진으로 등록할 수 있습니다.\n\n(추천 해상도: 4098x2048)');
+            }
+        } else {
+            $(this).prop('checked', false);
+            alert('사진을 등록해주세요.');
+        }
+    }
+});
+
+$('button[type=reset]').click(function() {
+    photosUnload();
+});
+
+$('#photoForm').submit(function() {
+    window.onunload = window.onbeforeunload = undefined;
+
+    if (!$('#photoFile').val()) {
+        alert('사진 파일을 선택해주세요.');
+        return false;
+    }
+
+    if (!$('input[name=room_id]:checked').val()) {
+        alert('공간을 선택해주세요.');
+        return false;
+    }
+
+    return true;
+});
+
 
 $photoPreview.click(function(e) {
     e.preventDefault();
@@ -52,20 +97,82 @@ $photoPreview.click(function(e) {
 });
 
 $photoFile.change(function() {
-    $photoPreview.children().remove();
+    photosUnload();
 
     var ext = $(this).val().split('.').pop().toLowerCase();
+
     if (ext.length > 0) {
-        if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
-            alert('사진 파일(gif, png, jpg)만 업로드 할수 있습니다.');
+        if ($.inArray(ext, ['jpg', 'jpeg']) == -1) {
             $(this).val('');
+            alert('사진 파일(jpg)만 업로드 할수 있습니다.');
             return false;
         }
+
+        $photoPreviewLoading.show();
+
+        var reader = new FileReader();
+        reader.readAsDataURL($photoFile[0].files[0])
+        reader.onload = function(e) {
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('photos.upload') }}",
+                data: {
+                    file_name: $photoFile.val(),
+                    file_data: e.target.result
+                }
+            }).success(function(data) {
+                $('#photoFileId').val(data.file_id);
+                $('#photoFileName').val(data.file_name);
+                $photoPreview.append("<img src=http://static.inotone.co.kr/data/img/" + data.file_name + " />");
+                $photoPreview.find('img').load(function() {
+                    $photoPreviewLoading.hide();
+
+                    if (this.naturalWidth / this.naturalHeight == 2) {
+                        $('#contentType').prop('checked', true);
+                    } else {
+                        $('#contentType').prop('checked', false);
+                    };
+                });
+            });
+        }
     }
-    loadPhoto($photoPreview[0], $photoFile[0]);
 });
 
-function loadPhoto(photoPreview, dataURL) {
+function photosUnload() {
+    $photoPreview.children().remove();
+    $('#contentType').prop('checked', false);
+    $('input[name=room_id]').prop('checked', false);
+    $('.rooms>label').removeClass('active');
+
+    var $photoFileId = $('#photoFileId'),
+        $photoFileName = $('#photoFileName');
+
+    if ($photoFileName.val()) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            cache: false,
+            url: "{{ url_for('photos.unload') }}",
+            data: {
+                file_name: $photoFileName.val()
+            }
+        }).success(function(data) {
+            $photoFileId.val('');
+            $photoFileName.val('');
+        });
+    }
+}
+
+window.onunload = function() {
+    photosUnload();
+};
+
+window.onbeforeunload = function(e) {
+    e = e || window.event;
+    e.returnValue = "변경사항이 저장되지 않을 수 있습니다.";
+};
+
+function loadPhoto(photoPreview, dataURL, callback) {
     var reader = new FileReader();
 
     reader.readAsDataURL(dataURL.files[0]);
@@ -76,6 +183,7 @@ function loadPhoto(photoPreview, dataURL) {
         img.onload = function() {
             photoPreview.appendChild(this);
             photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
+            callback();
         };
     }
 }
