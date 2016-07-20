@@ -27,6 +27,7 @@ class User(db.Model, BaseMixin):
     accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
     level =  db.Column(db.Integer)
     cover =  db.Column(db.Unicode(255))
+    avatar = db.Column(db.Unicode(255))
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""
@@ -148,6 +149,7 @@ class Social(db.Model, BaseMixin):
     social_id = db.Column(db.String(64), nullable=False, primary_key=True)
     nickname = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
+
 
 class Professional(db.Model, BaseMixin):
     """전문가 정보"""

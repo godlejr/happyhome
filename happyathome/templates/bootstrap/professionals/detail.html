@@ -1,10 +1,50 @@
-{% extends 'bootstrap/photos/base.html' %}
+{% extends 'bootstrap/professionals/content.html' %}
 
-{% block content %}
-<div class="content">
-    {% for post in post %}
-    <div class="pros-hp" id="{{ post.id }}"
-         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + post.user.cover }} )">
+{% block content_body %}
+
+<div class="hp-row">
+    <div class="col-md-9">
+        <div class="content-detail">
+            <div class="pros-intro">
+                <div class="pros-intro-title">소개</div>
+                <div class="pros-intro-body">
+                    <div class="pros-intro-content">{{ post.greeting}}</div>
+                </div>
+                <div class="pros-intro-title">프로젝트</div>
+                <div class="pros-intro-projects">
+                    {% for magazine in magazines %}
+                    {% if magazine.magazine_photos %}
+                    <div class="pros-intro-project" id="{{ magazine.id }}"
+                         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine.magazine_photos[0].file.name}} )">
+                        <div class="project-info">
+                            <div class="project-content">
+                                <div class="project-title">{{ magazine.title}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="content-sidebar">
+            <div class="pros-side">
+                <div class="pros-intro-title">contact</div>
+                <div class="pros-side-info">T. {{ post.phone }}</div>
+                <div class="pros-side-info">E. {{ post.user.email }}</div>
+                <div class="pros-side-info"><a href="http://{{post.homepage}}">H. {{ post.homepage }}</a></div>
+                <div class="pros-side-info">A. {{ post.address }}</div>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+$('.pros-intro-project').click(function() {
+    document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
+});
+
+
+</script>
 {% endblock %}

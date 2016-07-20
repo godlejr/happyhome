@@ -136,10 +136,178 @@ select.form-control {
 }
 
 /*pro_hp*/
-
+.hp-row{
+    width:100%;
+    float: left;
+}
+.pros-hp-menu{
+    list-style: none;
+    padding-left: 0px;
+}
 .pros-hp{
     width: 100%;
+    height: 200px;
+    background-repeat:no-repeat;
+    background-size: 1206px 200px;
 }
+
+.pros-hp-info{
+    position: absolute;
+    padding: 0;
+    width: 100%;
+    height: 200px;
+    float:left;
+}
+
+.pros-hp-info .pros-hp-avatar-info{
+    float: left;
+    top: 0px;
+    width: 160px;
+    padding: 20px 5px 5px 20px;
+    height:inherit
+}
+
+.pros-hp-avatar-info .pros-hp-review{
+    top: 0px;
+    padding: 5px;
+    color:white;
+}
+
+
+.pros-hp-avatar-info .pros-hp-avatar {
+    display: flex;
+    width: 130px;
+    height: 130px;
+    border-radius: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pros-hp-info .pros-hp-company-info{
+    position: relative;
+    float: left;
+    top: 0px;
+    padding: 20px 20px 10px 5px;
+    width: 260px;
+    height: inherit;
+    color: white;
+}
+
+.pros-hp-company-info .pros-hp-company-name{
+    padding: 10px 0px 10px 0px;
+    font-size: 25px;
+}
+
+.pros-hp-company-info .pros-hp-company-follow{
+    padding: 10px 0px 10px 0px;
+    font-size: 18px;
+}
+
+.pros-hp-button{
+    float:left;
+    padding: 5px;
+}
+
+.pros-hp-button-list{
+    width: 100%;
+    height: 30px;
+}
+/*pro_intro*/
+.pros-intro{
+    margin:0 auto;
+     width:90%;
+    display: table;
+    padding-bottom: 50px;
+}
+.pros-intro-body {
+    width: 100%;
+    margin: 0 auto;
+    padding: 15px 5px;
+    border: 1px solid #eeeeee;
+    text-align: justify;
+}
+.pros-intro-title {
+    width:100%;
+    margin: 0 auto;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 10px;
+}
+
+.pros-intro-body .pros-intro-content{
+    font-size: 15px;
+
+}
+
+.pros-intro-projects{
+    width: 100%;
+    margin:0 auto;
+    padding: 15px;
+    border: 1px solid #eeeeee;
+    display: inherit;
+}
+
+
+.pros-intro-projects .pros-intro-project{
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 50%;
+    margin:0 auto;
+    max-width: 300px;
+    max-height: 300px;
+    margin: 0 11px 22px 40px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pros-intro-project:after{
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.pros-intro-project .project-info{
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    width: 100%;
+    height: 30px;
+}
+
+.pros-intro-project .project-content{
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    background-color: #ffffff;
+}
+.pros-intro-project .project-title {
+    font-size: 15px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
+}
+
+/*pro side*/
+.pros-side{
+    width:90%
+    margin:0 auto;
+}
+
+.pros-side-info{
+    font-size: 15px;
+    font-weight: 400;
+    padding: 0px 0px 0px 5px;
+}
+
+
 
 /*pro_list*/
 .pros {

@@ -8,12 +8,15 @@
     {% if i < count+1 %}
     <div class="pros">
         <div class="prophoto" id="{{ posts.get(i).id }}"
-             style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + posts.get(i).user.cover }} )">
+              {% if posts.get(i).user.cover %}
+             style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + posts.get(i).user.cover }} )"
+          {% else %} style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
+           {% endif %} >
         </div>
         <div class="prostats">
-            <div class="proname">{{ posts.get(i).user.name }}</div>
-            <div class="profile">{{ posts.get(i).address }}</div>
-            <div class="progreet">{{ posts.get(i).greeting }}</div>
+            <div class="proname"><a href="{{ url_for('professionals.detail', id=posts.get(i).id) }}">{{ posts.get(i).user.name }}</a></div>
+            <div class="profile"><a href="{{ url_for('professionals.detail', id=posts.get(i).id) }}">{{ posts.get(i).address }}</a></div>
+            <div class="progreet"><a href="{{ url_for('professionals.detail', id=posts.get(i).id) }}">{{ posts.get(i).greeting }}</a></div>
         </div>
     </div>
     {% endif %}
@@ -39,5 +42,11 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+$('.prophoto').click(function() {
+    document.location.href = "{{ url_for('professionals.detail', id='') }}" + $(this).attr('id');
+});
+</script>
 
 {% endblock %}

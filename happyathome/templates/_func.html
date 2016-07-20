@@ -7,3 +7,10 @@
         <a href="{{ url_for(endpoint) }}">{{ display }}</a>
     </li>
 {% endmacro %}
+
+{% macro render_sub_hp_menu(endpoint, display , id) %}
+    <li class="pros-hp-button" >
+        <a href="{{ url_for(endpoint,id=id) }}">{{ display }}</a>
+    </li>
+{% endmacro %}
+
