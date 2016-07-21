@@ -3,14 +3,16 @@ import boto3
 import html2text
 import shortuuid
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
+from happyathome.forms import Pagination
 from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
 
 
-@magazines.route('/')
-def list():
+@magazines.route('/', defaults={'page': 1})
+@magazines.route('/page/<int:page>')
+def list(page):
     posts = db.session.query(Magazine)
     media = request.args.get('media') or ''
     category_id = request.args.get('category_id') or ''
@@ -23,7 +25,13 @@ def list():
     if residence_id:
         posts = posts.filter(Magazine.residence_id == residence_id)
 
-    posts = posts.order_by(Magazine.id.desc()).all()
+    pagination = Pagination(page, 12, posts.count())
+    if page != 1:
+        offset = 12 * (page - 1)
+    else:
+        offset = 0
+
+    posts = posts.order_by(Magazine.id.desc()).limit(12).offset(offset).all()
     categories = db.session.query(Category).all()
     residences = db.session.query(Residence).all()
 
@@ -33,7 +41,7 @@ def list():
                            categories=categories,
                            residences=residences,
                            category_id=category_id,
-                           residence_id=residence_id)
+                           residence_id=residence_id, pagination=pagination)
 
 
 @magazines.route('/new', methods=['GET', 'POST'])

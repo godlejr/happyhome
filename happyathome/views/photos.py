@@ -3,6 +3,7 @@ import os
 import boto3
 import shortuuid
 from flask_login import login_required
+from happyathome.forms import Pagination
 from happyathome.models import db, Photo, File, Comment, PhotoComment, Room
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from werkzeug.utils import secure_filename
@@ -10,15 +11,24 @@ from werkzeug.utils import secure_filename
 photos = Blueprint('photos', __name__)
 
 
-@photos.route('/')
-def list():
+@photos.route('/', defaults={'page': 1})
+@photos.route('/page/<int:page>')
+def list(page):
     posts = db.session.query(Photo)
     room_id = request.args.get('room_id') or ''
     if room_id:
         posts = posts.filter(Photo.room_id == room_id)
-    posts = posts.order_by(Photo.id.desc()).all()
+
+    pagination = Pagination(page, 12, posts.count())
+    if page != 1:
+        offset = 12 * (page - 1)
+    else:
+        offset = 0
+
+    posts = posts.order_by(Photo.id.desc()).limit(12).offset(offset).all()
     rooms = db.session.query(Room).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html', posts=posts, rooms=rooms, room_id=room_id)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html', posts=posts, rooms=rooms,
+                           room_id=room_id, pagination=pagination)
 
 
 @photos.route('/<id>')
