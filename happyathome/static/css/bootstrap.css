@@ -245,7 +245,8 @@ select.form-control {
     margin:0 auto;
     padding: 15px;
     border: 1px solid #eeeeee;
-    display: inherit;
+    display: table;
+    background-color: #ffffff;
 }
 
 
@@ -262,6 +263,51 @@ select.form-control {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+.pros-intro-projects .pros-detail-project {
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 33.3333%;
+    margin: 0 auto;
+    max-width: 320px;
+    max-height: 320px;
+    margin: 0 30px 22px 38px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pros-detail-project:after{
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.pros-detail-project .project-detail-info{
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    width: 100%;
+    height: 30px;
+}
+
+.pros-detail-project .project-detail-content{
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    background-color: #ffffff;
+}
+.pros-detail-project .project-detail-title {
+    font-size: 15px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
 }
 
 .pros-intro-project:after{

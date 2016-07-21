@@ -1,0 +1,29 @@
+{% extends 'bootstrap/professionals/content.html' %}
+
+{% block content_body %}
+<div class="pros-intro-title">프로젝트</div>
+<div class="pros-intro-projects">
+    {% for magazine in magazines %}
+    {% if magazine.magazine_photos %}
+    <div class="pros-detail-project" id="{{ magazine.id }}"
+         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine.magazine_photos[0].file.name}} )">
+        <div class="project-detail-info">
+            <div class="project-detail-content">
+                <div class="project-detail-title">{{ magazine.title }}</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+       {{ func.render_pagination('professionals.detail_list', pagination, post.id) }}
+</div>
+
+<script>
+    $('.pros-detail-project').click(function() {
+    document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
+});
+
+
+</script>
+
+{% endblock %}
