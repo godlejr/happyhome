@@ -1,0 +1,46 @@
+{% extends 'bootstrap/professionals/base.html' %}
+
+{% block content%}
+<div class="content">
+    <div class="pros-hp" id="{{ post.id }}"
+         {% if post.user.cover %}
+         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + post.user.cover }} )"
+         {% else %}
+         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
+         {% endif %}>
+        <div class="pros-hp-info">
+            <div class="pros-hp-avatar-info">
+                <div class="pros-hp-avatar" {% if post.user.avatar %}
+                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] + post.user.avatar }} )"
+                     {% else %}
+                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
+                     {% endif %}>
+                </div>
+                <div class="pros-hp-review">
+                    review *****
+                </div>
+            </div>
+            <div class="pros-hp-company-info">
+                <div class="pros-hp-company-name">
+                    {{ post.user.name }}
+                </div>
+                <div class="pros-hp-company-follow">
+                    팔로우 팔로워
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pros-hp-button-list">
+        <ul class="pros-hp-menu">
+            {{ func.render_sub_hp_menu('professionals.detail', '소개',post.id) }}
+            {{ func.render_sub_hp_menu('professionals.detail_list', '프로젝트',post.id) }}
+            {{ func.render_sub_hp_menu('professionals.list', '리뷰') }}
+            {{ func.render_sub_hp_menu('professionals.list', 'Q&A') }}
+        </ul>
+    </div>
+
+   {% block content_body %}{% endblock %}
+</div>
+{% endblock %}
+

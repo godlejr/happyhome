@@ -6,8 +6,10 @@ class Config(object):
     SECRET_KEY = 'secret'
     TEMPLATE_THEME = 'bootstrap'
     S3_BUCKET_NAME = 'http://static.inotone.co.kr'
+    S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'
     S3_COVER_DIRECTORY = '/data/cover/'
+    NO_IMG='noimg.JPG'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'mysql://root:1miglobal@inotone.cjj0w56trea4.ap-northeast-2.rds.amazonaws.com/happyathome'
