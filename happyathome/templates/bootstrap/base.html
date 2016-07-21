@@ -19,31 +19,57 @@
 </head>
 
 <body>
-    <div id="header">
-        <div class="top">
-            <div class="log"><a href="/"><img src="{{ url_for('static', filename='img/main/log.jpg') }}" /></a></div>
-                <div class="nav">
-                    <div class="search">
-                        <div class="search_field"><input name="textfield" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
-                        <div class="search_btn"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" alt="" /></div>
-                    </div>
-                    <div class="login_01">로그인</div>
-                    <div class="login_02">회원가입</div>
-                    <div class="gnb">
-                    <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리@홈</a></div>
-                    <div class="gnb_nav_h1"><a href="{{ url_for('photos.list') }}">갤러리@홈</a></div>
-                    <div class="gnb_nav_h2">프로@홈</div>
-                    <div class="gnb_nav_h2">해피@홈</div>
-                    <div class="write_i"><img src="{{ url_for('static', filename='img/main/write_i.jpg') }}" alt="" /></div>
-                    <div class="write_t">글쓰기</div>
-                </div><!-- gnb end -->
-            </div><!-- nav end -->
-        </div><!-- top end -->
-    </div><!-- header end -->
 
-    <div id="container">
-        {% block content %}{% endblock %}
+<div id="header">
+    <div class="top">
+        <div class="log"><a href="/"><img src="{{ url_for('static', filename='img/main/log.jpg') }}" /></a></div>
+            <div class="nav">
+                <div class="search">
+                    <div class="search_field"><input name="textfield" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
+                    <div class="search_btn"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" /></div>
+                </div>
+                <div class="login_01">로그인</div>
+                <div class="login_02">회원가입</div>
+                <div class="gnb">
+                <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리@홈</a></div>
+                <div class="gnb_nav_h1"><a href="{{ url_for('photos.list') }}">갤러리@홈</a></div>
+                <div class="gnb_nav_h2">프로@홈</div>
+                <div class="gnb_nav_h2">해피@홈</div>
+                <div class="write_i"><img src="{{ url_for('static', filename='img/main/write_i.jpg') }}" /></div>
+                <div class="write_t">글쓰기</div>
+            </div><!-- gnb end -->
+        </div><!-- nav end -->
+    </div><!-- top end -->
+</div><!-- header end -->
+
+<div id="container">
+    {% block content %}{% endblock %}
+</div>
+
+<div id="footer">
+    <div class="bot">
+        <div class="ci"><img src="{{ url_for('static', filename='img/main/ci.jpg') }}" /></div>
+        <div class="cr_1">상호명  |  INOTONE <br/> 대표이사  |  김경태 <br/> 주소  |  서울특별시 강남구 봉은사로84길 8, 5층(삼성동, 유승빌딩) <br/> Copyright ⓒ 2016 by Inotone Co,. LTD. All Rights Reserved</div>
+        <div class="cr_2">사업자등록번호  |  478-86-00420 <br/> 이메일  |  contact@inotone.co.kr</div>
+        <div class="cr_3">이용약관</div>
+        <div class="cr_4">개인정보취급방침</div>
+        <div class="cr_4">의견보내기</div>
+        <div class="selectbox">
+            <select id="familySite" name="family_site" class="styled">
+                <option>FAMILY</option>
+                <option value="http://www.hmglobal.com">한미글로벌</option>
+                <option value="http://www.ikukbo.com">국보디자인</option>
+            </select>
+        </div>
     </div>
+</div><!-- footer end -->
+
+<script>
+$('#familySite').change(function() {
+    if ($(this).val()) window.open($(this).val());
+});
+</script>
+
 </body>
 
 </html>
