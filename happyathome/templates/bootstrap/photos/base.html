@@ -2,4 +2,71 @@
 {% set active_new = "photos.new" %}
 {% set active_list = "photos.list" %}
 
-{% block content %}{% endblock %}
+{% block content %}
+<div id="filter">
+    <div id="f_nav">
+        <div id="f1">
+            <div class="f_nav_h1"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
+            <div class="f_nav_h2">테마</div>
+            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
+            <div class="f_nav_h2">주택</div>
+            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
+            <div class="f_nav_h2">작성자</div>
+            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
+            <div class="f_nav_h2">미디어</div>
+        </div>
+        <div id="f2">
+            <div class="f2_nav_h1">
+                <div class="f2_all" for="theme"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
+            </div>
+            <div class="f2_nav_h2">
+                <div class="f2_all" for="residence"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
+            </div>
+            <div class="f2_nav_h3">
+                <div class="f2_all" for="author"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
+            </div>
+            <div class="f2_nav_h4">
+                <div class="f2_all" for="media"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
+            </div>
+        </div>
+        <div id="residenceMenu" class="f_menu" for="residence">
+            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+            <div class="box2">
+                <div class="h1">전체</div>
+                {% for room in rooms %}
+                    <div class="h2" value="{{ room.id }}">{{ room.name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="authorMenu" class="f_menu" for="author">
+            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+            <div class="box2">
+                <div class="h1">전체</div>
+                <div class="h2">프로</div>
+                <div class="h2">일반</div>
+                <div class="h2">에디터</div>
+            </div>
+        </div>
+        <div id="mediaMenu" class="f_menu" for="media">
+            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+            <div class="box2">
+                <div class="h1">전체</div>
+                <div class="h2">사진</div>
+                <div class="h2">VR360</div>
+                <div class="h2">동영상</div>
+            </div>
+        </div>
+    </div>
+</div><!-- filter end -->
+
+{% block content_body %}{% endblock %}
+
+<script>
+$('.f2_all,.f_menu').mouseout(function() {
+    $('#' + $(this).attr('for') + 'Menu.f_menu').toggle();
+});
+$('.f2_all,.f_menu').mouseover(function() {
+    $('#' + $(this).attr('for') + 'Menu.f_menu').toggle();
+});
+</script>
+{% endblock %}

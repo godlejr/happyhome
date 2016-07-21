@@ -10,7 +10,8 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return redirect(url_for('magazines.list'))
+    magazines = Magazine.query.order_by(Magazine.id.desc()).limit(6).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html', magazines=magazines)
 
 
 @main.route('/login', methods=['GET', 'POST'])

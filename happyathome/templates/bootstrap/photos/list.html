@@ -1,18 +1,7 @@
 {% extends "bootstrap/photos/base.html" %}
 
-{% block content %}
+{% block content_body %}
 <div class="content">
-    <div class="well well-sm">
-        <div class="dropdown">
-            <select id="rooms" class="form-control">
-                <option value="">공간</option>
-                {% for room in rooms %}
-                    <option value="{{ room.id }}" {% if room.id == room_id|int %}selected{% endif %}>{{ room.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-
     <div class="cards">
     {% for post in posts %}
         <div class="card" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.file.name }})">

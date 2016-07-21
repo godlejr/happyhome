@@ -1,67 +1,27 @@
-{% extends "bootstrap/magazines/base.html" %}
+{% extends "bootstrap/base.html" %}
 
 {% block content %}
+<div class="img_section"></div>
+
 <div class="content">
-    <div class="well well-sm">
-        <div class="dropdown">
-            <select id="categories" class="form-control">
-                <option value="">테마</option>
-                {% for category in categories %}
-                    <option value="{{ category.id }}" {% if category.id == category_id|int %}selected{% endif %}>{{ category.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="dropdown">
-            <select id="residences" class="form-control">
-                <option value="">주거</option>
-                {% for residence in residences %}
-                    <option value="{{ residence.id }}" {% if residence.id == residence_id|int %}selected{% endif %}>{{ residence.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        <div class="dropdown">
-            <select id="media" class="form-control">
-                <option value="">미디어</option>
-                <option value="1" {% if media|int == 1 %}selected{% endif %}>사진</option>
-                <option value="2" {% if media|int == 2 %}selected{% endif %}>VR</option>
-                <option value="3" {% if media|int == 3 %}selected{% endif %}>동영상</option>
-            </select>
-        </div>
-    </div>
-
+    <div class="content-title">해피홈 추천 테마</div>
     <div class="cards">
-        {% for post in posts %}
-            {% if post.magazine_photos %}
-            <div class="card">
-                <div class="card-photo" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.magazine_photos[0].file.name }})">
+        {% for magazine in magazines %}
+            {% if magazine.magazine_photos %}
+            <div class="card" id="{{ magazine.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ magazine.magazine_photos[0].file.name }})">
+                <div class="card-info">
                     <div class="card-author">
-                        <div class="card-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
-                        <div class="card-user">{{ post.user.name }}</div>
+                        <div class="card-avatar" style="background-image:url(https://robohash.org/{{ magazine.id }}.png)"></div>
+                        <div class="card-user">{{ magazine.user.name }}</div>
                     </div>
-                </div>
-
-                <div class="card-content">
-                    <div class="card-category"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a></div>
-                    <div class="card-title"><a href="{{ url_for('magazines.detail', id=post.id) }}">{{ post.title }}</a></div>
+                    <div class="card-content">
+                        <div class="card-category"><a href="{{ url_for('magazines.list', category_id=magazine.category_id) }}">{{ magazine.category.name }}</a></div>
+                        <div class="card-title"><a href="{{ url_for('magazines.detail', id=magazine.id) }}">{{ magazine.title }}</a></div>
+                    </div>
                 </div>
             </div>
             {% endif %}
         {% endfor %}
     </div>
 </div>
-
-<script>
-$('select.form-control').change(function() {
-    document.location.href = "{{ url_for('magazines.list') }}" +
-                             "?category_id=" + $('#categories').val() +
-                             "&residence_id=" + $('#residences').val() +
-                             "&media=" + $('#media').val();
-});
-
-$('.card-photo').click(function() {
-    document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
-});
-</script>
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends 'bootstrap/magazines/base.html' %}
 
 {% block content %}
-<link href="http://cdn.pannellum.org/2.2/pannellum.css" rel="stylesheet" />
-<script src="http://cdn.pannellum.org/2.2/pannellum.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+<script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
 
 <div class="content">
     <div class="row">
@@ -28,21 +28,11 @@
                 <div class="content-photos">
                 {% for photo in post.magazine_photos %}
                     {% if photo.file.type == 2 %}
-                        <div class="content-photo-360">
-                            <div id="photo360-{{ photo.id }}"></div>
-                        </div>
+                        <div class="content-photo-360" id="photo360-{{ photo.id }}"></div>
 
                         <script>
-                        pannellum.viewer('photo360-{{ photo.id }}', {
-                            "type": "equirectangular",
-                            "panorama": "http://static.inotone.co.kr/data/img/{{ photo.file.name }}",
-                            "autoLoad": true,
-                            "hfov": 100,
-                            "yaw": -100,
-                            "autoRotate": -0.5,
-                            "zoom-controlls": false,
-                        });
-                        $('.pnlm-controls').hide();
+                        var carousel_{{ photo.id }} = new Carousel('photo360-{{ photo.id }}');
+                        carousel_{{ photo.id }}.viewer("http://static.inotone.co.kr/data/img/{{ photo.file.name }}");
                         </script>
                     {% else %}
                         <div class="content-photo">
