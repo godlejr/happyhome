@@ -1,54 +1,52 @@
 {% extends 'bootstrap/photos/base.html' %}
 
 {% block content %}
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
 <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
 
 <div class="content">
-    <div class="row">
-        <div class="col-md-9">
-            <div class="content-detail">
-            {% if post.file.type == 2 %}
-                <link href="http://cdn.pannellum.org/2.2/pannellum.css" rel="stylesheet" />
-                <script src="http://cdn.pannellum.org/2.2/pannellum.js"></script>
+    <div class="content-body">
+        <div class="content-main">
+            <div class="content-section">
+                <div class="content-photos">
+                {% if post.file.type == 2 %}
+                    <div class="content-photo-360" id="photo360"></div>
 
-                <div class="content-photo-360" id="photo360" style="width:650px;height:400px;"></div>
-
-                <script>
-                new Carousel('photo360').viewer("http://static.inotone.co.kr/data/img/{{ post.file.name }}");
-                </script>
-            {% else %}
-                <div class="content-photo">
-                    <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
-                </div>
-            {% endif %}
-                <div class="content-body">{{ post.content }}</div>
-                <div class="content-comment">
-                    <div class="comment-form">
-                        <form method="POST" name="comment_form" action="{{ url_for('photos.comment_new', id=post.id) }}">
-                            <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
-                            <button type="submit" class="btn btn-danger">질문하기</button>
-                        </form>
+                    <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+                    <script>new Carousel().viewer("photo360", "http://static.inotone.co.kr/data/img/{{ post.file.name }}");</script>
+                {% else %}
+                    <div class="content-photo">
+                        <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
                     </div>
-                    {% if post.comments %}
-                    <div class="comment-list">
-                        <ul>
-                        {% for photo_comment in post.comments %}
-                            <li>
-                                <div class="comment-author">{{ photo_comment.comment.user.name }}</div>
-                                <div class="comment-content">
-                                    {{ photo_comment.comment.content }}
-                                </div>
-                            </li>
-                        {% endfor %}
-                        </ul>
+                {% endif %}
+                    <div class="content-body">{{ post.content }}</div>
+                    <div class="content-comment">
+                        <div class="comment-form">
+                            <form method="POST" name="comment_form" action="{{ url_for('photos.comment_new', id=post.id) }}">
+                                <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
+                                <button type="submit" class="btn btn-danger">질문하기</button>
+                            </form>
+                        </div>
+                        {% if post.comments %}
+                        <div class="comment-list">
+                            <ul>
+                            {% for photo_comment in post.comments %}
+                                <li>
+                                    <div class="comment-author">{{ photo_comment.comment.user.name }}</div>
+                                    <div class="comment-content">
+                                        {{ photo_comment.comment.content }}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+
+        <div class="content-side">
             <div class="content-sidebar">
                 <div class="content-author">
                     {{ post.user.name }} | {{ post.room.name }}
@@ -58,9 +56,9 @@
                 {% if magazine_vrs %}
                     <div class="content-relative">
                         <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 VR</div>
-                        <ul class="relative-author photos-relative">
+                        <ul class="relative-photos">
                             {% for photo in magazine_vrs %}
-                                <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="85" height="85" /></a></li>
+                                <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="70" height="70" /></a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -70,9 +68,9 @@
                 {% if magazine_photos %}
                     <div class="content-relative">
                         <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 포토</div>
-                        <ul class="relative-author photos-relative">
+                        <ul class="relative-photos">
                             {% for photo in magazine_photos %}
-                                <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="85" height="85" /></a></li>
+                                <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="70" height="70" /></a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -82,9 +80,9 @@
                 {% if room_photos %}
                     <div class="content-relative">
                         <div class="relative-title"><a href="{{ url_for('photos.list', room_id=post.room_id) }}">{{ post.room.name }}</a>의 다른 포토</div>
-                        <ul class="relative-author photos-relative">
+                        <ul class="relative-photos">
                         {% for room_photo in room_photos %}
-                            <li><a href="{{ url_for('photos.detail', id=room_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ room_photo.file.name }}" width="85" height="85" /></a></li>
+                            <li><a href="{{ url_for('photos.detail', id=room_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ room_photo.file.name }}" width="70" height="70" /></a></li>
                         {% endfor %}
                         </ul>
                     </div>
@@ -94,9 +92,9 @@
                 {% if user_photos %}
                     <div class="content-relative">
                         <div class="relative-title">{{ post.user.name }}의 다른 포토</div>
-                        <ul class="relative-author photos-relative">
+                        <ul class="relative-photos">
                         {% for user_photo in user_photos %}
-                            <li><a href="{{ url_for('photos.detail', id=user_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_photo.file.name }}" width="85" height="85" /></a></li>
+                            <li><a href="{{ url_for('photos.detail', id=user_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_photo.file.name }}" width="70" height="70" /></a></li>
                         {% endfor %}
                         </ul>
                     </div>

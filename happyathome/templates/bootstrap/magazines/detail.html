@@ -27,11 +27,9 @@
                 <div class="content-photos">
                 {% for photo in post.magazine_photos %}
                     {% if photo.file.type == 2 %}
-                        <div class="content-photo-360" id="photo360-{{ photo.id }}" style="width:650px;height:400px;"></div>
+                        <div class="content-photo-360" id="photo360-{{ photo.id }}"></div>
 
-                        <script>
-                        new Carousel().viewer("photo360-{{ photo.id }}", "http://static.inotone.co.kr/data/img/{{ photo.file.name }}");
-                        </script>
+                        <script>new Carousel().viewer("photo360-{{ photo.id }}", "http://static.inotone.co.kr/data/img/{{ photo.file.name }}");</script>
                     {% else %}
                         <div class="content-photo">
                             <a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" /></a>
