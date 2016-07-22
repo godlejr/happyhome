@@ -41,11 +41,13 @@ def create_app(config_name):
     from happyathome.views.photos import photos as photos_blueprint
     from happyathome.views.magazines import magazines as magazines_blueprint
     from happyathome.views.professionals import professionals as pros_blueprint
+    from happyathome.views.users import users as users_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(magazines_blueprint, url_prefix='/magazines')
     app.register_blueprint(photos_blueprint, url_prefix='/photos')
     app.register_blueprint(pros_blueprint, url_prefix='/professionals')
+    app.register_blueprint(users_blueprint, url_prefix='/users')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
 
