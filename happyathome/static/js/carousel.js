@@ -45,7 +45,7 @@ var Carousel = (function() {
             this.photoWrap.addEventListener("mouseup", this.onPhotoMouseUp.bind(this), false);
             this.photoWrap.addEventListener("mousedown", this.onPhotoMouseDown.bind(this), false);
             this.photoWrap.addEventListener("mousemove", this.onPhotoMouseMove.bind(this), false);
-            this.photoWrap.addEventListener("mousewheel", this.onPhotoMouseWheel.bind(this), false );
+            this.photoWrap.addEventListener("mousewheel", this.onPhotoMouseWheel.bind(this), false);
 
             this.animate();
         },
@@ -85,12 +85,9 @@ var Carousel = (function() {
                 this.fov = 35;
             } else if (this.fov > 95) {
                 this.fov = 95;
-            } else {
-                this.fov = 75;
             }
 
             this.camera.projectionMatrix.makePerspective(this.fov, this.canvasWidth / this.canvasHeight, 1, 1100);
-
             this.render();
         },
         animate: function() {
