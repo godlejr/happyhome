@@ -3,53 +3,77 @@
 
 
 {% block content %}
-<div class="contentwrap">
-    <article class="container">
-        <div class="page-header">
-            <h1>회원가입 <small>일반회원가입</small></h1>
-        </div>
-        <form class="form-horizontal" method="POST">
-            <div class="form-group">
-                <div class="col-sm-4">
-                    {{ form.email(class="form-control", placeholder=form.email.label.text) }}
+<div class="content">
+    <div class="login-row">
+        <form class="login-form" method="POST">
+            <div class="login-header">
+                <div class="login-text">회원가입</div>
+            </div>
+            <div class="login-form-group">
+                <div class="login-form-fieldset">
+                    <div class="login-check">일반회원<input type="radio" class="login radio" name="login_check" id="users"
+                                                        value="1" checked="checked"/></div>
+                     <div class="login-check">사업자회원<input type="radio" class="login radio" name="login_check" id="pros"
+                                                         value="2"/></div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-sm-4">
-                    {{ form.name(class="form-control", placeholder=form.name.label.text) }}
+            <div class="login-form-group">
+                <div class="login-form-fieldset">
+                    {{ form.email(class="login-form-field", placeholder=form.email.label.text) }}
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-sm-4">
-                    {{ form.password(class="form-control", placeholder=form.password.label.text) }}
+            <div class="login-form-group" id="name">
+                <div class="login-form-fieldset">
+                    {{ form.name(class="login-form-field", placeholder=form.name.label.text) }}
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-4">
-                    {{ form.confirm(class="form-control", placeholder=form.confirm.label.text) }}
+
+            <div class="login-form-group">
+                <div class="login-form-fieldset">
+                    {{ form.password(class="login-form-field", placeholder=form.password.label.text) }}
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-4">
+            <div class="login-form-group">
+                <div class="login-form-fieldset">
+                    {{ form.confirm(class="login-form-field", placeholder=form.confirm.label.text) }}
+                </div>
+            </div>
+            <div class="login-form-group" id="business_no" hidden="hidden">
+                <div class="login-form-fieldset">
+                    {{ form.business_no(class="login-form-field", placeholder=form.business_no.label.text) }}
+                </div>
+            </div>
+            <div class="login-form-group">
+                <div class="login-form-fieldset">
                     {{ form.agreement }} <a href="/agreement">이용약관</a>에 동의합니다.
                 </div>
             </div>
             {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <ul>
-                        {% for message in messages %}
-                            <li>{{ message }} </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <div>{{ message }}</div>
+                {% endfor %}
+            </ul>
+            {% endif %}
             {% endwith %}
-            <button type="submit" class="btn btn-primary">회원가입</button>
+            <div class="login-form-group">
+                <button type="submit" class="login-button">회원가입</button>
+            </div>
             <!--social register -->
-
-
         </form>
-    </article>
+    </div>
 </div>
+
+<script>
+
+    $('input[name="login_check"]').change(function(){
+    if($(this).val() == "1")
+        $('#business_no').hide();
+    else
+        $('#business_no').show();
+    });
+</script>
 {% endblock %}

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
 from flask_login import login_user
 from happyathome.forms import JoinForm, LoginForm
-from happyathome.models import db, User, Magazine, Category, Residence
+from happyathome.models import db, User, Magazine, Category, Residence, Professional
 from sqlalchemy.dialects.postgresql import json
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -47,8 +47,22 @@ def join():
             user.email = form.email.data
             user.name = form.name.data
             user.password = generate_password_hash(form.password.data)
-            db.session.add(user)
-            db.session.commit()
+
+            if request.form['login_check'] == '2':
+                user.level = 2
+                db.session.add(user)
+                db.session.commit()
+                professional = Professional()
+                professional.business_no = form.business_no.data
+                professional.user_id = user.id
+                db.session.add(professional)
+                db.session.commit()
+            else:
+                user.level = 0
+                db.session.add(user)
+                db.session.commit()
+
+
             flash('가입을 축하합니다.')
             return redirect(url_for('main.login'))
 
