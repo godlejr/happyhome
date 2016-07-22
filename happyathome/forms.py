@@ -5,20 +5,20 @@ from math import ceil
 
 validators = {
     'email': [
-        Required(),
+        DataRequired(),
         Email(message='not an email fomat!')
     ],
     'password': [
-        Required(),
+        DataRequired(),
         Length(min=6, max=50),
-        EqualTo('confirm', message='Passwords must match'),
-       Regexp('[A-Za-z0-9@#$%^&+=]', message='Password contains invalid characters')
+        EqualTo('confirm', message='Passwords must match')
     ],
+
     'password_login':[
-        Required()
+        DataRequired()
     ],
     'name':[
-        Required(),
+        DataRequired(),
         Length(min=2, max=35)
     ],
     'agreement':[
@@ -28,11 +28,12 @@ validators = {
 
 
 class JoinForm(Form):
-    name = StringField('name',validators['name'])
-    email = StringField('email',validators['email'])
-    password = PasswordField('password',validators['password'])
-    confirm = PasswordField('password confirm')
-    agreement = BooleanField('agreement', validators['agreement'])
+    name = StringField('이름')
+    email = StringField('이메일',validators['email'])
+    password = PasswordField('비밀번호',validators['password'])
+    confirm = PasswordField('비밀번호 확인')
+    agreement = BooleanField('동의', validators['agreement'])
+    business_no = StringField('사업자번호('"-"'를 포함하세요)')
 
 
 class LoginForm(Form):

@@ -3,40 +3,44 @@
 
 
 {% block content %}
-<div class="contentwrap">
-    <article class="container">
-        <div class="page-header">
-            <h1>로그인</h1>
-        </div>
-        <form class="form-horizontal" method="POST">
-            <div class="form-group">
-                <div class="col-sm-4">
-                    {{ form.email(class="form-control", placeholder=form.email.label.text) }}
+<div class="content">
+    <article class="login-row">
+        <div class="login-form">
+            <form method="POST">
+                <div class="login-header">
+                    <div class="login-text">로그인</div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-4">
-                    {{ form.password(class="form-control", placeholder=form.password.label.text) }}
+                <div class="login-form-group">
+                    <div class="login-form-fieldset">
+                        {{ form.email(class="login-form-field", placeholder=form.email.label.text) }}
+                    </div>
                 </div>
-            </div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
-            <button type="submit" class="btn btn-primary">로그인</button>
-        </form>
 
-        <!--facebook login-->
-        <div class="col-sm-4">
-            <form name="fbForm" class="form-group" method="post">
-                <button type="button" id="fb-btn" class="btn btn-primary">facebook로그인</button>
+                <div class="login-form-group">
+                    <div class="login-form-fieldset">
+                        {{ form.password(class="login-form-field", placeholder=form.password.label.text) }}
+                    </div>
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                <div class="login-form-group">
+                    <button type="submit" class="login-button">로그인</button>
+                </div>
             </form>
+
+            <!--facebook login-->
+
+            <form name="fbForm" class="login-form-group" method="post">
+                <button type="button" id="fb-btn" class="login-button">facebook로그인</button>
+            </form>
+
         </div>
         <!--kakao login
         <a id="custom-login-btn" href="javascript:loginWithKakao()">
@@ -168,6 +172,9 @@
 
 
 
+
+
+
 </script>
 
 <!--kakao login-->
@@ -191,6 +198,9 @@
 
 
 
+
+
+
 </script>
 
 <!--google login-->
@@ -211,6 +221,9 @@
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
       };
+
+
+
 
 
 </script>

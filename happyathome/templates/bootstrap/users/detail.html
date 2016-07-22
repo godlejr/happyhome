@@ -1,0 +1,16 @@
+{% extends 'bootstrap/users/content.html' %}
+{% block content_body %}
+<div class="users-intro-projects">
+    {% for photo in photos %}
+    <div class="users-detail-project" id="{{ photo.id }}"
+         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photo.file.name}} )">
+    </div>
+    {% endfor %}
+</div>
+<script>
+    $('.users-detail-project').click(function() {
+    document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('id');
+});
+</script>
+{{ func.render_pagination('professionals.detail_list', pagination, post.id) }}
+{% endblock %}

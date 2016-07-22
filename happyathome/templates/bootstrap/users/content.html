@@ -1,0 +1,45 @@
+{% extends 'bootstrap/users/base.html' %}
+
+{% block content%}
+   <div class="content">
+    <div class="users-hp" id="{{ post.id }}"
+         {% if post.cover %}
+         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + post.user.cover }} )"
+         {% else %}
+         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
+         {% endif %}>
+        <div class="users-hp-info">
+            <div class="users-hp-avatar-info">
+                <div class="users-hp-avatar" {% if post.avatar %}
+                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] + post.avatar }} )"
+                     {% else %}
+                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
+                     {% endif %}>
+                </div>
+                <div class="users-hp-review">
+                    review *****
+                </div>
+            </div>
+            <div class="users-hp-company-info">
+                <div class="users-hp-company-name">
+                    {{ post.name }}
+                </div>
+                <div class="users-hp-company-follow">
+                    팔로우 팔로워
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="users-hp-button-list">
+        <ul class="users-hp-menu">
+            {{ func.render_sub_hp_menu('users.detail', '갤러리',post.id) }}
+            {{ func.render_sub_hp_menu('users.detail_list', '스토리',post.id) }}
+            {{ func.render_sub_hp_menu('professionals.list', '스크랩') }}
+            {{ func.render_sub_hp_menu('professionals.list', 'Q&A') }}
+             {{ func.render_sub_hp_menu('professionals.list', '리뷰') }}
+        </ul>
+    </div>
+   {% block content_body %}{% endblock %}
+</div>
+{% endblock %}
