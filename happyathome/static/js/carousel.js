@@ -1,5 +1,5 @@
 var Carousel = (function() {
-    var Carousel = function(viewerId) {
+    var Carousel = function() {
         var controller = document.createElement("div");
 
         controller.innerHTML = "TEST";
@@ -18,13 +18,14 @@ var Carousel = (function() {
         this.savedLatitude = 0;
         this.autoFlow = true;
         this.isUserInteracting = false;
-        this.photoWrap = document.getElementById(viewerId);
-        this.canvasWidth = this.photoWrap.offsetWidth;
-        this.canvasHeight = this.photoWrap.offsetHeight;
     }
 
     Carousel.prototype = {
-        viewer: function(panorama) {
+        viewer: function(viewerId, panorama) {
+            this.photoWrap = document.getElementById(viewerId);
+            this.canvasWidth = this.photoWrap.offsetWidth;
+            this.canvasHeight = this.photoWrap.offsetHeight;
+
             var sphere = new THREE.SphereGeometry(500, 60, 40);
             sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
@@ -41,10 +42,10 @@ var Carousel = (function() {
             this.renderer.setSize(this.canvasWidth, this.canvasHeight);
 
             this.photoWrap.appendChild(this.renderer.domElement);
-            this.photoWrap.addEventListener("mouseup", this.onPhotoMouseUp, false);
-            this.photoWrap.addEventListener("mousedown", this.onPhotoMouseDown, false);
-            this.photoWrap.addEventListener("mousemove", this.onPhotoMouseMove, false);
-            this.photoWrap.addEventListener("mousewheel", this.onPhotoMouseWheel, false );
+            this.photoWrap.addEventListener("mouseup", this.onPhotoMouseUp.bind(this), false);
+            this.photoWrap.addEventListener("mousedown", this.onPhotoMouseDown.bind(this), false);
+            this.photoWrap.addEventListener("mousemove", this.onPhotoMouseMove.bind(this), false);
+            this.photoWrap.addEventListener("mousewheel", this.onPhotoMouseWheel.bind(this), false );
 
             this.animate();
         },
@@ -93,28 +94,21 @@ var Carousel = (function() {
             this.render();
         },
         animate: function() {
-            var self = this;
-
-            window.requestAnimationFrame(function() {
-                self.animate();
-            });
-            self.render();
+            this.render();
+            window.requestAnimationFrame(this.animate.bind(this));
         },
         render: function() {
             if (this.autoFlow) {
                 this.longitude += 0.07;
             }
 
-            // limiting latitude from -85 to 85 (cannot point to the sky or under your feet)
             this.latitude = Math.max(-85, Math.min(85, this.latitude));
 
-            // moving the camera according to current latitude (vertical movement) and longitude (horizontal movement)
             this.camera.target.x = 500 * Math.sin(THREE.Math.degToRad(90 - this.latitude)) * Math.cos(THREE.Math.degToRad(this.longitude));
             this.camera.target.y = 500 * Math.cos(THREE.Math.degToRad(90 - this.latitude));
             this.camera.target.z = 500 * Math.sin(THREE.Math.degToRad(90 - this.latitude)) * Math.sin(THREE.Math.degToRad(this.longitude));
             this.camera.lookAt(this.camera.target);
 
-            // calling again render function
             this.renderer.render(this.scene, this.camera);
         }
     };
