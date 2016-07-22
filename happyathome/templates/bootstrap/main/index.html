@@ -24,4 +24,10 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+$('.card').click(function() {
+    document.location.href = $(this).find(".card-title>a").first().attr('href');
+});
+</script>
 {% endblock %}

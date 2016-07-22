@@ -22,7 +22,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; float:left; vertical-align:top;
 /******* header **********/
 #header     { width:100%; height:90px; background-color:#fff; }
  .top       { padding:0; margin:0 auto; 
-              width:1206px; height:90px; }
+              width:1184px; height:90px; }
  .log       { float:left;
               width:299px;
               padding-top:16px; }
@@ -133,24 +133,88 @@ ol,ul,li { list-style:none; margin:0; padding:0; float:left; vertical-align:top;
 
 
 /******* main container **********/
-#container     { width:100%; }
+#container {
+    width: 100%;
+}
 
 .content {
-    width: 1206px;
+    width: 100%;
+    max-width: 1206px;
     margin: 0 auto;
 }
 .content-title {
     font-size: 18px;
     font-weight: 700;
-    padding: 35px 0 25px 0;
+    padding-top: 40px;
     text-align: center;
     color: #030303;
 }
+.content-body {
+    display: flex;
+    width: 100%;
+    max-width: 1184px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+.content-main {
+    width: 100%;
+    max-width: 822px;
+}
+.content-section {
+    width: 100%;
+    border: 1px solid #eeeeee;
+    background-color: #ffffff;
+}
+.content-header {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+.content-photos {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+.content-photos img {
+    width: 100%;
+}
+.content-side {
+    flex: none;
+    margin-left: 22px;
+    width: 340px;
+}
+.content-sidebar {
+    width: 100%;
+    border: 1px solid #eeeeee;
+    background-color: #ffffff;
+}
+.content-relative {
+    width: 100%;
+}
+.content-relative .relative-list {
+    display: flex;
+}
+.content-relative .relative-title {
+    font-weight: 700;
+}
+.content-relative .relative-photo {
+    flex: none;
+    width: 70px;
+}
+.content-relative .relative-body {
+    flex: 1;
+    line-height: 170%;
+}
+.content-relative .relative-body p {
+    margin: 0;
+    font-size: 12px;
+}
+
 
 .cards {
     width: 100%;
     display: inline-block;
-    padding-top: 11px;
+    padding-top: 40px;
 }
 .card {
     position: relative;
@@ -186,7 +250,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; float:left; vertical-align:top;
     padding: 6px 20px;
     width: 100%;
     color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.6);
 }
 .card .card-avatar {
     display: flex;

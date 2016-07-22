@@ -5,11 +5,10 @@
 <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
 
 <div class="content">
-    <div class="row">
-        <div class="col-md-9">
-            <div class="content-detail">
-
-                <div class="magazine-body">
+    <div class="content-body">
+        <div class="content-main">
+            <div class="content-section">
+                <div class="content-header">
                     <div class="magazine-title">{{ post.title }}</div>
                     <div class="magazine-user">{{ post.user.name }}</div>
                     <div class="magazine-content">
@@ -28,11 +27,10 @@
                 <div class="content-photos">
                 {% for photo in post.magazine_photos %}
                     {% if photo.file.type == 2 %}
-                        <div class="content-photo-360" id="photo360-{{ photo.id }}"></div>
+                        <div class="content-photo-360" id="photo360-{{ photo.id }}" style="width:650px;height:400px;"></div>
 
                         <script>
-                        var carousel_{{ photo.id }} = new Carousel('photo360-{{ photo.id }}');
-                        carousel_{{ photo.id }}.viewer("http://static.inotone.co.kr/data/img/{{ photo.file.name }}");
+                        new Carousel().viewer("photo360-{{ photo.id }}", "http://static.inotone.co.kr/data/img/{{ photo.file.name }}");
                         </script>
                     {% else %}
                         <div class="content-photo">
@@ -42,10 +40,10 @@
                     <div class="content-body"><pre>{{ photo.content }}</pre></div>
                 {% endfor %}
                 </div>
-
             </div>
         </div>
-        <div class="col-md-3">
+
+        <div class="content-side">
             <div class="content-sidebar">
                 <div class="content-relative">
                     <a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a>
@@ -54,75 +52,63 @@
 
                 {% if post.category.category_magazines|length > 1 %}
                 <div class="content-relative">
-                    <ul class="relative-post magazines">
-                        <li class="relative-title"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a>의 다른 매거진</li>
-                        {% for category_magazine in post.category.category_magazines %}
-                            {% if category_magazine.magazine_photos and category_magazine.id != post.id %}
-                            <li>
-                                <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ category_magazine.magazine_photos[0].file.name }}" width="60" height="60" /></a></div>
-                                    <div class="relative-body">
-                                        <p>
-                                            <a href="{{ url_for('magazines.list', residence_id=category_magazine.residence.id) }}">{{ category_magazine.residence.name }}</a> |
-                                            {{ category_magazine.user.name }}
-                                        </p>
-                                        <p>{{ category_magazine.title }}</p>
-                                    </div>
+                    <div class="relative-title"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a>의 다른 매거진</div>
+                    {% for category_magazine in post.category.category_magazines %}
+                        {% if category_magazine.magazine_photos and category_magazine.id != post.id %}
+                            <div class="relative-list">
+                                <div class="relative-photo"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ category_magazine.magazine_photos[0].file.name }}" width="70" height="70" /></a></div>
+                                <div class="relative-body">
+                                    <p>
+                                        <a href="{{ url_for('magazines.list', residence_id=category_magazine.residence.id) }}">{{ category_magazine.residence.name }}</a> |
+                                        {{ category_magazine.user.name }}
+                                    </p>
+                                    <p>{{ category_magazine.title }}</p>
                                 </div>
-                            </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <hr />
                 {% endif %}
 
                 {% if post.residence.residence_magazines|length > 1 %}
                 <div class="content-relative">
-                    <ul class="relative-post magazines">
-                        <li class="relative-title"><a href="{{ url_for('magazines.list', residence_id=post.residence_id) }}">{{ post.residence.name }}</a>의 다른 매거진</li>
-                        {% for residence_magazine in post.residence.residence_magazines %}
-                            {% if residence_magazine.magazine_photos and residence_magazine.id != post.id %}
-                            <li>
-                                <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=residence_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ residence_magazine.magazine_photos[0].file.name }}" width="60" height="60" /></a></div>
-                                    <div class="relative-body">
-                                        <p>
-                                            <a href="{{ url_for('magazines.list', category_id=residence_magazine.category.id) }}">{{ residence_magazine.category.name }}</a> |
-                                            {{ residence_magazine.user.name }}
-                                        </p>
-                                        <p>{{ residence_magazine.title }}</p>
-                                    </div>
+                    <div class="relative-title"><a href="{{ url_for('magazines.list', residence_id=post.residence_id) }}">{{ post.residence.name }}</a>의 다른 매거진</div>
+                    {% for residence_magazine in post.residence.residence_magazines %}
+                        {% if residence_magazine.magazine_photos and residence_magazine.id != post.id %}
+                            <div class="relative-list">
+                                <div class="relative-image"><a href="{{ url_for('magazines.detail', id=residence_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ residence_magazine.magazine_photos[0].file.name }}" width="70" height="70" /></a></div>
+                                <div class="relative-body">
+                                    <p>
+                                        <a href="{{ url_for('magazines.list', category_id=residence_magazine.category.id) }}">{{ residence_magazine.category.name }}</a> |
+                                        {{ residence_magazine.user.name }}
+                                    </p>
+                                    <p>{{ residence_magazine.title }}</p>
                                 </div>
-                            </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <hr />
                 {% endif %}
 
                 {% if post.user.user_magazines|length > 1 %}
                 <div class="content-relative">
-                    <ul class="relative-post magazines">
-                        <li class="relative-title">{{ post.user.name }}의 다른 매거진</li>
-                        {% for user_magazine in post.user.user_magazines %}
-                            {% if user_magazine.magazine_photos and user_magazine.id != post.id %}
-                            <li>
-                                <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_magazine.magazine_photos[0].file.name }}" width="60" height="60" /></a></div>
-                                    <div class="relative-body">
-                                        <p>
-                                            <a href="{{ url_for('magazines.list', category_id=user_magazine.category.id) }}">{{ user_magazine.category.name }}</a> |
-                                            <a href="{{ url_for('magazines.list', residence_id=user_magazine.residence.id) }}">{{ user_magazine.residence.name }}</a>
-                                        </p>
-                                        <p>{{ user_magazine.title }}</p>
-                                    </div>
+                    <div class="relative-title">{{ post.user.name }}의 다른 매거진</div>
+                    {% for user_magazine in post.user.user_magazines %}
+                        {% if user_magazine.magazine_photos and user_magazine.id != post.id %}
+                            <div class="relative-list">
+                                <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_magazine.magazine_photos[0].file.name }}" width="70" height="70" /></a></div>
+                                <div class="relative-body">
+                                    <p>
+                                        <a href="{{ url_for('magazines.list', category_id=user_magazine.category.id) }}">{{ user_magazine.category.name }}</a> |
+                                        <a href="{{ url_for('magazines.list', residence_id=user_magazine.residence.id) }}">{{ user_magazine.residence.name }}</a>
+                                    </p>
+                                    <p>{{ user_magazine.title }}</p>
                                 </div>
-                            </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <hr />
                 {% endif %}
@@ -150,6 +136,7 @@
                         </form>
                     </div>
                 </div>
+
                 <div class="content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
             </div>
         </div>
