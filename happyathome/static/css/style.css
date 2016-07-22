@@ -41,7 +41,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; float:left; vertical-align:top;
                   font-size:13px; color:#2b2b2b; }
  .login_02      { float:left; 
                   margin-top:25px; margin-left:21px;
-                  font-size:13px; color:#2b2b2b; }
+                  font-size:13px; color:#2b2b2b; cursor:pointer;}
  .gnb           { width:885px; }
 
  .gnb_nav_h1    { float:left;
@@ -235,9 +235,327 @@ ol,ul,li { list-style:none; margin:0; padding:0; float:left; vertical-align:top;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
 
+/******* professionals *******/
+/*pro_hp*/
+.hp-row{
+    width:100%;
+    display: inline-block;
+}
+.hp-content-detail {
+    width: 866px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin: 0 auto;
+}
+.hp-content-sidebar {
+    padding: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.hp-row-left{
+    width:75%;
+    float:left;
+}
+
+.hp-row-right{
+    width:24%;
+    float:left;
+}
+
+.pros-row{
+    width: 80%;
+    margin:0 auto;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.pros-list-row{
+    width:80%;
+    margin:0 auto;
+}
+.pros-hp-menu{
+    list-style: none;
+    padding-left: 0px;
+}
+.pros-hp{
+    width: 100%;
+    height: 200px;
+    background-repeat:no-repeat;
+    background-size: 1206px 200px;
+}
+
+.pros-hp-info{
+    position: absolute;
+    padding: 0;
+    width: 100%;
+    height: 200px;
+    float:left;
+}
+
+.pros-hp-info .pros-hp-avatar-info{
+    float: left;
+    top: 0px;
+    width: 160px;
+    padding: 20px 5px 5px 20px;
+    height:inherit
+}
+
+.pros-hp-avatar-info .pros-hp-review{
+    top: 0px;
+    padding: 5px;
+    color:white;
+}
+
+
+.pros-hp-avatar-info .pros-hp-avatar {
+    display: flex;
+    width: 130px;
+    height: 130px;
+    border-radius: 1px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pros-hp-info .pros-hp-company-info{
+    position: relative;
+    float: left;
+    top: 0px;
+    padding: 20px 20px 10px 5px;
+    width: 260px;
+    height: inherit;
+    color: white;
+}
+
+.pros-hp-company-info .pros-hp-company-name{
+    padding: 10px 0px 10px 0px;
+    font-size: 25px;
+}
+
+.pros-hp-company-info .pros-hp-company-follow{
+    padding: 10px 0px 10px 0px;
+    font-size: 18px;
+}
+
+.pros-hp-button{
+    float:left;
+    padding: 5px;
+}
+
+.pros-hp-button-list{
+    width: 100%;
+    height: 30px;
+}
+/*pro_intro*/
+.pros-intro{
+    margin:0 auto;
+     width:90%;
+    display: table;
+    padding-bottom: 50px;
+}
+.pros-intro-body {
+    width: 100%;
+    margin: 0 auto;
+    padding: 15px 5px;
+    border: 1px solid #eeeeee;
+    text-align: justify;
+}
+.pros-intro-title {
+    width:100%;
+    margin: 0 auto;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 10px;
+}
+
+.pros-intro-body .pros-intro-content{
+    font-size: 15px;
+
+}
+
+.pros-intro-projects{
+    width: 100%;
+    margin:0 auto;
+    padding: 15px;
+    border: 1px solid #eeeeee;
+    display: table;
+    background-color: #ffffff;
+}
+
+
+.pros-intro-projects .pros-intro-project{
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 50%;
+    margin:0 auto;
+    max-width: 300px;
+    max-height: 300px;
+    margin: 0 11px 22px 40px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.pros-intro-projects .pros-detail-project {
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 33.3333%;
+    margin: 0 auto;
+    max-width: 320px;
+    max-height: 320px;
+    margin: 0 30px 22px 38px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pros-detail-project:after{
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.pros-detail-project .project-detail-info{
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    width: 100%;
+    height: 30px;
+}
+
+.pros-detail-project .project-detail-content{
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    background-color: #ffffff;
+}
+.pros-detail-project .project-detail-title {
+    font-size: 15px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
+}
+
+.pros-intro-project:after{
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+.pros-intro-project .project-info{
+    position: absolute;
+    bottom: 0;
+    padding: 0;
+    width: 100%;
+    height: 30px;
+}
+
+.pros-intro-project .project-content{
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    background-color: #ffffff;
+}
+.pros-intro-project .project-title {
+    font-size: 15px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
+}
+
+/*pro side*/
+.pros-side{
+    width:90%
+    margin:0 auto;
+}
+
+.pros-side-info{
+    font-size: 15px;
+    font-weight: 400;
+    padding: 0px 0px 0px 5px;
+}
+
+
+
+/*pro_list*/
+.pros {
+    width: 100%;
+    max-width: 800px;
+    display:inline-block;
+    border-top:5px solid #eeeeee;
+    margin: 0px 0px 30px 0px;
+    cursor: pointer;
+}
+
+.prophoto {
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 30%;
+    height: 200px;
+    max-width: 300px;
+    max-height: 200px;
+    margin: 32px 20px 32px;
+    padding: border: 1px solid #eeeeee;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.prostats {
+    position: relative;
+    float: left;
+    width: 59%;
+    height: 200px;
+    margin: 40px 20px 10px 0px;
+}
+
+.prostats .proname{
+    width: 100%;
+    height: 25%;
+    font-size: 20px;
+    overflow: hidden;
+    text-align: justify;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
+}
+
+.prostats .profile{
+    width: 100%;
+    height: 25%;
+    font-size: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
+}
+
+.prostats .progreet{
+    width: 100%;
+    height: 55%;
+    font-size: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: nowrap;
+}
+.custom-pagination{
+    display:inline-block;
+}
 
 /******* footer **********/
-#footer { width:100%; height:116px; background-color:#3e4448; } 
+#footer { width:100%; height:116px; background-color:#3e4448; }
  .bot   { padding:0; margin:0 auto; 
           width:1184px; height:92px; }
  .ci    { float:left;

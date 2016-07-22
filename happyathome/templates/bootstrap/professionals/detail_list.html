@@ -15,9 +15,8 @@
     </div>
     {% endif %}
     {% endfor %}
-       {{ func.render_pagination('professionals.detail_list', pagination, post.id) }}
 </div>
-
+{{ func.render_pagination('professionals.detail_list', pagination, post.id) }}
 <script>
     $('.pros-detail-project').click(function() {
     document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
