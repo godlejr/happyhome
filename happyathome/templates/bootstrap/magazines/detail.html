@@ -31,7 +31,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="magazine-content">{{ post.content }}</div>
+                    <div class="magazine-content content-text">{{ post.content }}</div>
                 </div>
 
                 <div class="content-photos">
@@ -45,7 +45,7 @@
                             <a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" /></a>
                         </div>
                     {% endif %}
-                    <div class="content-text"><pre>{{ photo.content }}</pre></div>
+                    <div class="content-text">{{ photo.content }}</div>
                 {% endfor %}
                 </div>
             </div>

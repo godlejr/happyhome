@@ -249,16 +249,17 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-photos img {
     width: 100%;
 }
-.content-photos>div {
-    margin: 15px 0;
-}
 .content-photo-360 {
     width: 650px;
     height: 400px;
 }
 .content-text {
+    margin: 20px 0;
     font-size: 16px;
     line-height: 180%;
+    white-space: pre-wrap;
+    word-wrap: break-all;
+    text-align: justify;
 }
 .content-side {
     flex: none;
@@ -492,6 +493,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .card .card-content .card-icon {
     float: left;
     width: 50px;
+    font-size: 12px;
 }
 .card .card-content .card-icon div {
     margin: 6px 0;
