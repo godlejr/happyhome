@@ -682,7 +682,184 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .custom-pagination{
     display:inline-block;
 }
+/******* users edit*****/
+.edit_menu{
+    width: 100%;
+    margin: 15px auto;
+    position: relative;
+    background-color: white;
+    display: inline-block;
+}
 
+.edit_menu_item{
+    padding: 14px 15px 13px 15px;
+    float: left;
+    font-size: 15px;
+    text-align: center;
+}
+.edit_menu_item>a{
+    font-size: 15px;
+}
+
+.edit_menu_out{
+    padding: 14px 15px 13px 15px;
+    float: right;
+    color: gray;
+    font-size: 10px;
+    text-align: center;
+}
+
+.edit_form{
+    padding-top: 16px;
+    max-width: 584px;
+    margin: 0 auto;
+}
+
+.edit_field{
+    padding: 0 16px;
+    margin-bottom: 22px;
+}
+
+ .edit_title{
+    padding-bottom: 6px;
+    font-size: 15px;
+    letter-spacing: -1px;
+ }
+
+ .edit_form_field{
+    border: 0px;
+    padding: 15px;
+    font-size: 15px;
+    letter-spacing: -1px;
+    margin: 0;
+    width: 100%;
+    max-width: 560px;
+ }
+
+ .edit_textarea_form{
+    border: 0;
+    width: 100%;
+    max-width: 560px;
+    height: 100px;
+    padding: 15px;
+    resize: none;
+    font-size: 15px;
+    line-height: 21px;
+    letter-spacing: -1px;
+ }
+
+ .edit_memo{
+    padding: 6px 6px 0;
+    letter-spacing: -0.5px;
+    font-size: 13px;
+ }
+
+ .edit_radio_label{
+    display: inline-block;
+    float: left;
+    width: 44%;
+    padding: 0px 0px 0px 20px;
+    letter-spacing: -1px;
+ }
+
+ .edit_gender{
+    float:left;
+    font-size: 15px;
+
+ }
+
+ .edit_button{
+    float: right;
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    border: 1px solid #939598
+ }
+
+.edit_radio_field{
+   height: 48px;
+    width: 582px;
+    padding: 15px;
+    background-color: white;
+ }
+
+.edit-profile-photo{
+    width:150px;
+    height:150px;
+}
+
+.edit-cover-photo{
+    width:582px;
+    height: 150px;
+}
+
+ .edit-profile-preview {
+    width: 582px;
+    height: 150px;
+    cursor: pointer;
+    margin: 0 auto;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #ffffff;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/btn_upload.png');
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.profile-preview-loading {
+    display: none;
+    width: 582px;
+    height: 150px;
+    margin: -150px 0 0px 0px;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/ripple.gif');
+}
+
+.cover-preview-loading {
+    display: none;
+    width: 582px;
+    height: 150px;
+    margin: -150px 0 0px 0px;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/ripple.gif');
+}
+
+.edit-file-form {
+    position: relative;
+}
+
+.cover_reset{
+    float:right;
+    padding:2px;
+}
+
+.profile_reset{
+    float:right;
+    padding:2px;
+}
+
+.edit_submit{
+    padding: 16px;
+    margin-bottom: 80px;
+    border-top: 1px solid #eeeeee;
+}
+
+.edit_submit_button{
+    font-weight: bold;
+    border: 0px;
+    padding: 15px;
+    width: 582px;
+    background: #bcbec0;
+    color: white;
+    font-size: 17px;
+    letter-spacing: -1px;
+}
 /******* users *******/
 
 .users-row{
@@ -707,7 +884,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 
 .users-hp-info{
-    position: absolute;
     padding: 0;
     width: 100%;
     height: 200px;
@@ -747,6 +923,21 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 260px;
     height: inherit;
     color: white;
+}
+
+.users-hp-info .users-hp-profile-edit{
+    position: relative;
+    float: right;
+    top: 0px;
+    padding: 20px;
+    width: 120px;
+    height: inherit;
+    color: white;
+}
+
+.users-hp-pofile-editbutton{
+    float:right;
+    font-size: 15px;
 }
 
 .users-hp-company-info .users-hp-company-name{

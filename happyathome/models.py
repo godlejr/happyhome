@@ -28,6 +28,8 @@ class User(db.Model, BaseMixin):
     level =  db.Column(db.Integer)
     cover =  db.Column(db.Unicode(255))
     avatar = db.Column(db.Unicode(255))
+    homepage = db.Column(db.Unicode(255))
+    sex = db.Column(db.Unicode(2))
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""

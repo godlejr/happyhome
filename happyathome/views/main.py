@@ -24,7 +24,7 @@ def login():
                 if not check_password_hash(user.password, form.password.data):
                     flash('password is wrong')
                 else:
-                    login_user(user)
+                    session['user_id']=user.email
                     return redirect(url_for('main.index'))
             else:
                 flash('there is no your ID')
