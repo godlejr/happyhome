@@ -27,17 +27,20 @@
                                 <button type="submit" class="btn-comment">문의</button>
                             </form>
                         </div>
+
                         {% if post.comments %}
                         <div class="comment-list">
                             <ul>
-                            {% for photo_comment in post.comments %}
-                                <li>
-                                    <div class="comment-author">{{ photo_comment.comment.user.name }}</div>
-                                    <div class="comment-content">
-                                        {{ photo_comment.comment.content }}
-                                    </div>
-                                </li>
-                            {% endfor %}
+                                {% for comment in post.comments %}
+                                    <li>
+                                        <div class="comment-info">
+                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ comment.comment.id }}.png)"></span>
+                                            <span class="comment-user">{{ comment.comment.user.name }}</span>
+                                            <span class="comment-date">{{ comment.comment.created_at }}</span>
+                                        </div>
+                                        <div class="comment-content">{{ comment.comment.content }}</div>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
                         {% endif %}

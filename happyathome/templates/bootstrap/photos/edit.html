@@ -2,49 +2,51 @@
 
 {% block content %}
 <div class="content">
-    <div class="well">
-        <form method="POST" id="photoForm" class="form-horizontal">
-            <fieldset>
-                <legend>사진을 등록해주세요.</legend>
+    <div class="content-body">
+        <div class="well">
+            <form method="POST" id="photoForm" class="form-horizontal">
+                <fieldset>
+                    <legend>사진을 등록해주세요.</legend>
 
-                <div class="form-group photo-file-form">
-                    <div class="photo-preview" id="photoPreview"></div>
-                    <div class="photo-preview-loading"></div>
-                    <input type="file" class="photo-file" id="photoFile" name="photo_file" />
-                    <input type="hidden" id="photoFileId" name="file_id" />
-                    <input type="hidden" id="photoFileName" name="file_name" />
-                </div>
-
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <input type="checkbox" id="contentType" name="content_type" value="2"><label for="contentType">360 VR 이미지입니다.</label>
+                    <div class="form-group photo-file-form">
+                        <div class="photo-preview" id="photoPreview"></div>
+                        <div class="photo-preview-loading"></div>
+                        <input type="file" class="photo-file" id="photoFile" name="photo_file" />
+                        <input type="hidden" id="photoFileId" name="file_id" />
+                        <input type="hidden" id="photoFileName" name="file_name" />
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="btn-group col-lg-10 col-lg-offset-1 rooms" data-toggle="buttons">
-                        {% for room in rooms %}
-                        <label class="btn btn-primary">
-                            <input type="radio" name="room_id" value="{{ room.id }}"> {{ room.name }}
-                        </label>
-                        {% endfor %}
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <input type="checkbox" id="contentType" name="content_type" value="2"><label for="contentType">360 VR 이미지입니다.</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <textarea class="form-control" rows="5" id="textArea" name="content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>
+                    <div class="form-group">
+                        <div class="btn-group col-lg-10 col-lg-offset-1 rooms" data-toggle="buttons">
+                            {% for room in rooms %}
+                            <label class="btn btn-primary">
+                                <input type="radio" name="room_id" value="{{ room.id }}"> {{ room.name }}
+                            </label>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <button type="reset" class="btn btn-default">취소</button>
-                        <button type="submit" class="btn btn-danger">등록</button>
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <textarea class="form-control" rows="5" id="textArea" name="content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>
+                        </div>
                     </div>
-                </div>
-            </fieldset>
-        </form>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <button type="reset" class="btn btn-default">취소</button>
+                            <button type="submit" class="btn btn-danger">등록</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>
 

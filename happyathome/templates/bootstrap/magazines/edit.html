@@ -2,71 +2,73 @@
 
 {% block content %}
 <div class="content">
-    <div class="well">
-        <form method="POST" class="form-horizontal" enctype="multipart/form-data">
-            <fieldset>
-                <legend>스토리를 등록해주세요.</legend>
+    <div class="content-body">
+        <div class="well">
+            <form method="POST" class="form-horizontal" enctype="multipart/form-data">
+                <fieldset>
+                    <legend>스토리를 등록해주세요.</legend>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <div class="btn-group" data-toggle="buttons">
-                            {% for category in categories %}
-                            <label class="btn btn-warning">
-                                <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
-                            </label>
-                            {% endfor %}
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <div class="btn-group" data-toggle="buttons">
+                                {% for category in categories %}
+                                <label class="btn btn-warning">
+                                    <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
+                                </label>
+                                {% endfor %}
+                            </div>
+
+                            <div class="btn-group pull-right" data-toggle="buttons">
+                                {% for residence in residences %}
+                                <label class="btn btn-success">
+                                    <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
+                                </label>
+                                {% endfor %}
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="btn-group pull-right" data-toggle="buttons">
-                            {% for residence in residences %}
-                            <label class="btn btn-success">
-                                <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
-                            </label>
-                            {% endfor %}
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <input class="form-control" name="title" placeholder="제목" />
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <input class="form-control" name="title" placeholder="제목" />
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <input class="form-control" name="size" placeholder="평수" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <input class="form-control" name="size" placeholder="평수" />
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <input class="form-control" name="location" placeholder="위치" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <input class="form-control" name="location" placeholder="위치" />
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <input class="form-control" name="cost" placeholder="비용" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <input class="form-control" name="cost" placeholder="비용" />
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <textarea class="form-control" rows="3" name="content" placeholder="내용"></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <textarea class="form-control" rows="3" name="content" placeholder="내용"></textarea>
+                    <div id="photos"></div>
+
+                    <div class="form-group">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <button type="submit" class="btn btn-danger">등록</button>
+                            <button class="btn" id="addBtnPhoto" type="button" value="1">사진 추가</button>
+                        </div>
                     </div>
-                </div>
-
-                <div id="photos"></div>
-
-                <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <button type="submit" class="btn btn-danger">등록</button>
-                        <button class="btn" id="addBtnPhoto" type="button" value="1">사진 추가</button>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>
 
