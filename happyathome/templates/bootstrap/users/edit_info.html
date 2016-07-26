@@ -34,23 +34,27 @@
     <div class="edit_field">
         <div class="edit_title">프로필 사진</div>
         <div class="edit-profile-preview" id="profilePreview">{% if post.avatar %}
-            <img class="edit-profile-photo" src="http://static.inotone.co.kr/data/user/{{post.avatar}}" >
-            {% endif %}</div>
+            <img class="edit-profile-photo" src="http://static.inotone.co.kr/data/user/{{post.avatar}}">
+            {% endif %}
+        </div>
         <div class="profile-preview-loading"></div>
         <input type="file" class="edit-file-form" id="profileFile" name="profileFile"/>
-        <button type="button" class="profile_reset" >취소</button>
-        <input type="hidden" id="profileFileName" name="profileFileName" {% if post.avatar %} value='{{post.avatar}}'{% endif %}/>
+        <button type="button" class="profile_reset">취소</button>
+        <input type="hidden" id="profileFileName" name="profileFileName" {% if post.avatar %} value='{{post.avatar}}' {%
+               endif %}/>
     </div>
 
     <div class="edit_field">
         <div class="edit_title">커버 사진</div>
         <div class="edit-profile-preview" id="coverPreview">{% if post.cover %}
-            <img class="edit-cover-photo" src="http://static.inotone.co.kr/data/cover/{{post.cover}}" >
-            {% endif %}</div>
+            <img class="edit-cover-photo" src="http://static.inotone.co.kr/data/cover/{{post.cover}}">
+            {% endif %}
+        </div>
         <div class="cover-preview-loading"></div>
         <input type="file" class="edit-file-form" id="coverFile" name="coverFile"/>
-        <button type="button" class="cover_reset" >취소</button>
-        <input type="hidden" id="coverFileName" name="coverFileName" />
+        <button type="button" class="cover_reset">취소</button>
+        <input type="hidden" id="coverFileName" name="coverFileName" {% if post.cover %} value="{{post.cover}}" {% endif
+               %}/>
     </div>
     <div class="edit_submit">
         <input type="submit" class="edit_submit_button" value="수정 완료"/>
@@ -234,6 +238,7 @@ function coverUnload() {
         });
     }
 }
+
 
 
 </script>
