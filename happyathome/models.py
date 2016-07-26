@@ -28,8 +28,6 @@ class User(db.Model, BaseMixin):
     level =  db.Column(db.Integer)
     cover =  db.Column(db.Unicode(255))
     avatar = db.Column(db.Unicode(255))
-    homepage = db.Column(db.Unicode(255))
-    sex = db.Column(db.Unicode(2))
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""
@@ -100,7 +98,7 @@ class Photo(db.Model, BaseMixin):
     user = db.relationship('User', backref=backref('user_photos'))
     file = db.relationship('File', backref=backref('file_photos'))
     room = db.relationship('Room', backref=backref('room_photos'))
-    magazine = db.relationship('Magazine', backref=backref('magazine_photos'))
+    magazine = db.relationship('Magazine', back_populates='photos')
     comments = db.relationship('PhotoComment', back_populates='photo')
 
 
@@ -131,7 +129,12 @@ class Magazine(db.Model, BaseMixin):
     user = db.relationship('User', backref=backref('user_magazines'))
     category = db.relationship('Category', backref=backref('category_magazines'))
     residence = db.relationship('Residence', backref=backref('residence_magazines'))
+    photos = db.relationship('Photo', back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
+
+    @property
+    def has_vr(self):
+        return False
 
 
 class MagazineComment(db.Model, BaseMixin):

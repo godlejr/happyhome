@@ -7,8 +7,8 @@
     <div class="content-title">해피홈 추천 테마</div>
     <div class="cards">
         {% for magazine in magazines %}
-            {% if magazine.magazine_photos %}
-            <div class="card" id="{{ magazine.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ magazine.magazine_photos[0].file.name }})">
+            {% if magazine.photos %}
+            <div class="card" id="{{ magazine.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ magazine.photos[0].file.name }})">
                 <div class="card-info">
                     <div class="card-author">
                         <div class="card-avatar" style="background-image:url(https://robohash.org/{{ magazine.id }}.png)"></div>

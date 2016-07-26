@@ -19,7 +19,7 @@ def list(page):
     residence_id = request.args.get('residence_id') or ''
 
     if media:
-        posts = posts.filter(Magazine.magazine_photos.any(Photo.file.has(type=media)))
+        posts = posts.filter(Magazine.photos.any(Photo.file.has(type=media)))
     if category_id:
         posts = posts.filter(Magazine.category_id == category_id)
     if residence_id:
@@ -85,7 +85,7 @@ def new():
             photo.room_id = request.form.getlist('room_id')[idx]
             photo.content = request.form.getlist('photo_content')[idx]
 
-            magazine.magazine_photos.append(photo)
+            magazine.photos.append(photo)
         db.session.add(magazine)
         db.session.commit()
 

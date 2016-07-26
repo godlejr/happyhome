@@ -40,10 +40,10 @@ class ClassAdminMagazine(sqla.ModelView):
     column_display_pk = True
 
     column_list = ('user', 'category', 'title', 'content')
-    form_columns = ['user', 'category', 'title', 'content', 'magazine_photos']
+    form_columns = ['user', 'category', 'title', 'content', 'photos']
     column_searchable_list = (User.name, User.email, Category.name, Magazine.title, Magazine.title)
 
-    column_labels = dict(user='사용자', category='범주', title='제목', content='내용', magazine_photos='사진들')
+    column_labels = dict(user='사용자', category='범주', title='제목', content='내용', photos='사진들')
 
 
 class CommentAdminFile(sqla.ModelView):

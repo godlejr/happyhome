@@ -4,8 +4,8 @@
 <div class="content">
     <div class="cards">
         {% for post in posts %}
-            {% if post.magazine_photos %}
-            <div class="card" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.magazine_photos[0].file.name }})">
+            {% if post.photos %}
+            <div class="card" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.photos[0].file.name }})">
                 <div class="card-media"><span class="vr-icon"></span></div>
                 <div class="card-media"><span class="mov-icon"></span></div>
                 <div class="card-info">
