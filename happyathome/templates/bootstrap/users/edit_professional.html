@@ -1,0 +1,36 @@
+{% extends 'bootstrap/users/edit.html' %}
+{% from "bootstrap/main/_formhelpers.html" import render_field %}
+
+{% block content_body %}
+<form class="edit_form"  method="POST">
+    <div class="edit_field">
+        <div class="edit_title">상호명</div>
+        {{ form.name(class="edit_form_field") }}
+    </div>
+    <div class="edit_field">
+        <div class="edit_title">사업자 번호</div>
+        {{ form.business_no(class="edit_form_field" , placeholder=form.business_no.label.text) }}
+    </div>
+    <div class="edit_field">
+        <div class="edit_title">주소</div>
+        {{ form.address(class="edit_form_field" , placeholder=form.address.label.text) }}
+    </div>
+    <div class="edit_field">
+        <div class="edit_title">전화번호</div>
+        {{ form.phone(class="edit_form_field" , placeholder=form.phone.label.text) }}
+    </div>
+    <div class="edit_field">
+        <div class="edit_title">홈페이지</div>
+        {{ form.homepage(class="edit_form_field" , placeholder=form.homepage.label.text) }}
+    </div>
+    <div class="edit_field">
+        <div class="edit_title">소개</div>
+        <textarea class="edit_textarea_form" placeholder="소개를 입력하세요" name="pro_intro"></textarea>
+    </div>
+
+    <div class="edit_submit">
+        <input type="submit" class="edit_submit_button" value="변경 완료"/>
+    </div>
+</form>
+
+{% endblock %}

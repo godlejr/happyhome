@@ -1,7 +1,14 @@
-from flask import Blueprint
-from flask import Blueprint, render_template, request, redirect, url_for, current_app
-from happyathome.forms import Pagination
-from happyathome.models import db, User, Photo, Magazine
+import base64
+import os
+
+import boto3
+import shortuuid
+
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
+from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
+from happyathome.models import db, User, Photo, Magazine, Professional
+from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
 
 users = Blueprint('users', __name__)
 
@@ -39,3 +46,121 @@ def detail_list(id, page):
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/detail_list.html', post=post,
                            current_app=current_app, magazines=magazines, pagination=pagination)
+
+
+@users.route('/edit_professional/<id>', methods=['GET', 'POST'])
+def edit_professional(id):
+    post = db.session.query(User).filter_by(id=id).first()
+    professional = Professional()
+    form = ProfessionalUpdateForm(request.form)
+
+    if request.method == 'POST':
+        post.name = form.name.data
+        post.level = 2
+        professional.user_id = id
+        professional.business_no = form.business_no.data
+        professional.homepage = form.homepage.data
+        professional.address = form.address.data
+        professional.phone = form.phone.data
+        professional.greeting = request.form.get('pro_intro')
+        db.session.add(post)
+        db.session.add(professional)
+        db.session.commit()
+
+        return redirect(url_for('users.edit_info', id=id))
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html', post=post, form=form)
+
+
+@users.route('/edit_password/<id>', methods=['GET', 'POST'])
+def edit_password(id):
+    post = db.session.query(User).filter_by(id=id).first()
+    form = PasswordUpdateForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            post.password = generate_password_hash(form.password.data)
+            db.session.add(post)
+            db.session.commit()
+
+            return redirect(url_for('users.edit_info', id=id))
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_password.html', post=post, form=form)
+
+
+@users.route('/edit_info/<id>', methods=['GET', 'POST'])
+def edit_info(id):
+    post = db.session.query(User).filter_by(id=id).first()
+    form = UpdateForm(request.form)
+    if request.method == 'POST':
+        post.name = form.name.data
+        post.homepage = form.homepage.data
+
+        if request.form['sex_check'] == '1':
+            post.sex = 'M'
+        else:
+            post.sex = 'F'
+        if post.avatar != request.form.get('profileFileName'):
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/user/%s' % post.avatar).delete()
+            post.avatar = request.form.get('profileFileName')
+
+        if post.cover != request.form.get('coverFileName'):
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/cover/%s' % post.cover).delete()
+            post.cover = request.form.get('coverFileName')
+
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('users.edit_info', id=id))
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_info.html', post=post, form=form)
+
+
+@users.route('/profile_upload', methods=['POST'])
+def profile_upload():
+    if request.method == "POST":
+        photo_data = request.form.get('file_data').split(',')[1]
+        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
+
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/user/%s' % photo_name).put(Body=base64.b64decode(photo_data),
+                                                                           ContentType='image/jpeg')
+        return jsonify({
+            'file_name': photo_name
+        })
+
+
+@users.route('/profile_unload', methods=['POST'])
+def profile_unload():
+    if request.form.get('pre_file_name') != request.form.get('file_name'):
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/user/%s' % request.form.get('file_name')).delete()
+
+    return jsonify({
+        'file_name': request.form.get('file_name')
+    })
+
+
+@users.route('/cover_upload', methods=['POST'])
+def cover_upload():
+    if request.method == "POST":
+        photo_data = request.form.get('file_data').split(',')[1]
+        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
+
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/cover/%s' % photo_name).put(Body=base64.b64decode(photo_data),
+                                                                            ContentType='image/jpeg')
+        return jsonify({
+            'file_name': photo_name
+        })
+
+
+@users.route('/cover_unload', methods=['POST'])
+def cover_unload():
+    if request.form.get('pre_file_name') != request.form.get('file_name'):
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/cover/%s' % request.form.get('file_name')).delete()
+
+    return jsonify({
+        'file_name': request.form.get('file_name')
+    })

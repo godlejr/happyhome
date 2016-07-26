@@ -25,6 +25,22 @@ validators = {
         DataRequired()
     ]
 }
+class ProfessionalUpdateForm(Form):
+    name = StringField('이름')
+    business_no = StringField(''"-"'를 포함하세요')
+    address = StringField('ex) 경기도 수원시 장안구 창훈로 19번길 6 00빌딩 000호')
+    phone = StringField('ex) 010-0000-0000')
+    homepage = StringField('http://')
+
+class PasswordUpdateForm(Form):
+    password = PasswordField('변경을 원하는 비밀번호를 입력하세요', validators['password'])
+    confirm = PasswordField('변경을 원하는 비밀번호 한번 더 입력하세요')
+
+
+class UpdateForm(Form):
+    name = StringField('이름')
+    email = StringField('이메일', validators['email'])
+    homepage = StringField('http://')
 
 
 class JoinForm(Form):

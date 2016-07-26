@@ -1,0 +1,240 @@
+{% extends 'bootstrap/users/edit.html' %}
+{% from "bootstrap/main/_formhelpers.html" import render_field %}
+
+{% block content_body %}
+<form class="edit_form" id="info_form" method="POST">
+    <div class="edit_field">
+        <div class="edit_title">이메일</div>
+        {{ form.email(class="edit_form_field", readonly="readonly" ,value=post.email) }}
+        <div class="edit_memo">이메일 변경을 원하시면, 관리자에게 메일을 보내주세요</div>
+    </div>
+    <div class="edit_field">
+        <div class="edit_title">이름</div>
+        {{ form.name(class="edit_form_field" ,value=post.name) }}
+    </div>
+
+    <div class="edit_field">
+        <div class="edit_title">홈페이지</div>
+        {{ form.homepage(class="edit_form_field" ,placeholder=form.homepage.label.text) }}
+    </div>
+
+    <div class="edit_field">
+        <div class="edit_title">성별</div>
+        <div class="edit_radio_field">
+            <label class="edit_radio_label">
+                <div class="edit_gender">남성</div>
+                <input type="radio" class="edit_button" name="sex_check" value="1" checked="checked"/>
+            </label>
+            <label class="edit_radio_label">
+                <div class="edit_gender">여성</div>
+                <input type="radio" class="edit_button" name="sex_check" value="2"/>
+            </label>
+        </div>
+    </div>
+    <div class="edit_field">
+        <div class="edit_title">프로필 사진</div>
+        <div class="edit-profile-preview" id="profilePreview">{% if post.avatar %}
+            <img class="edit-profile-photo" src="http://static.inotone.co.kr/data/user/{{post.avatar}}" >
+            {% endif %}</div>
+        <div class="profile-preview-loading"></div>
+        <input type="file" class="edit-file-form" id="profileFile" name="profileFile"/>
+        <button type="button" class="profile_reset" >취소</button>
+        <input type="hidden" id="profileFileName" name="profileFileName" {% if post.avatar %} value='{{post.avatar}}'{% endif %}/>
+    </div>
+
+    <div class="edit_field">
+        <div class="edit_title">커버 사진</div>
+        <div class="edit-profile-preview" id="coverPreview">{% if post.cover %}
+            <img class="edit-cover-photo" src="http://static.inotone.co.kr/data/cover/{{post.cover}}" >
+            {% endif %}</div>
+        <div class="cover-preview-loading"></div>
+        <input type="file" class="edit-file-form" id="coverFile" name="coverFile"/>
+        <button type="button" class="cover_reset" >취소</button>
+        <input type="hidden" id="coverFileName" name="coverFileName" />
+    </div>
+    <div class="edit_submit">
+        <input type="submit" class="edit_submit_button" value="수정 완료"/>
+    </div>
+
+</form>
+
+<script>
+var $profileFile = $('#profileFile'),
+    $profilePreview = $('#profilePreview'),
+    $profilePreviewLoading = $('.profile-preview-loading');
+
+var $coverFile = $('#coverFile'),
+    $coverPreview = $('#coverPreview'),
+    $coverPreviewLoading = $('.cover-preview-loading');
+
+$('button[class=profile_reset]').click(function() {
+    photosUnload();
+});
+
+$('button[class=cover_reset]').click(function() {
+    coverUnload();
+});
+
+$('#info_form').submit(function() {
+    window.onunload = window.onbeforeunload = undefined;
+
+    return true;
+});
+
+$profilePreview.click(function(e) {
+    e.preventDefault();
+    $profileFile.click();
+});
+
+$profileFile.change(function() {
+    photosUnload();
+
+    var ext = $(this).val().split('.').pop().toLowerCase();
+
+    if (ext.length > 0) {
+        if ($.inArray(ext, ['jpg', 'jpeg']) == -1) {
+            $(this).val('');
+            alert('사진 파일(jpg)만 업로드 할수 있습니다.');
+            return false;
+        }
+
+        $profilePreviewLoading.show();
+
+        var reader = new FileReader();
+        reader.readAsDataURL($profileFile[0].files[0])
+        reader.onload = function(e) {
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('users.profile_upload') }}",
+                data: {
+                    file_name: $profileFile.val(),
+                    file_data: e.target.result
+                }
+            }).success(function(data) {
+                $('#profileFileName').val(data.file_name);
+                $profilePreview.append("<img class=edit-profile-photo src=http://static.inotone.co.kr/data/user/" + data.file_name + " />");
+                $profilePreview.find('img').load(function() {
+                    $profilePreviewLoading.hide();
+                });
+            });
+        }
+    }
+});
+
+function photosUnload() {
+    $profilePreview.children().remove();
+
+    var $profileFileName = $('#profileFileName');
+
+    if ($profileFileName.val()) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            cache: false,
+            url: "{{ url_for('users.profile_unload') }}",
+            data: {
+                file_name: $profileFileName.val(),
+                pre_file_name: "{{ post.avatar }}"
+            }
+        }).success(function(data) {
+            $profileFileName.val('');
+        });
+    }
+}
+
+window.onunload = function() {
+    photosUnload();
+    coverUnload();
+};
+
+window.onbeforeunload = function(e) {
+    e = e || window.event;
+    e.returnValue = "변경사항이 저장되지 않을 수 있습니다.";
+};
+
+function loadPhoto(profilePreview, dataURL, callback) {
+    var reader = new FileReader();
+
+    reader.readAsDataURL(dataURL.files[0]);
+    reader.onload = function (e) {
+        var img = new Image();
+        img.src = e.target.result;
+        img.height = profilePreview.offsetHeight;
+        img.onload = function() {
+
+            profilePreview.style.width = profilePreview.offsetHeight;
+            profilePreview.appendChild(this);
+            callback();
+        };
+    }
+}
+
+$('button[type=reset]').click(function() {
+    coverUnload();
+});
+
+
+$coverPreview.click(function(e) {
+    e.preventDefault();
+    $coverFile.click();
+});
+
+$coverFile.change(function() {
+    coverUnload();
+
+    var ext = $(this).val().split('.').pop().toLowerCase();
+
+    if (ext.length > 0) {
+        if ($.inArray(ext, ['jpg', 'jpeg']) == -1) {
+            $(this).val('');
+            alert('사진 파일(jpg)만 업로드 할수 있습니다.');
+            return false;
+        }
+
+        $coverPreviewLoading.show();
+
+        var reader = new FileReader();
+        reader.readAsDataURL($coverFile[0].files[0])
+        reader.onload = function(e) {
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('users.cover_upload') }}",
+                data: {
+                    file_name: $coverFile.val(),
+                    file_data: e.target.result
+                }
+            }).success(function(data) {
+                $('#coverFileName').val(data.file_name);
+                $coverPreview.append("<img class=edit-cover-photo src=http://static.inotone.co.kr/data/cover/" + data.file_name + " />");
+                $coverPreview.find('img').load(function() {
+                    $coverPreviewLoading.hide();
+                });
+            });
+        }
+    }
+});
+
+function coverUnload() {
+    $coverPreview.children().remove();
+
+    var $coverFileName = $('#coverFileName');
+
+    if ($coverFileName.val()) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            cache: false,
+            url: "{{ url_for('users.cover_unload') }}",
+            data: {
+                file_name: $coverFileName.val(),
+                pre_file_name: "{{ post.cover }}"
+            }
+        }).success(function(data) {
+            $coverFileName.val('');
+        });
+    }
+}
+
+
+</script>
+{% endblock %}
