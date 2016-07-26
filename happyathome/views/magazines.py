@@ -103,6 +103,8 @@ def new():
 @magazines.route('/<id>')
 def detail(id):
     post = db.session.query(Magazine).filter_by(id=id).first()
+    post.hits += 1
+    db.session.commit()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post)
 
 

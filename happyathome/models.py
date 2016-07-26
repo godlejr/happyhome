@@ -1,4 +1,3 @@
-from flask_admin.contrib import sqla
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
 from sqlalchemy.orm import backref
@@ -10,6 +9,14 @@ class BaseMixin(object):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+
+    @property
+    def created_date(self):
+        return self.created_at.strftime('%Y-%m-%d')
+
+    @property
+    def updated_date(self):
+        return self.updated_at.strftime('%Y-%m-%d')
 
 
 class User(db.Model, BaseMixin):
@@ -90,6 +97,7 @@ class Photo(db.Model, BaseMixin):
     __tablename__ = 'photos'
 
     content = db.Column(db.Text)
+    hits = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
     room_id = db.Column(db.Integer, db.ForeignKey('rooms.id'))
@@ -125,6 +133,7 @@ class Magazine(db.Model, BaseMixin):
     location = db.Column(db.Unicode(255))
     cost = db.Column(db.Unicode(255))
     content = db.Column(db.Text)
+    hits = db.Column(db.Integer)
 
     user = db.relationship('User', backref=backref('user_magazines'))
     category = db.relationship('Category', backref=backref('category_magazines'))

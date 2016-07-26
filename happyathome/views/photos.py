@@ -38,6 +38,9 @@ def list(page):
 def detail(id):
     magazine_photos = []
     post = db.session.query(Photo).filter(Photo.id == id).first()
+    post.hits += 1
+    db.session.commit()
+
     user_photos = db.session.query(Photo).\
         filter(Photo.id != id).\
         filter(Photo.user_id == post.user_id).\
@@ -46,6 +49,7 @@ def detail(id):
         all()
     if post.magazine_id:
         magazine_photos = db.session.query(Photo).filter(Photo.magazine_id == post.magazine_id).all()
+
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html',
                            post=post,
                            user_photos=user_photos,

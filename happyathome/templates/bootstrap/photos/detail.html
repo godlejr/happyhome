@@ -31,14 +31,14 @@
                         {% if post.comments %}
                         <div class="comment-list">
                             <ul>
-                                {% for comment in post.comments %}
+                                {% for post_comment in post.comments %}
                                     <li>
                                         <div class="comment-info">
-                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ comment.comment.id }}.png)"></span>
-                                            <span class="comment-user">{{ comment.comment.user.name }}</span>
-                                            <span class="comment-date">{{ comment.comment.created_at }}</span>
+                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ post_comment.comment.id }}.png)"></span>
+                                            <span class="comment-user">{{ post_comment.comment.user.name }}</span>
+                                            <span class="comment-date">{{ post_comment.comment.created_date }}</span>
                                         </div>
-                                        <div class="comment-content">{{ comment.comment.content }}</div>
+                                        <div class="comment-content">{{ post_comment.comment.content }}</div>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -55,11 +55,11 @@
                     <div class="content-info">
                         <div class="content-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
                         <div class="content-author">
-                            <div class="content-user">{{ post.user.name }} <span>{{ post.created_at }}</span></div>
+                            <div class="content-user">{{ post.user.name }} <span>{{ post.created_date }}</span></div>
                             <div class="content-score">
                                 <span class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> 20</span>
                                 <span class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> 300</span>
-                                <span class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> 4000</span>
+                                <span class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ post.comments|length }}</span>
                             </div>
                         </div>
                     </div>
