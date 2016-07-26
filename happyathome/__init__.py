@@ -44,10 +44,10 @@ def create_app(config_name):
     from happyathome.views.users import users as users_blueprint
 
     app.register_blueprint(main_blueprint)
-    app.register_blueprint(magazines_blueprint, url_prefix='/magazines')
-    app.register_blueprint(photos_blueprint, url_prefix='/photos')
-    app.register_blueprint(pros_blueprint, url_prefix='/professionals')
-    app.register_blueprint(users_blueprint, url_prefix='/users')
+    app.register_blueprint(magazines_blueprint, url_prefix='/story')
+    app.register_blueprint(photos_blueprint, url_prefix='/gallery')
+    app.register_blueprint(pros_blueprint, url_prefix='/professional')
+    app.register_blueprint(users_blueprint, url_prefix='/user')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
 

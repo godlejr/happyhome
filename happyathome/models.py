@@ -132,9 +132,13 @@ class Magazine(db.Model, BaseMixin):
     photos = db.relationship('Photo', back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
 
-    @property
-    def has_vr(self):
-        return False
+    @classmethod
+    def vr_count(cls, magazine_id):
+        return db.session.query(Photo).filter(Photo.magazine_id == magazine_id).filter(Photo.file.has(type=2)).count()
+
+    @classmethod
+    def mov_count(cls, magazine_id):
+        return db.session.query(Photo).filter(Photo.magazine_id == magazine_id).filter(Photo.file.has(type=3)).count()
 
 
 class MagazineComment(db.Model, BaseMixin):

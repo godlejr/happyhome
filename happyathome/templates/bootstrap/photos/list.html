@@ -3,18 +3,30 @@
 {% block content_body %}
 <div class="content">
     <div class="cards">
-    {% for post in posts %}
-        <div class="card" id="{{ post.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ post.file.name }})">
-                <div class="card-info">
-                    <div class="card-author">
-                        <div class="card-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
-                        <div class="card-user">{{ post.user.name }}</div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-content-text">{{ post.content[:75] }}</div>
+    {% for card in cards %}
+        <div class="card" id="{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
+            {% if card.file.type == 2  %}
+                <div class="card-media"><span class="vr-icon"></span></div>
+            {% endif %}
+            {% if card.file.type == 3  %}
+                <div class="card-media"><span class="mov-icon"></span></div>
+            {% endif %}
+            <div class="card-info">
+                <div class="card-author">
+                    <div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.id }}.png)"></div>
+                    <div class="card-user">{{ card.user.name }}</div>
+                    <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> 1</div>
+                </div>
+                <div class="card-content">
+                    <div class="card-text">{{ card.content[:75] }}</div>
+                    <div class="card-icon">
+                        <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> 20</div>
+                        <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> 300</div>
+                        <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> 4000</div>
                     </div>
                 </div>
             </div>
+        </div>
     {% endfor %}
     </div>
     {{ func.render_pagination('photos.list', pagination) }}

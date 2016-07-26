@@ -13,30 +13,30 @@ magazines = Blueprint('magazines', __name__)
 @magazines.route('/', defaults={'page': 1})
 @magazines.route('/page/<int:page>')
 def list(page):
-    posts = db.session.query(Magazine)
+    cards = db.session.query(Magazine)
     media = request.args.get('media') or ''
     category_id = request.args.get('category_id') or ''
     residence_id = request.args.get('residence_id') or ''
 
     if media:
-        posts = posts.filter(Magazine.photos.any(Photo.file.has(type=media)))
+        cards = cards.filter(Magazine.photos.any(Photo.file.has(type=media)))
     if category_id:
-        posts = posts.filter(Magazine.category_id == category_id)
+        cards = cards.filter(Magazine.category_id == category_id)
     if residence_id:
-        posts = posts.filter(Magazine.residence_id == residence_id)
+        cards = cards.filter(Magazine.residence_id == residence_id)
 
-    pagination = Pagination(page, 12, posts.count())
+    pagination = Pagination(page, 12, cards.count())
     if page != 1:
         offset = 12 * (page - 1)
     else:
         offset = 0
 
-    posts = posts.order_by(Magazine.id.desc()).limit(12).offset(offset).all()
+    cards = cards.order_by(Magazine.id.desc()).limit(12).offset(offset).all()
     categories = db.session.query(Category).all()
     residences = db.session.query(Residence).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
-                           posts=posts,
+                           cards=cards,
                            media=media,
                            categories=categories,
                            residences=residences,

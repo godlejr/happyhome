@@ -489,6 +489,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     float: left;
     width: 100%;
     max-width: 288px;
+    font-size: 14px;
+    line-height: 170%;
+    padding-right: 10px;
 }
 .card .card-content .card-icon {
     float: left;

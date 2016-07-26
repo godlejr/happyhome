@@ -14,21 +14,24 @@ photos = Blueprint('photos', __name__)
 @photos.route('/', defaults={'page': 1})
 @photos.route('/page/<int:page>')
 def list(page):
-    posts = db.session.query(Photo)
+    cards = db.session.query(Photo)
     room_id = request.args.get('room_id') or ''
     if room_id:
-        posts = posts.filter(Photo.room_id == room_id)
+        posts = cards.filter(Photo.room_id == room_id)
 
-    pagination = Pagination(page, 12, posts.count())
+    pagination = Pagination(page, 12, cards.count())
     if page != 1:
         offset = 12 * (page - 1)
     else:
         offset = 0
 
-    posts = posts.order_by(Photo.id.desc()).limit(12).offset(offset).all()
+    cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
     rooms = db.session.query(Room).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html', posts=posts, rooms=rooms,
-                           room_id=room_id, pagination=pagination)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html',
+                           cards=cards,
+                           rooms=rooms,
+                           room_id=room_id,
+                           pagination=pagination)
 
 
 @photos.route('/<id>')
