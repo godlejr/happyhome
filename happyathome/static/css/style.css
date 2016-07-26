@@ -3,12 +3,12 @@
 * {
     margin:0px; padding:0px;
     font-family: 'Nanum Gothic', Tahoma, Sans-serif;
-    font-size: 12px;
-    color: #666362;
 }
 body     { padding:0; margin:0 auto; background-color:#f4f4f4; }
 div      { box-sizing: border-box; }
+table    { border-collapse: collapse; }
 #wrap    { padding:0; margin:0 auto; width:1184px; }
+.icon>img { vertical-align: middle; }
 
 /******* 공통 레이아웃 *********/
 a:link { text-decoration:none; }
@@ -147,7 +147,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-weight: 700;
     padding-top: 40px;
     text-align: center;
-    color: #030303;
 }
 .content-body {
     display: flex;
@@ -162,7 +161,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-section {
     width: 100%;
-    border: 1px solid #eeeeee;
+    padding: 50px 0 35px 0;
+    border: 1px solid #ebeaef;
     background-color: #ffffff;
 }
 .content-header {
@@ -170,17 +170,95 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     max-width: 650px;
     margin: 0 auto;
 }
+.content-header .magazine-title {
+    font-size: 20px;
+    font-weight: 700;
+}
+.content-header .magazine-header {
+    display: table;
+    width: 100%;
+    padding: 5px 0;
+    margin-top: 20px;
+    border-top: 1px solid #ebeaef;
+    border-bottom: 1px solid #ebeaef;
+}
+.content-header .magazine-info {
+    width: calc(100% - 200px);
+    font-size: 12px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.content-header .magazine-spec {
+    width: 200px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.content-header .magazine-spec table {
+    width: 100%;
+}
+.content-header .magazine-spec tr {
+    height: 30px;
+    border-bottom: 1px solid #ebeaef;
+}
+.content-header .magazine-spec tr:last-child {
+    border: 0;
+}
+.content-header .magazine-spec th,
+.content-header .magazine-spec td {
+    width: 50%;
+    font-size: 13px;
+}
+.content-header .magazine-spec th {
+    text-align: left;
+}
+.content-header .magazine-avatar {
+    display: table-cell;
+    vertical-align: middle;
+    width: 70px;
+    height: 70px;
+    border: 1px solid #ebeaef;
+    border-radius: 50px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.content-header .magazine-user {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 20px;
+}
+.content-header .magazine-user>div {
+    margin: 7px 0;
+}
+.content-header .magazine-username {
+    font-size: 16px;
+}
+.content-header .magazine-username span {
+    font-size: 12px;
+}
+.content-header .magazine-content {
+    margin: 25px 0;
+    font-size: 16px;
+}
 .content-photos {
     width: 100%;
     max-width: 650px;
     margin: 0 auto;
+    font-size: 16px;
 }
 .content-photos img {
     width: 100%;
 }
+.content-photos>div {
+    margin: 15px 0;
+}
 .content-photo-360 {
     width: 650px;
     height: 400px;
+}
+.content-text {
+    font-size: 16px;
+    line-height: 180%;
 }
 .content-side {
     flex: none;
@@ -189,21 +267,40 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-sidebar {
     width: 100%;
-    border: 1px solid #eeeeee;
+    border-top: 3px solid #000000;
     background-color: #ffffff;
+}
+.content-sidebar .content-sidebody {
+    padding: 0 20px;
+    border-left: 1px solid #ebeaef;
+    border-right: 1px solid #ebeaef;
+    border-bottom: 1px solid #ebeaef;
+}
+.content-sidebar .content-category {
+    padding: 30px 5px;
+    font-size: 16px;
+    font-weight: 700;
+    border-bottom: 1px solid #ebeaef;
 }
 .content-relative {
     width: 100%;
+    padding: 10px 0;
+    border-bottom: 1px solid #ebeaef;
 }
 .content-relative .relative-list {
     display: flex;
 }
 .content-relative .relative-title {
+    font-size: 14px;
     font-weight: 700;
+}
+.content-relative>div {
+    padding: 4px 0;
 }
 .content-relative .relative-photo {
     flex: none;
-    width: 70px;
+    width: 60px;
+    height: 60px;
 }
 .content-relative .relative-photos {
     overflow: auto;
@@ -217,11 +314,55 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-relative .relative-body {
     flex: 1;
-    line-height: 170%;
+    line-height: 150%;
+    padding-top: 5px;
+    margin-left: 15px;
 }
 .content-relative .relative-body p {
     margin: 0;
+    font-size: 13px;
+}
+.content-comment {
+    padding: 15px 3px;
+    font-size: 13px;
+}
+.content-comment .comment-form textarea {
+    vertical-align: middle;
+}
+.content-comment .comment-text {
+    width: 230px;
+    height: 55px;
+    border: 0;
+    background-color: #e8e8e8;
+}
+.content-comment .btn-comment {
+    width: 55px;
+    height: 55px;
+    border: 1px solid #e8e8e8;
+    background-color: #ffffff;
+}
+.content-comment .comment-list {
+    margin-top: 10px;
+}
+.content-comment .comment-avatar {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    border-radius: 50px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid #eeeeee;
+    vertical-align: middle;
+}
+.content-comment .comment-user {
+}
+.content-comment .comment-date {
     font-size: 12px;
+}
+.content-comment .comment-content {
+    padding-left: 33px;
 }
 
 
@@ -239,7 +380,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     max-height: 380px;
     padding-top: 10px;
     margin: 0 11px 22px 11px;
-    border: 1px solid #eeeeee;
+    border: 1px solid #ebeaef;
     background-color: #ffffff;
     background-size: cover;
     background-repeat: no-repeat;
@@ -351,9 +492,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .card .card-content .card-icon {
     float: left;
     width: 50px;
-}
-.card .card-content .card-icon img {
-    vertical-align: middle;
 }
 .card .card-content .card-icon div {
     margin: 6px 0;
@@ -485,7 +623,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     margin: 0 auto;
     padding: 15px 5px;
-    border: 1px solid #eeeeee;
+    border: 1px solid #ebeaef;
     text-align: justify;
 }
 .pros-intro-title {
@@ -505,7 +643,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     margin:0 auto;
     padding: 15px;
-    border: 1px solid #eeeeee;
+    border: 1px solid #ebeaef;
     display: table;
     background-color: #ffffff;
 }
@@ -635,7 +773,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     max-width: 300px;
     max-height: 200px;
     margin: 32px 20px 32px;
-    padding: border: 1px solid #eeeeee;
+    border: 1px solid #eeeeee;
     background-color: #ffffff;
     background-size: cover;
     background-repeat: no-repeat;
