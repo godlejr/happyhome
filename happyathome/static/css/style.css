@@ -972,6 +972,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 .edit-file-form {
     position: relative;
+    display:none;
 }
 
 .cover_reset{
