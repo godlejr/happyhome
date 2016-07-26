@@ -37,23 +37,18 @@ def list(page):
 @photos.route('/<id>')
 def detail(id):
     magazine_photos = []
-    magazine_vrs = []
-    room_photos = []
-    photo = db.session.query(Photo)
-    post = photo.filter(Photo.id == id).first()
-    others = photo.filter(Photo.id != id).filter(Photo.file.has(type=1))
-    user_photos = others.filter(Photo.user_id == post.user_id).order_by(Photo.id.desc()).limit(6).all()
-    if post.room_id:
-        room_photos = others.filter(Photo.room_id == post.room_id).order_by(Photo.id.desc()).limit(6).all()
+    post = db.session.query(Photo).filter(Photo.id == id).first()
+    user_photos = db.session.query(Photo).\
+        filter(Photo.id != id).\
+        filter(Photo.user_id == post.user_id).\
+        order_by(Photo.id.desc()).\
+        limit(6).\
+        all()
     if post.magazine_id:
-        magazine = photo.filter(Photo.magazine_id == post.magazine_id)
-        magazine_vrs = magazine.filter(Photo.file.has(type=2)).all()
-        magazine_photos = magazine.filter(Photo.file.has(type=1)).all()
+        magazine_photos = db.session.query(Photo).filter(Photo.magazine_id == post.magazine_id).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html',
                            post=post,
-                           room_photos=room_photos,
                            user_photos=user_photos,
-                           magazine_vrs=magazine_vrs,
                            magazine_photos=magazine_photos)
 
 

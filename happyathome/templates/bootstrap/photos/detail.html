@@ -19,12 +19,12 @@
                         <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
                     </div>
                 {% endif %}
-                    <div class="content-body">{{ post.content }}</div>
+                    <div class="content-text">{{ post.content }}</div>
                     <div class="content-comment">
                         <div class="comment-form">
                             <form method="POST" name="comment_form" action="{{ url_for('photos.comment_new', id=post.id) }}">
-                                <textarea class="form-control" rows="3" id="textArea" name="comment"></textarea>
-                                <button type="submit" class="btn btn-danger">질문하기</button>
+                                <textarea class="comment-text" id="textArea" name="comment"></textarea>
+                                <button type="submit" class="btn-comment">문의</button>
                             </form>
                         </div>
                         {% if post.comments %}
@@ -48,60 +48,67 @@
 
         <div class="content-side">
             <div class="content-sidebar">
-                <div class="content-author">
-                    {{ post.user.name }} | {{ post.room.name }}
+                <div class="content-sidebody">
+                    <div class="content-info">
+                        <div class="content-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
+                        <div class="content-author">
+                            <div class="content-user">{{ post.user.name }} <span>{{ post.created_at }}</span></div>
+                            <div class="content-score">
+                                <span class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> 20</span>
+                                <span class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> 300</span>
+                                <span class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> 4000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if magazine_photos %}
+                        <div class="content-relative">
+                            <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 포토</div>
+                            <ul class="relative-photos">
+                                {% for photo in magazine_photos %}
+                                    <li>
+                                        <div class="relative-photo-wrap">
+                                            <a href="{{ url_for('photos.detail', id=photo.id) }}">
+                                                {% if photo.file.type == 2 %}
+                                                    <div class="relative-photo vr-wrap"></div>
+                                                {% elif photo.file.type == 3 %}
+                                                    <div class="relative-photo mov-wrap"></div>
+                                                {% else %}
+                                                    <div class="relative-photo"></div>
+                                                {% endif %}
+                                                <img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="70" height="70" />
+                                            </a>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {% if user_photos %}
+                        <div class="content-relative">
+                            <div class="relative-title">{{ post.user.name }}의 다른 포토</div>
+                            <ul class="relative-photos">
+                            {% for user_photo in user_photos %}
+                                <li>
+                                    <div class="relative-photo-wrap">
+                                        <a href="{{ url_for('photos.detail', id=user_photo.id) }}">
+                                            {% if user_photo.file.type == 2 %}
+                                                <div class="relative-photo vr-wrap"></div>
+                                            {% elif user_photo.file.type == 3 %}
+                                                <div class="relative-photo mov-wrap"></div>
+                                            {% else %}
+                                                <div class="relative-photo"></div>
+                                            {% endif %}
+                                            <img src="http://static.inotone.co.kr/data/img/{{ user_photo.file.name }}" width="70" height="70" />
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                 </div>
-                <hr />
-
-                {% if magazine_vrs %}
-                    <div class="content-relative">
-                        <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 VR</div>
-                        <ul class="relative-photos">
-                            {% for photo in magazine_vrs %}
-                                <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="70" height="70" /></a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <hr />
-                {% endif %}
-
-                {% if magazine_photos %}
-                    <div class="content-relative">
-                        <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 포토</div>
-                        <ul class="relative-photos">
-                            {% for photo in magazine_photos %}
-                                <li><a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="70" height="70" /></a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <hr />
-                {% endif %}
-
-                {% if room_photos %}
-                    <div class="content-relative">
-                        <div class="relative-title"><a href="{{ url_for('photos.list', room_id=post.room_id) }}">{{ post.room.name }}</a>의 다른 포토</div>
-                        <ul class="relative-photos">
-                        {% for room_photo in room_photos %}
-                            <li><a href="{{ url_for('photos.detail', id=room_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ room_photo.file.name }}" width="70" height="70" /></a></li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                    <hr />
-                {% endif %}
-
-                {% if user_photos %}
-                    <div class="content-relative">
-                        <div class="relative-title">{{ post.user.name }}의 다른 포토</div>
-                        <ul class="relative-photos">
-                        {% for user_photo in user_photos %}
-                            <li><a href="{{ url_for('photos.detail', id=user_photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_photo.file.name }}" width="70" height="70" /></a></li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                    <hr />
-                {% endif %}
-
-                <div class="content-controls"><a href="#" class="btn btn-default btn-lg btn-block"><i class="glyphicon glyphicon-pencil"></i></a></div>
             </div>
         </div>
     </div>
