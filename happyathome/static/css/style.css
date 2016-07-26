@@ -2,7 +2,8 @@
 
 * {
     margin:0px; padding:0px;
-    font-family: 'Nanum Gothic', Tahoma, Sans-serif;
+    font-family: '나눔고딕', 'NanumGothic','Nanum Gothic', Tahoma, Sans-serif;
+    color: #666362;
 }
 body     { padding:0; margin:0 auto; background-color:#f4f4f4; }
 div      { box-sizing: border-box; }
@@ -162,7 +163,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-section {
     width: 100%;
     padding: 50px 0 35px 0;
-    border: 1px solid #ebeaef;
+    border: 1px solid #eaebee;
     background-color: #ffffff;
 }
 .content-header {
@@ -171,16 +172,15 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin: 0 auto;
 }
 .content-header .magazine-title {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
 }
 .content-header .magazine-header {
     display: table;
     width: 100%;
     padding: 5px 0;
     margin-top: 20px;
-    border-top: 1px solid #ebeaef;
-    border-bottom: 1px solid #ebeaef;
+    border-top: 1px solid #eaebee;
+    border-bottom: 1px solid #eaebee;
 }
 .content-header .magazine-info {
     width: calc(100% - 200px);
@@ -198,7 +198,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-header .magazine-spec tr {
     height: 30px;
-    border-bottom: 1px solid #ebeaef;
+    border-bottom: 1px solid #eaebee;
 }
 .content-header .magazine-spec tr:last-child {
     border: 0;
@@ -206,9 +206,11 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-header .magazine-spec th,
 .content-header .magazine-spec td {
     width: 50%;
-    font-size: 13px;
+    font-size: 12px;
 }
 .content-header .magazine-spec th {
+    color: #9d9e9e;
+    font-weight: 400;
     text-align: left;
 }
 .content-header .magazine-avatar {
@@ -231,14 +233,19 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin: 7px 0;
 }
 .content-header .magazine-username {
-    font-size: 16px;
+    color: #484e52;
+    font-size: 14px;
 }
 .content-header .magazine-username span {
+    color: #9d9e9e;
     font-size: 12px;
+    margin-left: 16px;
+}
+.content-header .magazine-score .icon {
+    margin-right: 7px;
 }
 .content-header .magazine-content {
     margin: 25px 0;
-    font-size: 16px;
 }
 .content-photos {
     width: 100%;
@@ -255,11 +262,12 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-text {
     margin: 20px 0;
-    font-size: 16px;
-    line-height: 180%;
+    font-size: 14px;
+    line-height: 30px;
     white-space: pre-wrap;
     word-wrap: break-all;
     text-align: justify;
+    color: #484e52;
 }
 .content-side {
     flex: none;
@@ -268,25 +276,28 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-sidebar {
     width: 100%;
+    color: #484e52;
     border-top: 3px solid #000000;
     background-color: #ffffff;
 }
+.content-sidebar a {
+    color: #0b8699;
+}
 .content-sidebar .content-sidebody {
     padding: 0 20px;
-    border-left: 1px solid #ebeaef;
-    border-right: 1px solid #ebeaef;
-    border-bottom: 1px solid #ebeaef;
+    border-left: 1px solid #eaebee;
+    border-right: 1px solid #eaebee;
+    border-bottom: 1px solid #eaebee;
 }
 .content-sidebar .content-category {
     padding: 30px 5px;
     font-size: 16px;
-    font-weight: 700;
-    border-bottom: 1px solid #ebeaef;
+    border-bottom: 1px solid #eaebee;
 }
 .content-relative {
     width: 100%;
-    padding: 10px 0;
-    border-bottom: 1px solid #ebeaef;
+    padding: 15px 0;
+    border-bottom: 1px solid #eaebee;
 }
 .content-relative .relative-list {
     display: flex;
@@ -296,7 +307,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-weight: 700;
 }
 .content-relative>div {
-    padding: 4px 0;
+    padding: 3px 0;
 }
 .content-relative .relative-photo {
     flex: none;
@@ -334,7 +345,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 230px;
     height: 55px;
     border: 0;
-    background-color: #e8e8e8;
+    background-color: #eaebee;
 }
 .content-comment .btn-comment {
     width: 55px;
@@ -345,6 +356,10 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-comment .comment-list {
     margin-top: 10px;
 }
+.content-comment .comment-list li {
+    padding: 20px 0;
+    border-bottom: 1px solid #eaebee;
+}
 .content-comment .comment-avatar {
     display: inline-block;
     width: 26px;
@@ -354,12 +369,16 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    border: 1px solid #eeeeee;
+    border: 1px solid #eaebee;
     vertical-align: middle;
 }
 .content-comment .comment-user {
+    color: #484e52;
+    font-size: 12px;
+    font-weight: 700;
 }
 .content-comment .comment-date {
+    margin-left: 10px;
     font-size: 12px;
 }
 .content-comment .comment-content {
