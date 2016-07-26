@@ -33,9 +33,9 @@
                 <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리@홈</a></div>
                 <div class="gnb_nav_h1"><a href="{{ url_for('photos.list') }}">갤러리@홈</a></div>
                 <div class="gnb_nav_h1"><a href="{{ url_for('professionals.list')}}">프로@홈</a></div>
-                <div class="gnb_nav_h2">해피@홈</div>
+                <div class="gnb_nav_h2">해피Q&A</div>
                 <div class="write_i"><img src="{{ url_for('static', filename='img/main/write_i.jpg') }}" /></div>
-                <div class="write_t">글쓰기</div>
+                <div class="write_t"><a href="{{ url_for('magazines.new') }}">글쓰기</a></div>
             </div><!-- gnb end -->
         </div><!-- nav end -->
     </div><!-- top end -->
