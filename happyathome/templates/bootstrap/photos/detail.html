@@ -34,7 +34,7 @@
                                 {% for post_comment in post.comments %}
                                     <li>
                                         <div class="comment-info">
-                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ post_comment.comment.id }}.png)"></span>
+                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ post_comment.comment.user_id }}.png)"></span>
                                             <span class="comment-user">{{ post_comment.comment.user.name }}</span>
                                             <span class="comment-date">{{ post_comment.comment.created_date }}</span>
                                         </div>
@@ -53,7 +53,7 @@
             <div class="content-sidebar">
                 <div class="content-sidebody">
                     <div class="content-info">
-                        <div class="content-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
+                        <div class="content-avatar" style="background-image:url(https://robohash.org/{{ post.user_id }}.png)"></div>
                         <div class="content-author">
                             <div class="content-user">{{ post.user.name }} <span>{{ post.created_date }}</span></div>
                             <div class="content-score">

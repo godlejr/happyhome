@@ -12,7 +12,7 @@
                     <div class="magazine-title">{{ post.title }}</div>
                     <div class="magazine-header">
                         <div class="magazine-info">
-                            <div class="magazine-avatar" style="background-image:url(https://robohash.org/{{ post.id }}.png)"></div>
+                            <div class="magazine-avatar" style="background-image:url(https://robohash.org/{{ post.user_id }}.png)"></div>
                             <div class="magazine-author">
                                 <div class="magazine-user">{{ post.user.name }} <span>{{ post.created_date }}</span></div>
                                 <div class="magazine-score">
@@ -133,7 +133,7 @@
                                 {% for magazine_comment in post.comments %}
                                     <li>
                                         <div class="comment-info">
-                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ magazine_comment.comment.id }}.png)"></span>
+                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ magazine_comment.comment.user_id }}.png)"></span>
                                             <span class="comment-user">{{ magazine_comment.comment.user.name }}</span>
                                             <span class="comment-date">{{ magazine_comment.comment.created_date }}</span>
                                         </div>

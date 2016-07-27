@@ -2,6 +2,7 @@ import base64
 import os
 import boto3
 import shortuuid
+from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import db, Photo, File, Comment, PhotoComment, Room
@@ -105,7 +106,7 @@ def new():
             db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
 
         photo = Photo()
-        photo.user_id = '1'
+        photo.user_id = session['user_id']
         photo.file_id = request.form['file_id']
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
@@ -124,7 +125,7 @@ def new():
 def comment_new(id):
     if request.method == 'POST':
         comment = Comment()
-        comment.user_id = '1'
+        comment.user_id = session['user_id']
         comment.content = request.form['comment']
 
         photo_comment = PhotoComment()

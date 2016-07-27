@@ -14,7 +14,7 @@
                 {% endif %}
                 <div class="card-info">
                     <div class="card-author">
-                        <div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.id }}.png)"></div>
+                        <div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.user_id }}.png)"></div>
                         <div class="card-user">{{ card.user.name }}</div>
                         <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
                     </div>
