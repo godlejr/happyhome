@@ -1100,7 +1100,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     height: 30px;
 }
-/*pro_intro*/
+/*user_intro*/
 .users-intro{
     margin:0 auto;
      width:90%;
@@ -1228,7 +1228,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     white-space: nowrap;
 }
 
-/*pro side*/
+/*user side*/
 .users-side{
     width:90%
     margin:0 auto;
@@ -1305,6 +1305,60 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     word-wrap: break-word;
     white-space: nowrap;
 }
+
+/******* QnA ********/
+.qna-row{
+    width:100%;
+    margin:0 auto;
+    display:inline-block;
+    background-color:white;
+}
+.qna-title{
+    font-size: 15px;
+    padding: 15px;
+    font-weight:bold;
+}
+
+.qna-content{
+   width:100%;
+   height: 220px;
+   margin: 0px 0px 10px 0px;
+   display: inline-block;
+}
+
+.qna-img{
+    float:left;
+    width: 200px;
+    height:200px;
+    margin: 10px 40px 10px 50px;
+    background-size: cover;
+    cursor:pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.qna-content-info{
+    float:left;
+    height:inherit;
+}
+
+.qna-content-name{
+    font-size: 20px;
+    font-weight: bold;
+    margin:20px 0px 10px 0px;
+    padding: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+}
+
+.qna-content-question{
+    padding:5px;
+    font-size:17px;
+}
+
+
+
 
 /******* login & join*******/
 .login-row{
