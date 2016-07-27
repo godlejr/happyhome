@@ -27,7 +27,8 @@ def login():
                 else:
                     session['user_id'] = user.id
                     session['user_email'] = user.email
-                    return redirect(url_for('main.index'))
+                    session['user_level'] = user.level
+                    return redirect(request.args.get('next', url_for('main.index')))
             else:
                 flash('there is no your ID')
 
@@ -54,13 +55,14 @@ def join():
                 user.level = 2
                 db.session.add(user)
                 db.session.commit()
+
                 professional = Professional()
                 professional.business_no = form.business_no.data
                 professional.user_id = user.id
                 db.session.add(professional)
                 db.session.commit()
             else:
-                user.level = 0
+                user.level = 1
                 db.session.add(user)
                 db.session.commit()
 

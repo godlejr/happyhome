@@ -11,7 +11,7 @@
 
     <title>해피홈 - 행복공간 크리에이터</title>
 
-    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -40,7 +40,7 @@
                 <div class="gnb_nav_h1"><a href="{{ url_for('professionals.list')}}">프로@홈</a></div>
                 <div class="gnb_nav_h2">해피Q&amp;A</div>
                 <div class="write_i"><img src="{{ url_for('static', filename='img/main/write_i.jpg') }}" /></div>
-                <div class="write_t"><a href="{{ url_for('magazines.new') }}">글쓰기</a></div>
+                <div class="write_t"><a href="{{ url_for('photos.new') }}">글쓰기</a></div>
             </div><!-- gnb end -->
         </div><!-- nav end -->
     </div><!-- top end -->
@@ -59,7 +59,7 @@
         <div class="cr_4">개인정보취급방침</div>
         <div class="cr_4">의견보내기</div>
         <div class="selectbox">
-            <select id="familySite" name="family_site" class="styled">
+            <select id="familySite" name="family_site" class="browser-default">
                 <option>FAMILY</option>
                 <option value="http://www.hmglobal.com">한미글로벌</option>
                 <option value="http://www.ikukbo.com">국보디자인</option>

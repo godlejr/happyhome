@@ -21,7 +21,7 @@
                     <div class="card-content">
                         <div class="card-text">
                             <div class="card-category"><a href="{{ url_for('magazines.list', category_id=card.category_id) }}">{{ card.category.name }}</a></div>
-                            <div class="card-title"><a href="{{ url_for('magazines.detail', id=card.id) }}">{{ card.title }}</a></div>
+                            <div class="card-title">{{ card.title }}</div>
                         </div>
                         <div class="card-icon">
                             <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> 20</div>

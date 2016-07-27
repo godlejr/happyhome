@@ -1,9 +1,10 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 * {
-    margin:0px; padding:0px;
-    font-family: '나눔고딕', 'NanumGothic','Nanum Gothic', Tahoma, Sans-serif;
+    margin: 0px;
+    padding:0px;
     color: #666362;
+    font-family: '나눔고딕', 'NanumGothic','Nanum Gothic', Tahoma, Sans-serif;
 }
 body     { padding:0; margin:0 auto; background-color:#f4f4f4; }
 div      { box-sizing: border-box; }
@@ -142,6 +143,14 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     max-width: 1206px;
     margin: 0 auto;
+}
+.content-form {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #eaebee;
 }
 .content-title {
     font-size: 18px;
@@ -1527,12 +1536,50 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
           font-size:12px; color:#9fa2a4; font-weight:bold; }
  .selectbox  { float:left; 
                padding-top:57px; margin-left:15px; }
- .select     { position: absolute;
-	       width: 83px; height: 21px;
-	       padding: 0 24px 0 8px;
-	       color: #2b2b2b; font-size:12px; background: url(/static/img/main/select.jpg) no-repeat;
-	       overflow: hidden; }
 
-
- 
-
+select.browser-default {
+    font-size: 12px;
+    padding: 3px;
+    height: 22px;
+}
+input[type=file] {
+    display: none;
+}
+.photo-file-form {
+    position: relative;
+}
+.photo-preview {
+    width: 700px;
+    height: 400px;
+    line-height: 400px;
+    cursor: pointer;
+    margin: 0 auto;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #ffffff;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/btn_upload.png');
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.photo-preview img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+}
+.photo-preview-loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 400px;
+    margin: -200px 0 0 -300px;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/ripple.gif');
+}

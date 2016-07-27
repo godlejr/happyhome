@@ -120,7 +120,7 @@ def new():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html', rooms=rooms)
 
 
-@photos.route('/<id>/comments/new', methods=['POST'])
+@photos.route('/<id>/comments/new', methods=['GET', 'POST'])
 @login_required
 def comment_new(id):
     if request.method == 'POST':

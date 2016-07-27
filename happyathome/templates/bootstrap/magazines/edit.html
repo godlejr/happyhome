@@ -1,67 +1,68 @@
 {% extends 'bootstrap/magazines/base.html' %}
 
 {% block content %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
 <div class="content">
     <div class="content-body">
-        <div class="well">
-            <form method="POST" class="form-horizontal" enctype="multipart/form-data">
+        <div class="content-form row">
+            <form method="POST" class="col s12" enctype="multipart/form-data">
                 <fieldset>
                     <legend>스토리를 등록해주세요.</legend>
 
-                    <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-1">
-                            <div class="btn-group" data-toggle="buttons">
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <select id="category_id" name="category_id">
+                                <option value="" disabled selected>테마를 선택해주세요</option>
                                 {% for category in categories %}
-                                <label class="btn btn-warning">
-                                    <input type="radio" name="category_id" value="{{ category.id }}"> {{ category.name }}
-                                </label>
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
                                 {% endfor %}
-                            </div>
+                            </select>
+                            <label>테마</label>
+                        </div>
 
-                            <div class="btn-group pull-right" data-toggle="buttons">
+                        <div class="input-field col s12 m6">
+                            <select id="residence_id"  name="residence_id">
+                                <option value="" disabled selected>주택을 선택해주세요</option>
                                 {% for residence in residences %}
-                                <label class="btn btn-success">
-                                    <input type="radio" name="residence_id" value="{{ residence.id }}"> {{ residence.name }}
-                                </label>
+                                    <option value="{{ residence.id }}">{{ residence.name }}</option>
                                 {% endfor %}
-                            </div>
+                            </select>
+                            <label>주택</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="formTitle" name="title" type="text" />
+                            <label for="formTitle">제목</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="formSize" name="size" type="text" />
+                            <label for="formSize">평수</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="formLocation" name="location" type="text" />
+                            <label for="formLocation">위치</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="formCost" name="cost" type="text" />
+                            <label for="formCost">비용</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <textarea id="formContent" name="content" class="materialize-textarea"></textarea>
+                            <label for="formContent">내용</label>
                         </div>
                     </div>
+                </fieldset>
+                <br/>
+                <fieldset>
+                    <legend>사진을 등록해주세요.</legend>
 
-                    <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-1">
-                            <input class="form-control" name="title" placeholder="제목" />
-                        </div>
+                    <div class="row">
+                        <div id="photos"></div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-1">
-                            <input class="form-control" name="size" placeholder="평수" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-1">
-                            <input class="form-control" name="location" placeholder="위치" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-1">
-                            <input class="form-control" name="cost" placeholder="비용" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-1">
-                            <textarea class="form-control" rows="3" name="content" placeholder="내용"></textarea>
-                        </div>
-                    </div>
-
-                    <div id="photos"></div>
-
-                    <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-1">
+                    <div class="row">
+                        <div class="input-field col s12">
                             <button type="submit" class="btn btn-danger">등록</button>
                             <button class="btn" id="addBtnPhoto" type="button" value="1">사진 추가</button>
                         </div>
@@ -117,32 +118,69 @@ function loadPhoto(photoPreview, dataURL) {
 
 function photoFileTmpl(id) {
     var tmpl =
-    '<div class="form-group">' +
-        '<div class="col-lg-10 col-lg-offset-1">' +
-            '<div class="photo-preview" id="photoPreview-' + id + '" id-value="' + id + '">' +
-                '<span class="glyphicon glyphicon-open"></span>' +
-            '</div>' +
-            '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
-            '<input type="hidden" id="photoRoom-' + id + '" name="room_id" value="" />' +
-            '<div class="btn-group col-lg-10 col-lg-offset-2" data-toggle="buttons">' +
-                {%- for room in rooms %}
-                '<label class="btn btn-primary photo-room" id-value="' + id + '" value="{{ room.id }}">' +
-                    '<input type="radio" value="{{ room.id }}" id-value="' + id + '"> {{ room.name }}' +
-                '</label>' +
-                {%- endfor %}
-            '</div>' +
-            '<textarea class="form-control" rows="3" name="photo_content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
+    '<div class="input-field col s12">' +
+        '<div class="photo-preview" id="photoPreview-' + id + '" id-value="' + id + '">' +
+            '<span class="glyphicon glyphicon-open"></span>' +
+        '</div>' +
+        '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
+        '<input type="hidden" id="photoRoom-' + id + '" name="room_id" value="" />' +
+        '<div class="input-field col s12">' +
+            '<select id="category_id" name="category_id">' +
+                '<option value="" disabled selected>공간을 선택해주세요</option>' +
+                {% for room in rooms %}
+                    '<option value="{{ room.id }}">{{ room.name }}</option>' +
+                {% endfor %}
+            '</select>' +
+            '<textarea class="materialize-textarea" name="photo_content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
         '</div>' +
     '</div>';
 
     return tmpl;
 }
 
+
+function photosUnload() {
+    $photoPreview.children().remove();
+    $('#contentType').prop('checked', false);
+    $('input[name=room_id]').prop('checked', false);
+    $('.rooms>label').removeClass('active');
+
+    var $photoFileId = $('#photoFileId'),
+        $photoFileName = $('#photoFileName');
+
+    if ($photoFileName.val()) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            cache: false,
+            url: "{{ url_for('photos.unload') }}",
+            data: {
+                file_name: $photoFileName.val()
+            }
+        }).success(function(data) {
+            $photoFileId.val('');
+            $photoFileName.val('');
+        });
+    }
+}
+
+window.onunload = function() {
+    photosUnload();
+};
+
+window.onbeforeunload = function(e) {
+    e = e || window.event;
+    e.returnValue = "변경사항이 저장되지 않을 수 있습니다.";
+};
+
 $('#addBtnPhoto').click(function() {
     $('#addBtnPhoto').val(parseInt($('#addBtnPhoto').val()) + 1);
-     $(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
+    $(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
+    $('#photos select').material_select();
 });
 
 $(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
+
+$('.content-form select').material_select();
 </script>
 {% endblock %}

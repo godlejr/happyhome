@@ -3,6 +3,7 @@ import boto3
 import html2text
 import shortuuid
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
+from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room
 from werkzeug.utils import secure_filename
@@ -44,7 +45,16 @@ def list(page):
                            residence_id=residence_id, pagination=pagination)
 
 
+@magazines.route('/<id>')
+def detail(id):
+    post = db.session.query(Magazine).filter_by(id=id).first()
+    post.hits += 1
+    db.session.commit()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post)
+
+
 @magazines.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     if request.method == 'POST':
         h = html2text.HTML2Text()
@@ -100,15 +110,8 @@ def new():
                            rooms=rooms)
 
 
-@magazines.route('/<id>')
-def detail(id):
-    post = db.session.query(Magazine).filter_by(id=id).first()
-    post.hits += 1
-    db.session.commit()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post)
-
-
-@magazines.route('/<id>/comments/new', methods=['POST'])
+@magazines.route('/<id>/comments/new', methods=['GET', 'POST'])
+@login_required
 def comment_new(id):
     if request.method == 'POST':
         comment = Comment()
