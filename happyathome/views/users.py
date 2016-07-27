@@ -6,7 +6,8 @@ import shortuuid
 
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
-from happyathome.models import db, User, Photo, Magazine, Professional
+from happyathome.models import db, User, Photo, Magazine, Professional, PhotoComment, Comment
+from sqlalchemy import text
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
@@ -46,6 +47,95 @@ def detail_list(id, page):
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/detail_list.html', post=post,
                            current_app=current_app, magazines=magazines, pagination=pagination)
+
+
+@users.route('/detail_qna/<id>')
+def detail_qna(id):
+    post = db.session.query(User).filter(User.id == id).first()
+    photo_comments = db.session.execute('''
+        SELECT  pt.id      AS  id
+        ,       pt.content AS	photo_name
+        ,       c1.content	AS	question
+        ,       c2.content	AS	answer
+        ,       fi.name AS file_name
+        FROM    comments	c1
+        ,       comments	c2
+        ,       users		us
+        ,       files		fi
+        ,       photos		pt
+        ,       photo_comments	pc
+        WHERE   c1.id	=	c2.comment_id
+        AND     c1.id	=	pc.comment_id
+        AND     pt.id	=	pc.photo_id
+        AND     fi.id	=	pt.file_id
+        AND     us.id	=	pt.user_id
+        AND     us.id	=	%s limit 2
+    ''' % id)
+
+    photo_comments_count = db.session.execute('''
+        SELECT  count(*)   AS  count
+        FROM    comments	c1
+        ,       comments	c2
+        ,       users		us
+        ,       files		fi
+        ,       photos		pt
+        ,       photo_comments	pc
+        WHERE   c1.id	=	c2.comment_id
+        AND     c1.id	=	pc.comment_id
+        AND     pt.id	=	pc.photo_id
+        AND     fi.id	=	pt.file_id
+        AND     us.id	=	pt.user_id
+        AND     us.id	=	%s
+    ''' % id)
+
+    magazine_comments = db.session.execute('''
+        SELECT      mz.id      AS id
+            ,       mz.title	AS	photo_name
+            ,       c1.content	AS	question
+            ,       c2.content	AS	answer
+            ,       fi.name 	AS 	file_name
+            FROM    comments	c1
+            ,       comments	c2
+            ,       users		us
+            ,       files		fi
+            ,       photos		pt
+            ,		magazines 	mz
+            ,       magazine_comments	mc
+            WHERE   c1.id	=	c2.comment_id
+            AND     c1.id	=	mc.comment_id
+            AND     mz.id	=	mc.magazine_id
+            AND     fi.id	=	pt.file_id
+            AND 	mz.id	=	pt.magazine_id
+            AND     us.id	=	mz.user_id
+            AND     us.id	=	%s  limit 2
+        ''' % id)
+
+    magazine_comments_count = db.session.execute('''
+        SELECT      count(*)    AS  count
+            FROM    comments	c1
+            ,       comments	c2
+            ,       users		us
+            ,       files		fi
+            ,       photos		pt
+            ,		magazines 	mz
+            ,       magazine_comments	mc
+            WHERE   c1.id	=	c2.comment_id
+            AND     c1.id	=	mc.comment_id
+            AND     mz.id	=	mc.magazine_id
+            AND     fi.id	=	pt.file_id
+            AND 	mz.id	=	pt.magazine_id
+            AND     us.id	=	mz.user_id
+            AND     us.id	=	%s
+        ''' % id)
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/detail_qna.html',
+                           post=post,
+                           photo_comments=photo_comments,
+                           photo_comments_count=photo_comments_count,
+                           magazine_comments=magazine_comments,
+                           magazine_comments_count=magazine_comments_count,
+                           current_app=current_app)
+
 
 
 @users.route('/edit_professional/<id>', methods=['GET', 'POST'])
