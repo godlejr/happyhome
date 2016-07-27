@@ -27,9 +27,9 @@
         <div id="roomMenu" class="f_menu" for="room">
             <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
             <div class="box2">
-                <div class="h1">전체</div>
+                <div class="h1"><a href="{{ url_for('photos.list') }}">전체</a></div>
                 {% for room in rooms %}
-                    <div class="h2" value="{{ room.id }}">{{ room.name }}</div>
+                    <div class="h2"><a href="{{ url_for('photos.list', room_id=room.id) }}">{{ room.name }}</a></div>
                 {% endfor %}
             </div>
         </div>
@@ -45,10 +45,10 @@
         <div id="mediaMenu" class="f_menu" for="media">
             <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
             <div class="box2">
-                <div class="h1">전체</div>
-                <div class="h2">사진</div>
-                <div class="h2">VR360</div>
-                <div class="h2">동영상</div>
+                <div class="h1"><a href="{{ url_for('photos.list') }}">전체</a></div>
+                <div class="h2"><a href="{{ url_for('photos.list', media=1, query_string=query_string) }}">사진</a></div>
+                <div class="h2"><a href="{{ url_for('photos.list', media=2) }}">VR360</a></div>
+                <div class="h2"><a href="{{ url_for('photos.list', media=3) }}">동영상</a></div>
             </div>
         </div>
     </div>

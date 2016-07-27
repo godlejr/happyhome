@@ -1,10 +1,13 @@
 import os
 import config
 from flask_admin import Admin
+from flask_login import LoginManager
 from happyathome.models import db, User, File, Photo, Magazine, MagazineComment, PhotoComment, Comment
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
+from happyathome.utils import RedisSessionInterface
 from happyathome.views.admin import MyView, UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile
+from redis import Redis
 
 
 def create_app(config_name):
@@ -25,16 +28,15 @@ def create_app(config_name):
     toolbar = DebugToolbarExtension()
     toolbar.init_app(app)
 
+    redis = Redis(host=app.config['REDIS_URL'])
+    app.session_interface = RedisSessionInterface(redis)
+
     # admin
     admin = Admin(app, name='Happy@Home', template_mode='bootstrap3')
     admin.add_view(UserAdmin(User, db.session, name='사용자관리'))
-
     admin.add_view(ClassAdminPhoto(Photo, db.session, name='포토', category='분류관리'))
     admin.add_view(ClassAdminMagazine(Magazine, db.session, name='매거진', category='분류관리'))
     admin.add_view(CommentAdminFile(Comment, db.session, name='댓글', category='댓글관리'))
-
-    # admin.add_view(ClassAdmin(db.session.query(File).join(Magazine).filter(Magazine.file_id==File.id),\
-    #                         db.session, name='매거진',  category='분류관리'))
 
     # Application Blueprints
     from happyathome.views.main import main as main_blueprint
@@ -50,5 +52,14 @@ def create_app(config_name):
     app.register_blueprint(users_blueprint, url_prefix='/user')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
+
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'main.login'
+    login_manager.login_message = '로그인 후 이용해주세요.'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     return app

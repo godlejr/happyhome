@@ -27,13 +27,18 @@
                     <div class="search_field"><input name="textfield" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
                     <div class="search_btn"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" /></div>
                 </div>
-                <div class="login_01">로그인</div>
-                <div class="login_02">회원가입</div>
+                {% if not session.user_id %}
+                    <div class="login_01"><a href="{{ url_for('main.login') }}">로그인</a></div>
+                    <div class="login_02"><a href="{{ url_for('main.join') }}">회원가입</a></div>
+                {% else %}
+                    <div class="login_01"><a href="{{ url_for('main.logout') }}">로그아웃</a></div>
+                    <div class="login_02"><a href="{{ url_for('main.join') }}">설정</a></div>
+                {% endif %}
                 <div class="gnb">
                 <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리@홈</a></div>
                 <div class="gnb_nav_h1"><a href="{{ url_for('photos.list') }}">갤러리@홈</a></div>
                 <div class="gnb_nav_h1"><a href="{{ url_for('professionals.list')}}">프로@홈</a></div>
-                <div class="gnb_nav_h2">해피Q&A</div>
+                <div class="gnb_nav_h2">해피Q&amp;A</div>
                 <div class="write_i"><img src="{{ url_for('static', filename='img/main/write_i.jpg') }}" /></div>
                 <div class="write_t"><a href="{{ url_for('magazines.new') }}">글쓰기</a></div>
             </div><!-- gnb end -->
@@ -67,14 +72,6 @@
 $('#familySite').change(function() {
     if ($(this).val()) window.open($(this).val());
 });
-
-$('.login_02').click(function(){
-    document.location.href = "{{ url_for('main.join') }}";
-})
-
-$('.login_01').click(function(){
-    document.location.href = "{{ url_for('main.login') }}";
-})
 </script>
 
 </body>

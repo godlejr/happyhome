@@ -14,10 +14,15 @@ photos = Blueprint('photos', __name__)
 @photos.route('/', defaults={'page': 1})
 @photos.route('/page/<int:page>')
 def list(page):
+    media = request.args.get('media', '')
+    room_id = request.args.get('room_id', '')
+    rooms = db.session.query(Room).all()
     cards = db.session.query(Photo)
-    room_id = request.args.get('room_id') or ''
+
+    if media:
+        cards = cards.filter(Photo.file.has(type=media))
     if room_id:
-        posts = cards.filter(Photo.room_id == room_id)
+        cards = cards.filter(Photo.room_id == room_id)
 
     pagination = Pagination(page, 12, cards.count())
     if page != 1:
@@ -26,7 +31,7 @@ def list(page):
         offset = 0
 
     cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
-    rooms = db.session.query(Room).all()
+
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html',
                            cards=cards,
                            rooms=rooms,
@@ -57,6 +62,7 @@ def detail(id):
 
 
 @photos.route('/upload', methods=['POST'])
+@login_required
 def upload():
     if request.method == "POST":
         photo_data = request.form.get('file_data').split(',')[1]
@@ -82,6 +88,7 @@ def upload():
 
 
 @photos.route('/unload', methods=['POST'])
+@login_required
 def unload():
     s3 = boto3.resource('s3')
     s3.Object('static.inotone.co.kr', 'data/img/%s' % request.form.get('file_name')).delete()
@@ -91,6 +98,7 @@ def unload():
 
 
 @photos.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     if request.method == 'POST':
         if request.form.getlist('content_type'):

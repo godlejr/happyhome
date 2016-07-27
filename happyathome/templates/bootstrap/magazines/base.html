@@ -29,7 +29,7 @@
             <div class="box2">
                 <div class="h1"><a href="{{ url_for('magazines.list') }}">전체</a></div>
                 {% for category in categories %}
-                    <div class="h2" value="{{ category.id }}"><a href="{{ url_for('magazines.list', category_id=category.id) }}">{{ category.name }}</a></div>
+                    <div class="h2"><a href="{{ url_for('magazines.list', category_id=category.id) }}">{{ category.name }}</a></div>
                 {% endfor %}
             </div>
         </div>

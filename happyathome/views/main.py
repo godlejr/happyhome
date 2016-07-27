@@ -25,7 +25,8 @@ def login():
                 if not check_password_hash(user.password, form.password.data):
                     flash('password is wrong')
                 else:
-                    session['user_id']=user.email
+                    session['user_id'] = user.id
+                    session['user_email'] = user.email
                     return redirect(url_for('main.index'))
             else:
                 flash('there is no your ID')
@@ -35,7 +36,7 @@ def login():
 
 @main.route('/logout')
 def logout():
-    session.pop('user_email', None)
+    session.clear()
     return redirect(url_for('main.index'))
 
 

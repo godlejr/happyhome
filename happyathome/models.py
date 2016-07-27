@@ -41,7 +41,8 @@ class User(db.Model, BaseMixin):
         return self.authenticated
 
     def __repr__(self):
-        return "%s(%s)" %(self.name,self.email)
+        return "%s(%s)" % (self.name, self.email)
+
 
 class Category(db.Model, BaseMixin):
     """카테고리 정보"""
@@ -77,7 +78,7 @@ class File(db.Model, BaseMixin):
     size = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-       return Markup('<img src="http://static.inotone.co.kr/data/img/%s" / width="100" height="100">') %self.name
+        return Markup('<img src="http://static.inotone.co.kr/data/img/%s" / width="100" height="100">') % self.name
 
 
 class Comment(db.Model, BaseMixin):

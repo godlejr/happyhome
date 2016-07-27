@@ -5,6 +5,8 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'secret'
     TEMPLATE_THEME = 'bootstrap'
+    REDIS_URL = 'dev.inotone.co.kr'
+    REDIS_DATABASE = 0
     S3_BUCKET_NAME = 'http://static.inotone.co.kr'
     S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'
