@@ -563,9 +563,10 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     float: left;
     width: 100%;
     max-width: 288px;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 170%;
     padding-right: 10px;
+    text-align: justify;
 }
 .card .card-content .card-icon {
     float: left;

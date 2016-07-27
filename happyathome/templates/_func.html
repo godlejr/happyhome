@@ -10,33 +10,33 @@
 
 {% macro render_sub_hp_menu(endpoint, display , id) %}
     <li class="pros-hp-button" >
-        <a href="{{ url_for(endpoint,id=id) }}">{{ display }}</a>
+        <a href="{{ url_for(endpoint, id=id) }}">{{ display }}</a>
     </li>
 {% endmacro %}
 
 {% macro render_edit_menu(endpoint, display , id) %}
-<a href="{{ url_for(endpoint,id=id) }}">{{ display }}</a>
+<a href="{{ url_for(endpoint, id=id) }}">{{ display }}</a>
 {% endmacro %}
 
-{% macro render_pagination(endpoint,pagination,id) %}
+{% macro render_pagination(endpoint, pagination, id=None) %}
 <!-- pagination -->
-    <div class="custom-pagination">
-        {% if pagination.has_prev %}
-        <a href="{{ url_for(endpoint,id=id, page=pagination.page - 1) }}">&#8592;</a>
-        {% endif %}
-        {% for page in pagination.iter_pages() %}
+<div class="custom-pagination">
+    {% if pagination.has_prev %}
+        <a href="{{ url_for(endpoint, page=pagination.page - 1, id=id) }}">&#8592;</a>
+    {% endif %}
+    {% for page in pagination.iter_pages() %}
         {% if page %}
-        {% if page != pagination.page %}
-        <a href="{{ url_for(endpoint,id=id, page=page) }}">{{ page }}</a>
+            {% if page != pagination.page %}
+                <a href="{{ url_for(endpoint,id=id, page=page) }}">{{ page }}</a>
+            {% else %}
+                <strong>{{ page }}</strong>
+            {% endif %}
         {% else %}
-        <strong>{{ page }}</strong>
+            <span>...</span>
         {% endif %}
-        {% else %}
-        <span>...</span>
-        {% endif %}
-        {% endfor %}
-        {% if pagination.has_next %}
-        <a href="{{ url_for(endpoint,id=id, page=pagination.page + 1) }}">&#8594;</a>
-        {% endif %}
-    </div>
+    {% endfor %}
+    {% if pagination.has_next %}
+        <a href="{{ url_for(endpoint, page=pagination.page + 1, id=id) }}">&#8594;</a>
+    {% endif %}
+</div>
 {% endmacro %}
