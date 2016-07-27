@@ -301,6 +301,49 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-photos img {
     width: 100%;
 }
+.content-photo {
+    position: relative;
+}
+.content-like {
+    position: absolute;
+    cursor: pointer;
+    bottom: 84px;
+    right: 0;
+}
+.content-clip {
+    position: absolute;
+    cursor: pointer;
+    bottom: 42px;
+    right: 0;
+}
+.content-share {
+    position: absolute;
+    cursor: pointer;
+    bottom: 0;
+    right: 0;
+}
+.content-like span,
+.content-clip span,
+.content-share span {
+    display: inline-block;
+    width: 45px;
+    height: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.content-like .like-icon {
+    background-image: url(/static/img/gallery/like_l.png);
+}
+.content-like .like-icon.active {
+    background-image: url(/static/img/gallery/like_l.jpg);
+}
+.content-clip .clip-icon {
+    background-image: url(/static/img/gallery/clip_l.png);
+}
+.content-share .share-icon {
+    background-image: url(/static/img/gallery/share_l.png);
+}
 .content-photo-360 {
     width: 650px;
     height: 400px;

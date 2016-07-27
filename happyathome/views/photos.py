@@ -5,7 +5,7 @@ import shortuuid
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, Photo, File, Comment, PhotoComment, Room
+from happyathome.models import db, Photo, File, Comment, PhotoComment, Room, PhotoLike
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from werkzeug.utils import secure_filename
 
@@ -135,3 +135,23 @@ def comment_new(id):
         db.session.add(photo_comment)
         db.session.commit()
     return redirect(url_for('photos.detail', id=id))
+
+
+@photos.route('/like', methods=['GET', 'POST'])
+@login_required
+def like():
+    if request.method == 'POST':
+        photo_likes = db.session.query(PhotoLike)\
+            .filter(PhotoLike.user_id == session['user_id'])\
+            .filter(PhotoLike.photo_id == request.form.get('photo_id'))
+        if photo_likes.count():
+            photo_likes.delete()
+        else:
+            photo_like = PhotoLike()
+            photo_like.user_id = session['user_id']
+            photo_like.photo_id = request.form.get('photo_id')
+            db.session.add(photo_like)
+        db.session.commit()
+    return jsonify({
+        'photo_id': request.form.get('photo_id')
+    })

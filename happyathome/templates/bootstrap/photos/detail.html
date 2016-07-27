@@ -17,6 +17,11 @@
                 {% else %}
                     <div class="content-photo">
                         <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+                        <div class="content-like" photo-id="{{ post.id }}">
+                            <span class="like-icon{% if post.has_like(session.user_id) %} active{% endif %}"></span>
+                        </div>
+                        <div class="content-clip" photo-id="{{ post.id }}"><span class="clip-icon"></span></div>
+                        <div class="content-share" photo-id="{{ post.id }}"><span class="share-icon"></span></div>
                     </div>
                 {% endif %}
                     <div class="content-text">{{ post.content }}</div>
@@ -116,4 +121,17 @@
         </div>
     </div>
 </div>
+
+<script>
+$('.content-like').click(function() {
+    $.ajax({
+        type: "POST",
+        url: "{{ url_for('photos.like') }}",
+        data: {
+            photo_id: $('.content-like').attr('photo-id')
+        }
+    }).success(function(data) {
+    });
+});
+</script>
 {% endblock %}

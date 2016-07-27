@@ -111,6 +111,21 @@ class Photo(db.Model, BaseMixin):
     magazine = db.relationship('Magazine', back_populates='photos')
     comments = db.relationship('PhotoComment', back_populates='photo')
 
+    @classmethod
+    def has_like(cls, user_id):
+        return db.session.query(PhotoLike).filter(PhotoLike.photo_id == cls.id).filter(PhotoLike.user_id == user_id).first()
+
+
+class PhotoLike(db.Model, BaseMixin):
+    """포토-좋아요 연결고리"""
+    __tablename__ = 'photo_likes'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
+
+    user = db.relationship('User', backref='like_users')
+    photo = db.relationship('Photo', backref='like_photos')
+
 
 class PhotoComment(db.Model, BaseMixin):
     """포토-댓글 연결고리"""
@@ -183,4 +198,3 @@ class Professional(db.Model, BaseMixin):
     greeting = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_professionals'))
-
