@@ -1,3 +1,4 @@
+from redis import Redis
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
 from flask_login import login_user
 from happyathome.forms import JoinForm, LoginForm
@@ -25,8 +26,13 @@ def login():
                 if not check_password_hash(user.password, form.password.data):
                     flash('password is wrong')
                 else:
+<<<<<<< HEAD
                     session['user_id'] = user.id
                     session['user_email'] = user.email
+=======
+                    session['user_id']=user.email
+                    redis = Redis()
+>>>>>>> feature/user_edit
                     return redirect(url_for('main.index'))
             else:
                 flash('there is no your ID')

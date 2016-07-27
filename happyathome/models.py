@@ -87,6 +87,7 @@ class Comment(db.Model, BaseMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content = db.Column(db.Text, nullable=False)
+    comment_id = db.Column(db.Integer)
 
     user = db.relationship('User', backref=backref('user_comments'))
     photos = db.relationship('PhotoComment', back_populates='comment')
