@@ -7,11 +7,18 @@
          style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photo.file.name}} )">
     </div>
     {% endfor %}
+    {% if session.user_id == post.id %}
+    <div class="users-add-project" style="background-image:url( {{ url_for('static', filename='img/add_file.JPG') }} )">
+    </div>
+    {% endif %}
 </div>
 <script>
     $('.users-detail-project').click(function() {
     document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('id');
 });
+
 </script>
+{% if pagination %}
 {{ func.render_pagination('professionals.detail_list', pagination, post.id) }}
+{% endif %}
 {% endblock %}

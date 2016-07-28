@@ -112,6 +112,16 @@ def new():
 
 @magazines.route('/<id>/comments/new', methods=['GET', 'POST'])
 @login_required
+
+@magazines.route('/<id>')
+def detail(id):
+    post = db.session.query(Magazine).filter_by(id=id).first()
+    post.hits += 1
+    db.session.commit()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/gallery.html', post=post)
+
+
+@magazines.route('/<id>/comments/new', methods=['POST'])
 def comment_new(id):
     if request.method == 'POST':
         comment = Comment()
