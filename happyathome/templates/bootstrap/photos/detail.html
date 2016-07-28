@@ -124,14 +124,20 @@
 
 <script>
 $('.content-like').click(function() {
-    $.ajax({
-        type: "POST",
-        url: "{{ url_for('photos.like') }}",
-        data: {
-            photo_id: $('.content-like').attr('photo-id')
-        }
-    }).success(function(data) {
-    });
+    {% if session.user_id %}
+        $(this).find('.like-icon').toggleClass('active');
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('photos.like') }}",
+            data: {
+                photo_id: $('.content-like').attr('photo-id')
+            }
+        }).success(function(data) {
+        });
+    {% else %}
+        document.location.href = "{{ url_for('main.login', next=request_url) }}";
+    {% endif %}
 });
 </script>
 {% endblock %}

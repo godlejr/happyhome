@@ -59,7 +59,8 @@ def detail(id):
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html',
                            post=post,
                            user_photos=user_photos,
-                           magazine_photos=magazine_photos)
+                           magazine_photos=magazine_photos,
+                           request_url=request.url)
 
 
 @photos.route('/upload', methods=['POST'])

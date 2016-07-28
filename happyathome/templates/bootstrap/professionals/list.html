@@ -3,39 +3,47 @@
 
 {% block content %}
 <div class="content">
-    <div class="pros-row">
-        <div class="pros-list-row">
-            {% for post in posts %}
-            <div class="pros" id="{{ post.id }}">
-                <div class="prophoto"
-                     {% if post.user.cover %}
-                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + post.user.cover }} )"
-                     {% else %}
-                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
-                     {% endif %}>
+    <div class="pros">
+        {% for post in posts %}
+        <div class="pro-card" id="{{ post.id }}">
+            <div class="pro-photo"
+                 {% if post.user.cover %}
+                 style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + post.user.cover }})"
+                 {% else %}
+                 style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }})"
+                 {% endif %}>
+                {% if post.address %}
+                <div class="pro-address">
+                    <i class="material-icons">location_on</i><br>
+                    {{ post.address }}
                 </div>
-                <div class="prostats">
-                    <div class="proname">{{ post.user.name }}</div>
-                    <div class="profile">{{ post.address }}</div>
-                    <div class="progreet">{{ post.greeting }}</div>
-                </div>
+                {% endif %}
             </div>
-            {% endfor %}
+            <div class="pro-detail">
+                <div class="pro-info">
+                    <div class="pro-avatar"
+                         {% if post.user.avatar %}
+                         style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] + post.user.avatar }})"
+                         {% endif %}
+                    ></div>
+                    <div class="pro-name">{{ post.user.name }}</div>
+                    <div class="pro-star">
+                        <i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i>
+                        <span class="pro-score">4.3</span>
+                    </div>
+                </div>
+                <div class="pro-greeting">{{ post.greeting|default('', true) }}</div>
+            </div>
         </div>
+        {% endfor %}
     </div>
     {{ func.render_pagination('professionals.list',pagination) }}
 </div>
 
 <script>
-$('.pros').click(function() {
+$('.pro-card').click(function() {
     document.location.href = "{{ url_for('professionals.detail', id='') }}" + $(this).attr('id');
 });
-
-
-
-
-
-
 </script>
 
 {% endblock %}

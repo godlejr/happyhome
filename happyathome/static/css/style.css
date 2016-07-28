@@ -4,7 +4,7 @@
     margin: 0px;
     padding:0px;
     color: #666362;
-    font-family: '나눔고딕', 'NanumGothic','Nanum Gothic', Tahoma, Sans-serif;
+    font-family: 'Nanum Gothic', Tahoma, Sans-serif;
 }
 body     { padding:0; margin:0 auto; background-color:#f4f4f4; }
 div      { box-sizing: border-box; }
@@ -307,13 +307,13 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-like {
     position: absolute;
     cursor: pointer;
-    bottom: 84px;
+    bottom: 116px;
     right: 0;
 }
 .content-clip {
     position: absolute;
     cursor: pointer;
-    bottom: 42px;
+    bottom: 58px;
     right: 0;
 }
 .content-share {
@@ -326,8 +326,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-clip span,
 .content-share span {
     display: inline-block;
-    width: 45px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
     background-repeat: no-repeat;
     background-position: center;
     background-color: rgba(0, 0, 0, 0.3);
@@ -634,6 +634,95 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
 
+.pros {
+    display: inline-block;
+    width: 100%;
+    padding-top: 40px;
+}
+.pro-card {
+    display: flex;
+    float: left;
+    cursor: pointer;
+    margin: 11px;
+    width: 50%;
+    max-width: 581px;
+    height: 287px;
+    background-color: #ffffff;
+    border: 1px solid #ebeaef;
+}
+.pro-card .pro-photo {
+    position: relative;
+    flex: none;
+    width: 285px;
+    height: 285px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.pro-card .pro-address {
+    position: absolute;
+    right: 0;
+    top: 35px;
+    width: 60px;
+    height: 60px;
+    padding: 5px 10px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 130%;
+    font-size: 12px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.pro-card .pro-address i {
+    color: #ffffff;
+    font-size: 16px;
+}
+.pro-card .pro-detail {
+    flex: 1;
+    padding: 0 20px;
+}
+.pro-card .pro-info {
+    width: 100%;
+    padding: 30px 0;
+}
+.pro-card .pro-avatar {
+    float: left;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ebeaef;
+    border-radius: 50px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.pro-card .pro-name {
+    margin-left: 50px;
+    padding-left: 20px;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 700;
+}
+.pro-card .pro-star {
+    margin-top: 10px;
+    margin-left: 50px;
+    padding-left: 20px;
+}
+.pro-card .pro-star i {
+    color: #0b8699;
+    font-size: 16px;
+}
+.pro-card .pro-score {
+    color: #0b8699;
+    font-size: 12px;
+    vertical-align: top;
+}
+.pro-card .pro-greeting {
+    width: 100%;
+    clear: both;
+    font-size: 14px;
+}
+
 /******* professionals *******/
 /*pro_hp*/
 .hp-row{
@@ -678,7 +767,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .pros-hp{
     width: 100%;
     height: 200px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     background-size: 1206px 200px;
 }
 
@@ -886,15 +975,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 
 
-/*pro_list*/
-.pros {
-    width: 100%;
-    max-width: 800px;
-    display:inline-block;
-    border-top:5px solid #eeeeee;
-    margin: 0px 0px 30px 0px;
-    cursor: pointer;
-}
 
 .prophoto {
     position: relative;
