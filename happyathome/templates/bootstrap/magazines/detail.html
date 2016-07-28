@@ -37,11 +37,15 @@
                 <div class="content-photos">
                 {% for photo in post.photos %}
                     {% if photo.file.type == 2 %}
-                        <div class="content-photo-360" id="photo360-{{ photo.id }}"></div>
+                        <div class="content-photo photo-360" id="photo360-{{ photo.id }}" photo-id="{{ post.id }}"></div>
 
-                        <script>new Carousel().viewer("photo360-{{ photo.id }}", "http://static.inotone.co.kr/data/img/{{ photo.file.name }}");</script>
+                        <script>
+                        new Carousel().viewer("photo360-{{ photo.id }}", {
+                            panorama: "http://static.inotone.co.kr/data/img/{{ photo.file.name }}"
+                        });
+                        </script>
                     {% else %}
-                        <div class="content-photo">
+                        <div class="content-photo" photo-id="{{ post.id }}">
                             <a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" /></a>
                         </div>
                     {% endif %}
@@ -151,4 +155,55 @@
         </div>
     </div>
 </div>
+
+
+<script>
+$('.content-like').click(function(event) {
+    {% if session.user_id %}
+        var icon = $(this).find('.like-icon');
+
+        icon.toggleClass('active');
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('photos.like') }}",
+            data: {
+                photo_id: $(this).parent('.content-photo').attr('photo-id')
+            }
+        }).success(function(data) {
+            $('.content-score .count-text.like').text(data.count);
+        }).error(function(request, status, error) {
+            icon.toggleClass('active');
+        });
+
+        event.stopPropagation();
+    {% else %}
+        document.location.href = "{{ url_for('main.login', next=request_url) }}";
+    {% endif %}
+});
+$('.content-scrap').click(function(event) {
+    event.stopPropagation();
+    {% if session.user_id %}
+        var icon = $(this).find('.scrap-icon');
+
+        icon.toggleClass('active');
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('photos.scrap') }}",
+            data: {
+                photo_id: $(this).parent('.content-photo').attr('photo-id')
+            }
+        }).success(function(data) {
+            $('.content-score .count-text.scrap').text(data.count);
+        }).error(function(request, status, error) {
+            icon.toggleClass('active');
+        });
+
+        event.stopPropagation();
+    {% else %}
+        document.location.href = "{{ url_for('main.login', next=request_url) }}";
+    {% endif %}
+});
+</script>
 {% endblock %}

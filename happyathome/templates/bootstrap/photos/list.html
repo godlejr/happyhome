@@ -20,8 +20,8 @@
                 <div class="card-content">
                     <div class="card-text">{{ card.content[:70] }}</div>
                     <div class="card-icon">
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> 20</div>
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> 300</div>
+                        <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_photos|length }}</div>
+                        <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_photos|length }}</div>
                         <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ card.comments|length }}</div>
                     </div>
                 </div>

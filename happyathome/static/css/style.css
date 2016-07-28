@@ -213,6 +213,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin-left: 16px;
 }
 .content-score .icon {
+    display: inline-block;
     font-size: 12px;
     margin-right: 7px;
 }
@@ -300,59 +301,67 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-photos img {
     width: 100%;
+    height: 100%;
 }
 .content-photo {
     position: relative;
+    display: flex;
+}
+.content-photo.photo-360 {
+    width: 650px;
+    height: 400px;
 }
 .content-like {
     position: absolute;
     cursor: pointer;
-    bottom: 116px;
     right: 0;
+    bottom: 116px;
+    width: 56px;
+    height: 56px;
 }
-.content-clip {
+.content-scrap {
     position: absolute;
     cursor: pointer;
-    bottom: 58px;
     right: 0;
+    bottom: 58px;
+    width: 56px;
+    height: 56px;
 }
 .content-share {
     position: absolute;
     cursor: pointer;
-    bottom: 0;
     right: 0;
-}
-.content-like span,
-.content-clip span,
-.content-share span {
-    display: inline-block;
+    bottom: 0;
     width: 56px;
     height: 56px;
+}
+.content-like span,
+.content-scrap span,
+.content-share span {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-color: rgba(0, 0, 0, 0.3);
 }
-.content-like .like-icon {
+.content-like span.like-icon {
     background-image: url(/static/img/gallery/like_icon.png);
 }
-.content-like .like-icon.active {
+.content-like span.like-icon.active {
     background-image: url(/static/img/gallery/like_active.png);
 }
-.content-clip .clip-icon {
-    background-image: url(/static/img/gallery/clip_icon.png);
+.content-scrap span.scrap-icon {
+    background-image: url(/static/img/gallery/scrap_icon.png);
 }
-.content-clip .clip-icon.active {
-    background-image: url(/static/img/gallery/clip_active.png);
+.content-scrap span.scrap-icon.active {
+    background-image: url(/static/img/gallery/scrap_active.png);
 }
-.content-share .share-icon {
+.content-share span.share-icon {
     background-image: url(/static/img/gallery/share_icon.png);
 }
-.content-share .share-icon.active {
+.content-share span.share-icon.active {
     background-image: url(/static/img/gallery/share_active.png);
-}
-.content-photo-360 {
-    width: 650px;
-    height: 400px;
 }
 .content-text {
     margin: 20px 0;
@@ -621,6 +630,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     float: left;
     width: 100%;
     max-width: 288px;
+    min-height: 1px;
     font-size: 13px;
     line-height: 170%;
     padding-right: 10px;

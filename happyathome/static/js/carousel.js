@@ -1,14 +1,5 @@
 var Carousel = (function() {
     var Carousel = function() {
-        var controller = document.createElement("div");
-
-        controller.innerHTML = "TEST";
-        controller.style.color = "#ffffff";
-        controller.style.paddingLeft = "10px";
-        controller.style.position = "relative";
-        controller.style.bottom = -this.canvasHeight + "px";
-        controller.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-
         this.fov = 75;
         this.savedX = 0;
         this.savedY = 0;
@@ -21,8 +12,38 @@ var Carousel = (function() {
     }
 
     Carousel.prototype = {
-        viewer: function(viewerId, panorama) {
+        viewer: function(viewerId, options) {
+            var like_icon = document.createElement("span"),
+                scrap_icon = document.createElement("span"),
+                share_icon = document.createElement("span"),
+                content_like = document.createElement("div"),
+                content_scrap = document.createElement("div"),
+                content_share = document.createElement("div");
+            like_icon.classList.add('like-icon');
+            if (options.is_like) {
+                like_icon.classList.add('active');
+            }
+
+            scrap_icon.classList.add('scrap-icon');
+            if (options.is_scrap) {
+                scrap_icon.classList.add('active');
+            }
+            share_icon.classList.add('share-icon');
+            content_like.classList.add('content-like');
+            content_like.appendChild(like_icon);
+            content_scrap.appendChild(scrap_icon);
+            content_scrap.classList.add('content-scrap');
+            content_share.appendChild(share_icon);
+            content_share.classList.add('content-share');
+
             this.photoWrap = document.getElementById(viewerId);
+            this.photoWrap.style.position = "relative";
+            if (options.action) {
+                this.photoWrap.appendChild(content_like);
+                this.photoWrap.appendChild(content_scrap);
+                this.photoWrap.appendChild(content_share);
+            }
+
             this.canvasWidth = this.photoWrap.offsetWidth;
             this.canvasHeight = this.photoWrap.offsetHeight;
 
@@ -30,7 +51,7 @@ var Carousel = (function() {
             sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
             var sphereMaterial = new THREE.MeshBasicMaterial();
-            sphereMaterial.map = new THREE.TextureLoader().load(panorama);
+            sphereMaterial.map = new THREE.TextureLoader().load(options.panorama);
 
             this.scene = new THREE.Scene();
             this.scene.add(new THREE.Mesh(sphere, sphereMaterial));

@@ -5,7 +5,7 @@ import shortuuid
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, Photo, File, Comment, PhotoComment, Room, PhotoLike
+from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from werkzeug.utils import secure_filename
 
@@ -47,11 +47,11 @@ def detail(id):
     post.hits += 1
     db.session.commit()
 
-    user_photos = db.session.query(Photo).\
-        filter(Photo.id != id).\
-        filter(Photo.user_id == post.user_id).\
-        order_by(Photo.id.desc()).\
-        limit(6).\
+    user_photos = db.session.query(Photo). \
+        filter(Photo.id != id). \
+        filter(Photo.user_id == post.user_id). \
+        order_by(Photo.id.desc()). \
+        limit(6). \
         all()
     if post.magazine_id:
         magazine_photos = db.session.query(Photo).filter(Photo.magazine_id == post.magazine_id).all()
@@ -141,18 +141,22 @@ def comment_new(id):
 @photos.route('/like', methods=['GET', 'POST'])
 @login_required
 def like():
+    photo_id = request.form.get('photo_id', '')
     if request.method == 'POST':
-        photo_likes = db.session.query(PhotoLike)\
-            .filter(PhotoLike.user_id == session['user_id'])\
-            .filter(PhotoLike.photo_id == request.form.get('photo_id'))
-        if photo_likes.count():
-            photo_likes.delete()
-        else:
-            photo_like = PhotoLike()
-            photo_like.user_id = session['user_id']
-            photo_like.photo_id = request.form.get('photo_id')
-            db.session.add(photo_like)
-        db.session.commit()
+        del_or_create(db.session, PhotoLike, user_id=session['user_id'], photo_id=photo_id)
     return jsonify({
-        'photo_id': request.form.get('photo_id')
+        'photo_id': photo_id,
+        'count': PhotoLike.query.filter_by(photo_id=photo_id).count()
+    })
+
+
+@photos.route('/scrap', methods=['GET', 'POST'])
+@login_required
+def scrap():
+    photo_id = request.form.get('photo_id', '')
+    if request.method == 'POST':
+        del_or_create(db.session, PhotoScrap, user_id=session['user_id'], photo_id=photo_id)
+    return jsonify({
+        'photo_id': photo_id,
+        'count': PhotoScrap.query.filter_by(photo_id=photo_id).count()
     })

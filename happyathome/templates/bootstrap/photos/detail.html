@@ -9,21 +9,30 @@
         <div class="content-main">
             <div class="content-section">
                 <div class="content-photos">
-                {% if post.file.type == 2 %}
-                    <div class="content-photo-360" id="photo360"></div>
+                    {% if post.file.type == 2 %}
+                        <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}"></div>
 
-                    <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
-                    <script>new Carousel().viewer("photo360", "http://static.inotone.co.kr/data/img/{{ post.file.name }}");</script>
-                {% else %}
-                    <div class="content-photo">
-                        <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
-                        <div class="content-like" photo-id="{{ post.id }}">
-                            <span class="like-icon{% if post.has_like(session.user_id) %} active{% endif %}"></span>
+                        <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+                        <script>
+                        new Carousel().viewer("photo360", {
+                            action: true,
+                            is_like: {% if post.is_active('PhotoLike', session.user_id) %}true{% else %}false{% endif %},
+                            is_scrap: {% if post.is_active('PhotoScrap', session.user_id) %}true{% else %}false{% endif %},
+                            panorama: "http://static.inotone.co.kr/data/img/{{ post.file.name }}"
+                        });
+                        </script>
+                    {% else %}
+                        <div class="content-photo" photo-id="{{ post.id }}">
+                            <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+                            <div class="content-like">
+                                <span class="like-icon{% if post.is_active('PhotoLike', session.user_id) %} active{% endif %}"></span>
+                            </div>
+                            <div class="content-scrap">
+                                <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
+                            </div>
+                            <div class="content-share"><span class="share-icon"></span></div>
                         </div>
-                        <div class="content-clip" photo-id="{{ post.id }}"><span class="clip-icon"></span></div>
-                        <div class="content-share" photo-id="{{ post.id }}"><span class="share-icon"></span></div>
-                    </div>
-                {% endif %}
+                    {% endif %}
                     <div class="content-text">{{ post.content }}</div>
                     <div class="content-comment">
                         <div class="comment-form">
@@ -62,9 +71,9 @@
                         <div class="content-author">
                             <div class="content-user">{{ post.user.name }} <span>{{ post.created_date }}</span></div>
                             <div class="content-score">
-                                <span class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> 20</span>
-                                <span class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> 300</span>
-                                <span class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ post.comments|length }}</span>
+                                <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> <span class="count-text like">{{ post.like_photos|length }}</span></div>
+                                <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> <span class="count-text scrap">{{ post.scrap_photos|length }}</span></div>
+                                <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> <span class="count-text comment">{{ post.comments|length }}</span></div>
                             </div>
                         </div>
                     </div>
@@ -123,18 +132,49 @@
 </div>
 
 <script>
-$('.content-like').click(function() {
+$('.content-like').click(function(event) {
     {% if session.user_id %}
-        $(this).find('.like-icon').toggleClass('active');
+        var icon = $(this).find('.like-icon');
+
+        icon.toggleClass('active');
 
         $.ajax({
             type: "POST",
             url: "{{ url_for('photos.like') }}",
             data: {
-                photo_id: $('.content-like').attr('photo-id')
+                photo_id: $(this).parent('.content-photo').attr('photo-id')
             }
         }).success(function(data) {
+            $('.content-score .count-text.like').text(data.count);
+        }).error(function(request, status, error) {
+            icon.toggleClass('active');
         });
+
+        event.stopPropagation();
+    {% else %}
+        document.location.href = "{{ url_for('main.login', next=request_url) }}";
+    {% endif %}
+});
+$('.content-scrap').click(function(event) {
+    event.stopPropagation();
+    {% if session.user_id %}
+        var icon = $(this).find('.scrap-icon');
+
+        icon.toggleClass('active');
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('photos.scrap') }}",
+            data: {
+                photo_id: $(this).parent('.content-photo').attr('photo-id')
+            }
+        }).success(function(data) {
+            $('.content-score .count-text.scrap').text(data.count);
+        }).error(function(request, status, error) {
+            icon.toggleClass('active');
+        });
+
+        event.stopPropagation();
     {% else %}
         document.location.href = "{{ url_for('main.login', next=request_url) }}";
     {% endif %}
