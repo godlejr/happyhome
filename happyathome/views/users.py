@@ -16,8 +16,8 @@ users = Blueprint('users', __name__)
 @users.route('/<id>/user_info')
 def user_info(id):
     post = db.session.query(User).filter_by(id=id).first()
-    #if session:
-     #   follow =  db.session.queru(Follow).filter(Follow.user_id == session['user_id'])
+    # if session:
+    #   follow =  db.session.queru(Follow).filter(Follow.user_id == session['user_id'])
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/user_infos.html', post=post,
                            current_app=current_app)
@@ -47,9 +47,9 @@ def gallery(id, page):
                            current_app=current_app, pagination=pagination)
 
 
-@users.route('/detail_list/<id>', defaults={'page': 1})
-@users.route('/detail_list/<id>/page/<int:page>')
-def detail_list(id, page):
+@users.route('/<id>/story', defaults={'page': 1})
+@users.route('/<id>/story/page/<int:page>')
+def story(id, page):
     post = db.session.query(User).filter_by(id=id).first()
     magazines = db.session.query(Magazine).filter(Magazine.user_id == post.id).order_by(Magazine.id.desc())
     pagination = Pagination(page, 6, magazines.count())
@@ -60,12 +60,23 @@ def detail_list(id, page):
         offset = 0
     magazines = magazines.limit(6).offset(offset).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/detail_list.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/story.html', post=post,
                            current_app=current_app, magazines=magazines, pagination=pagination)
 
 
-@users.route('/detail_qna/<id>')
-def detail_qna(id):
+@users.route('/<id>/follow')
+def follow(id):
+    post = db.session.query(User).filter_by(id=id).first()
+    followings = db.session.query(Follow).filter(Follow.user_id == id).all()
+    followers = db.session.query(Follow).filter(Follow.follow_id == id).all()
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/follow.html', post=post, followers=followers,
+                           followings=followings,
+                           current_app=current_app)
+
+
+@users.route('/<id>/question')
+def question(id):
     post = db.session.query(User).filter(User.id == id).first()
     photo_comments = db.session.execute('''
         SELECT  pt.id      AS  id
@@ -143,7 +154,7 @@ def detail_qna(id):
             AND     us.id	=	%s
         ''' % id)
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/detail_qna.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/question.html',
                            post=post,
                            photo_comments=photo_comments,
                            photo_comments_count=photo_comments_count,
@@ -152,7 +163,7 @@ def detail_qna(id):
                            current_app=current_app)
 
 
-@users.route('/edit_professional/<id>', methods=['GET', 'POST'])
+@users.route('/<id>/edit_professional', methods=['GET', 'POST'])
 def edit_professional(id):
     post = db.session.query(User).filter_by(id=id).first()
     professional = Professional()
@@ -173,10 +184,11 @@ def edit_professional(id):
 
         return redirect(url_for('users.edit_info', id=id))
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html', post=post, form=form)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html', post=post,
+                           form=form)
 
 
-@users.route('/edit_password/<id>', methods=['GET', 'POST'])
+@users.route('/<id>/edit_password', methods=['GET', 'POST'])
 def edit_password(id):
     post = db.session.query(User).filter_by(id=id).first()
     form = PasswordUpdateForm(request.form)
@@ -191,7 +203,7 @@ def edit_password(id):
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_password.html', post=post, form=form)
 
 
-@users.route('/edit_info/<id>', methods=['GET', 'POST'])
+@users.route('/<id>/edit_info', methods=['GET', 'POST'])
 def edit_info(id):
     post = db.session.query(User).filter_by(id=id).first()
     form = UpdateForm(request.form)
@@ -224,7 +236,8 @@ def edit_info(id):
 def profile_upload():
     if request.method == "POST":
         photo_data = request.form.get('file_data').split(',')[1]
-        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
+        photo_name = secure_filename(
+            ''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
 
         s3 = boto3.resource('s3')
         s3.Object('static.inotone.co.kr', 'data/user/%s' % photo_name).put(Body=base64.b64decode(photo_data),
@@ -249,7 +262,8 @@ def profile_unload():
 def cover_upload():
     if request.method == "POST":
         photo_data = request.form.get('file_data').split(',')[1]
-        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
+        photo_name = secure_filename(
+            ''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
 
         s3 = boto3.resource('s3')
         s3.Object('static.inotone.co.kr', 'data/cover/%s' % photo_name).put(Body=base64.b64decode(photo_data),
@@ -272,24 +286,28 @@ def cover_unload():
 
 @users.route('/following', methods=['POST'])
 def following():
-    if request.method=='POST':
-        follow = Follow()
-        follow.user_id = request.form.get('user_id')
-        follow.follow_id = request.form.get('follow_id')
+    if request.method == 'POST':
 
-        db.session.add(follow)
-        db.session.commit()
+        follow_check = db.session.query(Follow).filter(Follow.user_id == session['user_id']).filter(
+            Follow.follow_id == request.form.get('follow_id')).first()
 
-        return jsonify({
-            'ok': 'ok'
-        })
+        if follow_check:
+            db.session.query(Follow).filter(Follow.user_id == session['user_id']).filter(
+                Follow.follow_id == request.form.get('follow_id')).delete()
+            db.session.commit()
 
-@users.route('/following_cancel', methods=['POST'])
-def following_cancel():
-    if request.method=='POST':
-        db.session.query(Follow).filter(Follow.user_id == request.form.get('user_id')).filter(Follow.follow_id == request.form.get('follow_id')).delete()
-        db.session.commit()
+            return jsonify({
+                'ok': 2
+            })
 
-        return jsonify({
-            'ok': 'ok'
-        })
+        else:
+            follow = Follow()
+            follow.user_id = session['user_id']
+            follow.follow_id = request.form.get('follow_id')
+
+            db.session.add(follow)
+            db.session.commit()
+
+            return jsonify({
+                'ok': 1
+            })

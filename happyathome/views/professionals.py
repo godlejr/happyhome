@@ -43,6 +43,6 @@ def detail_list(id, page):
         offset = 0
     magazines = magazines.limit(6).offset(offset).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/detail_list.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/story.html', post=post,
                            current_app=current_app, magazines=magazines, pagination=pagination,
                            magazines_count=magazines_count)

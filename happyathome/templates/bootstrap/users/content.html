@@ -25,7 +25,7 @@
                     {{ post.name }}
                 </div>
                 <div class="users-hp-company-follow">
-                    팔로우 팔로워
+                  <a href="{{url_for('users.follow',id=post.id)}}">{{ post.following_count(post.id) }} 팔로잉  {{ post.follower_count(post.id) }} 팔로워</a>
                 </div>
             </div>
             {% if session.user_id %}
@@ -35,11 +35,11 @@
                 </div>
                 {% else %}
 
-                    <div class="users-hp-profile-edit {% if not post.follow_check(session.user_id ,post.id) %}display_none{% endif %}" id="follow">
-                        <div class="users-hp-pofile-editbutton">팔로우</div>
+                    <div class="follow {% if post.follow_check(session.user_id ,post.id) %} display_none{% endif %}" >
+                        <div class="users-hp-pofile-editbutton">팔로잉</div>
                     </div>
-                    <div class="users-hp-profile-edit {% if post.follow_check(session.user_id ,post.id) %}display_none{% endif %}" id="follow_cancel">
-                        <div class="users-hp-pofile-editbutton">팔로우 취소</div>
+                    <div class="follow {% if not post.follow_check(session.user_id ,post.id) %} display_none{% endif %}" >
+                        <div class="users-hp-pofile-editbutton">팔로잉 취소</div>
                     </div>
 
                 {% endif %}
@@ -50,9 +50,9 @@
     <div class="users-hp-button-list">
         <ul class="users-hp-menu">
             {{ func.render_sub_hp_menu('users.gallery', '갤러리', post.id) }}
-            {{ func.render_sub_hp_menu('users.detail_list', '스토리', post.id) }}
+            {{ func.render_sub_hp_menu('users.story', '스토리', post.id) }}
             {{ func.render_sub_hp_menu('professionals.list', '스크랩') }}
-            {{ func.render_sub_hp_menu('users.detail_qna', 'Q&A', post.id) }}
+            {{ func.render_sub_hp_menu('users.question', 'Q&A', post.id) }}
             {{ func.render_sub_hp_menu('professionals.list', '리뷰') }}
         </ul>
     </div>
@@ -60,24 +60,8 @@
 </div>
 
 <script>
-    $("#follow").click(function(){
-        $(this).replaceWith('<div class="users-hp-profile-edit" id="temper_follow_cancel">'+'<div class="users-hp-pofile-editbutton">팔로우 취소</div>'+'</div>');
+    $(".follow").click(function(){
         follow();
-    });
-
-    $("#follow_cancel").click(function(){
-        $(this).replaceWith('<div class="users-hp-profile-edit" id="temper_follow">'+'<div class="users-hp-pofile-editbutton">팔로우</div>'+'</div>');
-        follow_cancel();
-    });
-
-    $("#temper_follow").click(function(){
-        $(this).replaceWith('<div class="users-hp-profile-edit" id="temper_follow_cancel">'+'<div class="users-hp-pofile-editbutton">팔로우 취소</div>'+'</div>');
-        follow();
-    });
-
-    $("#temper_follow_cancel").click(function(){
-        $(this).replaceWith('<div class="users-hp-profile-edit" id="temper_follow">'+'<div class="users-hp-pofile-editbutton">팔로우</div>'+'</div>');
-        follow_cancel();
     });
 
     function follow(){
@@ -85,26 +69,20 @@
                 type: "POST",
                 url: "{{ url_for('users.following') }}",
                 data: {
-                    user_id: "{{ session.user_id }}",
                     follow_id: "{{ post.id }}"
                 }
-            }).fail(function() {
-                $("#temper_follow_cancel").replaceWith('<div class="users-hp-profile-edit" id="temper_follow">'+'<div class="users-hp-pofile-editbutton">팔로우</div>'+'</div>');
+            }).success(function(data) {
+                $(".follow").children().remove();
+                if(data.ok == 1){
+
+                     $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉 취소</div>');
+                }else{
+                     $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉</div>');
+                }
+
             });
     }
 
-    function follow_cancel(){
-         $.ajax({
-                type: "POST",
-                url: "{{ url_for('users.following_cancel') }}",
-                data: {
-                    user_id: "{{ session.user_id }}",
-                    follow_id: "{{ post.id }}"
-                }
-            }).fail(function() {
-                 $("#temper_follow").replaceWith('<div class="users-hp-profile-edit" id="temper_follow_cancel">'+'<div class="users-hp-pofile-editbutton">팔로우 취소</div>'+'</div>');
-            });
-    }
 
 
 </script>

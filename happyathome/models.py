@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
 from sqlalchemy.orm import backref
+from sqlalchemy.util import hybridmethod
 
 db = SQLAlchemy()
 
@@ -38,10 +39,22 @@ class User(db.Model, BaseMixin):
 
     follow = db.relationship('Follow', back_populates='user')
 
-    @classmethod
-    def follow_check(cls, session_id, follow_id):
+    @hybridmethod
+    def follow_check(self, session_id, follow_id):
         return db.session.query(Follow).filter(Follow.user_id == session_id).filter(
             Follow.follow_id == follow_id).first()
+
+    @hybridmethod
+    def following_count(self, user_id):
+        return db.session.query(Follow).filter(Follow.user_id == user_id).count()
+
+    @hybridmethod
+    def follower_count(self, user_id):
+        return db.session.query(Follow).filter(Follow.follow_id == user_id).count()
+
+    @hybridmethod
+    def follow_user(self, id):
+        return db.session.query(User).filter(User.id == id).first()
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""
@@ -66,6 +79,7 @@ class Follow(db.Model, BaseMixin):
     __tablename__ = 'follows'
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     follow_id = db.Column(db.Integer, nullable=False)
+
     user = db.relationship('User', back_populates='follow')
 
 

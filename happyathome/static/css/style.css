@@ -1292,6 +1292,20 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     color: white;
 }
 
+.users-hp-info .follow{
+    position: relative;
+    float: right;
+    top: 0px;
+    padding: 20px;
+    width: 120px;
+    height: inherit;
+    color: white;
+}
+
+.follow.display_none{
+    display:none;
+}
+
 .users-hp-pofile-editbutton{
     float:right;
     font-size: 15px;
@@ -1589,9 +1603,64 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-size:17px;
 }
 
+/******* follow *******/
+
+.follow-row{
+    width:100%;
+    margin:0 auto;
+    display:inline-block;
+    background-color:white;
+}
 
 
+.follow-title{
+    font-size: 15px;
+    padding: 15px;
+    font-weight:bold;
+}
 
+.follow-people{
+    width: 33.3333%;
+    float:left;
+}
+.follow-content-row{
+    width:100%;
+    display: flex;
+}
+
+.follow-avatar{
+    width:120px;
+    height:120px;
+    float:left;
+    margin:10px 10px 10px 20px;
+    cursor:pointer;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.follow-content{
+    float:left;
+    height:inherit;
+}
+
+.follow-name{
+    padding:15px;
+    font-size:20px
+}
+
+.follow-button{
+    margin:20px;
+    cursor:pointer;
+}
+
+.follow-me-button{
+    margin:20px;
+    cursor:pointer;
+}
+
+.follow-button.display_none{
+    display:none;
+}
 /******* login & join*******/
 .login-row{
     width: 500px;
