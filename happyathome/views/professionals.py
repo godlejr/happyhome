@@ -23,10 +23,9 @@ def list(page):
 @professionals.route('/<id>')
 def detail(id):
     post = db.session.query(Professional).filter_by(id=id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.user_id).order_by(Magazine.id.desc()).limit(
-        4).all()
+    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.user_id).order_by(Magazine.id.desc()).limit(4).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/gallery.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/detail.html', post=post,
                            current_app=current_app, magazines=magazines)
 
 

@@ -34,15 +34,14 @@
                     <div class="users-hp-pofile-editbutton"><a href="{{ url_for('users.edit_info',id=post.id) }}">프로필 수정</a></div>
                 </div>
                 {% else %}
-                    {% if not post.follow_check(session.user_id ,post.id) %}
-                    <div class="users-hp-profile-edit" id="follow">
+
+                    <div class="users-hp-profile-edit {% if not post.follow_check(session.user_id ,post.id) %}display_none{% endif %}" id="follow">
                         <div class="users-hp-pofile-editbutton">팔로우</div>
                     </div>
-                    {% else %}
-                    <div class="users-hp-profile-edit" id="follow_cancel">
+                    <div class="users-hp-profile-edit {% if post.follow_check(session.user_id ,post.id) %}display_none{% endif %}" id="follow_cancel">
                         <div class="users-hp-pofile-editbutton">팔로우 취소</div>
                     </div>
-                    {% endif %}
+
                 {% endif %}
             {% endif %}
         </div>
@@ -50,11 +49,11 @@
 
     <div class="users-hp-button-list">
         <ul class="users-hp-menu">
-            {{ func.render_sub_hp_menu('users.gallery', '갤러리',post.id) }}
-            {{ func.render_sub_hp_menu('users.detail_list', '스토리',post.id) }}
+            {{ func.render_sub_hp_menu('users.gallery', '갤러리', post.id) }}
+            {{ func.render_sub_hp_menu('users.detail_list', '스토리', post.id) }}
             {{ func.render_sub_hp_menu('professionals.list', '스크랩') }}
-            {{ func.render_sub_hp_menu('users.detail_qna', 'Q&A',post.id) }}
-             {{ func.render_sub_hp_menu('professionals.list', '리뷰') }}
+            {{ func.render_sub_hp_menu('users.detail_qna', 'Q&A', post.id) }}
+            {{ func.render_sub_hp_menu('professionals.list', '리뷰') }}
         </ul>
     </div>
    {% block content_body %}{% endblock %}
