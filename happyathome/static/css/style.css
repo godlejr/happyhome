@@ -333,16 +333,22 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     background-color: rgba(0, 0, 0, 0.3);
 }
 .content-like .like-icon {
-    background-image: url(/static/img/gallery/like_l.png);
+    background-image: url(/static/img/gallery/like_icon.png);
 }
 .content-like .like-icon.active {
-    background-image: url(/static/img/gallery/like_l.jpg);
+    background-image: url(/static/img/gallery/like_active.png);
 }
 .content-clip .clip-icon {
-    background-image: url(/static/img/gallery/clip_l.png);
+    background-image: url(/static/img/gallery/clip_icon.png);
+}
+.content-clip .clip-icon.active {
+    background-image: url(/static/img/gallery/clip_active.png);
 }
 .content-share .share-icon {
-    background-image: url(/static/img/gallery/share_l.png);
+    background-image: url(/static/img/gallery/share_icon.png);
+}
+.content-share .share-icon.active {
+    background-image: url(/static/img/gallery/share_active.png);
 }
 .content-photo-360 {
     width: 650px;
