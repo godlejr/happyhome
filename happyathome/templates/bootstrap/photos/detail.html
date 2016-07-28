@@ -10,20 +10,27 @@
             <div class="content-section">
                 <div class="content-photos">
                     {% if post.file.type == 2 %}
-                        <div class="content-photo-360" id="photo360"></div>
+                        <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}"></div>
 
                         <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
-                        <script>new Carousel().viewer("photo360", "http://static.inotone.co.kr/data/img/{{ post.file.name }}");</script>
+                        <script>
+                        new Carousel().viewer("photo360", {
+                            action: true,
+                            is_like: {% if post.is_active('PhotoLike', session.user_id) %}true{% else %}false{% endif %},
+                            is_scrap: {% if post.is_active('PhotoScrap', session.user_id) %}true{% else %}false{% endif %},
+                            panorama: "http://static.inotone.co.kr/data/img/{{ post.file.name }}"
+                        });
+                        </script>
                     {% else %}
-                        <div class="content-photo">
+                        <div class="content-photo" photo-id="{{ post.id }}">
                             <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
-                            <div class="content-like" photo-id="{{ post.id }}">
+                            <div class="content-like">
                                 <span class="like-icon{% if post.is_active('PhotoLike', session.user_id) %} active{% endif %}"></span>
                             </div>
-                            <div class="content-scrap" photo-id="{{ post.id }}">
+                            <div class="content-scrap">
                                 <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
                             </div>
-                            <div class="content-share" photo-id="{{ post.id }}"><span class="share-icon"></span></div>
+                            <div class="content-share"><span class="share-icon"></span></div>
                         </div>
                     {% endif %}
                     <div class="content-text">{{ post.content }}</div>
@@ -125,7 +132,7 @@
 </div>
 
 <script>
-$('.content-like').click(function() {
+$('.content-like').click(function(event) {
     {% if session.user_id %}
         var icon = $(this).find('.like-icon');
 
@@ -135,18 +142,21 @@ $('.content-like').click(function() {
             type: "POST",
             url: "{{ url_for('photos.like') }}",
             data: {
-                photo_id: $(this).attr('photo-id')
+                photo_id: $(this).parent('.content-photo').attr('photo-id')
             }
         }).success(function(data) {
             $('.content-score .count-text.like').text(data.count);
         }).error(function(request, status, error) {
             icon.toggleClass('active');
         });
+
+        event.stopPropagation();
     {% else %}
         document.location.href = "{{ url_for('main.login', next=request_url) }}";
     {% endif %}
 });
-$('.content-scrap').click(function() {
+$('.content-scrap').click(function(event) {
+    event.stopPropagation();
     {% if session.user_id %}
         var icon = $(this).find('.scrap-icon');
 
@@ -156,13 +166,15 @@ $('.content-scrap').click(function() {
             type: "POST",
             url: "{{ url_for('photos.scrap') }}",
             data: {
-                photo_id: $(this).attr('photo-id')
+                photo_id: $(this).parent('.content-photo').attr('photo-id')
             }
         }).success(function(data) {
             $('.content-score .count-text.scrap').text(data.count);
         }).error(function(request, status, error) {
             icon.toggleClass('active');
         });
+
+        event.stopPropagation();
     {% else %}
         document.location.href = "{{ url_for('main.login', next=request_url) }}";
     {% endif %}
