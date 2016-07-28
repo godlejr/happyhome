@@ -4,9 +4,9 @@ import os
 import boto3
 import shortuuid
 
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
-from happyathome.models import db, User, Photo, Magazine, Professional, PhotoComment, Comment
+from happyathome.models import db, User, Photo, Magazine, Professional, PhotoComment, Comment, Follow
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
@@ -14,11 +14,28 @@ from werkzeug.utils import secure_filename
 users = Blueprint('users', __name__)
 
 
-@users.route('/<id>', defaults={'page': 1})
-@users.route('/<id>/page/<int:page>')
-def detail(id, page):
+@users.route('/<id>/user_info')
+def user_info(id):
+    post = db.session.query(User).filter_by(id=id).first()
+    #if session:
+     #   follow =  db.session.queru(Follow).filter(Follow.user_id == session['user_id'])
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/user_infos.html', post=post,
+                           current_app=current_app)
+
+
+@users.route('/<id>/gallery', defaults={'page': 1})
+@users.route('/<id>/gallery/page/<int:page>')
+def gallery(id, page):
     post = db.session.query(User).filter_by(id=id).first()
     photos = db.session.query(Photo).filter(Photo.user_id == post.id).order_by(Photo.id.desc())
+
+    if session:
+        if session['user_id'] == post.id:
+            photos = photos.limit(4).all()
+            return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html', post=post,
+                                   photos=photos,
+                                   current_app=current_app)
 
     pagination = Pagination(page, 6, photos.count())
 
@@ -27,8 +44,7 @@ def detail(id, page):
     else:
         offset = 0
     photos = photos.limit(6).offset(offset).all()
-
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/detail.html', post=post, photos=photos,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html', post=post, photos=photos,
                            current_app=current_app, pagination=pagination)
 
 
@@ -135,7 +151,6 @@ def detail_qna(id):
                            magazine_comments=magazine_comments,
                            magazine_comments_count=magazine_comments_count,
                            current_app=current_app)
-
 
 
 @users.route('/edit_professional/<id>', methods=['GET', 'POST'])
@@ -254,3 +269,28 @@ def cover_unload():
     return jsonify({
         'file_name': request.form.get('file_name')
     })
+
+
+@users.route('/following', methods=['POST'])
+def following():
+    if request.method=='POST':
+        follow = Follow()
+        follow.user_id = request.form.get('user_id')
+        follow.follow_id = request.form.get('follow_id')
+
+        db.session.add(follow)
+        db.session.commit()
+
+        return jsonify({
+            'ok': 'ok'
+        })
+
+@users.route('/following_cancel', methods=['POST'])
+def following_cancel():
+    if request.method=='POST':
+        db.session.query(Follow).filter(Follow.user_id == request.form.get('user_id')).filter(Follow.follow_id == request.form.get('follow_id')).delete()
+        db.session.commit()
+
+        return jsonify({
+            'ok': 'ok'
+        })

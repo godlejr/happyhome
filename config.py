@@ -13,13 +13,10 @@ class Config(object):
     S3_COVER_DIRECTORY = '/data/cover/'
     NO_IMG='noimg.JPG'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
-<<<<<<< HEAD
+    REDIS_URL = "dev.inotone.co.kr"
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_POOL_TIMEOUT = 10
     SQLALCHEMY_POOL_RECYCLE = 1800
-=======
-    REDIS_URL = "redis://dev.inotone.co.kr:6379/0"
->>>>>>> feature/user_edit
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'mysql://root:1miglobal@inotone.cjj0w56trea4.ap-northeast-2.rds.amazonaws.com/happyathome'
     SOCIAL_FACEBOOK = {

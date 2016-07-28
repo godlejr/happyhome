@@ -21,18 +21,14 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST':
         if form.validate():
-            user = db.session.query(User).filter_by(email=form.email.data).one()
+            user = db.session.query(User).filter_by(email=form.email.data).first()
             if user:
                 if not check_password_hash(user.password, form.password.data):
                     flash('password is wrong')
                 else:
-<<<<<<< HEAD
                     session['user_id'] = user.id
                     session['user_email'] = user.email
-=======
-                    session['user_id']=user.email
-                    redis = Redis()
->>>>>>> feature/user_edit
+                    session['user_level'] = user.level
                     return redirect(url_for('main.index'))
             else:
                 flash('there is no your ID')

@@ -1157,6 +1157,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .users-hp-pofile-editbutton{
     float:right;
     font-size: 15px;
+    cursor:pointer;
 }
 
 .users-hp-company-info .users-hp-company-name{
@@ -1237,6 +1238,21 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin: 0 auto;
     max-width: 320px;
     max-height: 320px;
+    margin: 0 30px 22px 38px;
+    background-color: #ffffff;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.users-intro-projects .users-add-project {
+    position: relative;
+    cursor: pointer;
+    float: left;
+    width: 33.3333%;
+    margin: 0 auto;
+    max-width: 320px;
+    height: 320px;
     margin: 0 30px 22px 38px;
     background-color: #ffffff;
     background-size: cover;

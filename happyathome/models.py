@@ -32,9 +32,16 @@ class User(db.Model, BaseMixin):
     password = db.Column(db.Unicode(255), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
     accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
-    level =  db.Column(db.Integer)
-    cover =  db.Column(db.Unicode(255))
+    level = db.Column(db.Integer)
+    cover = db.Column(db.Unicode(255))
     avatar = db.Column(db.Unicode(255))
+
+    follow = db.relationship('Follow', back_populates='user')
+
+    @classmethod
+    def follow_check(cls, session_id, follow_id):
+        return db.session.query(Follow).filter(Follow.user_id == session_id).filter(
+            Follow.follow_id == follow_id).first()
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""
@@ -52,6 +59,14 @@ class Category(db.Model, BaseMixin):
 
     def __repr__(self):
         return self.name
+
+
+class Follow(db.Model, BaseMixin):
+    """팔로우 정보"""
+    __tablename__ = 'follows'
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    follow_id = db.Column(db.Integer, nullable=False)
+    user = db.relationship('User', back_populates='follow')
 
 
 class Residence(db.Model, BaseMixin):
@@ -176,11 +191,10 @@ class Professional(db.Model, BaseMixin):
     __tablename__ = 'professionals'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    business_no = db.Column(db.Unicode(15), nullable = False)
+    business_no = db.Column(db.Unicode(15), nullable=False)
     phone = db.Column(db.Unicode(15))
     address = db.Column(db.Unicode(255))
     homepage = db.Column(db.Unicode(45))
     greeting = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_professionals'))
-
