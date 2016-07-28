@@ -6,8 +6,7 @@ import shortuuid
 
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
-from happyathome.models import db, User, Photo, Magazine, Professional, PhotoComment, Comment, Follow
-from sqlalchemy import text
+from happyathome.models import db, User, Photo, Magazine, Professional, Follow
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
