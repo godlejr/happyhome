@@ -1,8 +1,31 @@
+import sys
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
+from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import backref
 
 db = SQLAlchemy()
+
+
+def get_or_create(session, model, **kwargs):
+    instance = session.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance
+    else:
+        instance = model(**kwargs)
+        session.add(instance)
+        session.commit()
+        return instance
+
+
+def del_or_create(session, model, **kwargs):
+    instance = session.query(model).filter_by(**kwargs)
+    if instance.first():
+        instance.delete()
+    else:
+        instance = model(**kwargs)
+        session.add(instance)
+    session.commit()
 
 
 class BaseMixin(object):
@@ -126,9 +149,9 @@ class Photo(db.Model, BaseMixin):
     magazine = db.relationship('Magazine', back_populates='photos')
     comments = db.relationship('PhotoComment', back_populates='photo')
 
-    @classmethod
-    def has_like(cls, user_id):
-        return db.session.query(PhotoLike).filter(PhotoLike.photo_id == cls.id).filter(PhotoLike.user_id == user_id).first()
+    @hybrid_method
+    def is_active(self, model, user_id):
+        return getattr(sys.modules[__name__], model).query.filter_by(photo_id=self.id, user_id=user_id).first()
 
 
 class PhotoLike(db.Model, BaseMixin):
@@ -140,6 +163,17 @@ class PhotoLike(db.Model, BaseMixin):
 
     user = db.relationship('User', backref='like_users')
     photo = db.relationship('Photo', backref='like_photos')
+
+
+class PhotoScrap(db.Model, BaseMixin):
+    """포토-좋아요 연결고리"""
+    __tablename__ = 'photo_scraps'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
+
+    user = db.relationship('User', backref='scrap_users')
+    photo = db.relationship('Photo', backref='scrap_photos')
 
 
 class PhotoComment(db.Model, BaseMixin):
@@ -173,13 +207,17 @@ class Magazine(db.Model, BaseMixin):
     photos = db.relationship('Photo', back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
 
-    @classmethod
-    def vr_count(cls, magazine_id):
-        return db.session.query(Photo).filter(Photo.magazine_id == magazine_id).filter(Photo.file.has(type=2)).count()
+    @hybrid_property
+    def vr_count(self):
+        return db.session.query(Photo).filter(Photo.magazine_id == self.id).filter(Photo.file.has(type=2)).count()
 
-    @classmethod
-    def mov_count(cls, magazine_id):
-        return db.session.query(Photo).filter(Photo.magazine_id == magazine_id).filter(Photo.file.has(type=3)).count()
+    @hybrid_property
+    def mov_count(self):
+        return db.session.query(Photo).filter(Photo.magazine_id == self.id).filter(Photo.file.has(type=3)).count()
+
+    @hybrid_method
+    def is_active(self, model, user_id):
+        return getattr(sys.modules[__name__], model).query.filter_by(photo_id=self.id, user_id=user_id).first()
 
 
 class MagazineComment(db.Model, BaseMixin):
