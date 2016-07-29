@@ -5,6 +5,13 @@ from happyathome.models import db, User, Professional, Magazine, Category, Resid
 professionals = Blueprint('professionals', __name__)
 
 
+@professionals.context_processor
+def utility_processor():
+    def url_for_s3(s3path, filename):
+        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
+    return dict(url_for_s3=url_for_s3)
+
+
 @professionals.route('/', defaults={'page': 1})
 @professionals.route('/page/<int:page>')
 def list(page):
