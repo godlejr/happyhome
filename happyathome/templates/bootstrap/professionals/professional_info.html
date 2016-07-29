@@ -1,4 +1,4 @@
-{% extends 'bootstrap/professionals/content.html' %}
+{% extends 'bootstrap/professionals/menu.html' %}
 
 {% block content_body %}
 
@@ -8,7 +8,7 @@
             <div class="pros-intro">
                 <div class="pros-intro-title">소개</div>
                 <div class="pros-intro-body">
-                    <div class="pros-intro-content">{{ post.greeting}}</div>
+                    <div class="pros-intro-content">{{ professional.greeting }}</div>
                 </div>
                 <div class="pros-intro-title">프로젝트</div>
                 <div class="pros-intro-projects">
@@ -32,10 +32,10 @@
         <div class="hp-content-sidebar">
             <div class="pros-side">
                 <div class="pros-intro-title">contact</div>
-                <div class="pros-side-info">T. {{ post.phone }}</div>
-                <div class="pros-side-info">E. {{ post.user.email }}</div>
-                <div class="pros-side-info"><a href="http://{{post.homepage}}">H. {{ post.homepage }}</a></div>
-                <div class="pros-side-info">A. {{ post.address }}</div>
+                <div class="pros-side-info">T. {{ professional.phone }}</div>
+                <div class="pros-side-info">E. {{ post.email }}</div>
+                <div class="pros-side-info"><a href="http://{{professional.homepage}}">H. {{ professional.homepage }}</a></div>
+                <div class="pros-side-info">A. {{ professional.address }}</div>
             </div>
         </div>
     </div>

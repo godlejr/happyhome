@@ -1635,7 +1635,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .follow-content-row{
     width:100%;
-    display: flex;
+    display: inherit;
 }
 
 .follow-avatar{

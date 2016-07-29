@@ -61,6 +61,7 @@ class User(db.Model, BaseMixin):
     avatar = db.Column(db.Unicode(255))
 
     follow = db.relationship('Follow', back_populates='user')
+    professional = db.relationship('Professional',backref=backref('professional_users'))
 
     @hybridmethod
     def follow_check(self, session_id, follow_id):

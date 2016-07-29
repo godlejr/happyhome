@@ -1,4 +1,4 @@
-{% extends 'bootstrap/users/content.html' %}
+{% extends 'bootstrap/users/menu.html' %}
 
 {% block content_body %}
 <div class="users-intro-projects">
@@ -15,7 +15,7 @@
     {% endif %}
     {% endfor %}
 </div>
-{{ func.render_pagination('users.detail_list', pagination, post.id) }}
+{{ func.render_pagination('users.story', pagination, post.id) }}
 <script>
     $('.users-detail-project').click(function() {
     document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');

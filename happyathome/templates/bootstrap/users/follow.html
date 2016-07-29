@@ -1,4 +1,4 @@
-{% extends 'bootstrap/users/content.html' %}
+{% extends 'bootstrap/users/menu.html' %}
 
 {% block content_body %}
 <div class="follow-row">
@@ -36,7 +36,7 @@
     <div class="follow-content-row">
         {% for following in followings %}
         <div class="follow-people">
-            <div class="follow-avatar" id="{{post.follow_user(following.follow_id).id}}" {% if post.follow_user(following.follow_id).avatar %}
+            <div class="follow-avatar" id="{{post.follow_user(following.follow_id).id}}" name="{{post.follow_user(following.follow_id).level}}" {% if post.follow_user(following.follow_id).avatar %}
                  style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] +  post.follow_user(following.follow_id).avatar }} )"
                  {% else %}
                  style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
@@ -69,7 +69,11 @@
     });
 
     $(".follow-avatar").click(function() {
-        document.location.href = "/user/" + $(this).attr('id') + "/gallery";
+        if($(this).attr('name') == 2){
+            document.location.href = "{{ url_for('professionals.professional_info', id='') }}" + $(this).attr('id');
+        }else{
+            document.location.href = "/user/" + $(this).attr('id') + "/gallery";
+        }
     });
 
     $(".follow-button").click(function(){
