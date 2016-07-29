@@ -13,15 +13,15 @@
                 <div class="user-name">{{ user.name }}</div>
             </div>
             <div class="content-menu">
-                <div class="menu-item">소개</div>
-                <div class="menu-item">프로젝트</div>
+                <a href="{{ url_for('professionals.detail', id=user.id) }}"><div class="menu-item">소개</div></a>
+                <a href="{{ url_for('professionals.story', id=user.id) }}"><div class="menu-item">스토리</div></a>
+                <a href="{{ url_for('professionals.gallery', id=user.id) }}"><div class="menu-item">갤러리</div></a>
+                <a href="{{ url_for('professionals.scrap', id=user.id) }}"><div class="menu-item">스크랩</div></a>
                 <div class="menu-item">Q&A</div>
             </div>
         </div>
     </div>
 
-    <div class="content-body body-main">
-        {% block content_body %}{% endblock %}
-    </div>
+    {% block content_body %}{% endblock %}
 </div>
 {% endblock %}

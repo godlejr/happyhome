@@ -1,27 +1,28 @@
-{% extends 'bootstrap/users/menu.html' %}
-{% block content_body %}
+{% extends 'bootstrap/users/content.html' %}
 
-<div class="users-intro-projects">
-    {% for photo in photos %}
-    <div class="users-detail-project" id="{{ photo.id }}"
-         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photo.file.name}} )">
-        {% if photo.file.type == 2  %}
-                <div class="scrap-media"><span class="vr-icon"></span></div>
-        {% endif %}
+{% block content_body %}
+<div class="content-body">
+    <div class="user-contents">
+        <div class="user-title">갤러리</div>
+        <div class="cards">
+            {% for photo in photos %}
+                <div class="card" id="{{ photo.id }}"
+                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photo.file.name) }})">
+                    {% if photo.vr_count  %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% endif %}
+                    {% if photo.mov_count  %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
-    {% if session.user_id == post.id %}
-    <div class="users-add-project" style="background-image:url( {{ url_for('static', filename='img/add_file.JPG') }} )">
-    </div>
-    {% endif %}
 </div>
+
 <script>
-    $('.users-detail-project').click(function() {
+$('.card').click(function() {
     document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('id');
 });
-
 </script>
-{% if pagination %}
-{{ func.render_pagination('users.gallery', pagination, post.id) }}
-{% endif %}
 {% endblock %}

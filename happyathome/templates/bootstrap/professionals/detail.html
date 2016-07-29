@@ -1,47 +1,49 @@
 {% extends 'bootstrap/professionals/content.html' %}
 
 {% block content_body %}
-<div class="content-main">
-    <div class="content-section">
-        <div class="user-content">
-            <div class="user-intro">
-                <div class="user-title">소개</div>
-                <div class="user-greeting">{{ professional.greeting }}</div>
+<div class="content-body body-main">
+    <div class="content-main">
+        <div class="content-section">
+            <div class="user-content">
+                <div class="user-intro">
+                    <div class="user-title">소개</div>
+                    <div class="user-greeting">{{ professional.greeting }}</div>
+                </div>
+                <div class="user-project">
+                    <div class="user-title">스토리</div>
+                </div>
             </div>
-            <div class="user-project">
-                <div class="user-title">프로젝트</div>
-            </div>
-        </div>
-        <div class="user-projects">
-            <div class="cards">
-                {% for magazine in magazines %}
-                    {% if magazine.photos %}
-                    <div class="card" id="{{ magazine.id }}"
-                         style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazine.photos[0].file.name) }})">
-                        {% if magazine.vr_count  %}
-                            <div class="card-media"><span class="vr-icon"></span></div>
+            <div class="user-projects">
+                <div class="cards">
+                    {% for magazine in magazines %}
+                        {% if magazine.photos %}
+                        <div class="card" id="{{ magazine.id }}"
+                             style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazine.photos[0].file.name) }})">
+                            {% if magazine.vr_count  %}
+                                <div class="card-media"><span class="vr-icon"></span></div>
+                            {% endif %}
+                            {% if magazine.mov_count  %}
+                                <div class="card-media"><span class="mov-icon"></span></div>
+                            {% endif %}
+                            <div class="card-title">{{ magazine.title }}</div>
+                        </div>
                         {% endif %}
-                        {% if magazine.mov_count  %}
-                            <div class="card-media"><span class="mov-icon"></span></div>
-                        {% endif %}
-                        <div class="card-title">{{ magazine.title }}</div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="content-side">
-    <div class="content-sidebar">
-        <div class="user-sidebody">
-            <div class="user-profile">
-                <div class="user-title">CONTACT</div>
-                <div class="user-info"><span class="phone-icon"></span> {{ professional.phone }}</div>
-                <div class="user-info"><span class="email-icon"></span> {{ professional.user.email }}</div>
-                <div class="user-info"><span class="homepage-icon"></span> <a href="http://{{ professional.homepage }}" target="_blank">{{ professional.homepage }}</a></div>
-                <div class="user-info"><span class="address-icon"></span> {{ professional.address }}</div>
+    <div class="content-side">
+        <div class="content-sidebar">
+            <div class="user-sidebody">
+                <div class="user-profile">
+                    <div class="user-title">CONTACT</div>
+                    <div class="user-info"><span class="phone-icon"></span> {{ professional.phone }}</div>
+                    <div class="user-info"><span class="email-icon"></span> {{ professional.user.email }}</div>
+                    <div class="user-info"><span class="homepage-icon"></span> <a href="http://{{ professional.homepage }}" target="_blank">{{ professional.homepage }}</a></div>
+                    <div class="user-info"><span class="address-icon"></span> {{ professional.address }}</div>
+                </div>
             </div>
         </div>
     </div>

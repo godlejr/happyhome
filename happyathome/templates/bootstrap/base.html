@@ -33,7 +33,7 @@
                     <div class="login_02"><a href="{{ url_for('main.join') }}">회원가입</a></div>
                 {% else %}
                     <div class="login_01"><a href="{{ url_for('main.logout') }}">로그아웃</a></div>
-                    <div class="login_02"><a href="{{ url_for('users.gallery',id=session.user_id) }}">설정</a></div>
+                    <div class="login_02"><a href="{{ url_for('users.info',id=session.user_id) }}">설정</a></div>
                 {% endif %}
                 <div class="gnb">
                 <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리@홈</a></div>

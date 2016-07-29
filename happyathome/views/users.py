@@ -13,45 +13,57 @@ from werkzeug.utils import secure_filename
 users = Blueprint('users', __name__)
 
 
-@users.route('/<id>/user_info')
-def user_info(id):
-    post = db.session.query(User).filter_by(id=id).first()
+@users.context_processor
+def utility_processor():
+    def url_for_s3(s3path, filename):
+        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
+    return dict(url_for_s3=url_for_s3)
+
+
+@users.route('/<id>')
+def info(id):
+    user = db.session.query(User).filter_by(id=id).first()
     # if session:
     #   follow =  db.session.queru(Follow).filter(Follow.user_id == session['user_id'])
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/user_infos.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html',
+                           user=user,
                            current_app=current_app)
 
 
 @users.route('/<id>/gallery', defaults={'page': 1})
 @users.route('/<id>/gallery/page/<int:page>')
 def gallery(id, page):
-    post = db.session.query(User).filter_by(id=id).first()
-    photos = db.session.query(Photo).filter(Photo.user_id == post.id).order_by(Photo.id.desc())
+    user = db.session.query(User).filter_by(id=id).first()
+    photos = db.session.query(Photo).filter(Photo.user_id == user.id).order_by(Photo.id.desc())
 
     if session:
-        if session['user_id'] == post.id:
+        if session['user_id'] == user.id:
             photos = photos.limit(4).all()
-            return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html', post=post,
+            return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html',
+                                   user=user,
                                    photos=photos,
                                    current_app=current_app)
 
-    pagination = Pagination(page, 6, photos.count())
+    pagination = Pagination(page, 8, photos.count())
 
     if page != 1:
         offset = 6 * (page - 1)
     else:
         offset = 0
-    photos = photos.limit(6).offset(offset).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html', post=post, photos=photos,
-                           current_app=current_app, pagination=pagination)
+    photos = photos.limit(12).offset(offset).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html',
+                           user=user,
+                           photos=photos,
+                           current_app=current_app,
+                           pagination=pagination)
 
 
 @users.route('/<id>/story', defaults={'page': 1})
 @users.route('/<id>/story/page/<int:page>')
 def story(id, page):
-    post = db.session.query(User).filter_by(id=id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.id).order_by(Magazine.id.desc())
+    user = db.session.query(User).filter_by(id=id).first()
+    magazines = db.session.query(Magazine).filter(Magazine.user_id == user.id).order_by(Magazine.id.desc())
     pagination = Pagination(page, 6, magazines.count())
 
     if page != 1:
@@ -60,8 +72,11 @@ def story(id, page):
         offset = 0
     magazines = magazines.limit(6).offset(offset).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/story.html', post=post,
-                           current_app=current_app, magazines=magazines, pagination=pagination)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/story.html',
+                           user=user,
+                           current_app=current_app,
+                           magazines=magazines,
+                           pagination=pagination)
 
 
 @users.route('/<id>/follow')
@@ -77,12 +92,14 @@ def follow(id):
 
 @users.route('/<id>/scrap')
 def scrap(id):
-    post = db.session.query(User).filter_by(id=id).first()
-    photoscraps = db.session.query(PhotoScrap).filter(PhotoScrap.user_id == post.id)
+    user = db.session.query(User).filter_by(id=id).first()
+    photoscraps = db.session.query(PhotoScrap).filter(PhotoScrap.user_id == user.id)
     photoscrap_count = photoscraps.count()
     photoscraps = photoscraps.all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap.html', post=post, photoscraps=photoscraps,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap.html',
+                           user=user,
+                           photoscraps=photoscraps,
                            photoscrap_count=photoscrap_count,
                            current_app=current_app)
 

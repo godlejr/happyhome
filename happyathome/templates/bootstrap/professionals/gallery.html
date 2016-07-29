@@ -1,21 +1,24 @@
-{% extends 'bootstrap/users/content.html' %}
+{% extends 'bootstrap/professionals/content.html' %}
 
 {% block content_body %}
 <div class="content-body">
     <div class="user-contents">
-        <div class="user-title">갤러리 스크랩({{photoscrap_count}})</div>
+        <div class="user-title">갤러리</div>
         <div class="cards">
-            {% for photoscrap in photoscraps %}
-                <div class="card" id="{{ photoscrap.photo_id }}"
-                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photoscrap.photo.file.name) }})">
-                    {% if photoscrap.vr_count  %}
+            {% for photo in photos %}
+                <div class="card" id="{{ photo.id }}"
+                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photo.file.name) }})">
+                    {% if photo.vr_count  %}
                         <div class="card-media"><span class="vr-icon"></span></div>
                     {% endif %}
-                    {% if photoscrap.mov_count  %}
+                    {% if photo.mov_count  %}
                         <div class="card-media"><span class="mov-icon"></span></div>
                     {% endif %}
                 </div>
             {% endfor %}
+        </div>
+        <div class="pagination-nav">
+            {{ func.render_pagination('professionals.gallery', pagination, user.id) }}
         </div>
     </div>
 </div>

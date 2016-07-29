@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
+from flask import session
 from happyathome.forms import Pagination
 from happyathome.models import db, User, Professional, Magazine, Category, Residence, Photo, PhotoScrap
 
@@ -42,8 +43,8 @@ def detail(id):
 @professionals.route('/<id>/story', defaults={'page': 1})
 @professionals.route('/<id>/story/page/<int:page>')
 def story(id, page):
-    post = db.session.query(User).filter_by(id=id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.id).order_by(Magazine.id.desc())
+    user = db.session.query(User).filter_by(id=id).first()
+    magazines = db.session.query(Magazine).filter(Magazine.user_id == user.id).order_by(Magazine.id.desc())
     magazines_count = magazines.count()
     pagination = Pagination(page, 6, magazines.count())
 
@@ -53,9 +54,37 @@ def story(id, page):
         offset = 0
     magazines = magazines.limit(6).offset(offset).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/story.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/story.html', user=user,
                            current_app=current_app, magazines=magazines, pagination=pagination,
                            magazines_count=magazines_count)
+
+
+@professionals.route('/<id>/gallery', defaults={'page': 1})
+@professionals.route('/<id>/gallery/page/<int:page>')
+def gallery(id, page):
+    user = db.session.query(User).filter_by(id=id).first()
+    photos = db.session.query(Photo).filter(Photo.user_id == user.id).order_by(Photo.id.desc())
+    pagination = Pagination(page, 8, photos.count())
+
+    if session:
+        if session['user_id'] == user.id:
+            photos = photos.limit(4).all()
+            return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/gallery.html',
+                                   user=user,
+                                   photos=photos,
+                                   pagination=pagination,
+                                   current_app=current_app)
+
+    if page != 1:
+        offset = 6 * (page - 1)
+    else:
+        offset = 0
+    photos = photos.limit(12).offset(offset).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/gallery.html',
+                           user=user,
+                           photos=photos,
+                           current_app=current_app,
+                           pagination=pagination)
 
 
 @professionals.route('/<id>/question')
@@ -148,12 +177,13 @@ def question(id):
 
 @professionals.route('/<id>/scrap')
 def scrap(id):
-    post = db.session.query(User).filter_by(id=id).first()
-    photoscraps = db.session.query(PhotoScrap).filter(PhotoScrap.user_id == post.id)
+    user = db.session.query(User).filter_by(id=id).first()
+    photoscraps = db.session.query(PhotoScrap).filter(PhotoScrap.user_id == user.id)
     photoscrap_count = photoscraps.count()
     photoscraps = photoscraps.all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/scrap.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/scrap.html',
+                           user=user,
                            photoscraps=photoscraps,
                            photoscrap_count=photoscrap_count,
                            current_app=current_app)

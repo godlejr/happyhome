@@ -2,79 +2,51 @@
 
 {% block content%}
 <div class="content">
-    <div class="users-hp" id="{{ post.id }}"
-         {% if post.cover %}
-         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + post.cover }} )"
-         {% else %}
-         style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
-         {% endif %}>
-        <div class="users-hp-info">
-            <div class="users-hp-avatar-info">
-                <div class="users-hp-avatar" {% if post.avatar %}
-                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] + post.avatar }} )"
-                     {% else %}
-                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_COVER_DIRECTORY'] + current_app.config['NO_IMG'] }} )"
-                     {% endif %}>
+    <div class="content-cover-wrap" {% if user.cover %}style="background-image:url({{ url_for_s3('S3_COVER_DIRECTORY', filename=user.cover) }})"{% endif %}>
+        <div class="content-cover">
+            <div class="content-user">
+                <div class="user-avatar" {% if user.avatar %}style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=user.avatar) }})"{% endif %}></div>
+                <div class="user-star">
+                    <i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i>
+                    <span class="user-score">4.3</span>
                 </div>
-                <div class="users-hp-review">
-                    review *****
-                </div>
+                <div class="user-name">{{ user.name }}</div>
             </div>
-            <div class="users-hp-company-info">
-                <div class="users-hp-company-name">
-                    {{ post.name }}
-                </div>
-                <div class="users-hp-company-follow">
-                  <a href="{{url_for('users.follow',id=post.id)}}">{{ post.following_count(post.id) }} 팔로잉  {{ post.follower_count(post.id) }} 팔로워</a>
-                </div>
+            <div class="content-menu">
+                <a href="{{ url_for('users.info', id=user.id) }}"><div class="menu-item">소개</div></a>
+                <a href="{{ url_for('users.story', id=user.id) }}"><div class="menu-item">스토리</div></a>
+                <a href="{{ url_for('users.gallery', id=user.id) }}"><div class="menu-item">갤러리</div></a>
+                <a href="{{ url_for('users.scrap', id=user.id) }}"><div class="menu-item">스크랩</div></a>
+                <div class="menu-item">Q&A</div>
             </div>
-            {% if session.user_id %}
-                {%if session.user_id == post.id %}
-                <div class="users-hp-profile-edit">
-                    <div class="users-hp-pofile-editbutton"><a href="{{ url_for('users.edit_info',id=post.id) }}">프로필 수정</a></div>
-                </div>
-                {% else %}
-
-                    <div class="follow {% if post.follow_check(session.user_id ,post.id) %} display_none{% endif %}" >
-                        <div class="users-hp-pofile-editbutton">팔로잉</div>
-                    </div>
-                    <div class="follow {% if not post.follow_check(session.user_id ,post.id) %} display_none{% endif %}" >
-                        <div class="users-hp-pofile-editbutton">팔로잉 취소</div>
-                    </div>
-
-                {% endif %}
-            {% endif %}
         </div>
     </div>
 
-    {% block menu_body %}{% endblock %}
+    {% block content_body %}{% endblock %}
 </div>
 
 <script>
-    $(".follow").click(function(){
-        follow();
-    });
+$(".follow").click(function(){
+    follow();
+});
 
-    function follow(){
-         $.ajax({
-                type: "POST",
-                url: "{{ url_for('users.following') }}",
-                data: {
-                    follow_id: "{{ post.id }}"
-                }
-            }).success(function(data) {
-                $(".follow").children().remove();
-                if(data.ok == 1){
+function follow(){
+     $.ajax({
+            type: "POST",
+            url: "{{ url_for('users.following') }}",
+            data: {
+                follow_id: "{{ user.id }}"
+            }
+        }).success(function(data) {
+            $(".follow").children().remove();
+            if(data.ok == 1){
 
-                     $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉 취소</div>');
-                }else{
-                     $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉</div>');
-                }
+                 $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉 취소</div>');
+            }else{
+                 $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉</div>');
+            }
 
-            });
-    }
-
-
-
+        });
+}
 </script>
 {% endblock %}

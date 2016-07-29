@@ -224,6 +224,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     justify-content: center;
     margin-top: 20px;
 }
+.content-cover .content-menu a {
+    color: #ffffff;
+}
 .content-cover .content-menu .menu-item {
     display: inline-block;
     margin: 0 20px;
@@ -752,11 +755,12 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     top: 35px;
     width: 60px;
     height: 60px;
-    padding: 5px 10px;
+    padding: 5px 10px 0 10px;
     color: #ffffff;
     text-align: center;
-    line-height: 130%;
+    line-height: 140%;
     font-size: 12px;
+    overflow: hidden;
     background-repeat: no-repeat;
     background-position: center;
     background-color: rgba(0, 0, 0, 0.5);
@@ -806,8 +810,15 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .pro-card .pro-greeting {
     width: 100%;
-    clear: both;
+    height: 100%;
+    max-height: 160px;
+    line-height: 170%;
     font-size: 14px;
+    overflow: hidden;
+    text-align: justify;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 /******* professionals *******/
@@ -2073,4 +2084,40 @@ input[type=file] {
     background-repeat: no-repeat;
     background-position: center;
     background-image:url(/static/img/professional/location-icon.png);
+}
+
+
+.user-contents {
+    width: 100%;
+    background-color: #ffffff;
+}
+.user-contents .user-title {
+    padding: 40px 64px;
+}
+.user-contents .cards {
+    display: block;
+    padding: 0;
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    background-color: #ffffff;
+}
+.user-contents .card {
+    width: 25%;
+    max-width: 248px;
+    max-height: 248px;
+}
+.user-contents .card .card-title {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 7px 0 7px 15px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.pagination-nav {
+    display: block;
+    clear: both;
 }

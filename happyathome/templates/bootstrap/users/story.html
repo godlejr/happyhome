@@ -1,29 +1,34 @@
-{% extends 'bootstrap/users/menu.html' %}
+{% extends 'bootstrap/users/content.html' %}
 
 {% block content_body %}
-<div class="users-intro-projects">
-    {% for magazine in magazines %}
-    {% if magazine.photos %}
-    <div class="users-detail-project" id="{{ magazine.id }}"
-         style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine.photos[0].file.name}})">
-        {% if magazine.vr_count  %}
-                <div class="scrap-media"><span class="vr-icon"></span></div>
-        {% endif %}
-        <div class="project-detail-info">
-            <div class="project-detail-content">
-                <div class="project-detail-title">{{ magazine.title }}</div>
-            </div>
+<div class="content-body">
+    <div class="user-contents">
+        <div class="user-title">스토리</div>
+        <div class="cards">
+            {% for magazine in magazines %}
+                {% if magazine.photos %}
+                <div class="card" id="{{ magazine.id }}"
+                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazine.photos[0].file.name) }})">
+                    {% if magazine.vr_count  %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% endif %}
+                    {% if magazine.mov_count  %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
+                    <div class="card-title">{{ magazine.title }}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="pagination-nav">
+            {{ func.render_pagination('users.story', pagination, user.id) }}
         </div>
     </div>
-    {% endif %}
-    {% endfor %}
 </div>
-{{ func.render_pagination('users.story', pagination, post.id) }}
+
 <script>
-    $('.users-detail-project').click(function() {
+$('.card').click(function() {
     document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
 });
-
 </script>
-
 {% endblock %}

@@ -81,7 +81,7 @@ $('#photoForm').submit(function() {
         return false;
     }
 
-    if (!$('input[name=room_id]:checked').val()) {
+    if (!$('#room_id').val()) {
         alert('공간을 선택해주세요.');
         return false;
     }

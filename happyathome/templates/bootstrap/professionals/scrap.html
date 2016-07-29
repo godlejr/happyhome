@@ -1,24 +1,29 @@
-{% extends 'bootstrap/professionals/menu.html' %}
+{% extends 'bootstrap/professionals/content.html' %}
 
 {% block content_body %}
-<div class="scrap-row">
-    <div class="scrap-title">갤러리 스크랩({{photoscrap_count}})</div>
-    <div class="users-intro-projects">
-        {% for photoscrap in photoscraps %}
-        <div class="users-detail-project" id="{{ photoscrap.photo.id }}"
-             style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photoscrap.photo.file.name}} )">
-             {% if photoscrap.photo.file.type == 2  %}
-                <div class="scrap-media"><span class="vr-icon"></span></div>
-             {% endif %}
+<div class="content-body">
+    <div class="user-contents">
+        <div class="user-title">갤러리 스크랩({{photoscrap_count}})</div>
+        <div class="cards">
+            {% for photoscrap in photoscraps %}
+                <div class="card" id="{{ photoscrap.photo_id }}"
+                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photoscrap.photo.file.name) }})">
+                    {% if photoscrap.vr_count  %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% endif %}
+                    {% if photoscrap.mov_count  %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <div class="pagination-nav"></div>
     </div>
 </div>
 
 <script>
-    $('.users-detail-project').click(function(){
-        document.location.href = "{{ url_for('photos.detail',id='') }}" + $(this).attr('id');
-    })
+$('.card').click(function(){
+    document.location.href = "{{ url_for('photos.detail',id='') }}" + $(this).attr('id');
+})
 </script>
-
 {% endblock %}

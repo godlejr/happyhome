@@ -4,7 +4,7 @@
 <div class="content">
     <div class="pros">
         {% for post in posts %}
-        <div class="pro-card" id="{{ post.id }}">
+        <div class="pro-card" id="{{ post.user_id }}">
             <div class="pro-photo" {% if post.user.cover %}style="background-image:url({{ url_for_s3('S3_COVER_DIRECTORY', filename=post.user.cover) }})"{% endif %}>
                 {% if post.address %}
                 <div class="pro-address">
@@ -27,7 +27,7 @@
         </div>
         {% endfor %}
     </div>
-    {{ func.render_pagination('professionals.list',pagination) }}
+    {{ func.render_pagination('professionals.list', pagination) }}
 </div>
 
 <script>
