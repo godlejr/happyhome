@@ -753,12 +753,12 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     position: absolute;
     right: 0;
     top: 35px;
-    width: 60px;
-    height: 60px;
+    width: 66px;
+    height: 66px;
     padding: 5px 10px 0 10px;
     color: #ffffff;
     text-align: center;
-    line-height: 140%;
+    line-height: 150%;
     font-size: 12px;
     overflow: hidden;
     background-repeat: no-repeat;
@@ -2031,6 +2031,7 @@ input[type=file] {
 }
 .user-sidebody {
     padding: 0 35px;
+    border: 1px solid #eaebee;
 }
 .user-profile {
     margin-top: 40px;
@@ -2090,6 +2091,7 @@ input[type=file] {
 .user-contents {
     width: 100%;
     background-color: #ffffff;
+    border: 1px solid #eaebee;
 }
 .user-contents .user-title {
     padding: 40px 64px;
