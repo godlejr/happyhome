@@ -1372,7 +1372,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     margin:0 auto;
     padding: 15px;
-    border: 1px solid #eeeeee;
     display: table;
     background-color: #ffffff;
 }
@@ -1405,6 +1404,28 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.users-detail-project .scrap-media {
+    height: 26px;
+    padding: 10px 10px 0 0;
+    margin-bottom: 2px;
+    text-align: right;
+}
+.users-detail-project .scrap-media span {
+    display: inline-block;
+    width: 36px;
+    height: 26px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.users-detail-project .scrap-media .vr-icon {
+    background-image: url(/static/img/main/vr_i.png);
+}
+.users-detail-project .scrap-media .mov-icon {
+    background-image: url(/static/img/main/mov_i.png);
 }
 
 .users-intro-projects .users-add-project {
@@ -1671,6 +1692,22 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .follow-button.display_none{
     display:none;
 }
+
+/******* scrap *******/
+.scrap-row {
+    width: 100%;
+    margin: 0 auto;
+    display: inline-block;
+    background-color: white;
+}
+
+.scrap-title{
+    font-size: 15px;
+    padding: 15px;
+    font-weight:bold;
+}
+
+
 /******* login & join*******/
 .login-row{
     width: 500px;

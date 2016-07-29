@@ -1,0 +1,24 @@
+{% extends 'bootstrap/users/menu.html' %}
+
+{% block content_body %}
+<div class="scrap-row">
+    <div class="scrap-title">갤러리 스크랩({{photoscrap_count}})</div>
+    <div class="users-intro-projects">
+        {% for photoscrap in photoscraps %}
+        <div class="users-detail-project" id="{{ photoscrap.photo.id }}"
+             style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photoscrap.photo.file.name}} )">
+             {% if photoscrap.photo.file.type == 2  %}
+                <div class="scrap-media"><span class="vr-icon"></span></div>
+             {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    $('.users-detail-project').click(function(){
+        document.location.href = "{{ url_for('photos.detail',id='') }}" + $(this).attr('id');
+    })
+</script>
+
+{% endblock %}

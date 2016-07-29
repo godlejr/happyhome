@@ -6,7 +6,7 @@ import shortuuid
 
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
-from happyathome.models import db, User, Photo, Magazine, Professional, Follow
+from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
@@ -72,6 +72,18 @@ def follow(id):
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/follow.html', post=post, followers=followers,
                            followings=followings,
+                           current_app=current_app)
+
+
+@users.route('/<id>/scrap')
+def scrap(id):
+    post = db.session.query(User).filter_by(id=id).first()
+    photoscraps = db.session.query(PhotoScrap).filter(PhotoScrap.user_id == post.id)
+    photoscrap_count = photoscraps.count()
+    photoscraps = photoscraps.all()
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap.html', post=post, photoscraps=photoscraps,
+                           photoscrap_count=photoscrap_count,
                            current_app=current_app)
 
 

@@ -1,0 +1,48 @@
+{% extends 'bootstrap/professionals/menu.html' %}
+
+{% block content_body %}
+<div class="qna-row">
+
+    <div class="qna-title">
+        갤러리 Q&A {%if photo_comments_count %}{% for count in photo_comments_count %}({{ count.count }}){% endfor %}{% endif %}
+    </div>
+    {% for photo_comment in photo_comments %}
+    <div class="qna-content">
+        <div class="qna-img" id="photos" name="{{ photo_comment.id }}" style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photo_comment.file_name }})">
+        </div>
+        <div class="qna-content-info">
+            <div class="qna-content-name">{{ photo_comment.photo_name }}</div>
+            <div class="qna-content-question">Q: {{ photo_comment.question }}</div>
+            <div class="qna-content-question">A: {{ photo_comment.answer }}</div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="qna-title">
+        스토리 Q&A {%if magazine_comments_count %}{% for count in magazine_comments_count %}({{ count.count }}){% endfor %}{% endif %}
+    </div>
+    {% for magazine_comment in magazine_comments %}
+    <div class="qna-content">
+        <div class="qna-img" id="magazines" name="{{ magazine_comment.id }}" style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine_comment.file_name }})">
+        </div>
+        <div class="qna-content-info">
+            <div class="qna-content-name">{{ magazine_comment.photo_name }}</div>
+            <div class="qna-content-question">Q: {{ magazine_comment.question }}</div>
+            <div class="qna-content-question">A: {{ magazine_comment.answer }}</div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<script>
+ $('#magazines').click(function() {
+    document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('name');
+});
+
+ $('#photos').click(function() {
+    document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('name');
+});
+
+</script>
+{% endblock %}

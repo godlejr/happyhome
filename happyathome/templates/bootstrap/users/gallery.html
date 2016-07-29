@@ -5,6 +5,9 @@
     {% for photo in photos %}
     <div class="users-detail-project" id="{{ photo.id }}"
          style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photo.file.name}} )">
+        {% if photo.file.type == 2  %}
+                <div class="scrap-media"><span class="vr-icon"></span></div>
+        {% endif %}
     </div>
     {% endfor %}
     {% if session.user_id == post.id %}

@@ -11,10 +11,10 @@
                     <div class="pros-intro-content">{{ professional.greeting }}</div>
                 </div>
                 <div class="pros-intro-title">프로젝트</div>
-                <div class="pros-intro-projects">
+                <div class="users-intro-projects">
                     {% for magazine in magazines %}
                     {% if magazine.photos %}
-                    <div class="pros-intro-project" id="{{ magazine.id }}"
+                    <div class="users-intro-project" id="{{ magazine.id }}"
                          style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine.photos[0].file.name }})">
                         <div class="project-info">
                             <div class="project-content">

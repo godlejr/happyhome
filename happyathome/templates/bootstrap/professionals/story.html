@@ -2,11 +2,14 @@
 
 {% block content_body %}
 <div class="pros-intro-title">프로젝트</div>
-<div class="pros-intro-projects">
+<div class="users-intro-projects">
     {% for magazine in magazines %}
     {% if magazine.photos %}
-    <div class="pros-detail-project" id="{{ magazine.id }}"
+    <div class="users-detail-project" id="{{ magazine.id }}"
          style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine.photos[0].file.name }})">
+        {% if magazine.vr_count  %}
+                <div class="scrap-media"><span class="vr-icon"></span></div>
+        {% endif %}
         <div class="project-detail-info">
             <div class="project-detail-content">
                 <div class="project-detail-title">{{ magazine.title }}</div>

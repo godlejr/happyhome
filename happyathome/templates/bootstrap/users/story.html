@@ -6,6 +6,9 @@
     {% if magazine.photos %}
     <div class="users-detail-project" id="{{ magazine.id }}"
          style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine.photos[0].file.name}})">
+        {% if magazine.vr_count  %}
+                <div class="scrap-media"><span class="vr-icon"></span></div>
+        {% endif %}
         <div class="project-detail-info">
             <div class="project-detail-content">
                 <div class="project-detail-title">{{ magazine.title }}</div>
