@@ -5,6 +5,13 @@ from happyathome.models import db, User, Professional, Magazine, Category, Resid
 professionals = Blueprint('professionals', __name__)
 
 
+@professionals.context_processor
+def utility_processor():
+    def url_for_s3(s3path, filename):
+        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
+    return dict(url_for_s3=url_for_s3)
+
+
 @professionals.route('/', defaults={'page': 1})
 @professionals.route('/page/<int:page>')
 def list(page):
@@ -22,12 +29,12 @@ def list(page):
 
 @professionals.route('/<id>')
 def detail(id):
-    post = db.session.query(User).filter_by(id=id).first()
-    professional = db.session.query(Professional).filter(Professional.user_id == post.id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.id).order_by(Magazine.id.desc()).limit(
-        4).all()
+    user = db.session.query(User).filter_by(id=id).first()
+    professional = db.session.query(Professional).filter(Professional.user_id == user.id).first()
+    magazines = db.session.query(Magazine).filter(Magazine.user_id == user.id).order_by(Magazine.id.desc()).limit(4).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/detail.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/detail.html',
+                           user=user,
                            professional=professional,
                            current_app=current_app, magazines=magazines)
 

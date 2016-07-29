@@ -1,50 +1,55 @@
-{% extends 'bootstrap/professionals/menu.html' %}
+{% extends 'bootstrap/professionals/content.html' %}
 
 {% block content_body %}
-
-<div class="hp-row">
-    <div class="hp-row-left">
-        <div class="hp-content-detail">
-            <div class="pros-intro">
-                <div class="pros-intro-title">소개</div>
-                <div class="pros-intro-body">
-                    <div class="pros-intro-content">{{ professional.greeting }}</div>
-                </div>
-                <div class="pros-intro-title">프로젝트</div>
-                <div class="users-intro-projects">
-                    {% for magazine in magazines %}
-                    {% if magazine.photos %}
-                    <div class="users-intro-project" id="{{ magazine.id }}"
-                         style="background-image:url({{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine.photos[0].file.name }})">
-                        <div class="project-info">
-                            <div class="project-content">
-                                <div class="project-title">{{ magazine.title }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-                </div>
+<div class="content-main">
+    <div class="content-section">
+        <div class="user-content">
+            <div class="user-intro">
+                <div class="user-title">소개</div>
+                <div class="user-greeting">{{ professional.greeting }}</div>
+            </div>
+            <div class="user-project">
+                <div class="user-title">프로젝트</div>
             </div>
         </div>
-    </div>
-    <div class="hp-row-right">
-        <div class="hp-content-sidebar">
-            <div class="pros-side">
-                <div class="pros-intro-title">contact</div>
-                <div class="pros-side-info">T. {{ professional.phone }}</div>
-                <div class="pros-side-info">E. {{ post.email }}</div>
-                <div class="pros-side-info"><a href="http://{{professional.homepage}}">H. {{ professional.homepage }}</a></div>
-                <div class="pros-side-info">A. {{ professional.address }}</div>
+        <div class="user-projects">
+            <div class="cards">
+                {% for magazine in magazines %}
+                    {% if magazine.photos %}
+                    <div class="card" id="{{ magazine.id }}"
+                         style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazine.photos[0].file.name) }})">
+                        {% if magazine.vr_count  %}
+                            <div class="card-media"><span class="vr-icon"></span></div>
+                        {% endif %}
+                        {% if magazine.mov_count  %}
+                            <div class="card-media"><span class="mov-icon"></span></div>
+                        {% endif %}
+                        <div class="card-title">{{ magazine.title }}</div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
+
+<div class="content-side">
+    <div class="content-sidebar">
+        <div class="user-sidebody">
+            <div class="user-profile">
+                <div class="user-title">CONTACT</div>
+                <div class="user-info"><span class="phone-icon"></span> {{ professional.phone }}</div>
+                <div class="user-info"><span class="email-icon"></span> {{ professional.user.email }}</div>
+                <div class="user-info"><span class="homepage-icon"></span> <a href="http://{{ professional.homepage }}" target="_blank">{{ professional.homepage }}</a></div>
+                <div class="user-info"><span class="address-icon"></span> {{ professional.address }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-$('.pros-intro-project').click(function() {
+$('.card').click(function() {
     document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
 });
-
-
 </script>
 {% endblock %}
