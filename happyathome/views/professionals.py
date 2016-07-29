@@ -21,24 +21,27 @@ def list(page):
 
 
 @professionals.route('/<id>')
-def detail(id):
-    post = db.session.query(Professional).filter_by(id=id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.user_id).order_by(Magazine.id.desc()).limit(4).all()
+def professional_info(id):
+    post = db.session.query(User).filter_by(id=id).first()
+    professional = db.session.query(Professional).filter(Professional.user_id == post.id).first()
+    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.id).order_by(Magazine.id.desc()).limit(
+        4).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/detail.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/professional_info.html', post=post,
+                           professional=professional,
                            current_app=current_app, magazines=magazines)
 
 
-@professionals.route('/detail_list/<id>', defaults={'page': 1})
-@professionals.route('/detail_list/<id>/page/<int:page>')
-def detail_list(id, page):
-    post = db.session.query(Professional).filter_by(id=id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.user_id).order_by(Magazine.id.desc())
+@professionals.route('/<id>/story', defaults={'page': 1})
+@professionals.route('/<id>/story/page/<int:page>')
+def story(id, page):
+    post = db.session.query(User).filter_by(id=id).first()
+    magazines = db.session.query(Magazine).filter(Magazine.user_id == post.id).order_by(Magazine.id.desc())
     magazines_count = magazines.count()
     pagination = Pagination(page, 6, magazines.count())
 
     if page != 1:
-        offset = 6 * (page-1)
+        offset = 6 * (page - 1)
     else:
         offset = 0
     magazines = magazines.limit(6).offset(offset).all()

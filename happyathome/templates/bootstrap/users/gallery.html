@@ -1,4 +1,4 @@
-{% extends 'bootstrap/users/content.html' %}
+{% extends 'bootstrap/users/menu.html' %}
 {% block content_body %}
 
 <div class="users-intro-projects">
@@ -19,6 +19,6 @@
 
 </script>
 {% if pagination %}
-{{ func.render_pagination('professionals.detail_list', pagination, post.id) }}
+{{ func.render_pagination('users.gallery', pagination, post.id) }}
 {% endif %}
 {% endblock %}
