@@ -70,7 +70,7 @@
 
     $(".follow-avatar").click(function() {
         if($(this).attr('name') == 2){
-            document.location.href = "{{ url_for('professionals.professional_info', id='') }}" + $(this).attr('id');
+            document.location.href = "{{ url_for('professionals.detail', id='') }}" + $(this).attr('id');
         }else{
             document.location.href = "/user/" + $(this).attr('id') + "/gallery";
         }

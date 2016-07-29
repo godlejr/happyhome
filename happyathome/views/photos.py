@@ -56,7 +56,7 @@ def detail(id):
     if post.magazine_id:
         magazine_photos = db.session.query(Photo).filter(Photo.magazine_id == post.magazine_id).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/professional_info.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/detail.html',
                            post=post,
                            user_photos=user_photos,
                            magazine_photos=magazine_photos,

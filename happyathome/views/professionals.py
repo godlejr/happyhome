@@ -21,13 +21,13 @@ def list(page):
 
 
 @professionals.route('/<id>')
-def professional_info(id):
+def detail(id):
     post = db.session.query(User).filter_by(id=id).first()
     professional = db.session.query(Professional).filter(Professional.user_id == post.id).first()
     magazines = db.session.query(Magazine).filter(Magazine.user_id == post.id).order_by(Magazine.id.desc()).limit(
         4).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/professional_info.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/detail.html', post=post,
                            professional=professional,
                            current_app=current_app, magazines=magazines)
 
