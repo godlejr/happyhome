@@ -19,6 +19,7 @@ var Carousel = (function() {
                 content_like = document.createElement("div"),
                 content_scrap = document.createElement("div"),
                 content_share = document.createElement("div");
+
             like_icon.classList.add('like-icon');
             if (options.is_like) {
                 like_icon.classList.add('active');
@@ -50,8 +51,21 @@ var Carousel = (function() {
             var sphere = new THREE.SphereGeometry(500, 60, 40);
             sphere.applyMatrix(new THREE.Matrix4().makeScale(-1, 1, 1));
 
+            var loader = new THREE.TextureLoader();
+            loader.crossOrigin = '';
+
             var sphereMaterial = new THREE.MeshBasicMaterial();
-            sphereMaterial.map = new THREE.TextureLoader().load(options.panorama);
+            sphereMaterial.map = loader.load(
+                options.panorama,
+                function (texture) {
+                },
+                function (xhr) {
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                function (xhr) {
+                    console.log('An error happened');
+                }
+            );
 
             this.scene = new THREE.Scene();
             this.scene.add(new THREE.Mesh(sphere, sphereMaterial));
@@ -64,6 +78,7 @@ var Carousel = (function() {
 
             this.photoWrap.appendChild(this.renderer.domElement);
             this.photoWrap.addEventListener("mouseup", this.onPhotoMouseUp.bind(this), false);
+
             this.photoWrap.addEventListener("mousedown", this.onPhotoMouseDown.bind(this), false);
             this.photoWrap.addEventListener("mousemove", this.onPhotoMouseMove.bind(this), false);
             this.photoWrap.addEventListener("mousewheel", this.onPhotoMouseWheel.bind(this), false);
