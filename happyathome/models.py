@@ -161,6 +161,12 @@ class Comment(db.Model, BaseMixin):
     def is_deleted(self):
         return self.deleted
 
+    @hybrid_property
+    def reply_count(self):
+        if self.depth == 0:
+            return db.session.query(Comment).filter(Comment.group_id == self.group_id).filter(Comment.depth != 0).count()
+        return 0
+
 
 class Photo(db.Model, BaseMixin):
     """사진 정보"""

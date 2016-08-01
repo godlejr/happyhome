@@ -134,33 +134,28 @@
                         {% if post.comments %}
                         <div class="comment-list">
                             <ul>
-                                {% for magazine_comment in post.comments %}
-                                    {% if not magazine_comment.comment.deleted %}
+                                {% for comment in comments %}
                                     <li class="comment-box">
-                                        <div class="comment-info" id="{{ magazine_comment.comment.id }}" >
-                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ magazine_comment.comment.user_id }}.png)"></span>
-                                            <span class="comment-user">{{ magazine_comment.comment.user.name }}</span>
-                                            <span class="comment-date">{{ magazine_comment.comment.created_date }}</span>
+                                        <div class="comment-info" id="{{ comment.id }}" >
+                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ comment.user_id }}.png)"></span>
+                                            <span class="comment-user">{{ comment.user.name }} {{ comment.reply_count }}</span>
+                                            <span class="comment-date">{{ comment.created_date }}</span>
                                             {% if session.user_id %}
-                                                {% if post.user.id == session.user_id and magazine_comment.comment.user.id != session.user_id %}
-                                                    {% if not post.is_reply( magazine_comment.comment.id ) %}
+                                                {% if post.user.id == session.user_id and comment.user_id != session.user_id %}
                                                     <span class="comment-reply">답글</span>
-                                                    {% else %}
                                                     <span class="comment-reply-finish">답변완료</span>
-                                                    {% endif %}
                                                     <span class="comment-finish" hidden="hidden" >완료</span>
                                                     <span class="comment-remove">삭제</span>
                                                 {% endif %}
-                                                {% if magazine_comment.comment.user.id == session.user_id %}
+                                                {% if comment.user.id == session.user_id %}
                                                     <span class="comment-edit">수정</span>
                                                     <span class="comment-finish" hidden="hidden" >완료</span>
                                                     <span class="comment-remove">삭제</span>
                                                 {% endif %}
                                             {% endif %}
                                         </div>
-                                        <div class="comment-content" >{{ magazine_comment.comment.content }}</div>
+                                        <div class="comment-content" >{{ comment.content }}</div>
                                     </li>
-                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>

@@ -50,7 +50,9 @@ def detail(id):
     post = db.session.query(Magazine).filter_by(id=id).first()
     post.hits += 1
     db.session.commit()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post)
+
+    comments = Comment.query.filter(Comment.magazines.any(magazine_id=id)).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post, comments=comments)
 
 
 @magazines.route('/new', methods=['GET', 'POST'])
