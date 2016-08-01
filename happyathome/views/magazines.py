@@ -5,7 +5,7 @@ import shortuuid
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app, session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room
+from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room, User
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
@@ -51,7 +51,7 @@ def detail(id):
     post.hits += 1
     db.session.commit()
 
-    comments = Comment.query.filter(Comment.magazines.any(magazine_id=id)).all()
+    comments = Comment.query.filter(Comment.magazines.any(magazine_id=id)).order_by(Comment.group_id.desc()).order_by(Comment.depth.asc()).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post, comments=comments)
 
 
@@ -123,6 +123,34 @@ def comment_new(id):
         db.session.add(magazine_comment)
         db.session.commit()
     return redirect(url_for('magazines.detail', id=id))
+
+
+@magazines.route('/comment_reply', methods=['POST'])
+def comment_reply():
+    if request.method == 'POST':
+
+        comment = Comment(session['user_id'], request.form.get('group_id'), request.form.get('content'))
+        comment.depth = 1
+        db.session.add(comment)
+        db.session.commit()
+
+        magazine_comment = MagazineComment()
+        magazine_comment.magazine_id = request.form.get('magazine_id')
+        magazine_comment.comment_id = comment.id
+
+        db.session.add(magazine_comment)
+        db.session.commit()
+
+        user = db.session.query(User).filter(User.id == session['user_id']).first();
+
+        return jsonify({
+            'comment_id':comment.id,
+            'user_id':session['user_id'],
+            'user_name':user.name,
+            'created_date':comment.created_date,
+            'comment': comment.content
+        })
+
 
 
 @magazines.route('/comment_edit', methods=['POST'])
