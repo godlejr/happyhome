@@ -116,9 +116,16 @@ def new():
 @login_required
 def comment_new(id):
     if request.method == 'POST':
+        comment = Comment()
+        comment.user_id = session['user_id']
+        comment.group_id = comment.max1_group_id
+        comment.content = request.form['comment']
+        db.session.add(comment)
+        db.session.commit()
+
         magazine_comment = MagazineComment()
         magazine_comment.magazine_id = id
-        magazine_comment.comment = Comment(session['user_id'], request.form['comment'])
+        magazine_comment.comment_id = comment.id
 
         db.session.add(magazine_comment)
         db.session.commit()
@@ -128,8 +135,10 @@ def comment_new(id):
 @magazines.route('/comment_reply', methods=['POST'])
 def comment_reply():
     if request.method == 'POST':
-
-        comment = Comment(session['user_id'], request.form.get('group_id'), request.form.get('content'))
+        comment = Comment()
+        comment.user_id = session['user_id']
+        comment.group_id = request.form.get('group_id')
+        comment.content = request.form.get('content')
         comment.depth = 1
         db.session.add(comment)
         db.session.commit()
