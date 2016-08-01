@@ -139,9 +139,9 @@ class Comment(db.Model, BaseMixin):
     __tablename__ = 'comments'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    content = db.Column(db.Text, nullable=False)
-    comment_id = db.Column(db.Integer)
-    is_reply = db.Column(db.Integer)
+    group_id = db.Column(db.Integer)
+    depth = db.Column(db.Integer)
+    sort = db.Column(db.Integer)
     deleted = db.Column(db.Boolean)
 
     user = db.relationship('User', backref=backref('user_comments'))
