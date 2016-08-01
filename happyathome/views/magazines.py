@@ -2,10 +2,11 @@ import os
 import boto3
 import html2text
 import shortuuid
-from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app
+from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app, session
 from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room
+from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
@@ -115,7 +116,8 @@ def new():
 def comment_new(id):
     if request.method == 'POST':
         comment = Comment()
-        comment.user_id = '1'
+        comment.comment_id = db.session.query(func.max(Comment.comment_id)) + 1
+        comment.user_id = session['user_id']
         comment.content = request.form['comment']
 
         magazine_comment = MagazineComment()
@@ -125,3 +127,31 @@ def comment_new(id):
         db.session.add(magazine_comment)
         db.session.commit()
     return redirect(url_for('magazines.detail', id=id))
+
+
+@magazines.route('/comment_edit', methods=['POST'])
+def comment_edit():
+    if request.method == 'POST':
+        comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
+        comment.content = request.form.get('content')
+
+        db.session.add(comment)
+        db.session.commit()
+
+        return jsonify({
+            'comment': comment.content
+        })
+
+
+@magazines.route('/comment_remove', methods=['POST'])
+def comment_remove():
+    if request.method == 'POST':
+        comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
+        comment.deleted = True
+
+        db.session.add(comment)
+        db.session.commit()
+
+        return jsonify({
+            'ok': 1
+        })
