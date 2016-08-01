@@ -542,6 +542,24 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     border: 0;
     background-color: #eaebee;
 }
+
+.comment-reply-text {
+    width: calc(100% - 60px);
+    height: 55px;
+    border: 0;
+    background-color: #eaebee;
+}
+
+.comment-edit-text {
+    padding: 2px 0 10px 0;
+    margin: 0 0 15px 32px;
+    border: 0;
+    background-color: #eaebee;
+}
+
+
+
+
 .content-comment .btn-comment {
     width: 55px;
     height: 55px;
@@ -575,10 +593,51 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin-left: 10px;
     font-size: 12px;
 }
+
+.content-comment .comment-reply {
+    margin-left: 2px;
+    font-size: 12px;
+    cursor:pointer;
+}
+.content-comment .comment-reply-finish {
+    margin-left: 2px;
+    font-size: 12px;
+}
+
+.content-comment .comment-edit {
+    margin-left: 2px;
+    font-size: 12px;
+    cursor:pointer;
+}
+
+.content-comment .comment-remove {
+    margin-left: 2px;
+    font-size: 12px;
+    cursor:pointer;
+}
+
+.comment-finish {
+    margin-left: 2px;
+    font-size: 12px;
+    cursor:pointer;
+}
+
+.comment-cancel {
+    margin-left: 2px;
+    font-size: 12px;
+    cursor:pointer;
+}
+
+
 .content-comment .comment-content {
     padding: 2px 0 10px 0;
     margin: 0 0 15px 32px;
     border-bottom: 1px solid #eaebee;
+}
+
+.comment-reply-content{
+    padding: 2px 0 10px 0;
+    margin: 0 0 0 32px;
 }
 
 

@@ -141,10 +141,16 @@ class Comment(db.Model, BaseMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     content = db.Column(db.Text, nullable=False)
     comment_id = db.Column(db.Integer)
+    is_reply = db.Column(db.Integer)
+    deleted = db.Column(db.Boolean)
 
     user = db.relationship('User', backref=backref('user_comments'))
     photos = db.relationship('PhotoComment', back_populates='comment')
     magazines = db.relationship('MagazineComment', back_populates='comment')
+
+    @hybrid_property
+    def is_deleted(self):
+        return self.deleted
 
 
 class Photo(db.Model, BaseMixin):
@@ -221,6 +227,10 @@ class Magazine(db.Model, BaseMixin):
     residence = db.relationship('Residence', backref=backref('residence_magazines'))
     photos = db.relationship('Photo', back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
+
+    @hybridmethod
+    def is_reply(self, comment_id):
+        return db.session.query(Comment).filter(Comment.comment_id == comment_id).filter(Comment.deleted == False).first()
 
     @hybrid_property
     def vr_count(self):

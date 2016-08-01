@@ -135,14 +135,46 @@
                         <div class="comment-list">
                             <ul>
                                 {% for magazine_comment in post.comments %}
-                                    <li>
-                                        <div class="comment-info">
+                                    {% if not magazine_comment.comment.deleted %}
+                                    <li class="comment-box">
+                                        <div class="comment-info" id="{{ magazine_comment.comment.id }}" >
                                             <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ magazine_comment.comment.user_id }}.png)"></span>
                                             <span class="comment-user">{{ magazine_comment.comment.user.name }}</span>
                                             <span class="comment-date">{{ magazine_comment.comment.created_date }}</span>
+                                            {% if session.user_id %}
+                                                {% if post.user.id == session.user_id and magazine_comment.comment.user.id != session.user_id %}
+                                                    {% if not post.is_reply( magazine_comment.comment.id ) %}
+                                                    <span class="comment-reply">답글</span>
+                                                    {% else %}
+                                                    <span class="comment-reply-finish">답변완료</span>
+                                                    {% endif %}
+                                                    <span class="comment-finish" hidden="hidden" >완료</span>
+                                                    <span class="comment-remove">삭제</span>
+                                                {% endif %}
+                                                {% if magazine_comment.comment.user.id == session.user_id %}
+                                                    <span class="comment-edit">수정</span>
+                                                    <span class="comment-finish" hidden="hidden" >완료</span>
+                                                    <span class="comment-remove">삭제</span>
+                                                {% endif %}
+                                            {% endif %}
                                         </div>
-                                        <div class="comment-content">{{ magazine_comment.comment.content }}</div>
+                                        <div class="comment-content" >{{ magazine_comment.comment.content }}</div>
+
+                                        {% if post.is_reply( magazine_comment.comment.id ) %}
+                                            <div class="comment-reply-content">
+                                                <div class="comment-info" id="{{ post.is_reply( magazine_comment.comment.id ).id }}" >
+                                                    <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ post.is_reply( magazine_comment.comment.id ).user_id }}.png)"></span>
+                                                    <span class="comment-user">{{ post.is_reply( magazine_comment.comment.id ).user.name }}님의 답변</span>
+                                                    <span class="comment-date">{{ post.is_reply( magazine_comment.comment.id ).created_date }}</span>
+                                                    <span class="comment-edit">수정</span>
+                                                    <span class="comment-finish" hidden="hidden" >완료</span>
+                                                    <span class="comment-remove">삭제</span>
+                                                </div>
+                                                <div class="comment-content" >{{ post.is_reply( magazine_comment.comment.id ).content }}</div>
+                                            </div>
+                                        {% endif %}
                                     </li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
@@ -156,8 +188,54 @@
     </div>
 </div>
 
-
 <script>
+$('.comment-reply').click(function(){
+    var self = this;
+    var id = $(this).parent().attr('id');
+});
+
+$('.comment-remove').click(function(){
+    var self = this;
+    var id = $(self).parent().attr('id');
+    $.ajax({
+        type:"POST",
+        url:"{{ url_for('magazines.comment_remove') }}",
+        data:{
+            comment_id: id
+        }
+    }).success(function(data){
+        $(self).parent().parent().remove();
+    });
+});
+
+$('.comment-edit').click(function(){
+    var id = $(this).parent().attr('id');
+    var comment = $(document.getElementById(id)).next()
+    var value =  comment.text();
+
+    comment.replaceWith('<textarea class="comment-edit-text">'+ value + '</textarea>');
+    $(this).hide();
+    $(this).next('.comment-finish').show();
+});
+
+$('.comment-finish').click(function(){
+    var self = this;
+    var id = $(self).parent().attr('id');
+    var comment = $(document.getElementById(id)).next()
+    $.ajax({
+        type:"POST",
+        url: "{{ url_for('magazines.comment_edit') }}",
+        data:{
+            comment_id: id
+            ,content: comment.val()
+            }
+    }).success(function(data){
+            $(self).hide();
+            $(self).prev('.comment-edit').show();
+            comment.replaceWith('<div class="comment-content">' + data.comment + '</div>');
+    });
+});
+
 $('.content-like').click(function(event) {
     {% if session.user_id %}
         var icon = $(this).find('.like-icon');
