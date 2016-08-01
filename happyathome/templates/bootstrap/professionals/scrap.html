@@ -3,7 +3,7 @@
 {% block content_body %}
 <div class="content-body">
     <div class="user-contents">
-        <div class="user-title">갤러리 스크랩({{photoscrap_count}})</div>
+        <div class="user-title">갤러리 스크랩({{ photoscrap_count }})</div>
         <div class="cards">
             {% for photoscrap in photoscraps %}
                 <div class="card" id="{{ photoscrap.photo_id }}"

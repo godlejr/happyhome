@@ -17,7 +17,7 @@
                 <a href="{{ url_for('professionals.story', id=user.id) }}"><div class="menu-item">스토리</div></a>
                 <a href="{{ url_for('professionals.gallery', id=user.id) }}"><div class="menu-item">갤러리</div></a>
                 <a href="{{ url_for('professionals.scrap', id=user.id) }}"><div class="menu-item">스크랩</div></a>
-                <div class="menu-item">Q&A</div>
+                <a href="{{ url_for('professionals.question', id=user.id) }}"><div class="menu-item">Q&amp;A</div></a>
             </div>
         </div>
     </div>

@@ -164,7 +164,7 @@ class Comment(db.Model, BaseMixin):
     @hybrid_property
     def reply_count(self):
         if self.depth == 0:
-            return db.session.query(Comment).filter(Comment.group_id == self.group_id).filter(Comment.depth != 0).count()
+            return Comment.query.filter(Comment.group_id == self.group_id).filter(Comment.depth != 0).count()
         return 0
 
 

@@ -1,14 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
 from flask import session
 from happyathome.forms import Pagination
-from happyathome.models import db, User, Professional, Magazine, Category, Residence, Photo, PhotoScrap
+from happyathome.models import db, User, Professional, Magazine, Category, Residence, Photo, PhotoScrap, Comment
 
 professionals = Blueprint('professionals', __name__)
 
 
 @professionals.context_processor
 def utility_processor():
-    def url_for_s3(s3path, filename):
+    def url_for_s3(s3path, filename=''):
         return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
     return dict(url_for_s3=url_for_s3)
 
@@ -89,90 +89,13 @@ def gallery(id, page):
 
 @professionals.route('/<id>/question')
 def question(id):
-    post = db.session.query(User).filter(User.id == id).first()
-    photo_comments = db.session.execute('''
-        SELECT  pt.id      AS  id
-        ,       pt.content AS	photo_name
-        ,       c1.content	AS	question
-        ,       c2.content	AS	answer
-        ,       fi.name AS file_name
-        FROM    comments	c1
-        ,       comments	c2
-        ,       users		us
-        ,       files		fi
-        ,       photos		pt
-        ,       photo_comments	pc
-        WHERE   c1.id	=	c2.comment_id
-        AND     c1.id	=	pc.comment_id
-        AND     pt.id	=	pc.photo_id
-        AND     fi.id	=	pt.file_id
-        AND     us.id	=	pt.user_id
-        AND     us.id	=	%s limit 2
-    ''' % id)
-
-    photo_comments_count = db.session.execute('''
-        SELECT  count(*)   AS  count
-        FROM    comments	c1
-        ,       comments	c2
-        ,       users		us
-        ,       files		fi
-        ,       photos		pt
-        ,       photo_comments	pc
-        WHERE   c1.id	=	c2.comment_id
-        AND     c1.id	=	pc.comment_id
-        AND     pt.id	=	pc.photo_id
-        AND     fi.id	=	pt.file_id
-        AND     us.id	=	pt.user_id
-        AND     us.id	=	%s
-    ''' % id)
-
-    magazine_comments = db.session.execute('''
-        SELECT      mz.id      AS id
-            ,       mz.title	AS	photo_name
-            ,       c1.content	AS	question
-            ,       c2.content	AS	answer
-            ,       fi.name 	AS 	file_name
-            FROM    comments	c1
-            ,       comments	c2
-            ,       users		us
-            ,       files		fi
-            ,       photos		pt
-            ,		magazines 	mz
-            ,       magazine_comments	mc
-            WHERE   c1.id	=	c2.comment_id
-            AND     c1.id	=	mc.comment_id
-            AND     mz.id	=	mc.magazine_id
-            AND     fi.id	=	pt.file_id
-            AND 	mz.id	=	pt.magazine_id
-            AND     us.id	=	mz.user_id
-            AND     us.id	=	%s  limit 2
-        ''' % id)
-
-    magazine_comments_count = db.session.execute('''
-        SELECT      count(*)    AS  count
-            FROM    comments	c1
-            ,       comments	c2
-            ,       users		us
-            ,       files		fi
-            ,       photos		pt
-            ,		magazines 	mz
-            ,       magazine_comments	mc
-            WHERE   c1.id	=	c2.comment_id
-            AND     c1.id	=	mc.comment_id
-            AND     mz.id	=	mc.magazine_id
-            AND     fi.id	=	pt.file_id
-            AND 	mz.id	=	pt.magazine_id
-            AND     us.id	=	mz.user_id
-            AND     us.id	=	%s
-        ''' % id)
-
+    user = db.session.query(User).filter_by(id=id).first()
+    story_qna = Comment.query.filter(Comment.user_id == id).filter(Comment.magazines.any(comment_id=Comment.id)).all()
+    gallery_qna = Comment.query.filter(Comment.user_id == id).filter(Comment.photos.any(comment_id=Comment.id)).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/question.html',
-                           post=post,
-                           photo_comments=photo_comments,
-                           photo_comments_count=photo_comments_count,
-                           magazine_comments=magazine_comments,
-                           magazine_comments_count=magazine_comments_count,
-                           current_app=current_app)
+                           user=user,
+                           story_qna=story_qna,
+                           gallery_qna=gallery_qna)
 
 
 @professionals.route('/<id>/scrap')
