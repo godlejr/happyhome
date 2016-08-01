@@ -150,12 +150,10 @@ class Comment(db.Model, BaseMixin):
     photos = db.relationship('PhotoComment', back_populates='comment')
     magazines = db.relationship('MagazineComment', back_populates='comment')
 
-    def __init__(self, user_id, content):
+    @hybrid_property
+    def max1_group_id(self):
         group_id = db.session.query(func.max(self.group_id)).one()[0]
-
-        self.user_id = user_id
-        self.content = content
-        self.group_id = (group_id + 1) if group_id else 1
+        return (group_id + 1) if group_id else 1
 
     @hybrid_property
     def is_deleted(self):
@@ -287,3 +285,22 @@ class Professional(db.Model, BaseMixin):
     greeting = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_professionals'))
+
+
+class Board(db.Model, BaseMixin):
+    """댓글 내역"""
+    __tablename__ = 'boards'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    board_id = db.Column(db.Integer)
+    group_id = db.Column(db.Integer)
+    depth = db.Column(db.Integer, default=0)
+    sort = db.Column(db.Integer, default=0)
+    deleted = db.Column(db.Boolean, default=0)
+    content = db.Column(db.Text)
+
+    user = db.relationship('User', backref=backref('user_boards'))
+
+    @hybrid_property
+    def is_deleted(self):
+        return self.deleted
