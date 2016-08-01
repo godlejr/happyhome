@@ -3,33 +3,33 @@
 {% block content_body %}
 <div class="content">
     <div class="cards">
-    {% for card in cards %}
-        <div class="card" id="{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
-            {% if card.file.type == 2  %}
-                <div class="card-media"><span class="vr-icon"></span></div>
-            {% endif %}
-            {% if card.file.type == 3  %}
-                <div class="card-media"><span class="mov-icon"></span></div>
-            {% endif %}
-            <div class="card-info">
-                <div class="card-author">
-                    <div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.user_id }}.png)"></div>
-                    <div class="card-user">{{ card.user.name }}</div>
-                    <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
-                </div>
-                <div class="card-content">
-                    <div class="card-text">{{ card.content[:70] }}</div>
-                    <div class="card-icon">
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_photos|length }}</div>
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_photos|length }}</div>
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ card.comments|length }}</div>
+        {% for card in cards %}
+            <div class="card" id="{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
+                {% if card.file.type == 2  %}
+                    <div class="card-media"><span class="vr-icon"></span></div>
+                {% endif %}
+                {% if card.file.type == 3  %}
+                    <div class="card-media"><span class="mov-icon"></span></div>
+                {% endif %}
+                <div class="card-info">
+                    <div class="card-author">
+                        <div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.user_id }}.png)"></div>
+                        <div class="card-user">{{ card.user.name }}</div>
+                        <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ card.content[:70] }}</div>
+                        <div class="card-icon">
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_photos|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_photos|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ card.comments|length }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
     </div>
-    {{ func.render_pagination('photos.list', pagination) }}
+    <div class="pagination-nav">{{ func.render_pagination('photos.list', pagination) }}</div>
 </div>
 
 <script>

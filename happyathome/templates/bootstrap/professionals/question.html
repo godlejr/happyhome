@@ -19,14 +19,14 @@
         </div>
         <div class="content-list">
             <div class="user-title">스토리 Q&A ({{ 0 }})</div>
-            {% for qna in story_qna %}
+            {% for story in story_qna %}
                 <div class="qna-list">
-                    <div class="qna-image" style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=qna.magazines[0].magazine.photos[0].file.name) }})"></div>
-                    <div class="qna-title"><a href="{{ url_for('magazines.detail', id=qna.magazines[0].magazine.id) }}">{{ qna.magazines[0].magazine.title }}</a></div>
+                    <div class="qna-image" style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=story.photos[0].file.name) }})"></div>
+                    <div class="qna-title"><a href="{{ url_for('magazines.detail', id=story.id) }}">{{ story.title }}</a></div>
                     <div class="qna-content-body">
-                        <div class="qna-content"><span class="q-green-icon"></span> {{ qna.content }}</div>
+                        <div class="qna-content"><span class="q-green-icon"></span> {{ story.comments[0].content }}</div>
                         <div class="qna-hr"></div>
-                        <div class="qna-content"><span class="a-black-icon"></span> {{ qna.content }}</div>
+                        <div class="qna-content"><span class="a-black-icon"></span> {{ story.comments[0].content }}</div>
                     </div>
                 </div>
             {% endfor %}
@@ -35,8 +35,7 @@
             <div class="user-title">해피 Q&A ({{ 0 }})</div>
             {% for qna in happy_qna %}
                 <div class="qna-list">
-                    <div class="qna-image" style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=qna.photos[0].photo.file_name) }})">
-                    </div>
+                    <div class="qna-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=qna.photos[0].photo.file_name) }})"></div>
                     <div class="qna-content-body">
                         <div class="qna-content"><span class="q-green-icon"></span> {{ qna.content }}</div>
                         <div class="qna-hr"></div>
@@ -49,8 +48,7 @@
             <div class="user-title">프로 Q&A ({{ 0 }})</div>
             {% for qna in pro_qna %}
                 <div class="qna-list">
-                    <div class="qna-image" style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=qna.photos[0].photo.file_name) }})">
-                    </div>
+                    <div class="qna-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=qna.photos[0].photo.file_name) }})"></div>
                     <div class="qna-content-body">
                         <div class="qna-content"><span class="q-green-icon"></span> {{ qna.content }}</div>
                         <div class="qna-hr"></div>

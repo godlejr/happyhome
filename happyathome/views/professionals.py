@@ -90,7 +90,7 @@ def gallery(id, page):
 @professionals.route('/<id>/question')
 def question(id):
     user = db.session.query(User).filter_by(id=id).first()
-    story_qna = Comment.query.filter(Comment.user_id == id).filter(Comment.magazines.any(comment_id=Comment.id)).all()
+    story_qna = Magazine.query.filter(Magazine.comments.any(Comment.user_id == id)).all()
     gallery_qna = Comment.query.filter(Comment.user_id == id).filter(Comment.photos.any(comment_id=Comment.id)).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/question.html',
                            user=user,
