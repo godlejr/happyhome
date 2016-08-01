@@ -159,20 +159,6 @@
                                             {% endif %}
                                         </div>
                                         <div class="comment-content" >{{ magazine_comment.comment.content }}</div>
-
-                                        {% if post.is_reply( magazine_comment.comment.id ) %}
-                                            <div class="comment-reply-content">
-                                                <div class="comment-info" id="{{ post.is_reply( magazine_comment.comment.id ).id }}" >
-                                                    <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ post.is_reply( magazine_comment.comment.id ).user_id }}.png)"></span>
-                                                    <span class="comment-user">{{ post.is_reply( magazine_comment.comment.id ).user.name }}님의 답변</span>
-                                                    <span class="comment-date">{{ post.is_reply( magazine_comment.comment.id ).created_date }}</span>
-                                                    <span class="comment-edit">수정</span>
-                                                    <span class="comment-finish" hidden="hidden" >완료</span>
-                                                    <span class="comment-remove">삭제</span>
-                                                </div>
-                                                <div class="comment-content" >{{ post.is_reply( magazine_comment.comment.id ).content }}</div>
-                                            </div>
-                                        {% endif %}
                                     </li>
                                     {% endif %}
                                 {% endfor %}

@@ -141,20 +141,20 @@ class Comment(db.Model, BaseMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     group_id = db.Column(db.Integer)
-    depth = db.Column(db.Integer)
-    sort = db.Column(db.Integer)
-    deleted = db.Column(db.Boolean)
+    depth = db.Column(db.Integer, default=0)
+    sort = db.Column(db.Integer, default=0)
+    deleted = db.Column(db.Boolean, default=0)
     content = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_comments'))
     photos = db.relationship('PhotoComment', back_populates='comment')
     magazines = db.relationship('MagazineComment', back_populates='comment')
 
-    def __init__(self, user_id, comment):
-        group_id = db.session.query(func.max(self.group_id))
+    def __init__(self, user_id, content):
+        group_id = db.session.query(func.max(self.group_id)).one()[0]
 
         self.user_id = user_id
-        self.comment = comment
+        self.content = content
         self.group_id = (group_id + 1) if group_id else 1
 
     @hybrid_property
@@ -236,10 +236,6 @@ class Magazine(db.Model, BaseMixin):
     residence = db.relationship('Residence', backref=backref('residence_magazines'))
     photos = db.relationship('Photo', back_populates='magazine')
     comments = db.relationship('MagazineComment', back_populates='magazine')
-
-    @hybridmethod
-    def is_reply(self, comment_id):
-        return db.session.query(Comment).filter(Comment.comment_id == comment_id).filter(Comment.deleted == False).first()
 
     @hybrid_property
     def vr_count(self):
