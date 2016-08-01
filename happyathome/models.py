@@ -143,6 +143,7 @@ class Comment(db.Model, BaseMixin):
     depth = db.Column(db.Integer)
     sort = db.Column(db.Integer)
     deleted = db.Column(db.Boolean)
+    content = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_comments'))
     photos = db.relationship('PhotoComment', back_populates='comment')

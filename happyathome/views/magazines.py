@@ -115,8 +115,9 @@ def new():
 @login_required
 def comment_new(id):
     if request.method == 'POST':
+        max_id = db.session.query(func.max(Comment.comment_id))
         comment = Comment()
-        comment.comment_id = db.session.query(func.max(Comment.comment_id)) + 1
+        comment.group_id = (max_id if max_id else 0) + 1
         comment.user_id = session['user_id']
         comment.content = request.form['comment']
 
