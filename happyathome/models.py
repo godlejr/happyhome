@@ -62,7 +62,7 @@ class User(db.Model, BaseMixin):
     avatar = db.Column(db.Unicode(255))
 
     follow = db.relationship('Follow', back_populates='user')
-    professional = db.relationship('Professional',backref=backref('professional_users'))
+    professional = db.relationship('Professional', backref=backref('professional_users'))
 
     @hybridmethod
     def follow_check(self, session_id, follow_id):
@@ -150,10 +150,12 @@ class Comment(db.Model, BaseMixin):
     photos = db.relationship('PhotoComment', back_populates='comment')
     magazines = db.relationship('MagazineComment', back_populates='comment')
 
+
     @hybrid_property
     def max1_group_id(self):
         group_id = db.session.query(func.max(self.group_id)).one()[0]
         return (group_id + 1) if group_id else 1
+
 
     @hybrid_property
     def is_deleted(self):
@@ -162,8 +164,14 @@ class Comment(db.Model, BaseMixin):
     @hybrid_property
     def reply_count(self):
         if self.depth == 0:
-            return Comment.query.filter(Comment.group_id == self.group_id).filter(Comment.depth != 0).count()
+            return db.session.query(Comment).filter(Comment.group_id == self.group_id).filter(
+                Comment.depth != 0).filter(Comment.deleted != 1).count()
         return 0
+
+
+    @hybrid_property
+    def getId(self):
+        return self.id
 
 
 class Photo(db.Model, BaseMixin):

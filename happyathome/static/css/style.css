@@ -622,6 +622,13 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     cursor:pointer;
 }
 
+.comment-finish-reply {
+    margin-left: 2px;
+    font-size: 12px;
+    cursor:pointer;
+}
+
+
 .comment-cancel {
     margin-left: 2px;
     font-size: 12px;
