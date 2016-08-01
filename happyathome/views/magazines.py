@@ -6,7 +6,6 @@ from flask import Blueprint, render_template, request, redirect, jsonify, url_fo
 from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room
-from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
@@ -115,15 +114,9 @@ def new():
 @login_required
 def comment_new(id):
     if request.method == 'POST':
-        max_id = db.session.query(func.max(Comment.comment_id))
-        comment = Comment()
-        comment.group_id = (max_id if max_id else 0) + 1
-        comment.user_id = session['user_id']
-        comment.content = request.form['comment']
-
         magazine_comment = MagazineComment()
         magazine_comment.magazine_id = id
-        magazine_comment.comment = comment
+        magazine_comment.comment = Comment(session['user_id'], request.form['comment'])
 
         db.session.add(magazine_comment)
         db.session.commit()

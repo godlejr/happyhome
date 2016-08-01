@@ -150,14 +150,16 @@ class Comment(db.Model, BaseMixin):
     photos = db.relationship('PhotoComment', back_populates='comment')
     magazines = db.relationship('MagazineComment', back_populates='comment')
 
+    def __init__(self, user_id, comment):
+        group_id = db.session.query(func.max(self.group_id))
+
+        self.user_id = user_id
+        self.comment = comment
+        self.group_id = (group_id + 1) if group_id else 1
+
     @hybrid_property
     def is_deleted(self):
         return self.deleted
-
-    @hybrid_property
-    def max_group_id(self):
-        group_id = db.session.query(func.max(self.group_id))
-        return group_id if group_id else 0
 
 
 class Photo(db.Model, BaseMixin):
