@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
-from flask_login import login_user
 from happyathome.forms import JoinForm, LoginForm
 from happyathome.models import db, User, Magazine, Category, Residence, Professional, Photo
 from sqlalchemy.dialects.postgresql import json
@@ -29,10 +28,8 @@ def login():
                     session['user_email'] = user.email
                     session['user_level'] = user.level
                     return redirect(request.args.get('next', url_for('main.index')))
-
             else:
                 flash('there is no your ID')
-
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/login.html', form=form)
 
 
@@ -66,7 +63,6 @@ def join():
                 user.level = 1
                 db.session.add(user)
                 db.session.commit()
-
 
             flash('가입을 축하합니다.')
             return redirect(url_for('main.login'))

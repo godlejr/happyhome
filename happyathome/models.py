@@ -1,6 +1,7 @@
 import sys
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
+from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import backref
 from sqlalchemy.util import hybridmethod
@@ -131,7 +132,7 @@ class File(db.Model, BaseMixin):
     size = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return Markup('<img src="http://static.inotone.co.kr/data/img/%s" / width="100" height="100">') % self.name
+        return Markup('<img src="http://static.inotone.co.kr/data/img/%s" width="100" height="100">') % self.name
 
 
 class Comment(db.Model, BaseMixin):
@@ -143,6 +144,7 @@ class Comment(db.Model, BaseMixin):
     depth = db.Column(db.Integer)
     sort = db.Column(db.Integer)
     deleted = db.Column(db.Boolean)
+    content = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_comments'))
     photos = db.relationship('PhotoComment', back_populates='comment')
@@ -151,6 +153,11 @@ class Comment(db.Model, BaseMixin):
     @hybrid_property
     def is_deleted(self):
         return self.deleted
+
+    @hybrid_property
+    def max_group_id(self):
+        group_id = db.session.query(func.max(self.group_id))
+        return group_id if group_id else 0
 
 
 class Photo(db.Model, BaseMixin):

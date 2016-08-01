@@ -7,6 +7,7 @@ from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
+from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
 photos = Blueprint('photos', __name__)
@@ -125,7 +126,10 @@ def new():
 @login_required
 def comment_new(id):
     if request.method == 'POST':
+        group_id = db.session.query(func.max(Comment.group_id))
+
         comment = Comment()
+        comment.group_id = group_id
         comment.user_id = session['user_id']
         comment.content = request.form['comment']
 
