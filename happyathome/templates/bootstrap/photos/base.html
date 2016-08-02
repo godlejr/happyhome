@@ -36,17 +36,17 @@
         <div id="authorMenu" class="f_menu" for="author">
             <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
             <div class="box2">
-                <div class="h1">전체</div>
-                <div class="h2">프로</div>
-                <div class="h2">일반</div>
-                <div class="h2">에디터</div>
+                <div class="h1"><a href="{{ url_for('photos.list') }}">전체</a></div>
+                <div class="h2"><a href="{{ url_for('photos.list', level=2) }}">프로</a></div>
+                <div class="h2"><a href="{{ url_for('photos.list', level=1) }}">일반</a></div>
+                <div class="h2"><a href="{{ url_for('photos.list', level=9) }}">에디터</a></div>
             </div>
         </div>
         <div id="mediaMenu" class="f_menu" for="media">
             <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
             <div class="box2">
                 <div class="h1"><a href="{{ url_for('photos.list') }}">전체</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', media=1, query_string=query_string) }}">사진</a></div>
+                <div class="h2"><a href="{{ url_for('photos.list', media=1) }}">사진</a></div>
                 <div class="h2"><a href="{{ url_for('photos.list', media=2) }}">VR360</a></div>
                 <div class="h2"><a href="{{ url_for('photos.list', media=3) }}">동영상</a></div>
             </div>

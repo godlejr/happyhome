@@ -17,12 +17,15 @@ photos = Blueprint('photos', __name__)
 @photos.route('/page/<int:page>')
 def list(page):
     media = request.args.get('media', '')
+    level = request.args.get('level', '')
     room_id = request.args.get('room_id', '')
     rooms = db.session.query(Room).all()
     cards = db.session.query(Photo)
 
     if media:
         cards = cards.filter(Photo.file.has(type=media))
+    if level:
+        cards = cards.filter(Photo.user.has(level=level))
     if room_id:
         cards = cards.filter(Photo.room_id == room_id)
 

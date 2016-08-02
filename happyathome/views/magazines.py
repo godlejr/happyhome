@@ -15,9 +15,9 @@ magazines = Blueprint('magazines', __name__)
 @magazines.route('/page/<int:page>')
 def list(page):
     cards = db.session.query(Magazine)
-    media = request.args.get('media') or ''
-    category_id = request.args.get('category_id') or ''
-    residence_id = request.args.get('residence_id') or ''
+    media = request.args.get('media', '')
+    category_id = request.args.get('category_id', '')
+    residence_id = request.args.get('residence_id', '')
 
     if media:
         cards = cards.filter(Magazine.photos.any(Photo.file.has(type=media)))
