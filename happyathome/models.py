@@ -150,12 +150,10 @@ class Comment(db.Model, BaseMixin):
     photos = db.relationship('PhotoComment', back_populates='comment')
     magazines = db.relationship('MagazineComment', back_populates='comment')
 
-
     @hybrid_property
     def max1_group_id(self):
-        group_id = db.session.query(func.max(self.group_id)).one()[0]
+        group_id = db.session.query(func.max(Comment.group_id)).one()[0]
         return (group_id + 1) if group_id else 1
-
 
     @hybrid_property
     def is_deleted(self):
@@ -167,7 +165,6 @@ class Comment(db.Model, BaseMixin):
             return db.session.query(Comment).filter(Comment.group_id == self.group_id).filter(
                 Comment.depth != 0).filter(Comment.deleted != 1).count()
         return 0
-
 
     @hybrid_property
     def getId(self):
