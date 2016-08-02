@@ -166,7 +166,6 @@ class Comment(db.Model, BaseMixin):
                 Comment.depth != 0).filter(Comment.deleted != 1).count()
         return 0
 
-
     @hybrid_property
     def getId(self):
         return self.id

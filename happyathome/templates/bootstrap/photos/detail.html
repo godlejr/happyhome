@@ -45,15 +45,51 @@
                         {% if post.comments %}
                         <div class="comment-list">
                             <ul>
-                                {% for post_comment in post.comments %}
-                                    <li>
-                                        <div class="comment-info">
-                                            <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ post_comment.comment.user_id }}.png)"></span>
-                                            <span class="comment-user">{{ post_comment.comment.user.name }}</span>
-                                            <span class="comment-date">{{ post_comment.comment.created_date }}</span>
-                                        </div>
-                                        <div class="comment-content">{{ post_comment.comment.content }}</div>
-                                    </li>
+                                {% for comment in comments %}
+                                     {% if comment.deleted == 0 %}
+                                        <li>
+                                            {% if comment.depth == 0 %}
+                                            <div class="comment-info" id="{{ comment.id }}" name="{{ comment.group_id }}">
+                                                <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ comment.user_id }}.png)"></span>
+                                                <span class="comment-user">{{ comment.user.name }}</span>
+                                                <span class="comment-date">{{ comment.created_date }}</span>
+                                                {% if session.user_id %}
+                                                        {% if post.user.id == session.user_id and comment.user_id != session.user_id %}
+                                                            {% if comment.reply_count != 1 %}
+                                                            <span class="comment-reply">답글</span>
+                                                            {% else %}
+                                                            <span class="comment-reply-finish">답변완료</span>
+                                                            {% endif %}
+                                                            <span class="comment-reply-finish" hidden="hidden">답변완료</span>
+                                                            <span class="comment-finish-reply" hidden="hidden" >완료</span>
+                                                            <span class="comment-remove">삭제</span>
+                                                        {% endif %}
+                                                        {% if comment.user.id == session.user_id %}
+                                                            <span class="comment-edit">수정</span>
+                                                            <span class="comment-finish" hidden="hidden" >완료</span>
+                                                            <span class="comment-remove">삭제</span>
+                                                        {% endif %}
+                                                    {% endif %}
+                                            </div>
+                                            <div class="comment-content">{{ comment.content }}</div>
+                                            <textarea class="comment-edit-text" id="reply-hidden-form" hidden="hidden"></textarea>
+                                            {% else %}
+                                                <div class="comment-reply-content">
+                                                    <div class="comment-info" id="{{ comment.getId }}" >
+                                                        <span class="comment-avatar" style="background-image:url(https://robohash.org/{{ comment.user_id }}.png)"></span>
+                                                        <span class="comment-user">{{ comment.user.name }}님의 답변</span>
+                                                        <span class="comment-date">{{ comment.created_date }}</span>
+                                                        {% if comment.user_id == session.user_id %}
+                                                        <span class="comment-edit">수정</span>
+                                                        <span class="comment-finish" hidden="hidden" >완료</span>
+                                                        <span class="comment-remove">삭제</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="comment-content" >{{ comment.content }}</div>
+                                                </div>
+                                            {% endif %}
+                                        </li>
+                                     {% endif %}
                                 {% endfor %}
                             </ul>
                         </div>
@@ -132,6 +168,128 @@
 </div>
 
 <script>
+
+$('.comment-reply').click(function(){
+    var id = $(this).parent().attr('id');
+    $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text').show();
+    $(this).next().next('.comment-finish-reply').show();
+    $(this).hide();
+
+});
+
+$('.comment-finish-reply').click(function(){
+    var self = this;
+    var group_id = $(self).parent().attr('name');
+    var id = $(self).parent().attr('id');
+    comment = $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text');
+    content = comment.val();
+    $.ajax({
+        type:"POST",
+        url:"{{ url_for('photos.comment_reply') }}",
+        data:{
+            photo_id: "{{ post.id }}",
+            content: content,
+            group_id: group_id
+        }
+    }).success(function(data){
+        $(self).hide();
+        $(self).prev('.comment-reply-finish').show();
+        comment.hide();
+        comment.parent().after('<li class="comment-box">'+'<div class="comment-reply-content">'+
+                                                        '<div class="comment-info" id="'+ data.comment_id +'" >' +
+                                                        '<span class="comment-avatar" style="background-image:url(https://robohash.org/' + data.user_id +'.png)"></span>'+
+                                                        '<span class="comment-user">' + data.user_name + '님의 답변</span>'+
+                                                        '<span class="comment-date">' + data.created_date + '</span>'+
+                                                        '<span class="comment-edit">수정</span>'+'<span class="comment-finish" hidden="hidden" >완료</span>'+
+                                                        '<span class="comment-remove">삭제</span>' + '</div>' +
+                                                        '<div class="comment-content" >' + data.comment +'</div>'+
+                                                        '</div>'+'</li>');
+        $('.comment-remove').click(function(){
+            var self = this;
+            var id = $(self).parent().attr('id');
+            $.ajax({
+                type:"POST",
+                url:"{{ url_for('photos.comment_remove') }}",
+                data:{
+                    comment_id: id
+                }
+            }).success(function(data){
+                $(self).parent().parent().remove();
+            });
+        });
+
+        $('.comment-edit').click(function(){
+            var id = $(this).parent().attr('id');
+            var comment = $(document.getElementById(id)).next()
+            var value =  comment.text();
+
+            comment.replaceWith('<textarea class="comment-edit-text">'+ value + '</textarea>');
+            $(this).hide();
+            $(this).next('.comment-finish').show();
+        });
+
+        $('.comment-finish').click(function(){
+            var self = this;
+            var id = $(self).parent().attr('id');
+            var comment = $(document.getElementById(id)).next()
+            $.ajax({
+                type:"POST",
+                url: "{{ url_for('photos.comment_edit') }}",
+                data:{
+                    comment_id: id
+                    ,content: comment.val()
+                    }
+            }).success(function(data){
+                    $(self).hide();
+                    $(self).prev('.comment-edit').show();
+                    comment.replaceWith('<div class="comment-content">' + data.comment + '</div>');
+            });
+        });
+    });
+});
+
+$('.comment-remove').click(function(){
+    var self = this;
+    var id = $(self).parent().attr('id');
+    $.ajax({
+        type:"POST",
+        url:"{{ url_for('photos.comment_remove') }}",
+        data:{
+            comment_id: id
+        }
+    }).success(function(data){
+        $(self).parent().parent().remove();
+    });
+});
+
+$('.comment-edit').click(function(){
+    var id = $(this).parent().attr('id');
+    var comment = $(document.getElementById(id)).next()
+    var value =  comment.text();
+
+    comment.replaceWith('<textarea class="comment-edit-text">'+ value + '</textarea>');
+    $(this).hide();
+    $(this).next('.comment-finish').show();
+});
+
+$('.comment-finish').click(function(){
+    var self = this;
+    var id = $(self).parent().attr('id');
+    var comment = $(document.getElementById(id)).next()
+    $.ajax({
+        type:"POST",
+        url: "{{ url_for('photos.comment_edit') }}",
+        data:{
+            comment_id: id
+            ,content: comment.val()
+            }
+    }).success(function(data){
+            $(self).hide();
+            $(self).prev('.comment-edit').show();
+            comment.replaceWith('<div class="comment-content">' + data.comment + '</div>');
+    });
+});
+
 $('.content-like').click(function(event) {
     {% if session.user_id %}
         var icon = $(this).find('.like-icon');
