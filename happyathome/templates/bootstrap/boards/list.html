@@ -1,0 +1,20 @@
+{% extends "bootstrap/boards/base.html" %}
+
+{% block content %}
+<div class="content">
+    <div class="content-body">
+        <div class="board-content">
+            <div class="board-title">해피 Q&A</div>
+            <div class="board-list">
+                {% for post in posts %}
+                    <div class="board-content">{{ post.content }}</div>
+                    <div class="board-author">{{ post.user.name }}</div>
+                    <div class="board-date">{{ post.created_date }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination-nav">{{ func.render_pagination('professionals.list', pagination) }}</div>
+</div>
+{% endblock %}
