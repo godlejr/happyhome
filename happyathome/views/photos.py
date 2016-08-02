@@ -5,7 +5,7 @@ import shortuuid
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap
+from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
@@ -48,6 +48,8 @@ def detail(id):
     post.hits += 1
     db.session.commit()
 
+    comments = Comment.query.filter(Comment.photos.any(photo_id=id)).order_by(Comment.group_id.desc()).order_by(
+        Comment.depth.asc()).all()
     user_photos = db.session.query(Photo). \
         filter(Photo.id != id). \
         filter(Photo.user_id == post.user_id). \
@@ -61,7 +63,8 @@ def detail(id):
                            post=post,
                            user_photos=user_photos,
                            magazine_photos=magazine_photos,
-                           request_url=request.url)
+                           request_url=request.url,
+                           comments=comments)
 
 
 @photos.route('/upload', methods=['POST'])
@@ -126,16 +129,18 @@ def new():
 @login_required
 def comment_new(id):
     if request.method == 'POST':
-        group_id = db.session.query(func.max(Comment.group_id))
 
         comment = Comment()
-        comment.group_id = group_id
+        comment.group_id = comment.max1_group_id
         comment.user_id = session['user_id']
         comment.content = request.form['comment']
 
+        db.session.add(comment)
+        db.session.commit()
+
         photo_comment = PhotoComment()
         photo_comment.photo_id = id
-        photo_comment.comment = comment
+        photo_comment.comment_id = comment.id
 
         db.session.add(photo_comment)
         db.session.commit()
@@ -164,3 +169,60 @@ def scrap():
         'photo_id': photo_id,
         'count': PhotoScrap.query.filter_by(photo_id=photo_id).count()
     })
+
+
+@photos.route('/comment_reply', methods=['POST'])
+def comment_reply():
+    if request.method == 'POST':
+        comment = Comment()
+        comment.user_id = session['user_id']
+        comment.group_id = request.form.get('group_id')
+        comment.content = request.form.get('content')
+        comment.depth = 1
+        db.session.add(comment)
+        db.session.commit()
+
+        photo_comment = PhotoComment()
+        photo_comment.photo_id = request.form.get('photo_id')
+        photo_comment.comment_id = comment.id
+
+        db.session.add(photo_comment)
+        db.session.commit()
+
+        user = db.session.query(User).filter(User.id == session['user_id']).first();
+
+        return jsonify({
+            'comment_id':comment.id,
+            'user_id':session['user_id'],
+            'user_name':user.name,
+            'created_date':comment.created_date,
+            'comment': comment.content
+        })
+
+
+@photos.route('/comment_edit', methods=['POST'])
+def comment_edit():
+    if request.method == 'POST':
+        comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
+        comment.content = request.form.get('content')
+
+        db.session.add(comment)
+        db.session.commit()
+
+        return jsonify({
+            'comment': comment.content
+        })
+
+
+@photos.route('/comment_remove', methods=['POST'])
+def comment_remove():
+    if request.method == 'POST':
+        comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
+        comment.deleted = True
+
+        db.session.add(comment)
+        db.session.commit()
+
+        return jsonify({
+            'ok': 1
+        })
