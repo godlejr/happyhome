@@ -124,7 +124,7 @@ def question(id):
         AND		EXISTS	(	SELECT	1
                             FROM	comments	re
                             WHERE	re.group_id	=	cm.group_id
-                            AND		re.user_id	=	3
+                            AND		re.user_id	=	%s
                             AND		re.depth	>	0
                             GROUP
                             BY		re.group_id
@@ -134,7 +134,7 @@ def question(id):
         ,			cm.depth	ASC
         ,			cm.sort		ASC
         ,			cm.id		ASC
-    ''')
+    ''' % id)
     gallery_qna = db.session.execute('''
             SELECT	cm.id
             ,		cm.group_id
@@ -156,7 +156,7 @@ def question(id):
             AND		EXISTS	(	SELECT	1
                                 FROM	comments	re
                                 WHERE	re.group_id	=	cm.group_id
-                                AND		re.user_id	=	3
+                                AND		re.user_id	=	%s
                                 AND		re.depth	>	0
                                 GROUP
                                 BY		re.group_id
@@ -166,7 +166,7 @@ def question(id):
             ,			cm.depth	ASC
             ,			cm.sort		ASC
             ,			cm.id		ASC
-        ''')
+        ''' % id)
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/question.html',
                            user=user,
                            story_qna=story_qna,
