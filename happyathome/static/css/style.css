@@ -3,8 +3,14 @@
 * {
     margin: 0px;
     padding:0px;
-    color: #666362;
+    color: #000000;
     font-family: 'Nanum Gothic', Tahoma, Sans-serif;
+}
+hr {
+    margin: 40px 0;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 body     { padding:0; margin:0 auto; background-color:#f4f4f4; }
 div      { box-sizing: border-box; }
@@ -148,9 +154,34 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 40px 50px;
     background-color: #ffffff;
     border: 1px solid #eaebee;
+    border-top: 2px solid #000000;
+}
+.content-form legend {
+    margin: 20px 0;
+    font-weight: 700;
+}
+.content-form .input-field {
+    min-height: 30px;
+    margin: 15px 0;
+}
+.content-form .input-field label {
+    margin-right: 20px;
+    font-size: 14px;
+    font-weight: 700;
+}
+.content-form .input-field input,
+.content-form .input-field textarea {
+    min-height: 30px;
+    width: 100%;
+    max-width: 700px;
+    border: 0;
+    border-bottom: 1px solid skyblue;
+}
+.content-form .input-field textarea {
+    height: 80px;
 }
 .content-title {
     font-size: 18px;
@@ -1988,6 +2019,11 @@ select.browser-default {
 input[type=file] {
     display: none;
 }
+
+
+#photos hr:last-child {
+    display: none;
+}
 .photo-file-form {
     position: relative;
 }
@@ -1996,15 +2032,15 @@ input[type=file] {
     height: 400px;
     line-height: 400px;
     cursor: pointer;
-    margin: 0 auto;
+    margin: 20px auto;
     text-align: center;
     vertical-align: middle;
-    background-color: #ffffff;
+    border: 1px solid #ededed;
+    background-color: #f4f4f4;
     background-size: auto;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('/static/img/btn_upload.png');
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 .photo-preview img {
     width: auto;
@@ -2318,4 +2354,37 @@ input[type=file] {
 .user-statistics td i {
     padding: 20px;
     font-size: 44px;
+}
+
+.btn-panel.left {
+    display: inline;
+    float: left;
+}
+.btn-panel.right {
+    display: inline;
+    float: right;
+}
+.btn-submit {
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 7px 30px;
+    border: 1px solid #46AB76;
+    background-color: #5EB788;
+}
+.btn-default {
+    cursor: pointer;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 7px 30px;
+    border: 1px solid #46AB76;
+    background-color: #ffffff;
+}
+.btn-default i {
+    color: #5EB788;
+    font-size: 16px;
+    font-weight: 700;
+    vertical-align: top;
 }
