@@ -1,12 +1,14 @@
 {% extends 'bootstrap/photos/base.html' %}
 
 {% block content %}
-<head>
-    <meta property="og:title" content="{{ post.user.name }}">
-    <meta property="og:url" content="http://dev.inotone.co.kr/gallery/{{ post.id }}">
-    <meta property="og:description" content="{{ post.content }}">
-    <meta property="og:image" content="http://static.inotone.co.kr/data/img/{{ post.file.name }}">
-</head>
+<meta property="og:title" content="{{ post.user.name }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://dev.inotone.co.kr/gallery/{{ post.id }}">
+<meta property="og:image" content="http://static.inotone.co.kr/data/img/{{ post.file.name }}">
+<meta property="og:description" content="{{ post.content }}">
+<meta property="og:width" content="300">
+<meta property="og:height" content="300">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
 <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
 
