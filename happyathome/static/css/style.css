@@ -636,6 +636,13 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 
 
+.comment-reply-remove {
+    margin-left: 2px;
+    font-size: 12px;
+    cursor:pointer;
+}
+
+
 .content-comment .comment-content {
     padding: 2px 0 10px 0;
     margin: 0 0 15px 32px;

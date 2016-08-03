@@ -157,7 +157,8 @@ def comment_reply():
             'user_id':session['user_id'],
             'user_name':user.name,
             'created_date':comment.created_date,
-            'comment': comment.content
+            'comment': comment.content,
+            'group_id': comment.get_parent_id(comment.group_id)
         })
 
 
