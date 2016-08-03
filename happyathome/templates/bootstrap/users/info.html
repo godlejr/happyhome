@@ -8,12 +8,14 @@
                 <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
             </ul>
         </div>
+
         {% if session.user_id == user.id %}
-        <div class="user-new">
-            <a href="{{ url_for('magazines.new') }}"><div class="story-new"><i class="material-icons">add</i><span>스토리 등록</span></div></a>
-            <a href="{{ url_for('photos.new') }}"><div class="gallery-new"><i class="material-icons">add</i><span>갤러리 등록</span></div></a>
-        </div>
+            <div class="user-new">
+                <a href="{{ url_for('magazines.new') }}"><div class="story-new"><i class="material-icons">add</i><span>스토리 등록</span></div></a>
+                <a href="{{ url_for('photos.new') }}"><div class="gallery-new"><i class="material-icons">add</i><span>갤러리 등록</span></div></a>
+            </div>
         {% endif %}
+
         <table class="user-statistics">
             <tbody>
             <tr>
@@ -50,4 +52,10 @@
         </table>
     </div>
 </div>
+
+<script>
+$('.user-menu li').click(function() {
+    document.location.href = $(this).attr('href');
+});
+</script>
 {% endblock %}

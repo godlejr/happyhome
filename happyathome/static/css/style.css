@@ -172,7 +172,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-size: 14px;
     font-weight: 700;
 }
-.content-form .input-field input,
+.content-form .input-field input[type=text],
 .content-form .input-field textarea {
     min-height: 30px;
     width: 100%;
@@ -2281,6 +2281,7 @@ input[type=file] {
 
 .user-menu {
     width: 100%;
+    max-width: 657px;
     padding: 25px 64px;
     margin: 0 auto;
 }
@@ -2380,6 +2381,15 @@ input[type=file] {
     font-weight: 700;
     padding: 7px 30px;
     border: 1px solid #46AB76;
+    background-color: #ffffff;
+}
+.btn-danger {
+    cursor: pointer;
+    color: #CC020A;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 7px 30px;
+    border: 1px solid #CC020A;
     background-color: #ffffff;
 }
 .btn-default i {

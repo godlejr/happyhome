@@ -3,21 +3,12 @@
 {% block content%}
 <div class="content">
     <div class="content-body">
-        <div class="user-contents">
+        <div class="content-form">
             <div class="edit_menu">
-                <div class="edit_menu_item">
-                    <a href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</a>
-                </div>
-                <div class="edit_menu_item">
-                    <a href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</a>
-                </div>
-                {% if user.level == 1 %}
-                    <div class="edit_menu_item">
-                        <a href="{{ url_for('users.edit_professional', id=user.id) }}">비밀번호 변경</a>
-                    </div>
-                {% endif %}
-                <div class="edit_menu_out">
-                    회원 탈퇴
+                <div class="user-menu">
+                    <ul>
+                        <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
+                    </ul>
                 </div>
             </div>
 
