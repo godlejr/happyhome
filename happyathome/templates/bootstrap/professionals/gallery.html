@@ -8,10 +8,9 @@
             {% for photo in photos %}
                 <div class="card" id="{{ photo.id }}"
                      style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photo.file.name) }})">
-                    {% if photo.vr_count  %}
+                    {% if photo.file.type == 2  %}
                         <div class="card-media"><span class="vr-icon"></span></div>
-                    {% endif %}
-                    {% if photo.mov_count  %}
+                    {% elif photo.file.type == 3  %}
                         <div class="card-media"><span class="mov-icon"></span></div>
                     {% endif %}
                 </div>

@@ -1208,10 +1208,10 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin: 22px 0;
 }
 .custom-pagination {
-    display: flex;
     margin: 0 auto;
 }
 .custom-pagination li {
+    float: left;
     margin: 5px;
     width: 15px;
     height: 15px;
@@ -2228,4 +2228,19 @@ input[type=file] {
     background-repeat: no-repeat;
     background-position: center;
     background-image:url(/static/img/professional/Q-green.png);
+}
+
+.board-content {
+    width: 100%;
+}
+.board-title {
+    width: 100%;
+    color: #000000;
+    font-size: 20px;
+    font-weight: 700;
+}
+.board-list {
+    width: 100%;
+    margin-top: 30px;
+    border: 1px solid #eeeeee;
 }

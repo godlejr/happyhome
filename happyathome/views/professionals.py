@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, current_app
+from flask import Blueprint, render_template, current_app
 from flask import session
 from happyathome.forms import Pagination
-from happyathome.models import db, User, Professional, Magazine, Category, Residence, Photo, PhotoScrap, Comment
+from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment
 
 professionals = Blueprint('professionals', __name__)
 
@@ -89,9 +89,84 @@ def gallery(id, page):
 
 @professionals.route('/<id>/question')
 def question(id):
-    user = db.session.query(User).filter_by(id=id).first()
-    story_qna = Magazine.query.filter(Magazine.comments.any(Comment.user_id == id)).all()
-    gallery_qna = Comment.query.filter(Comment.user_id == id).filter(Comment.photos.any(comment_id=Comment.id)).all()
+    user = User.query.filter_by(id=id).first()
+    story_qna = db.session.execute('''
+        SELECT	cm.id
+        ,		cm.group_id
+        ,		cm.depth
+        ,		cm.sort
+        ,		cm.content
+        ,		mz.id       as  magazine_id
+        ,		mz.title    as  magazine_title
+        ,		pf.name     as  file_name
+        FROM	comments	cm
+        ,		magazines	mz
+        ,		(	SELECT	ph.magazine_id
+                    ,		fi.name
+                    FROM	files	fi
+                    ,		photos	ph
+                    ,		(	SELECT	magazine_id
+                                ,		MIN(id)	id
+                                FROM	photos
+                                GROUP
+                                BY		magazine_id
+                            )	pt
+                    WHERE	ph.id		=	pt.id
+                    AND		ph.file_id	=	fi.id
+                )	pf
+        WHERE	mz.id	    =	pf.magazine_id
+        AND		cm.deleted	=	0
+        AND		EXISTS	(	SELECT	1
+                            FROM	magazine_comments	mc
+                            WHERE	mc.magazine_id	=	mz.id
+                            AND		mc.comment_id	=	cm.id
+                        )
+        AND		EXISTS	(	SELECT	1
+                            FROM	comments	re
+                            WHERE	re.group_id	=	cm.group_id
+                            AND		re.user_id	=	%s
+                            AND		re.depth	>	0
+                            GROUP
+                            BY		re.group_id
+                        )
+        ORDER
+        BY			cm.group_id	DESC
+        ,			cm.depth	ASC
+        ,			cm.sort		ASC
+        ,			cm.id		ASC
+    ''' % id)
+    gallery_qna = db.session.execute('''
+            SELECT	cm.id
+            ,		cm.group_id
+            ,		cm.depth
+            ,		cm.sort
+            ,		cm.content
+            ,		ph.id       as  photo_id
+            ,		fi.name     as  file_name
+            FROM	comments	cm
+            ,		photos  	ph
+            ,       files       fi
+            WHERE	ph.file_id  =   fi.id
+            AND     cm.deleted	=	0
+            AND		EXISTS	(	SELECT	1
+                                FROM	photo_comments	pc
+                                WHERE	pc.photo_id     =	ph.id
+                                AND		pc.comment_id	=	cm.id
+                            )
+            AND		EXISTS	(	SELECT	1
+                                FROM	comments	re
+                                WHERE	re.group_id	=	cm.group_id
+                                AND		re.user_id	=	%s
+                                AND		re.depth	>	0
+                                GROUP
+                                BY		re.group_id
+                            )
+            ORDER
+            BY			cm.group_id	DESC
+            ,			cm.depth	ASC
+            ,			cm.sort		ASC
+            ,			cm.id		ASC
+        ''' % id)
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/question.html',
                            user=user,
                            story_qna=story_qna,
@@ -100,13 +175,12 @@ def question(id):
 
 @professionals.route('/<id>/scrap')
 def scrap(id):
-    user = db.session.query(User).filter_by(id=id).first()
-    photoscraps = db.session.query(PhotoScrap).filter(PhotoScrap.user_id == user.id)
-    photoscrap_count = photoscraps.count()
+    user = User.query.filter_by(id=id).first()
+    photoscraps = PhotoScrap.query.filter_by(user_id=user.id)
+    photoscraps_count = photoscraps.count()
     photoscraps = photoscraps.all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/scrap.html',
                            user=user,
                            photoscraps=photoscraps,
-                           photoscrap_count=photoscrap_count,
-                           current_app=current_app)
+                           photoscraps_count=photoscraps_count)
