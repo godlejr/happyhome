@@ -34,48 +34,37 @@ def info(id):
 @users.route('/<id>/gallery', defaults={'page': 1})
 @users.route('/<id>/gallery/page/<int:page>')
 def gallery(id, page):
-    user = db.session.query(User).filter_by(id=id).first()
-    photos = db.session.query(Photo).filter(Photo.user_id == user.id).order_by(Photo.id.desc())
+    user = User.query.filter_by(id=id).first()
 
-    if session:
-        if session['user_id'] == user.id:
-            photos = photos.limit(4).all()
-            return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html',
-                                   user=user,
-                                   photos=photos,
-                                   current_app=current_app)
+    page_offset = 9 if 'user_id' in session and session['user_id'] == user.id else 10
+    photos = Photo.query.filter_by(user_id=user.id)
+    photos_count = photos.count()
 
-    pagination = Pagination(page, 8, photos.count())
+    offset = (page_offset * (page - 1)) if page != 1 else 0
+    pagination = Pagination(page, page_offset, photos.count())
+    photos = photos.order_by(Photo.id.desc()).limit(page_offset).offset(offset).all()
 
-    if page != 1:
-        offset = 6 * (page - 1)
-    else:
-        offset = 0
-    photos = photos.limit(12).offset(offset).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/gallery.html',
                            user=user,
                            photos=photos,
-                           current_app=current_app,
+                           photos_count=photos_count,
                            pagination=pagination)
 
 
 @users.route('/<id>/story', defaults={'page': 1})
 @users.route('/<id>/story/page/<int:page>')
 def story(id, page):
-    user = db.session.query(User).filter_by(id=id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == user.id).order_by(Magazine.id.desc())
-    pagination = Pagination(page, 6, magazines.count())
-
-    if page != 1:
-        offset = 6 * (page - 1)
-    else:
-        offset = 0
-    magazines = magazines.limit(6).offset(offset).all()
+    offset = (10 * (page - 1)) if page != 1 else 0
+    user = User.query.filter_by(id=id).first()
+    magazines = Magazine.query.filter_by(user_id=user.id)
+    pagination = Pagination(page, 10, magazines.count())
+    magazines_count = magazines.count()
+    magazines = magazines.order_by(Magazine.id.desc()).limit(10).offset(offset).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/story.html',
                            user=user,
-                           current_app=current_app,
                            magazines=magazines,
+                           magazines_count=magazines_count,
                            pagination=pagination)
 
 
@@ -90,18 +79,21 @@ def follow(id):
                            current_app=current_app)
 
 
-@users.route('/<id>/scrap')
-def scrap(id):
-    user = db.session.query(User).filter_by(id=id).first()
-    photoscraps = db.session.query(PhotoScrap).filter(PhotoScrap.user_id == user.id)
-    photoscrap_count = photoscraps.count()
-    photoscraps = photoscraps.all()
+@users.route('/<id>/scrap', defaults={'page': 1})
+@users.route('/<id>/scrap/page/<int:page>')
+def scrap(id, page):
+    offset = (10 * (page - 1)) if page != 1 else 0
+    user = User.query.filter_by(id=id).first()
+    photoscraps = PhotoScrap.query.filter_by(user_id=user.id)
+    pagination = Pagination(page, 10, photoscraps.count())
+    photoscraps_count = photoscraps.count()
+    photoscraps = photoscraps.order_by(PhotoScrap.id.desc()).limit(10).offset(offset).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap.html',
                            user=user,
                            photoscraps=photoscraps,
-                           photoscrap_count=photoscrap_count,
-                           current_app=current_app)
+                           photoscraps_count=photoscraps_count,
+                           pagination=pagination)
 
 
 @users.route('/<id>/question')

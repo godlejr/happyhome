@@ -173,14 +173,18 @@ def question(id):
                            gallery_qna=gallery_qna)
 
 
-@professionals.route('/<id>/scrap')
-def scrap(id):
+@professionals.route('/<id>/scrap', defaults={'page': 1})
+@professionals.route('/<id>/scrap/page/<int:page>')
+def scrap(id, page):
+    offset = (10 * (page - 1)) if page != 1 else 0
     user = User.query.filter_by(id=id).first()
     photoscraps = PhotoScrap.query.filter_by(user_id=user.id)
+    pagination = Pagination(page, 10, photoscraps.count())
     photoscraps_count = photoscraps.count()
-    photoscraps = photoscraps.all()
+    photoscraps = photoscraps.order_by(PhotoScrap.id.desc()).limit(10).offset(offset).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/scrap.html',
                            user=user,
+                           pagination=pagination,
                            photoscraps=photoscraps,
                            photoscraps_count=photoscraps_count)

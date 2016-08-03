@@ -233,8 +233,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     padding: 5px 0;
     color: #ffffff;
     width: 130px;
-    border: 2px solid #ffffff;
-    border-radius: 2px;
+    border: 1px solid #ffffff;
+    border-radius: 3px;
     text-align: center;
     font-size: 16px;
     font-weight: 700;
@@ -2147,9 +2147,9 @@ input[type=file] {
     background-color: #ffffff;
 }
 .user-contents .card {
-    width: 25%;
-    max-width: 248px;
-    max-height: 248px;
+    width: 20%;
+    max-width: 194px;
+    max-height: 194px;
 }
 .user-contents .card .card-title {
     position: absolute;

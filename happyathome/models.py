@@ -188,6 +188,14 @@ class Photo(db.Model, BaseMixin):
     magazine = db.relationship('Magazine', back_populates='photos')
     comments = db.relationship('PhotoComment', back_populates='photo')
 
+    @hybrid_property
+    def is_vr(self):
+        return True if self.file.type == 2 else False
+
+    @hybrid_property
+    def is_mov(self):
+        return True if self.file.type == 3 else False
+
     @hybrid_method
     def is_active(self, model, user_id):
         return getattr(sys.modules[__name__], model).query.filter_by(photo_id=self.id, user_id=user_id).first()
@@ -248,11 +256,19 @@ class Magazine(db.Model, BaseMixin):
 
     @hybrid_property
     def vr_count(self):
-        return db.session.query(Photo).filter(Photo.magazine_id == self.id).filter(Photo.file.has(type=2)).count()
+        return Photo.query.filter(Photo.magazine_id == self.id).filter(Photo.file.has(type=2)).count()
 
     @hybrid_property
     def mov_count(self):
-        return db.session.query(Photo).filter(Photo.magazine_id == self.id).filter(Photo.file.has(type=3)).count()
+        return Photo.query.filter(Photo.magazine_id == self.id).filter(Photo.file.has(type=3)).count()
+
+    @hybrid_property
+    def has_vr(self):
+        return True if self.vr_count else False
+
+    @hybrid_property
+    def has_mov(self):
+        return True if self.mov_count else False
 
     @hybrid_method
     def is_active(self, model, user_id):

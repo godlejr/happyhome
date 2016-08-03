@@ -3,19 +3,21 @@
 {% block content_body %}
 <div class="content-body">
     <div class="user-contents">
-        <div class="user-title">갤러리 스크랩({{photoscrap_count}})</div>
+        <div class="user-title">갤러리 스크랩({{photoscraps_count}})</div>
         <div class="cards">
             {% for photoscrap in photoscraps %}
                 <div class="card" id="{{ photoscrap.photo_id }}"
                      style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photoscrap.photo.file.name) }})">
-                    {% if photoscrap.vr_count  %}
+                    {% if photoscrap.photo.is_vr  %}
                         <div class="card-media"><span class="vr-icon"></span></div>
-                    {% endif %}
-                    {% if photoscrap.mov_count  %}
+                    {% elif photoscrap.photo.is_mov  %}
                         <div class="card-media"><span class="mov-icon"></span></div>
                     {% endif %}
                 </div>
             {% endfor %}
+        </div>
+        <div class="pagination-nav">
+            {{ func.render_pagination('users.scrap', pagination, user.id) }}
         </div>
     </div>
 </div>

@@ -9,10 +9,10 @@
                 {% if magazine.photos %}
                 <div class="card" id="{{ magazine.id }}"
                      style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazine.photos[0].file.name) }})">
-                    {% if magazine.vr_count  %}
+                    {% if magazine.has_vr  %}
                         <div class="card-media"><span class="vr-icon"></span></div>
                     {% endif %}
-                    {% if magazine.mov_count  %}
+                    {% if magazine.has_mov  %}
                         <div class="card-media"><span class="mov-icon"></span></div>
                     {% endif %}
                     <div class="card-title">{{ magazine.title }}</div>
@@ -21,7 +21,7 @@
             {% endfor %}
         </div>
         <div class="pagination-nav">
-            {{ func.render_pagination('professionals.scrap', pagination, user.id) }}
+            {{ func.render_pagination('professionals.story', pagination, user.id) }}
         </div>
     </div>
 </div>
