@@ -329,6 +329,7 @@ $('.content-like').click(function(event) {
         document.location.href = "{{ url_for('main.login', next=request_url) }}";
     {% endif %}
 });
+
 $('.content-scrap').click(function(event) {
     event.stopPropagation();
     {% if session.user_id %}
