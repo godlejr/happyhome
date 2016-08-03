@@ -167,8 +167,12 @@ class Comment(db.Model, BaseMixin):
         return 0
 
     @hybrid_property
-    def getId(self):
+    def get_id(self):
         return self.id
+
+    @hybrid_method
+    def get_parent_id(self, group_id):
+        return db.session.query(Comment).filter(Comment.group_id == group_id).filter(Comment.depth == 0).first().id
 
 
 class Photo(db.Model, BaseMixin):
