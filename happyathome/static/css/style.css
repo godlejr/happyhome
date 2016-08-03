@@ -234,7 +234,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     color: #ffffff;
     width: 130px;
     border: 1px solid #ffffff;
-    border-radius: 3px;
     text-align: center;
     font-size: 16px;
     font-weight: 700;
@@ -1232,9 +1231,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 /******* users edit*****/
 .edit_menu{
     width: 100%;
-    margin: 15px auto;
-    position: relative;
-    background-color: white;
     display: inline-block;
 }
 
@@ -1264,12 +1260,13 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 .edit_field{
     padding: 0 16px;
-    margin-bottom: 22px;
+    margin-bottom: 30px;
 }
 
  .edit_title{
     padding-bottom: 6px;
     font-size: 15px;
+    font-weight: 700;
     letter-spacing: -1px;
  }
 
@@ -1281,6 +1278,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin: 0;
     width: 100%;
     max-width: 560px;
+    border-bottom: 1px solid skyblue;
  }
 
  .edit_textarea_form{
@@ -1312,7 +1310,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
  .edit_gender{
     float:left;
     font-size: 15px;
-
  }
 
  .edit_button{
@@ -1328,6 +1325,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 582px;
     padding: 15px;
     background-color: white;
+    border-bottom: 1px solid skyblue;
  }
 
 .edit-profile-photo{
@@ -1394,8 +1392,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 .edit_submit{
     padding: 16px;
-    margin-bottom: 80px;
-    border-top: 1px solid #eeeeee;
+    margin-bottom: 40px;
 }
 
 .edit_submit_button{
@@ -2040,6 +2037,7 @@ input[type=file] {
     width: 100%;
 }
 .user-title {
+    clear: both;
     color: #000000;
     font-size: 20px;
     font-weight: 700;
@@ -2243,4 +2241,81 @@ input[type=file] {
     width: 100%;
     margin-top: 30px;
     border: 1px solid #eeeeee;
+}
+
+.user-menu {
+    width: 100%;
+    padding: 25px 64px;
+    margin: 0 auto;
+}
+.user-menu li {
+    display: inline-block;
+    padding-top: 19px;
+    width: 263px;
+    height: 35px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    border-top: 1px solid #eeeeee;
+    border-right: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+}
+.user-menu li:first-child {
+    border-left: 1px solid #eeeeee;
+}
+.user-menu li:hover {
+    cursor: pointer;
+    color: #ffffff;
+    background-color: #97CE68;
+}
+
+.user-new {
+    margin: 40px 0;
+    text-align: center;
+}
+.user-new i {
+    color: #99CE66;
+    font-size: 46px;
+    padding-top: 40px;
+}
+.user-new .story-new,
+.user-new .gallery-new {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    margin: 20px;
+    vertical-align: middle;
+    border: 1px solid #cccccc;
+    background-color: #f9f9f9;
+}
+.user-new span {
+    display: inline-block;
+    width: 100%;
+    clear: both;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.user-statistics {
+    margin: 60px auto;
+    border: 1px solid #cccccc;
+}
+.user-statistics th {
+    width: 150px;
+    height: 30px;
+    font-size: 14px;
+    border: 1px solid #cccccc;
+    background-color: #f9f9f9;
+}
+.user-statistics td {
+    width: 150px;
+    height: 20px;
+    font-size: 12px;
+    text-align: center;
+    border-right: 1px dashed #cccccc;
+}
+.user-statistics td i {
+    padding: 20px;
+    font-size: 44px;
 }

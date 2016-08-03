@@ -1,7 +1,53 @@
 {% extends 'bootstrap/users/content.html' %}
 
 {% block content_body %}
-<div class="content-body body-main">
-
+<div class="content-body">
+    <div class="user-contents">
+        <div class="user-menu">
+            <ul>
+                <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
+            </ul>
+        </div>
+        {% if session.user_id == user.id %}
+        <div class="user-new">
+            <a href="{{ url_for('magazines.new') }}"><div class="story-new"><i class="material-icons">add</i><span>스토리 등록</span></div></a>
+            <a href="{{ url_for('photos.new') }}"><div class="gallery-new"><i class="material-icons">add</i><span>갤러리 등록</span></div></a>
+        </div>
+        {% endif %}
+        <table class="user-statistics">
+            <tbody>
+            <tr>
+                <th>내가 올린 자료</th>
+                <th>스크랩</th>
+                <th>팔로우</th>
+                <th>Q&A</th>
+            </tr>
+            <tr>
+                <td><i class="material-icons">camera_alt</i></td>
+                <td><i class="material-icons">collections_bookmark</i></td>
+                <td><i class="material-icons">person_add</i></td>
+                <td><i class="material-icons">live_help</i></td>
+            </tr>
+            <tr>
+                <td>나의 스토리</td>
+                <td>나의 스크랩북</td>
+                <td>나의 팔로워</td>
+                <td>내가 질문</td>
+            </tr>
+            <tr>
+                <td>나의 갤러리</td>
+                <td></td>
+                <td>나의 팔로잉</td>
+                <td>내에게 질문</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

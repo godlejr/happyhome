@@ -2,24 +2,27 @@
 
 {% block content%}
 <div class="content">
-    <div class="edit_menu">
-        <div class="edit_menu_item">
-            {{ func.render_edit_menu('users.edit_info', '정보수정',post.id) }}
-        </div>
-        <div class="edit_menu_item">
-            {{ func.render_edit_menu('users.edit_password', '비밀번호 변경',post.id) }}
-        </div>
-        {% if post.level != 2 %}
-        <div class="edit_menu_item">
-            {{ func.render_edit_menu('users.edit_professional', '사업자로 변경',post.id) }}
-        </div>
-        {% endif %}
-        <div class="edit_menu_out">
-            회원 탈퇴
+    <div class="content-body">
+        <div class="user-contents">
+            <div class="edit_menu">
+                <div class="edit_menu_item">
+                    <a href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</a>
+                </div>
+                <div class="edit_menu_item">
+                    <a href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</a>
+                </div>
+                {% if user.level == 1 %}
+                    <div class="edit_menu_item">
+                        <a href="{{ url_for('users.edit_professional', id=user.id) }}">비밀번호 변경</a>
+                    </div>
+                {% endif %}
+                <div class="edit_menu_out">
+                    회원 탈퇴
+                </div>
+            </div>
+
+            {% block content_body %}{% endblock %}
         </div>
     </div>
-    {% block content_body %}{% endblock %}
 </div>
-
-
 {% endblock %}
