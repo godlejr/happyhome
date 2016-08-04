@@ -9,15 +9,22 @@
         <div class="content-main">
             <div class="content-section">
                 <div class="content-header">
-                    <div class="magazine-title">{{ post.title }}</div>
+                    <div class="magazine-title">
+                        {{ post.title }}
+                        <div class="content-button" magazine-id="{{ post.id }}">
+                            <span class="like-icon {% if post.is_active('MagazineLike', session.user_id) %}active{% endif %}"></span>
+                            <span class="scrap-icon {% if post.is_active('MagazineScrap', session.user_id) %}active{% endif %}"></span>
+                            <span class="share-icon"></span>
+                        </div>
+                    </div>
                     <div class="magazine-header">
                         <div class="magazine-info">
                             <div class="magazine-avatar" id="{{post.user.id}}" style="background-image:url(https://robohash.org/{{ post.user_id }}.png)"></div>
                             <div class="magazine-author">
                                 <div class="magazine-user" ><a href="{{ url_for('users.info',id = post.user.id) }}"> {{ post.user.name }} </a> <span>{{ post.created_date }}</span></div>
-                                <div class="magazine-score">
-                                    <span class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> 20</span>
-                                    <span class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> 300</span>
+                                <div class="content-score">
+                                    <span class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> <span class="count-text like">{{ post.like_magazines|length }}</span></span>
+                                    <span class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> <span class="count-text scrap">{{ post.scrap_magazines|length }}</span></span>
                                     <span class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ post.comments|length }}</span>
                                 </div>
                             </div>
@@ -313,22 +320,21 @@ $('.comment-list').delegate('.comment-finish', 'click', function() {
     });
 });
 
-$('.content-like').click(function(event) {
+$('.like-icon').click(function(event) {
     {% if session.user_id %}
-        var icon = $(this).find('.like-icon');
-
-        icon.toggleClass('active');
+        var self = this;
+        $(self).toggleClass('active');
 
         $.ajax({
             type: "POST",
-            url: "{{ url_for('photos.like') }}",
+            url: "{{ url_for('magazines.like') }}",
             data: {
-                photo_id: $(this).parent('.content-photo').attr('photo-id')
+                magazine_id: $(self).parent('.content-button').attr('magazine-id')
             }
         }).success(function(data) {
             $('.content-score .count-text.like').text(data.count);
         }).error(function(request, status, error) {
-            icon.toggleClass('active');
+            $(self).toggleClass('active');
         });
 
         event.stopPropagation();
@@ -337,23 +343,21 @@ $('.content-like').click(function(event) {
     {% endif %}
 });
 
-$('.content-scrap').click(function(event) {
-    event.stopPropagation();
+$('.scrap-icon').click(function(event) {
     {% if session.user_id %}
-        var icon = $(this).find('.scrap-icon');
-
-        icon.toggleClass('active');
+        var self = this;
+        $(self).toggleClass('active');
 
         $.ajax({
             type: "POST",
-            url: "{{ url_for('photos.scrap') }}",
+            url: "{{ url_for('magazines.scrap') }}",
             data: {
-                photo_id: $(this).parent('.content-photo').attr('photo-id')
+                magazine_id: $(self).parent('.content-button').attr('magazine-id')
             }
         }).success(function(data) {
             $('.content-score .count-text.scrap').text(data.count);
         }).error(function(request, status, error) {
-            icon.toggleClass('active');
+            $(self).toggleClass('active');
         });
 
         event.stopPropagation();

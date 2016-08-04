@@ -275,7 +275,29 @@ class Magazine(db.Model, BaseMixin):
 
     @hybrid_method
     def is_active(self, model, user_id):
-        return getattr(sys.modules[__name__], model).query.filter_by(photo_id=self.id, user_id=user_id).first()
+        return getattr(sys.modules[__name__], model).query.filter_by(magazine_id=self.id, user_id=user_id).first()
+
+
+class MagazineLike(db.Model, BaseMixin):
+    """스토리-좋아요 연결고리"""
+    __tablename__ = 'magazine_likes'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
+
+    user = db.relationship('User', backref='magazine_like_users')
+    magazine = db.relationship('Magazine', backref='like_magazines')
+
+
+class MagazineScrap(db.Model, BaseMixin):
+    """스토리-좋아요 연결고리"""
+    __tablename__ = 'magazine_scraps'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
+
+    user = db.relationship('User', backref='magazine_scrap_users')
+    magazine = db.relationship('Magazine', backref='scrap_magazines')
 
 
 class MagazineComment(db.Model, BaseMixin):

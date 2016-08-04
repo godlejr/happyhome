@@ -193,6 +193,19 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     padding-top: 40px;
     text-align: center;
 }
+.magazine-title .content-button {
+    float: right;
+}
+.magazine-title .content-button span {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(33, 200, 44, 0.3);
+}
 .content-body {
     display: flex;
     width: 100%;
@@ -568,7 +581,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 .content-like span,
 .content-scrap span,
-.content-share span{
+.content-share span {
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -576,22 +589,22 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     background-position: center;
     background-color: rgba(0, 0, 0, 0.3);
 }
-.content-like span.like-icon {
+span.like-icon {
     background-image: url(/static/img/gallery/like_icon.png);
 }
-.content-like span.like-icon.active {
+span.like-icon.active {
     background-image: url(/static/img/gallery/like_active.png);
 }
-.content-scrap span.scrap-icon {
+span.scrap-icon {
     background-image: url(/static/img/gallery/scrap_icon.png);
 }
-.content-scrap span.scrap-icon.active {
+span.scrap-icon.active {
     background-image: url(/static/img/gallery/scrap_active.png);
 }
-.content-share span.share-icon {
+span.share-icon {
     background-image: url(/static/img/gallery/share_icon.png);
 }
-.content-share span.share-icon.active {
+span.share-icon.active {
     background-image: url(/static/img/gallery/share_active.png);
 }
 
