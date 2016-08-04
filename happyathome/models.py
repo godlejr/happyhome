@@ -66,20 +66,19 @@ class User(db.Model, BaseMixin):
 
     @hybridmethod
     def follow_check(self, session_id, follow_id):
-        return db.session.query(Follow).filter(Follow.user_id == session_id).filter(
-            Follow.follow_id == follow_id).first()
+        return Follow.query.filter_by(user_id=session_id).filter_by(follow_id=follow_id).first()
 
     @hybridmethod
     def following_count(self, user_id):
-        return db.session.query(Follow).filter(Follow.user_id == user_id).count()
+        return Follow.query.filter_by(user_id=user_id).count()
 
     @hybridmethod
     def follower_count(self, user_id):
-        return db.session.query(Follow).filter(Follow.follow_id == user_id).count()
+        return Follow.query.filter_by(follow_id=user_id).count()
 
     @hybridmethod
     def follow_user(self, id):
-        return db.session.query(User).filter(User.id == id).first()
+        return User.query.filter(User.id == id).first()
 
     def is_authenticated(self):
         """Email 인증 여부 확인"""

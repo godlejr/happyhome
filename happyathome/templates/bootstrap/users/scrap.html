@@ -3,11 +3,13 @@
 {% block content_body %}
 <div class="content-body">
     <div class="user-contents">
-        <div class="user-menu">
-            <ul>
-                <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
-            </ul>
-        </div>
+        {% if session.user_id == user.id %}
+            <div class="user-menu">
+                <ul>
+                    <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
+                </ul>
+            </div>
+        {% endif %}
 
         <div class="user-title">갤러리 스크랩({{photoscraps_count}})</div>
         <div class="cards">

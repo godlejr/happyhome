@@ -1,7 +1,7 @@
 {% extends 'bootstrap/users/base.html' %}
 
 {% block content%}
-<div class="content">
+    <div class="content">
     <div class="content-cover-wrap" {% if user.cover %}style="background-image:url({{ url_for_s3('S3_COVER_DIRECTORY', filename=user.cover) }})"{% endif %}>
         <div class="content-cover">
             <div class="content-user">
@@ -19,6 +19,15 @@
                 <a href="{{ url_for('users.scrap', id=user.id) }}"><div class="menu-item">스크랩</div></a>
                 <div class="menu-item">Q&A</div>
             </div>
+            <div class="user-follow-wrap">
+                <div class="user-follows">
+                    <ul>
+                        <li><a href="{{ url_for('users.user_follower', id=user.id) }}"><span class="follewer-count">{{ user.follower_count(user.id) }}</span> 팔로워</a></li>
+                        <li><a href="{{ url_for('users.user_following', id=user.id) }}"><span class="follewing-count">{{ user.following_count(user.id) }}</span> 팔로잉</a></li>
+                    </ul>
+                </div>
+                <div class="user-follow" {% if user.id == session.user_id %}>나{% else %}style="background-image: url(/static/img/add_file.jpg);">{% endif %}</div>
+            </div>
         </div>
     </div>
 
@@ -26,27 +35,20 @@
 </div>
 
 <script>
-$(".follow").click(function(){
-    follow();
-});
-
-function follow(){
-     $.ajax({
+$(".user-follow").click(function(){
+    {% if user.id == session.user_id %}
+        document.location.href = "{{ url_for('users.follow', id=user.id) }}";
+    {% else %}
+        $.ajax({
             type: "POST",
             url: "{{ url_for('users.following') }}",
             data: {
                 follow_id: "{{ user.id }}"
             }
         }).success(function(data) {
-            $(".follow").children().remove();
-            if(data.ok == 1){
-
-                 $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉 취소</div>');
-            }else{
-                 $(".follow").append('<div class="users-hp-pofile-editbutton">팔로잉</div>');
-            }
-
+            $('.follewer-count').text(parseInt($('.follewer-count').text()) + data.ok);
         });
-}
+    {% endif %}
+});
 </script>
 {% endblock %}

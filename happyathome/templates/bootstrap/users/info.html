@@ -1,13 +1,15 @@
 {% extends 'bootstrap/users/content.html' %}
 
 {% block content_body %}
-<div class="content-body">
+<div class="content-body body-main">
     <div class="user-contents">
-        <div class="user-menu">
-            <ul>
-                <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
-            </ul>
-        </div>
+        {% if session.user_id == user.id %}
+            <div class="user-menu">
+                <ul>
+                    <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
+                </ul>
+            </div>
+        {% endif %}
 
         {% if session.user_id == user.id %}
             <div class="user-new">
@@ -16,7 +18,7 @@
             </div>
         {% endif %}
 
-        <table class="user-statistics">
+        <table class="table">
             <tbody>
             <tr>
                 <th>내가 올린 자료</th>

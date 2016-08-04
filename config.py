@@ -5,14 +5,13 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'secret'
     TEMPLATE_THEME = 'bootstrap'
-    REDIS_URL = 'dev.inotone.co.kr'
+    NO_IMG = 'noimg.JPG'
+    REDIS_URL = '52.78.113.21'
     S3_BUCKET_NAME = 'http://static.inotone.co.kr'
     S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'
     S3_COVER_DIRECTORY = '/data/cover/'
-    NO_IMG='noimg.JPG'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
-    REDIS_URL = "dev.inotone.co.kr"
 
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_POOL_TIMEOUT = 10
