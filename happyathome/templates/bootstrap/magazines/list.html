@@ -24,8 +24,8 @@
                             <div class="card-title">{{ card.title }}</div>
                         </div>
                         <div class="card-icon">
-                            <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_photos|length }}</div>
-                            <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_photos|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_magazines|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_magazines|length }}</div>
                             <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ card.comments|length }}</div>
                         </div>
                     </div>

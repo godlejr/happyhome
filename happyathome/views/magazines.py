@@ -5,7 +5,8 @@ import shortuuid
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app, session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room, User
+from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room, User, \
+    del_or_create, MagazineLike, MagazineScrap
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
@@ -110,6 +111,31 @@ def new():
                            categories=categories,
                            residences=residences,
                            rooms=rooms)
+
+
+@magazines.route('/like', methods=['GET', 'POST'])
+@login_required
+def like():
+    magazine_id = request.form.get('magazine_id', '')
+    if request.method == 'POST':
+        del_or_create(db.session, MagazineLike, user_id=session['user_id'], magazine_id=magazine_id)
+    return jsonify({
+        'magazine_id': magazine_id,
+        'count': MagazineLike.query.filter_by(magazine_id=magazine_id).count()
+    })
+
+
+@magazines.route('/scrap', methods=['GET', 'POST'])
+@login_required
+def scrap():
+    magazine_id = request.form.get('magazine_id', '')
+    if request.method == 'POST':
+        del_or_create(db.session, MagazineScrap, user_id=session['user_id'], magazine_id=magazine_id)
+    return jsonify({
+        'magazine_id': magazine_id,
+        'count': MagazineScrap.query.filter_by(magazine_id=magazine_id).count()
+    })
+
 
 
 @magazines.route('/<id>/comments/new', methods=['GET', 'POST'])

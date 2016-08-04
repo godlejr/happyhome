@@ -19,17 +19,17 @@
                     {% for follower in followers %}
                         <div class="cell col">
                             <div class="follow-info">
-                                <div class="follow-avatar" id="{{ user.follow_user(follower.user_id).id }}"
-                                     {% if user.follow_user(follower.user_id).avatar %}
-                                     style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=user.follow_user(follower.user_id).avatar) }})"
+                                <div class="follow-avatar" id="{{ follower.user_id }}"
+                                     {% if follower.user.avatar %}
+                                     style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=follower.user.avatar) }})"
                                      {% endif %}
                                 ></div>
                                 <div class="follow-content">
-                                    <div class="follow-name">{{ user.follow_user(follower.user_id).name }}</div>
-                                    {% if session.user_id == follower.user_id %}
-                                        나
-                                    {% else %}
-                                        {% if session.user_id %}
+                                    <div class="follow-name">{{ follower.user.name }}</div>
+                                    {% if session.user_id %}
+                                        {% if session.user_id == follower.user_id %}
+                                            나
+                                        {% else %}
                                             <button class="follow-button btn-submit small {% if user.follow_check(session.user_id, follower.user_id) %}display_none{% endif %}"
                                                 name="{{ follower.user_id }}">
                                                 <i class="material-icons">person_add</i> 팔로잉
@@ -58,11 +58,7 @@ $(".follow-me-button").click(function(){
 });
 
 $(".follow-avatar").click(function() {
-    if($(this).attr('name') == 2){
-        document.location.href = "{{ url_for('professionals.detail', id='') }}" + $(this).attr('id');
-    }else{
-        document.location.href = "/user/" + $(this).attr('id') + "/gallery";
-    }
+    document.location.href = "{{ url_for('users.info', id='') }}" + $(this).attr('id');
 });
 
 $(".follow-button").click(function(){

@@ -38,9 +38,9 @@
                     <div class="login_02"><a href="{{ url_for('users.edit_profile',id=session.user_id) }}">설정</a></div>
                 {% endif %}
                 <div class="gnb">
-                <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리@홈</a></div>
-                <div class="gnb_nav_h1"><a href="{{ url_for('photos.list') }}">갤러리@홈</a></div>
-                <div class="gnb_nav_h1"><a href="{{ url_for('professionals.list')}}">프로@홈</a></div>
+                <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리</a></div>
+                <div class="gnb_nav_h1"><a href="{{ url_for('photos.list') }}">갤러리</a></div>
+                <div class="gnb_nav_h1"><a href="{{ url_for('professionals.list')}}">프로</a></div>
                 <div class="gnb_nav_h2"><a href="{{ url_for('boards.list', board_id=1)}}">해피Q&amp;A</a></div>
                 <div class="write_i"><img src="{{ url_for('static', filename='img/main/write_i.jpg') }}" /></div>
                 <div class="write_t"><a href="{{ url_for('users.info', id=session.user_id) }}">글쓰기</a></div>

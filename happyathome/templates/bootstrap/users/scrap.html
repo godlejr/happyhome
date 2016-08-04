@@ -11,7 +11,21 @@
             </div>
         {% endif %}
 
-        <div class="user-title">갤러리 스크랩({{photoscraps_count}})</div>
+        <div class="user-title">스토리 스크랩({{ magazinescraps_count }})</div>
+        <div class="cards">
+            {% for magazinescrap in magazinescraps %}
+                <div class="card" id="{{ magazinescrap.magazine_id }}"
+                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazinescrap.magazine.photos[0].file.name) }})">
+                    {% if magazinescrap.magazine.has_vr  %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% elif magazinescrap.magazine.has_mov  %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="user-title">갤러리 스크랩({{ photoscraps_count }})</div>
         <div class="cards">
             {% for photoscrap in photoscraps %}
                 <div class="card" id="{{ photoscrap.photo_id }}"
@@ -23,9 +37,6 @@
                     {% endif %}
                 </div>
             {% endfor %}
-        </div>
-        <div class="pagination-nav">
-            {{ func.render_pagination('users.scrap', pagination, user.id) }}
         </div>
     </div>
 </div>
