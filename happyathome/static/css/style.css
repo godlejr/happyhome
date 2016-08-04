@@ -219,8 +219,16 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     background-color: rgba(0, 0, 0, 0.085);
 }
 .content-cover .content-user {
+    color: #484e52;
     padding: 40px 0 10px 0;
 }
+.content-sidebar .content-user a{
+    color: #484e52;
+}
+.content-user a:hover{
+    text-decoration:underline;
+}
+
 .content-cover .user-avatar {
     display: block;
     margin: 0 auto;
@@ -342,6 +350,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-avatar {
     display: table-cell;
+    cursor:pointer;
     vertical-align: middle;
     width: 56px;
     height: 56px;
@@ -390,6 +399,11 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     display: table-cell;
     vertical-align: middle;
 }
+
+.magazine-user a:hover{
+    text-decoration:underline;
+}
+
 .content-header .magazine-spec {
     width: 200px;
     display: table-cell;
@@ -418,6 +432,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-header .magazine-avatar {
     display: table-cell;
     vertical-align: middle;
+    cursor:pointer;
     width: 70px;
     height: 70px;
     border: 1px solid #ebeaef;
@@ -726,6 +741,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-comment .comment-avatar {
     display: inline-block;
+    cursor:pointer;
     width: 26px;
     height: 26px;
     border-radius: 50px;
@@ -741,6 +757,12 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-size: 12px;
     font-weight: 700;
 }
+
+.comment-info a:hover{
+    color: #484e52;
+    text-decoration:underline;
+}
+
 .content-comment .comment-date {
     margin-left: 10px;
     font-size: 12px;
@@ -869,6 +891,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     color: #ffffff;
     background-color: rgba(0, 0, 0, 0.6);
 }
+
+
 .card .card-avatar {
     display: flex;
     width: 26px;
@@ -921,6 +945,11 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .card .card-content a:hover {
     text-decoration: underline;
 }
+
+.card .card-author a:hover {
+    text-decoration: underline;
+}
+
 .card .card-content .card-category {
     font-weight: 700;
     margin-bottom: 8px;

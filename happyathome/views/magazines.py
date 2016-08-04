@@ -180,12 +180,11 @@ def comment_edit():
 @magazines.route('/comment_remove', methods=['POST'])
 def comment_remove():
     if request.method == 'POST':
-        comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
-        comment.deleted = True
-
-        db.session.add(comment)
+        db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).update({ 'deleted' : True })
         db.session.commit()
 
         return jsonify({
             'ok': 1
         })
+
+
