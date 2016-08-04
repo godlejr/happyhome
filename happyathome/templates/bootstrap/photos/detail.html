@@ -9,9 +9,17 @@
 <meta property="og:description" content="{{ post.content }}" />
 <meta property="og:image:width" content="300" />
 <meta property="og:image:height" content="300" />
-{% endblock %}
-{% block content %}
 
+<meta name="twitter:card" content="{{ post.user.name }}" />
+<meta name="twitter:url" content="http://dev.inotone.co.kr/gallery/{{ post.id }}" />
+<meta name="twitter:description" content="{{ post.content }}" />
+<meta name="twitter:image" content="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
 <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
 
@@ -41,7 +49,17 @@
                             <div class="content-scrap">
                                 <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
                             </div>
-                            <div class="content-share"><span class="share-icon"></span></div>
+                            <div class="content-share-sns" hidden="hidden">
+                                <div class="content-share-facebook"><a target="_blank"
+                                                                       href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/{{ post.id }}"><span
+                                        class="share-icon"></span></a></div>
+                                <div class="content-share-kakao"><a href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/gallery/{{ post.id }}"
+                                                                    target="_blank">
+                                    <span class="share-icon" id="kakaostory-share-button" ></span>
+                                </a></div>
+                                <div class="content-share-twitter"><span class="share-icon"></span></div>
+                            </div>
+                            <div class="content-share active" ><span class="share-icon"></span></div>
                         </div>
                     {% endif %}
                     <div class="content-text">{{ post.content }}</div>
@@ -179,9 +197,37 @@
 </div>
 
 <script>
-$('.share-icon').click(function(){
-    window.open('http://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/gallery/' + '{{ post.id }}');
+
+$('.share-icon').mouseover(function(){
+    $(this).toggleClass('active');
+    $('.content-share-sns').show();
+}).mouseout(function() {
+    $(this).toggleClass('active');
+    $('.content-share-sns').hide();
 });
+
+window.kakaoAsyncInit = function(){
+	Kakao.Story.createShareButton({
+		container: '#kakaostory-share-button'
+	});
+};
+
+(function (d,s,id){
+	var js,fjs = d.getElementsByTagName(s)[0];
+	if(d.getElementById(id)) return;
+	js = d.createElement(s); js.id =id;
+	js.src = "//developers.kakao.com/sdk/js/kakao.story.min.js";
+	fjs.parentNode.insertBefore(js,fjs);
+}(document,'script','kakao-js-sdk'));
+
+$('.content-share-twitter').click(function(){
+    twitter( 'http://dev.inotone.co.kr/gallery/{{post.id}}' ,'{{ post.user.name }}');
+});
+
+twitter=function(url,text){
+	window.open("https://twitter.com/intent/tweet?url=" + url  +"&text=" + text );
+};
+
 
 $('.comment-reply').click(function(){
     if ($(this).text() == '답글'){

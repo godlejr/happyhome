@@ -404,14 +404,74 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-share {
     position: absolute;
     cursor: pointer;
+    float: left;
     right: 0;
     bottom: 0;
     width: 56px;
     height: 56px;
 }
+.content-share-sns{
+    float:left;
+}
+
+.content-share-facebook{
+    position: absolute;
+    cursor: pointer;
+    right: 56px;
+    float: left;
+    bottom: 0;
+    width: 56px;
+    height: 56px;
+}
+
+.content-share-kakao{
+    position: absolute;
+    cursor: pointer;
+    right: 112px;
+    bottom: 0;
+    float: left;
+    width: 56px;
+    height: 56px;
+}
+.content-share-kakao.kakao-button{
+    cursor:pointer;
+}
+.content-share-twitter{
+    position: absolute;
+    cursor: pointer;
+    right: 168px;
+    float: left;
+    bottom: 0;
+    width: 56px;
+    height: 56px;
+}
+
+.content-share-instar{
+    position: absolute;
+    cursor: pointer;
+    right: 112px;
+    float: left;
+    bottom: 0;
+    width: 56px;
+    height: 56px;
+}
+
+.content-share-facebook span,
+.content-share-kakao span,
+.content-share-twitter span{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    background-size:cover;
+}
+
+
 .content-like span,
 .content-scrap span,
-.content-share span {
+.content-share span{
     display: inline-block;
     width: 100%;
     height: 100%;
@@ -436,6 +496,16 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-share span.share-icon.active {
     background-image: url(/static/img/gallery/share_active.png);
+}
+
+.content-share-facebook span.share-icon {
+    background-image: url(/static/img/gallery/facebook_icon.png);
+}
+.content-share-twitter span.share-icon {
+    background-image: url(/static/img/gallery/twitter_icon.png);
+}
+.content-share-kakao span.share-icon {
+    background-image: url(/static/img/gallery/kakao_icon.png);
 }
 .content-text {
     margin: 20px 0;
