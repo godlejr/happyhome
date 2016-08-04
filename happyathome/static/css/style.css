@@ -198,6 +198,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .magazine-title .content-button span {
     display: inline-block;
+    cursor: pointer;
     width: 30px;
     height: 30px;
     border-radius: 50%;
