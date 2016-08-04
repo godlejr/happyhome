@@ -528,28 +528,31 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-share-set .content-share-facebook{
     position: absolute;
     cursor: pointer;
-    left: 775px;
+    left: 755px;
+    top: 180px;
     float: left;
-    width: 45px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
 }
 
 .content-share-set .content-share-kakao{
     position: absolute;
     cursor: pointer;
-    left: 730px;
+    left: 725px;
+    top: 180px;
     float: left;
-    width: 45px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
 }
 
 .content-share-set .content-share-twitter{
     position: absolute;
     cursor: pointer;
-    left: 685px;
+    left: 695px;
+    top: 180px;
     float: left;
-    width: 45px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
 }
 
 .content-share-sns{
