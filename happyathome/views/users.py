@@ -7,7 +7,7 @@ import shortuuid
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
 from flask_login import login_required
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
-from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap
+from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap, Comment
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
@@ -27,9 +27,20 @@ def utility_processor():
 def info(id=None):
     if not id:
         return redirect(url_for('users.info', id=session['user_id']))
-
     user = User.query.filter_by(id=id).first()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html', user=user)
+    magazine_count =  Magazine.query.filter_by(user_id=id).count()
+    photo_count = Photo.query.filter_by(user_id=id).count()
+    photoscrap_count = PhotoScrap.query.filter_by(user_id=id).count()
+    following_count = Follow.query.filter_by(user_id=id).count()
+    follower_count = Follow.query.filter_by(follow_id=id).count()
+    comment_count = Comment.query.filter_by(user_id=id).filter_by(deleted=0).filter_by(depth=0).count()
+
+
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html', user=user,
+                           magazine_count=magazine_count, photo_count=photo_count, photoscrap_count=photoscrap_count,
+                           following_count=following_count, follower_count=follower_count, comment_count=comment_count
+                           )
 
 
 @users.route('/<id>/gallery', defaults={'page': 1})
