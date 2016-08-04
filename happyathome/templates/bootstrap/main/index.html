@@ -17,8 +17,8 @@
                 {% endif %}
                 <div class="card-info">
                     <div class="card-author">
-                        <div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.user_id }}.png)"></div>
-                        <div class="card-user">{{ card.user.name }}</div>
+                        <a href="{{ url_for('users.info',id = card.user.id) }}"><div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.user_id }}.png)"></div></a>
+                        <a class="card-user" href="{{ url_for('users.info',id = card.user.id) }}">{{ card.user.name }}</a>
                         <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
                     </div>
                     <div class="card-content">
@@ -50,8 +50,8 @@
             {% endif %}
             <div class="card-info">
                 <div class="card-author">
-                    <div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.id }}.png)"></div>
-                    <div class="card-user">{{ card.user.name }}</div>
+                    <a href="{{ url_for('users.info',id = card.user.id) }}"><div class="card-avatar" style="background-image:url(https://robohash.org/{{ card.id }}.png)"></div></a>
+                    <a class="card-user" href="{{ url_for('users.info',id = card.user.id) }}">{{ card.user.name }}</a>
                     <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
                 </div>
                 <div class="card-content">

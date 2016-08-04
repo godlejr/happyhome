@@ -12,7 +12,7 @@ class Config(object):
     S3_COVER_DIRECTORY = '/data/cover/'
     NO_IMG='noimg.JPG'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
-    REDIS_URL = "dev.inotone.co.kr"
+    REDIS_URL = "52.78.113.21"
 
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_POOL_TIMEOUT = 10
