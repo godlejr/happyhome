@@ -19,9 +19,36 @@
                 <a href="{{ url_for('professionals.scrap', id=user.id) }}"><div class="menu-item">스크랩</div></a>
                 <a href="{{ url_for('professionals.question', id=user.id) }}"><div class="menu-item">Q&amp;A</div></a>
             </div>
+            <div class="user-follow-wrap">
+                <div class="user-follows">
+                    <ul>
+                        <li><a href="{{ url_for('users.user_follower', id=user.id) }}"><span class="follewer-count">{{ user.follower_count(user.id) }}</span> 팔로워</a></li>
+                        <li><a href="{{ url_for('users.user_following', id=user.id) }}"><span class="follewing-count">{{ user.following_count(user.id) }}</span> 팔로잉</a></li>
+                    </ul>
+                </div>
+                <div class="user-follow" {% if user.id == session.user_id %}>나{% else %}style="background-image: url(/static/img/add_file.jpg);">{% endif %}</div>
+            </div>
         </div>
     </div>
 
     {% block content_body %}{% endblock %}
 </div>
+
+<script>
+$(".user-follow").click(function(){
+    {% if user.id == session.user_id %}
+        document.location.href = "{{ url_for('users.follow', id=user.id) }}";
+    {% else %}
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('users.following') }}",
+            data: {
+                follow_id: "{{ user.id }}"
+            }
+        }).success(function(data) {
+            $('.follewer-count').text(parseInt($('.follewer-count').text()) + data.ok);
+        });
+    {% endif %}
+});
+</script>
 {% endblock %}
