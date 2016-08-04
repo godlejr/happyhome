@@ -3,6 +3,12 @@
 {% block content_body %}
 <div class="content-body">
     <div class="user-contents">
+        <div class="user-menu">
+            <ul>
+                <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
+            </ul>
+        </div>
+
         <div class="user-title">스토리</div>
         <div class="cards">
             {% for magazine in magazines %}
@@ -29,6 +35,10 @@
 <script>
 $('.card').click(function() {
     document.location.href = "{{ url_for('magazines.detail', id='') }}" + $(this).attr('id');
+});
+
+$('.user-menu li').click(function() {
+    document.location.href = $(this).attr('href');
 });
 </script>
 {% endblock %}

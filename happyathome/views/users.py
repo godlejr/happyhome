@@ -5,6 +5,7 @@ import boto3
 import shortuuid
 
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
+from flask_login import login_required
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
 from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap
 from werkzeug.security import generate_password_hash
@@ -20,15 +21,15 @@ def utility_processor():
     return dict(url_for_s3=url_for_s3)
 
 
+@users.route('/')
 @users.route('/<id>')
-def info(id):
-    user = db.session.query(User).filter_by(id=id).first()
-    # if session:
-    #   follow =  db.session.queru(Follow).filter(Follow.user_id == session['user_id'])
+@login_required
+def info(id=None):
+    if not id:
+        return redirect(url_for('users.info', id=session['user_id']))
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html',
-                           user=user,
-                           current_app=current_app)
+    user = User.query.filter_by(id=id).first()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html', user=user)
 
 
 @users.route('/<id>/gallery', defaults={'page': 1})
@@ -184,7 +185,7 @@ def question(id):
                            current_app=current_app)
 
 
-@users.route('/<id>/edit_professional', methods=['GET', 'POST'])
+@users.route('/<id>/professional/edit', methods=['GET', 'POST'])
 def edit_professional(id):
     post = db.session.query(User).filter_by(id=id).first()
     professional = Professional()
@@ -209,48 +210,48 @@ def edit_professional(id):
                            form=form)
 
 
-@users.route('/<id>/edit_password', methods=['GET', 'POST'])
+@users.route('/<id>/password/edit', methods=['GET', 'POST'])
 def edit_password(id):
-    post = db.session.query(User).filter_by(id=id).first()
+    user = db.session.query(User).filter_by(id=id).first()
     form = PasswordUpdateForm(request.form)
     if request.method == 'POST':
         if form.validate():
-            post.password = generate_password_hash(form.password.data)
-            db.session.add(post)
+            user.password = generate_password_hash(form.password.data)
+            db.session.add(user)
             db.session.commit()
 
             return redirect(url_for('users.edit_info', id=id))
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_password.html', post=post, form=form)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_password.html', user=user, form=form)
 
 
-@users.route('/<id>/edit_info', methods=['GET', 'POST'])
-def edit_info(id):
-    post = db.session.query(User).filter_by(id=id).first()
+@users.route('/<id>/edit', methods=['GET', 'POST'])
+def edit_profile(id):
+    user = User.query.filter_by(id=session['user_id']).first()
     form = UpdateForm(request.form)
     if request.method == 'POST':
-        post.name = form.name.data
-        post.homepage = form.homepage.data
+        user.name = form.name.data
+        user.homepage = form.homepage.data
 
         if request.form['sex_check'] == '1':
-            post.sex = 'M'
+            user.sex = 'M'
         else:
-            post.sex = 'F'
-        if post.avatar != request.form.get('profileFileName'):
-            s3 = boto3.resource('s3')
-            s3.Object('static.inotone.co.kr', 'data/user/%s' % post.avatar).delete()
-            post.avatar = request.form.get('profileFileName')
+            user.sex = 'F'
 
-        if post.cover != request.form.get('coverFileName'):
+        if user.avatar != request.form.get('profileFileName'):
             s3 = boto3.resource('s3')
-            s3.Object('static.inotone.co.kr', 'data/cover/%s' % post.cover).delete()
-            post.cover = request.form.get('coverFileName')
+            s3.Object('static.inotone.co.kr', 'data/user/%s' % user.avatar).delete()
+            user.avatar = request.form.get('profileFileName')
 
-        db.session.add(post)
+        if user.cover != request.form.get('coverFileName'):
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/cover/%s' % user.cover).delete()
+            user.cover = request.form.get('coverFileName')
+
+        db.session.add(user)
         db.session.commit()
-        return redirect(url_for('users.edit_info', id=id))
-
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_info.html', post=post, form=form)
+        return redirect(url_for('users.edit_profile', id=id))
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_profile.html', user=user, form=form)
 
 
 @users.route('/profile_upload', methods=['POST'])
