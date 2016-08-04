@@ -522,14 +522,15 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 56px;
 }
 .content-share-set{
+    position:relative;
+    float:right;
    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .content-share-set .content-share-facebook{
     position: absolute;
     cursor: pointer;
-    left: 755px;
-    top: 180px;
+    right: -65px;
     float: left;
     width: 30px;
     height: 30px;
@@ -538,8 +539,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-share-set .content-share-kakao{
     position: absolute;
     cursor: pointer;
-    left: 725px;
-    top: 180px;
+    right: -35px;
     float: left;
     width: 30px;
     height: 30px;
@@ -548,8 +548,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-share-set .content-share-twitter{
     position: absolute;
     cursor: pointer;
-    left: 695px;
-    top: 180px;
+    right: -5px;
     float: left;
     width: 30px;
     height: 30px;

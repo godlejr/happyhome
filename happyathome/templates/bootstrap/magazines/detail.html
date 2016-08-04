@@ -20,17 +20,7 @@
 <div class="content">
     <div class="content-body">
         <div class="content-main">
-            <div class="content-share-set" hidden="hidden">
-                <div class="content-share-facebook"><a target="_blank"
-                                                       href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/story/{{ post.id }}"><span
-                        class="share-icon"></span></a></div>
-                <div class="content-share-kakao"><a
-                        href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/story/{{ post.id }}"
-                        target="_blank">
-                    <span class="share-icon" id="kakaostory-share-button"></span>
-                </a></div>
-                <div class="content-share-twitter"><span class="share-icon"></span></div>
-            </div>
+
             <div class="content-section">
                 <div class="content-header">
                     <div class="magazine-title">
@@ -39,6 +29,18 @@
                             <span class="like-icon {% if post.is_active('MagazineLike', session.user_id) %}active{% endif %}"></span>
                             <span class="scrap-icon {% if post.is_active('MagazineScrap', session.user_id) %}active{% endif %}"></span>
                             <span class="share-icon"></span>
+                        </div>
+
+                        <div class="content-share-set" hidden="hidden">
+                            <div class="content-share-facebook"><a target="_blank"
+                                                                   href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/story/{{ post.id }}"><span
+                                    class="share-icon"></span></a></div>
+                            <div class="content-share-kakao"><a
+                                    href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/story/{{ post.id }}"
+                                    target="_blank">
+                                <span class="share-icon" id="kakaostory-share-button"></span>
+                            </a></div>
+                            <div class="content-share-twitter"><span class="share-icon"></span></div>
                         </div>
                     </div>
                     <div class="magazine-header">
