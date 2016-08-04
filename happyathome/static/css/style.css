@@ -859,6 +859,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     max-width: 286px;
 }
+
+
 .card .card-hits {
     float: left;
     width: 50px;
