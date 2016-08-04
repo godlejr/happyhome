@@ -71,13 +71,34 @@ def story(id, page):
 
 @users.route('/<id>/follow')
 def follow(id):
-    post = db.session.query(User).filter_by(id=id).first()
-    followings = db.session.query(Follow).filter(Follow.user_id == id).all()
-    followers = db.session.query(Follow).filter(Follow.follow_id == id).all()
+    user = User.query.filter_by(id=id).first()
+    followings = Follow.query.filter_by(user_id=id).limit(8).all()
+    followers = Follow.query.filter_by(follow_id=id).limit(8).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/follow.html', post=post, followers=followers,
-                           followings=followings,
-                           current_app=current_app)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/follow.html',
+                           user=user,
+                           followers=followers,
+                           followings=followings)
+
+
+@users.route('/<id>/follower')
+def user_follower(id):
+    user = User.query.filter_by(id=id).first()
+    followers = Follow.query.filter_by(follow_id=id).all()
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/follower.html',
+                           user=user,
+                           followers=followers)
+
+
+@users.route('/<id>/following')
+def user_following(id):
+    user = User.query.filter_by(id=id).first()
+    followings = Follow.query.filter_by(user_id=id).all()
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/following.html',
+                           user=user,
+                           followings=followings)
 
 
 @users.route('/<id>/scrap', defaults={'page': 1})
@@ -309,27 +330,20 @@ def cover_unload():
 @users.route('/following', methods=['POST'])
 def following():
     if request.method == 'POST':
-
-        follow_check = db.session.query(Follow).filter(Follow.user_id == session['user_id']).filter(
-            Follow.follow_id == request.form.get('follow_id')).first()
+        follow = Follow.query.filter_by(user_id=session['user_id']).filter_by(follow_id=request.form.get('follow_id'))
+        follow_check = follow.first()
 
         if follow_check:
-            db.session.query(Follow).filter(Follow.user_id == session['user_id']).filter(
-                Follow.follow_id == request.form.get('follow_id')).delete()
-            db.session.commit()
-
-            return jsonify({
-                'ok': 2
-            })
-
+            ok = -1
+            follow.delete()
         else:
+            ok = 1
             follow = Follow()
             follow.user_id = session['user_id']
             follow.follow_id = request.form.get('follow_id')
 
             db.session.add(follow)
-            db.session.commit()
-
-            return jsonify({
-                'ok': 1
-            })
+        db.session.commit()
+        return jsonify({
+            'ok': ok
+        })

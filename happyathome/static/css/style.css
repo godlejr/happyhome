@@ -17,38 +17,41 @@ div      { box-sizing: border-box; }
 table    { border-collapse: collapse; }
 #wrap    { padding:0; margin:0 auto; width:1184px; }
 .icon>img { vertical-align: middle; }
+.input-disabled { border: 0 !important; }
+.left { float: left !important; }
+.right { float: right !important; }
 
 /******* 공통 레이아웃 *********/
 a:link { text-decoration:none; }
 a:visited { text-decoration:none; }
 a:active { text-decoration:none; }
-a:hover{ text-decoration:none; }
+a:hover{ text-decoration:underline; }
 a img { border:0; vertical-align:top; }
 ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .clear { clear:both; }
 
 /******* header **********/
 #header     { width:100%; height:90px; background-color:#fff; }
- .top       { padding:0; margin:0 auto; 
+ .top       { padding:0; margin:0 auto;
               width:1184px; height:90px; }
  .log       { float:left;
               width:299px;
               padding-top:16px; }
- .nav       { float:left;  
+ .nav       { float:left;
               width:885px; }
- .search    { float:left; 
+ .search    { float:left;
               width:143px; height:31px;
               margin-top:10px; margin-left:602px; }
  .search_field  { float:left;
                   width:122px; height:31px;
                   background:url(/static/img/main/search_bg.jpg) no-repeat; }
  .search_btn    { float:left;
-                  width:21px; 
+                  width:21px;
                   margin-top:10px; }
- .login_01      { float:left; 
+ .login_01      { float:left;
                   margin-top:25px; margin-left:28px;
                   font-size:13px; color:#2b2b2b; cursor:pointer; }
- .login_02      { float:left; 
+ .login_02      { float:left;
                   margin-top:25px; margin-left:21px;
                   font-size:13px; color:#2b2b2b; cursor:pointer;}
  .gnb           { width:885px; }
@@ -68,7 +71,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
                   margin-top:14px; margin-left:1px;
                   font-size:13px; color:#2b2b2b; }
  .img_section  { padding:0; margin:0  auto;
-                 width:100%; height:394px; 
+                 width:100%; height:394px;
                  background-color:#484e52; background:url(/static/img/main/img.jpg) no-repeat; }
 #filter        { float:left;
                  width:100%; height:65px; background-color:#484e52; }
@@ -99,25 +102,25 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
  .f_menu .box2 a { color: #030303; font-size: 13px;}
  .f_menu .h1    { width:152px;
                     padding-top:16px;
-                    padding-left:28px; 
+                    padding-left:28px;
                     font-size:13px; color:#2b2b2b; }
  .f_menu .h2    { width:152px;
                     padding-top:11px;
-                    padding-left:28px; 
+                    padding-left:28px;
                     font-size:13px; color:#2b2b2b; }
 
-#f1            { position:relative; 
+#f1            { position:relative;
                  padding:0; margin:7px auto 0 auto;
                  width:590px; height:27px; }
 .f_nav_h1      { float:left;
                  margin-top:11px; margin-left:100px; }
 .f_nav_h2      { float:left;
-                 margin-top:7px; 
+                 margin-top:7px;
                  font-size:15px; color:#a5afb7;  }
 .f_nav_h3      { float:left;
                  margin-top:11px; margin-left:122px; }
-#f2           { position:relative; 
-                padding:0; margin:0 auto; 
+#f2           { position:relative;
+                padding:0; margin:0 auto;
                 width:700px; height:26px; }
 .f2_nav_h1    { float:left;
                 width:160px; height:25px;
@@ -134,10 +137,10 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .f2_nav_h4    { float:left;
                 width:160px; height:25px;
                 margin-top:7px; padding-left:60px;
-                font-size:15px; color:#fff; text-align: center; }       
+                font-size:15px; color:#fff; text-align: center; }
 .f2_all       { float:left; cursor: pointer;
                 width:61px; height:17px; }
-              
+
 
 
 /******* main container **********/
@@ -164,6 +167,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-weight: 700;
 }
 .content-form .input-field {
+    position: relative;
     min-height: 30px;
     margin: 15px 0;
 }
@@ -200,7 +204,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     padding-top: 22px;
 }
 .content-cover-wrap {
-    position: relative;
     width: 100%;
     max-width: 1184px;
     height: 295px;
@@ -210,7 +213,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     background-position: center;
 }
 .content-cover {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.085);
@@ -276,6 +279,55 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     text-align: center;
     font-size: 16px;
     font-weight: 700;
+}
+.user-follow-wrap {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.user-follow {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 52px;
+    border-radius: 50%;
+    font-weight: 700;
+    text-align: center;
+    background-color: #f9f9f9;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.user-follows {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    width: 180px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.user-follows ul {
+    padding: 3px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.user-follows li {
+    display: inline;
+    padding: 0 10px;
+    color: #ffffff;
+    text-align: center;
+}
+.user-follows li a:hover {
+    text-decoration: underline;
+}
+.user-follows li a,
+.user-follows li span {
+    color: #ffffff;
+}
+.user-follows li:last-child {
+    border-left: 1px solid #ffffff;
 }
 .content-main {
     width: 100%;
@@ -1429,6 +1481,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     padding: 6px 6px 0;
     letter-spacing: -0.5px;
     font-size: 13px;
+    font-weight: 500;
  }
 
  .edit_radio_label{
@@ -1470,19 +1523,19 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 150px;
 }
 
- .edit-profile-preview {
+.edit-profile-preview {
     width: 582px;
     height: 150px;
     cursor: pointer;
     margin: 0 auto;
     text-align: center;
     vertical-align: middle;
-    background-color: #ffffff;
+    border: 1px solid #ededed;
+    background-color: #f4f4f4;
     background-size: auto;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('/static/img/btn_upload.png');
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
 .profile-preview-loading {
@@ -1895,60 +1948,93 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 
 /******* follow *******/
-
-.follow-row{
-    width:100%;
-    margin:0 auto;
-    display:inline-block;
-    background-color:white;
+.follow-list {
+    display: table;
+    width: 100%;
+    border-top: 1px solid #eeeeee;
+    border-left: 1px solid #eeeeee;
+    border-right: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
 }
-
-
+.follow-list .caption {
+    display: table-caption;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eeeeee;
+    border-left: 1px solid #eeeeee;
+    border-right: 1px solid #eeeeee;
+}
+.follow-list .row {
+    display: table-row;
+    border-bottom: 1px solid #eeeeee;
+}
+.follow-list .cell {
+    display: table-cell;
+    padding: 20px;
+    text-align: center;
+    border-right: 1px dashed #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+}
+.follow-list .cell:last-child {
+    border-right: 0;
+}
+.follow-list .col {
+    width: 25%;
+}
 .follow-title{
     font-size: 15px;
-    padding: 15px;
-    font-weight:bold;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 15px 64px;
 }
-
+.follow-info {
+}
 .follow-people{
     width: 33.3333%;
     float:left;
 }
 .follow-content-row{
-    width:100%;
-    display: inherit;
+    width: 100%;
+    padding: 0 64px 40px 64px;
 }
-
-.follow-avatar{
-    width:120px;
-    height:120px;
-    float:left;
-    margin:10px 10px 10px 20px;
-    cursor:pointer;
+.follow-avatar {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    border-radius: 50%;
+    vertical-align: middle;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
-.follow-content{
-    float:left;
-    height:inherit;
+.follow-content {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
 }
-
-.follow-name{
-    padding:15px;
-    font-size:20px
+.follow-name {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 14px;
+    font-weight: 700;
 }
-
-.follow-button{
-    margin:20px;
-    cursor:pointer;
+.follow-button {
+    width: 112px;
+    height: 32px;
+    vertical-align: middle;
 }
-
+.follow-button i {
+    color: #ffffff;
+    font-size: 18px;
+    vertical-align: middle;
+}
 .follow-me-button{
     margin:20px;
     cursor:pointer;
 }
-
 .follow-button.display_none{
     display:none;
 }
@@ -2085,31 +2171,31 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 /******* footer **********/
 #footer { width:100%; height:116px; background-color:#3e4448; }
- .bot   { padding:0; margin:0 auto; 
+ .bot   { padding:0; margin:0 auto;
           width:1184px; height:92px; }
  .ci    { float:left;
-          width:162px; 
+          width:162px;
           padding-top:35px; }
  .cr_1  { float:left;
-          width:388px; 
-          padding-top:20px; 
+          width:388px;
+          padding-top:20px;
           font-size:12px;
           color:#787c7f;
           line-height: 20px;
         }
  .cr_2  { float:left;
-          width:279px; 
+          width:279px;
           padding-top:60px;
           font-size:12px;
           color:#787c7f;
           line-height: 20px;}
- .cr_3  { float:left; 
+ .cr_3  { float:left;
           padding-top:60px; margin-left:8px;
           font-size:12px; color:#9fa2a4; font-weight:bold; }
- .cr_4  { float:left; 
+ .cr_4  { float:left;
           padding-top:60px; margin-left:25px;
           font-size:12px; color:#9fa2a4; font-weight:bold; }
- .selectbox  { float:left; 
+ .selectbox  { float:left;
                padding-top:57px; margin-left:15px; }
 
 select.browser-default {
@@ -2158,7 +2244,7 @@ input[type=file] {
     width: 600px;
     height: 400px;
     margin: -200px 0 0 -300px;
-    background-color: #ffffff;
+    background-color: #f4f4f4;
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('/static/img/ripple.gif');
@@ -2435,25 +2521,28 @@ input[type=file] {
 }
 
 
-.user-statistics {
+.table {
     margin: 60px auto;
-    border: 1px solid #cccccc;
+    border: 1px solid #cccccc !important;
 }
-.user-statistics th {
+.table th {
     width: 150px;
     height: 30px;
     font-size: 14px;
     border: 1px solid #cccccc;
     background-color: #f9f9f9;
 }
-.user-statistics td {
+.table td {
     width: 150px;
     height: 20px;
     font-size: 12px;
     text-align: center;
     border-right: 1px dashed #cccccc;
 }
-.user-statistics td i {
+.table td:last-child {
+    border-right: 1px solid #cccccc;
+}
+.table td i {
     padding: 20px;
     font-size: 44px;
 }
@@ -2466,7 +2555,7 @@ input[type=file] {
     display: inline;
     float: right;
 }
-.btn-submit {
+button.btn-submit {
     cursor: pointer;
     color: #ffffff;
     font-size: 14px;
@@ -2475,7 +2564,10 @@ input[type=file] {
     border: 1px solid #46AB76;
     background-color: #5EB788;
 }
-.btn-default {
+button.btn-submit.small {
+    padding: 5px 20px;
+}
+button.btn-default {
     cursor: pointer;
     color: #000000;
     font-size: 14px;
@@ -2484,7 +2576,13 @@ input[type=file] {
     border: 1px solid #46AB76;
     background-color: #ffffff;
 }
-.btn-danger {
+button.btn-default i {
+    color: #5EB788;
+    font-size: 16px;
+    font-weight: 700;
+    vertical-align: top;
+}
+button.btn-danger {
     cursor: pointer;
     color: #CC020A;
     font-size: 14px;
@@ -2492,10 +2590,4 @@ input[type=file] {
     padding: 7px 30px;
     border: 1px solid #CC020A;
     background-color: #ffffff;
-}
-.btn-default i {
-    color: #5EB788;
-    font-size: 16px;
-    font-weight: 700;
-    vertical-align: top;
 }

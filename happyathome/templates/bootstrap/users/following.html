@@ -11,48 +11,10 @@
             </div>
         {% endif %}
 
-        <div class="follow-title">{{user.name}}님의 팔로워({{user.follower_count(user.id)}})</div>
-        <div class="follow-content-row">
-            <div class="follow-list">
-                <div class="caption"><a href="{{ url_for('users.user_follower', id=user.id) }}">나의 팔로워</a></div>
-                <div class="row">
-                    {% for follower in followers %}
-                        <div class="cell col">
-                            <div class="follow-info">
-                                <div class="follow-avatar" id="{{ user.follow_user(follower.user_id).id }}"
-                                     {% if user.follow_user(follower.user_id).avatar %}
-                                     style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=user.follow_user(follower.user_id).avatar) }})"
-                                     {% endif %}
-                                ></div>
-                                <div class="follow-content">
-                                    <div class="follow-name">{{ user.follow_user(follower.user_id).name }}</div>
-                                    {% if session.user_id == follower.user_id %}
-                                        나
-                                    {% else %}
-                                        {% if session.user_id %}
-                                            <button class="follow-button btn-submit small {% if user.follow_check(session.user_id, follower.user_id) %}display_none{% endif %}"
-                                                name="{{ follower.user_id }}">
-                                                <i class="material-icons">person_add</i> 팔로잉
-                                            </button>
-                                            <button class="follow-button btn-submit small {% if not user.follow_check(session.user_id, follower.user_id) %}display_none{% endif %}"
-                                                name="{{ follower.user_id }}">
-                                                팔로잉 취소
-                                            </button>
-                                        {% endif %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        {% if loop.index % 4 == 0 %}</div><div>{% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
         <div class="follow-title">{{user.name}}님이 팔로잉({{user.following_count(user.id)}})</div>
         <div class="follow-content-row">
             <div class="follow-list">
-                <div class="caption"><a href="{{ url_for('users.user_following', id=user.id) }}">나의 팔로잉</a></div>
+                <div class="caption">나의 팔로잉</div>
                 <div class="row">
                     {% for following in followings %}
                         <div class="cell col">
@@ -86,6 +48,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
