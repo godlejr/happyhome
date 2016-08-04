@@ -4,9 +4,8 @@
 {% block content_body %}
 <form class="edit_form" id="info_form" method="POST">
     <div class="edit_field">
-        <div class="edit_title">이메일</div>
-        {{ form.email(class="edit_form_field", readonly="readonly", value=user.email) }}
-        <div class="edit_memo">이메일 변경을 원하시면, 관리자에게 메일을 보내주세요</div>
+        <div class="edit_title">이메일 <span class="edit_memo">이메일 변경을 원하시면, 관리자에게 메일을 보내주세요</span></div>
+        {{ form.email(class="edit_form_field input-disabled", readonly="readonly", value=user.email) }}
     </div>
     <div class="edit_field">
         <div class="edit_title">이름</div>
