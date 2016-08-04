@@ -49,17 +49,21 @@
                             <div class="content-scrap">
                                 <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
                             </div>
-                            <div class="content-share-sns" hidden="hidden">
-                                <div class="content-share-facebook"><a target="_blank"
-                                                                       href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/gallery/{{ post.id }}"><span
-                                        class="share-icon"></span></a></div>
-                                <div class="content-share-kakao"><a href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/gallery/{{ post.id }}"
-                                                                    target="_blank">
-                                    <span class="share-icon" id="kakaostory-share-button" ></span>
-                                </a></div>
-                                <div class="content-share-twitter"><span class="share-icon"></span></div>
+
+                            <div class="content-share active" >
+                                <div class="content-share-sns" hidden="hidden">
+                                    <div class="content-share-facebook"><a target="_blank"
+                                                                           href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/gallery/{{ post.id }}"><span
+                                            class="share-icon"></span></a></div>
+                                    <div class="content-share-kakao"><a
+                                            href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/gallery/{{ post.id }}"
+                                            target="_blank">
+                                        <span class="share-icon" id="kakaostory-share-button"></span>
+                                    </a></div>
+                                    <div class="content-share-twitter"><span class="share-icon"></span></div>
+                                </div>
+                                <span class="share-icon"></span>
                             </div>
-                            <div class="content-share active" ><span class="share-icon"></span></div>
                         </div>
                     {% endif %}
                     <div class="content-text">{{ post.content }}</div>
@@ -198,7 +202,7 @@
 
 <script>
 
-$('.share-icon').mouseover(function(){
+$('.content-share active').find('.share-icon').mouseover(function(){
     $(this).toggleClass('active');
     $('.content-share-sns').show();
 }).mouseout(function() {
