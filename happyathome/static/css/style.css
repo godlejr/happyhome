@@ -521,11 +521,42 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 56px;
     height: 56px;
 }
+.content-share-set{
+   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.content-share-set .content-share-facebook{
+    position: absolute;
+    cursor: pointer;
+    left: 775px;
+    float: left;
+    width: 45px;
+    height: 45px;
+}
+
+.content-share-set .content-share-kakao{
+    position: absolute;
+    cursor: pointer;
+    left: 730px;
+    float: left;
+    width: 45px;
+    height: 45px;
+}
+
+.content-share-set .content-share-twitter{
+    position: absolute;
+    cursor: pointer;
+    left: 685px;
+    float: left;
+    width: 45px;
+    height: 45px;
+}
+
 .content-share-sns{
     float:left;
 }
 
-.content-share-facebook{
+.content-share-sns.content-share-facebook{
     position: absolute;
     cursor: pointer;
     right: 56px;
@@ -535,7 +566,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 56px;
 }
 
-.content-share-kakao{
+.content-share-sns.content-share-kakao{
     position: absolute;
     cursor: pointer;
     right: 112px;
@@ -544,10 +575,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 56px;
     height: 56px;
 }
-.content-share-kakao.kakao-button{
-    cursor:pointer;
-}
-.content-share-twitter{
+
+.content-share-sns.content-share-twitter{
     position: absolute;
     cursor: pointer;
     right: 168px;
