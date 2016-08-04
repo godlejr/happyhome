@@ -50,7 +50,7 @@
                                 <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
                             </div>
 
-                            <div class="content-share active" >
+                            <div class="content-share" >
                                 <div class="content-share-sns" hidden="hidden">
                                     <div class="content-share-facebook"><a target="_blank"
                                                                            href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/gallery/{{ post.id }}"><span
@@ -62,7 +62,7 @@
                                     </a></div>
                                     <div class="content-share-twitter"><span class="share-icon"></span></div>
                                 </div>
-                                <span class="share-icon"></span>
+                                <span id="share-icon" class="share-icon"></span>
                             </div>
                         </div>
                     {% endif %}
@@ -202,11 +202,11 @@
 
 <script>
 
-$('.content-share active').find('.share-icon').mouseover(function(){
-    $(this).toggleClass('active');
+$('.content-share').mouseover(function(){
+    $(this).find('#share-icon').toggleClass('active');
     $('.content-share-sns').show();
 }).mouseout(function() {
-    $(this).toggleClass('active');
+    $(this).find('#share-icon').toggleClass('active');
     $('.content-share-sns').hide();
 });
 
