@@ -1,4 +1,5 @@
 from flask import current_app, Blueprint, render_template, request, session, url_for, redirect
+from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import Board, db
 
@@ -26,6 +27,7 @@ def list(board_id, page):
 
 
 @boards.route('/<board_id>/new', methods=['POST'])
+@login_required
 def new(board_id):
     if request.method == 'POST':
         post = Board()
@@ -39,6 +41,7 @@ def new(board_id):
 
 
 @boards.route('/<board_id>/delete/<id>')
+@login_required
 def delete(board_id, id):
     post = Board.query.filter_by(user_id=session['user_id'], board_id=board_id, id=id)
     board = post.first()
