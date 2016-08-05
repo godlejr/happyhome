@@ -31,7 +31,9 @@
                     <form method="POST" name="content_form" action="{{ url_for('photos.comment_new', id=post.id) }}">
                         {% if post.is_vr %}
                             <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}">
-                                <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
+                                {% if post.user_id == session.user_id %}
+                                    <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
+                                {% endif %}
                             </div>
 
                             <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
@@ -45,7 +47,9 @@
                             </script>
                         {% else %}
                             <div class="content-photo" photo-id="{{ post.id }}">
-                                <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
+                                {% if post.user_id == session.user_id %}
+                                    <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
+                                {% endif %}
                                 <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
                                 <div class="content-like">
                                     <span class="like-icon{% if post.is_active('PhotoLike', session.user_id) %} active{% endif %}"></span>
