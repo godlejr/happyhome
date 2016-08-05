@@ -53,9 +53,7 @@
         <input type="file" class="edit-file-form" id="coverFile" name="coverFile"/>
         <input type="hidden" id="coverFileName" name="coverFileName" {% if user.cover %}value="{{ user.cover }}"{% endif %}/>
     </div>
-    <div class="edit_submit">
-        <input type="submit" class="edit_submit_button" value="수정 완료"/>
-    </div>
+    <button type="submit" class="btn-submit right">수정 완료</button>
 
 </form>
 
