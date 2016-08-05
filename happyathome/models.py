@@ -154,8 +154,6 @@ class Comment(db.Model, BaseMixin):
         group_id = db.session.query(func.max(Comment.group_id)).one()[0]
         return (group_id + 1) if group_id else 1
 
-
-
     @hybrid_property
     def is_deleted(self):
         return self.deleted
