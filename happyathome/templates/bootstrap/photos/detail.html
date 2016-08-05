@@ -28,44 +28,49 @@
         <div class="content-main">
             <div class="content-section">
                 <div class="content-photos">
-                    {% if post.file.type == 2 %}
-                        <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}"></div>
-
-                        <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
-                        <script>
-                        new Carousel().viewer("photo360", {
-                            action: true,
-                            is_like: {% if post.is_active('PhotoLike', session.user_id) %}true{% else %}false{% endif %},
-                            is_scrap: {% if post.is_active('PhotoScrap', session.user_id) %}true{% else %}false{% endif %},
-                            panorama: "http://static.inotone.co.kr/data/img/{{ post.file.name }}"
-                        });
-                        </script>
-                    {% else %}
-                        <div class="content-photo" photo-id="{{ post.id }}">
-                            <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
-                            <div class="content-like">
-                                <span class="like-icon{% if post.is_active('PhotoLike', session.user_id) %} active{% endif %}"></span>
-                            </div>
-                            <div class="content-scrap">
-                                <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
+                    <form method="POST" name="content_form" action="{{ url_for('photos.comment_new', id=post.id) }}">
+                        {% if post.is_vr %}
+                            <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}">
+                                <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
                             </div>
 
-                            <div class="content-share" >
-                                <div class="content-share-sns" hidden="hidden">
-                                    <div class="content-share-facebook"><a target="_blank"
-                                                                           href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/gallery/{{ post.id }}"><span
-                                            class="share-icon"></span></a></div>
-                                    <div class="content-share-kakao"><a
-                                            href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/gallery/{{ post.id }}"
-                                            target="_blank">
-                                        <span class="share-icon" id="kakaostory-share-button"></span>
-                                    </a></div>
-                                    <div class="content-share-twitter"><span class="share-icon"></span></div>
+                            <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+                            <script>
+                            new Carousel().viewer("photo360", {
+                                action: true,
+                                is_like: {% if post.is_active('PhotoLike', session.user_id) %}true{% else %}false{% endif %},
+                                is_scrap: {% if post.is_active('PhotoScrap', session.user_id) %}true{% else %}false{% endif %},
+                                panorama: "http://static.inotone.co.kr/data/img/{{ post.file.name }}"
+                            });
+                            </script>
+                        {% else %}
+                            <div class="content-photo" photo-id="{{ post.id }}">
+                                <div class="photo-remove" photo-id="{{ post.id }}><i class="material-icons">clear</i></div>
+                                <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+                                <div class="content-like">
+                                    <span class="like-icon{% if post.is_active('PhotoLike', session.user_id) %} active{% endif %}"></span>
                                 </div>
-                                <span id="share-icon" class="share-icon"></span>
+                                <div class="content-scrap">
+                                    <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
+                                </div>
+
+                                <div class="content-share" >
+                                    <div class="content-share-sns" hidden="hidden">
+                                        <div class="content-share-facebook"><a target="_blank"
+                                                                               href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/gallery/{{ post.id }}"><span
+                                                class="share-icon"></span></a></div>
+                                        <div class="content-share-kakao"><a
+                                                href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/gallery/{{ post.id }}"
+                                                target="_blank">
+                                            <span class="share-icon" id="kakaostory-share-button"></span>
+                                        </a></div>
+                                        <div class="content-share-twitter"><span class="share-icon"></span></div>
+                                    </div>
+                                    <span id="share-icon" class="share-icon"></span>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                    </form>
                     <div class="content-text">{{ post.content }}</div>
                     <div class="content-comment">
                         <div class="comment-form">
@@ -392,6 +397,11 @@ $('.content-scrap').click(function(event) {
     {% else %}
         document.location.href = "{{ url_for('main.login', next=request_url) }}";
     {% endif %}
+});
+
+$('.photo-remove').click(function() {
+    if (confirm('사진을 삭제하시겠습니까?')) {
+    }
 });
 </script>
 {% endblock %}
