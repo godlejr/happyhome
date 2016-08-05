@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, current_app
 from flask import session
 from happyathome.forms import Pagination
-from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment
+from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment, MagazineScrap
 
 professionals = Blueprint('professionals', __name__)
 
@@ -173,17 +173,58 @@ def question(id):
                            gallery_qna=gallery_qna)
 
 
-@professionals.route('/<id>/scrap', defaults={'page': 1})
-@professionals.route('/<id>/scrap/page/<int:page>')
-def scrap(id, page):
+@professionals.route('/<id>/scrap')
+def scrap(id):
+    user = User.query.filter_by(id=id).first()
+    magazinescraps = MagazineScrap.query.filter_by(user_id=user.id)
+    magazinescraps_count = magazinescraps.count()
+    magazinescraps = magazinescraps.order_by(MagazineScrap.id.desc()).limit(10).all()
+
+    photoscraps = PhotoScrap.query.filter_by(user_id=user.id)
+    photoscraps_count = photoscraps.count()
+    photoscraps = photoscraps.order_by(PhotoScrap.id.desc()).limit(10).all()
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/scrap.html',
+                           user=user,
+                           photoscraps=photoscraps,
+                           photoscraps_count=photoscraps_count,
+                           magazinescraps=magazinescraps,
+                           magazinescraps_count=magazinescraps_count)
+
+
+
+@professionals.route('/<id>/scrap/story', defaults={'page': 1})
+@professionals.route('/<id>/scrap/story/page/<int:page>')
+def scrap_story(id, page):
     offset = (10 * (page - 1)) if page != 1 else 0
     user = User.query.filter_by(id=id).first()
+
+    magazinescraps = MagazineScrap.query.filter_by(user_id=user.id)
+    magazinescraps_count = magazinescraps.count()
+    magazinescraps = magazinescraps.order_by(MagazineScrap.id.desc()).limit(10).offset(offset).all()
+
+    pagination = Pagination(page, 10, magazinescraps_count)
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap_story.html',
+                           user=user,
+                           pagination=pagination,
+                           magazinescraps=magazinescraps,
+                           magazinescraps_count=magazinescraps_count)
+
+
+@professionals.route('/<id>/scrap/gallery', defaults={'page': 1})
+@professionals.route('/<id>/scrap/gallery/page/<int:page>')
+def scrap_gallery(id, page):
+    offset = (10 * (page - 1)) if page != 1 else 0
+    user = User.query.filter_by(id=id).first()
+
     photoscraps = PhotoScrap.query.filter_by(user_id=user.id)
-    pagination = Pagination(page, 10, photoscraps.count())
     photoscraps_count = photoscraps.count()
     photoscraps = photoscraps.order_by(PhotoScrap.id.desc()).limit(10).offset(offset).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/scrap.html',
+    pagination = Pagination(page, 10, photoscraps_count)
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap_gallery.html',
                            user=user,
                            pagination=pagination,
                            photoscraps=photoscraps,

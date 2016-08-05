@@ -3,7 +3,7 @@
 {% block content_body %}
 <div class="content-body">
     <div class="user-contents">
-        {% if session.user_id == user.id %}
+        {% if user.id == session.user_id %}
             <div class="user-menu">
                 <ul>
                     <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
@@ -11,7 +11,7 @@
             </div>
         {% endif %}
 
-        <div class="user-title"><a href="{{ url_for('users.scrap_story', id=user.id) }}">스토리 스크랩({{ magazinescraps_count }})</a></div>
+        <div class="user-title">스토리 스크랩({{ magazinescraps_count }})</div>
         <div class="cards">
             {% for magazinescrap in magazinescraps %}
                 <div class="card" href="{{ url_for('magazines.detail', id=magazinescrap.magazine_id) }}"
@@ -25,18 +25,8 @@
             {% endfor %}
         </div>
 
-        <div class="user-title"><a href="{{ url_for('users.scrap_gallery', id=user.id) }}">갤러리 스크랩({{ photoscraps_count }})</a></div>
-        <div class="cards">
-            {% for photoscrap in photoscraps %}
-                <div class="card" href="{{ url_for('photos.detail', id=photoscrap.photo_id) }}"
-                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photoscrap.photo.file.name) }})">
-                    {% if photoscrap.photo.is_vr %}
-                        <div class="card-media"><span class="vr-icon"></span></div>
-                    {% elif photoscrap.photo.is_mov %}
-                        <div class="card-media"><span class="mov-icon"></span></div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+        <div class="pagination-nav">
+            {{ func.render_pagination('users.scrap_story', pagination, user.id) }}
         </div>
     </div>
 </div>

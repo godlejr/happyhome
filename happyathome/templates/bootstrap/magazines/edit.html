@@ -4,8 +4,9 @@
 <div class="content">
     <div class="content-body">
         <div class="content-form">
-            <form method="POST" class="col s12" enctype="multipart/form-data">
+            <form method="POST" id="contentForm" enctype="multipart/form-data">
                 <legend>스토리를 등록해주세요.</legend>
+
                 <div class="input-field">
                     <select id="category_id" name="category_id">
                         <option value="" disabled selected>테마를 선택해주세요</option>
@@ -39,7 +40,7 @@
                 </div>
 
                 <div class="input-field">
-                    <textarea id="formContent" name="content" class="materialize-textarea" placeholder="내용을 입력해주세요"></textarea>
+                    <textarea id="formContent" name="content" placeholder="내용을 입력해주세요"></textarea>
                 </div>
 
                 <br/>
@@ -60,30 +61,92 @@
 </div>
 
 <script>
-var $photoFile,
-    $photoPreview;
+var $photoId,
+    $photoFile,
+    $photoFileId,
+    $photoFileName,
+    $photoPreview,
+    $photoPreviewLoading;
 
-$('#photos').on('click', '.photo-room', function() {
-    $('#photoRoom-' + $(this).attr('id-value')).val($(this).attr('value'));
+$('#photos').on('click', '.photo-remove', function(e) {
+    $('#photoField-' + $(this).attr('id-value')).remove();
 }).on('click', '.photo-preview', function(e) {
     e.preventDefault();
 
-    $photoFile = $('#photoFile-' + $(this).attr('id-value'))
-    $photoPreview = $('#photoPreview-' + $(this).attr('id-value'));
+    $photoId = $(this).attr('id-value');
+
+    $photoPreviewLoading = $('#photoPreviewLoading-' + $photoId);
+    $photoPreview = $('#photoPreview-' + $photoId);
+    $photoFile = $('#photoFile-' + $photoId);
     $photoFile.click();
 }).on('change', '.photo-file', function() {
     $photoPreview.children().remove();
 
     var ext = $(this).val().split('.').pop().toLowerCase();
     if (ext.length > 0) {
-        if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
-            alert('사진 파일(gif, png, jpg)만 업로드 할수 있습니다.');
+        if ($.inArray(ext, ['jpg', 'jpeg']) == -1) {
+            alert('사진 파일(JPG)만 업로드 할수 있습니다.');
             $(this).val('');
             return false;
         }
+
+        loadPhoto($photoPreview[0], $photoFile[0]);
+/*
+        var reader = new FileReader();
+        reader.readAsDataURL($photoFile[0].files[0])
+        reader.onload = function(e) {
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('photos.upload') }}",
+                data: {
+                    file_name: $photoFile.val(),
+                    file_data: e.target.result
+                }
+            }).success(function(data) {
+                $photoPreview.append("<img src=http://static.inotone.co.kr/data/img/" + data.file_name + " />");
+                $photoPreview.find('img').load(function() {
+                    $photoPreviewLoading.hide();
+
+                    if (this.naturalWidth / this.naturalHeight == 2) {
+                        $('#contentType').prop('checked', true);
+                    } else {
+                        $('#contentType').prop('checked', false);
+                    };
+                });
+            });
+        }
+*/
+    }
+});
+
+$('#contentForm').submit(function() {
+    window.onunload = window.onbeforeunload = undefined;
+
+    if (!$('#category_id').val()) {
+        alert('테마를 선택해주세요.');
+        $('#category_id').focus();
+        return false;
     }
 
-    loadPhoto($photoPreview[0], $photoFile[0]);
+    if (!$('#residence_id').val()) {
+        alert('주택을 선택해주세요.');
+        $('#residence_id').focus();
+        return false;
+    }
+
+    if (!$('#formTitle').val()) {
+        alert('제목을 입력해주세요.');
+        $('#formTitle').focus();
+        return false;
+    }
+
+    if (!$('#formContent').val()) {
+        alert('내용을 입력해주세요.');
+        $('#formContent').focus();
+        return false;
+    }
+
+    return true;
 });
 
 function loadPhoto(photoPreview, dataURL) {
@@ -93,7 +156,6 @@ function loadPhoto(photoPreview, dataURL) {
     reader.onload = function (e) {
         var img = new Image();
         img.src = e.target.result;
-        img.height = photoPreview.offsetHeight;
         img.onload = function() {
             photoPreview.appendChild(this);
             photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
@@ -101,37 +163,36 @@ function loadPhoto(photoPreview, dataURL) {
     }
 }
 
-
 function photoFileTmpl(id) {
     var tmpl =
-    '<div class="input-field">' +
-        '<div class="photo-preview" id="photoPreview-' + id + '" id-value="' + id + '">' +
-            '<span class="glyphicon glyphicon-open"></span>' +
-        '</div>' +
+    '<div class="input-field" id="photoField-' + id + '">';
+
+    if (id != 1) {
+        tmpl += '<div class="photo-remove" id-value="' + id + '"><i class="material-icons">clear</i></div>';
+    }
+
+    tmpl +=
+        '<div class="photo-preview" id="photoPreview-' + id + '" id-value="' + id + '"></div>' +
+        '<div class="photo-preview-loading" id="photoPreviewLoading-' + id + '"></div>' +
         '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
-        '<input type="hidden" id="photoRoom-' + id + '" name="room_id" value="" />' +
-        '<div class="input-field">' +
-            '<select id="category_id" name="category_id">' +
-                '<option value="" disabled selected>공간을 선택해주세요</option>' +
-                {% for room in rooms %}
-                    '<option value="{{ room.id }}">{{ room.name }}</option>' +
-                {% endfor %}
-            '</select>' +
-        '</div>' +
-        '<div class="input-field">' +
-            '<textarea class="materialize-textarea" name="photo_content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
-        '</div>' +
-    '</div>' +
-    '<hr>';
+        '<input type="hidden" id="photoFileId-' + id + '" name="file_id" />' +
+        '<input type="hidden" id="photoFileName-' + id + '" name="file_name" />' +
+        '<select id="photoRoom-' + id + '" name="room_id">' +
+            '<option value="" disabled selected>공간을 선택해주세요</option>' +
+            {% for room in rooms %}
+                '<option value="{{ room.id }}">{{ room.name }}</option>' +
+            {% endfor %}
+        '</select>' +
+        '<textarea name="photo_content" class="margin-top-20" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
+        '<hr>' +
+    '</div>';
 
     return tmpl;
 }
 
-
 function photosUnload() {
     $photoPreview.children().remove();
     $('#contentType').prop('checked', false);
-    $('input[name=room_id]').prop('checked', false);
     $('.rooms>label').removeClass('active');
 
     var $photoFileId = $('#photoFileId'),
@@ -165,11 +226,8 @@ window.onbeforeunload = function(e) {
 $('#addBtnPhoto').click(function() {
     $('#addBtnPhoto').val(parseInt($('#addBtnPhoto').val()) + 1);
     $(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
-    $('#photos select').material_select();
 });
 
 $(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
-
-$('.content-form select').material_select();
 </script>
 {% endblock %}

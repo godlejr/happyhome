@@ -88,8 +88,8 @@ def upload():
         db.session.commit()
 
         s3 = boto3.resource('s3')
-        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data),
-                                                                          ContentType='image/jpeg')
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data), ContentType='image/jpeg')
+
         return jsonify({
             'file_id': file.id,
             'file_name': photo_name

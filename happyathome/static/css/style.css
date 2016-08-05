@@ -20,6 +20,7 @@ table    { border-collapse: collapse; }
 .input-disabled { border: 0 !important; }
 .left { float: left !important; }
 .right { float: right !important; }
+.margin-top-20 { margin-top: 20px; }
 
 /******* 공통 레이아웃 *********/
 a:link { text-decoration:none; }
@@ -155,9 +156,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-form {
     width: 100%;
-    max-width: 800px;
+    max-width: 822px;
     margin: 0 auto;
-    padding: 40px 50px;
+    padding: 40px 60px;
     background-color: #ffffff;
     border: 1px solid #eaebee;
     border-top: 2px solid #000000;
@@ -923,7 +924,7 @@ span.share-icon.active {
     font-size: 14px;
     color: #ffffff;
     width: 100%;
-    max-width: 286px;
+    max-width: 280px;
 }
 
 
@@ -2221,9 +2222,19 @@ input[type=file] {
     display: none;
 }
 
-
-#photos hr:last-child {
-    display: none;
+.photo-remove {
+    position: absolute;
+    cursor: pointer;
+    top: -29px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ededed;
+}
+.photo-remove i {
+    color: #CC020A;
+    font-size: 28px;
 }
 .photo-file-form {
     position: relative;
@@ -2231,7 +2242,7 @@ input[type=file] {
 .photo-preview {
     width: 700px;
     height: 400px;
-    line-height: 400px;
+    line-height: 396px;
     cursor: pointer;
     margin: 20px auto;
     text-align: center;

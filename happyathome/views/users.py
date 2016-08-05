@@ -101,9 +101,8 @@ def user_following(id):
                            followings=followings)
 
 
-@users.route('/<id>/scrap', defaults={'page': 1})
-@users.route('/<id>/scrap/page/<int:page>')
-def scrap(id, page):
+@users.route('/<id>/scrap')
+def scrap(id):
     user = User.query.filter_by(id=id).first()
 
     magazinescraps = MagazineScrap.query.filter_by(user_id=user.id)
@@ -118,6 +117,44 @@ def scrap(id, page):
                            user=user,
                            magazinescraps=magazinescraps,
                            magazinescraps_count=magazinescraps_count,
+                           photoscraps=photoscraps,
+                           photoscraps_count=photoscraps_count)
+
+
+@users.route('/<id>/scrap/story', defaults={'page': 1})
+@users.route('/<id>/scrap/story/page/<int:page>')
+def scrap_story(id, page):
+    offset = (10 * (page - 1)) if page != 1 else 0
+    user = User.query.filter_by(id=id).first()
+
+    magazinescraps = MagazineScrap.query.filter_by(user_id=user.id)
+    magazinescraps_count = magazinescraps.count()
+    magazinescraps = magazinescraps.order_by(MagazineScrap.id.desc()).limit(10).offset(offset).all()
+
+    pagination = Pagination(page, 10, magazinescraps_count)
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap_story.html',
+                           user=user,
+                           pagination=pagination,
+                           magazinescraps=magazinescraps,
+                           magazinescraps_count=magazinescraps_count)
+
+
+@users.route('/<id>/scrap/gallery', defaults={'page': 1})
+@users.route('/<id>/scrap/gallery/page/<int:page>')
+def scrap_gallery(id, page):
+    offset = (10 * (page - 1)) if page != 1 else 0
+    user = User.query.filter_by(id=id).first()
+
+    photoscraps = PhotoScrap.query.filter_by(user_id=user.id)
+    photoscraps_count = photoscraps.count()
+    photoscraps = photoscraps.order_by(PhotoScrap.id.desc()).limit(10).offset(offset).all()
+
+    pagination = Pagination(page, 10, photoscraps_count)
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/scrap_gallery.html',
+                           user=user,
+                           pagination=pagination,
                            photoscraps=photoscraps,
                            photoscraps_count=photoscraps_count)
 
