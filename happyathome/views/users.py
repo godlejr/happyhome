@@ -35,12 +35,21 @@ def info(id=None):
     following_count = Follow.query.filter_by(user_id=id).count()
     follower_count = Follow.query.filter_by(follow_id=id).count()
     comment_count = Comment.query.filter_by(user_id=id, deleted=0, depth=0).count()
-    question_count = Comment.query. \
+    magazine_question_count = Comment.query. \
         filter(Comment.deleted == 0). \
         filter(Comment.depth == 0). \
         filter(Comment.user_id != id). \
         filter(Comment.magazines.any(Magazine.user_id == id)). \
         count()
+
+    photo_question_count = Comment.query. \
+        filter(Comment.deleted == 0). \
+        filter(Comment.depth == 0). \
+        filter(Comment.user_id != id). \
+        filter(Comment.photos.any(Photo.user_id == id)). \
+        count()
+
+    question_count = magazine_question_count + photo_question_count
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html', user=user,
                            magazine_count=magazine_count, photo_count=photo_count, photoscrap_count=photoscrap_count,

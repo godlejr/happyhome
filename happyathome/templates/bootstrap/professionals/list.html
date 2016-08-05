@@ -15,7 +15,7 @@
             </div>
             <div class="pro-detail">
                 <div class="pro-info">
-                    <div class="pro-avatar" {% if post.user.avatar %}style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }})"{% endif %}></div>
+                    <div class="pro-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
                     <div class="pro-name">{{ post.user.name }}</div>
                     <div class="pro-star">
                         <i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i>

@@ -11,6 +11,11 @@ from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
 
+@magazines.context_processor
+def utility_processor():
+    def url_for_s3(s3path, filename=''):
+        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
+    return dict(url_for_s3=url_for_s3)
 
 @magazines.route('/', defaults={'page': 1})
 @magazines.route('/page/<int:page>')
@@ -184,7 +189,8 @@ def comment_reply():
             'user_name':user.name,
             'created_date':comment.created_date,
             'comment': comment.content,
-            'group_id': comment.get_parent_id(comment.group_id)
+            'group_id': comment.get_parent_id(comment.group_id),
+            'avatar': user.avatar
         })
 
 

@@ -58,8 +58,8 @@ class User(db.Model, BaseMixin):
     authenticated = db.Column(db.Boolean, default=False)
     accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
     level = db.Column(db.Integer)
-    cover = db.Column(db.Unicode(255))
-    avatar = db.Column(db.Unicode(255))
+    cover = db.Column(db.Unicode(255), default='cover.jpg',nullable=False)
+    avatar = db.Column(db.Unicode(255), default='avatar.jpg',nullable=False )
 
     follow = db.relationship('Follow', back_populates='user')
     professional = db.relationship('Professional', backref=backref('professional_users'))

@@ -7,6 +7,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 main = Blueprint('main', __name__)
 
 
+@main.context_processor
+def utility_processor():
+    def url_for_s3(s3path, filename=''):
+        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
+    return dict(url_for_s3=url_for_s3)
+
 @main.route('/')
 def index():
     magazines = Magazine.query.order_by(Magazine.id.desc()).limit(6).all()

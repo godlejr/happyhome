@@ -39,7 +39,6 @@
         </div>
         <div class="profile-preview-loading"></div>
         <input type="file" class="edit-file-form" id="profileFile" name="profileFile"/>
-        <button type="button" class="profile_reset">취소</button>
         <input type="hidden" id="profileFileName" name="profileFileName" {% if user.avatar %}value='{{ user.avatar }}'{% endif %}/>
     </div>
 
@@ -52,7 +51,6 @@
         </div>
         <div class="cover-preview-loading"></div>
         <input type="file" class="edit-file-form" id="coverFile" name="coverFile"/>
-        <button type="button" class="cover_reset">취소</button>
         <input type="hidden" id="coverFileName" name="coverFileName" {% if user.cover %}value="{{ user.cover }}"{% endif %}/>
     </div>
     <div class="edit_submit">
@@ -70,13 +68,6 @@ var $coverFile = $('#coverFile'),
     $coverPreview = $('#coverPreview'),
     $coverPreviewLoading = $('.cover-preview-loading');
 
-$('button[class=profile_reset]').click(function() {
-    photosUnload();
-});
-
-$('button[class=cover_reset]').click(function() {
-    coverUnload();
-});
 
 $('#info_form').submit(function() {
     window.onunload = window.onbeforeunload = undefined;

@@ -83,7 +83,7 @@
                                         <li>
                                             {% if comment.depth == 0 %}
                                             <div class="comment-info" id="{{ comment.id }}" name="{{ comment.group_id }}">
-                                                <span class="comment-avatar"  name="{{ comment.user.id }}" style="background-image:url(https://robohash.org/{{ comment.user_id }}.png)"></span>
+                                                <span class="comment-avatar"  name="{{ comment.user.id }}"  style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
                                                 <a href="{{ url_for('users.info',id = comment.user.id) }}"><span class="comment-user">{{ comment.user.name }}</span></a>
                                                 <span class="comment-date">{{ comment.created_date }}</span>
                                                 {% if session.user_id %}
@@ -109,7 +109,7 @@
                                             {% else %}
                                                 <div class="comment-reply-content">
                                                     <div class="comment-info" id="{{ comment.get_id }}" parent-id = "{{ comment.get_parent_id(comment.group_id) }}">
-                                                        <span class="comment-avatar"  name="{{ comment.user.id }}" style="background-image:url(https://robohash.org/{{ comment.user_id }}.png)"></span>
+                                                        <span class="comment-avatar"  name="{{ comment.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
                                                         <a href="{{ url_for('users.info',id = comment.user.id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
                                                         <span class="comment-date">{{ comment.created_date }}</span>
                                                         {% if comment.user_id == session.user_id %}
@@ -136,7 +136,7 @@
             <div class="content-sidebar">
                 <div class="content-sidebody">
                     <div class="content-info">
-                        <div class="content-avatar" id="{{ post.user.id }}" style="background-image:url(https://robohash.org/{{ post.user_id }}.png)"></div>
+                        <div class="content-avatar" id="{{ post.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
                         <div class="content-author">
                             <div class="content-user"><a href="{{ url_for('users.info',id = post.user.id) }}">{{ post.user.name }}</a> <span>{{ post.created_date }}</span></div>
                             <div class="content-score">
@@ -272,7 +272,7 @@ $('.comment-finish-reply').click(function(){
         reply_finish.show();
         comment.parent().after('<li class="comment-box">'+'<div class="comment-reply-content">'+
                                                         '<div class="comment-info" id="'+ data.comment_id +'" parent-id ="'+ data.group_id +'">' +
-                                                        '<span class="comment-avatar" name=' + data.user_id + ' style="background-image:url(https://robohash.org/' + data.user_id +'.png)"></span>'+
+                                                        '<span class="comment-avatar" name=' + data.user_id + ' style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename="' + data.avatar + '" ) }})"></span>'+
                                                         '<a href="/user/' + data.user_id + '">'+'<span class="comment-user">'+ data.user_name + '</span>'+'</a>'+'<span class="comment-user">님의 답변</span>'+
                                                         '<span class="comment-date">' + data.created_date + '</span>'+
                                                         '<span class="comment-edit" cancel-id ="1" >수정</span>'+
