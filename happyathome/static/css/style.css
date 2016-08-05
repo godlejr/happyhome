@@ -2256,12 +2256,14 @@ input[type=file] {
 .photo-remove {
     position: absolute;
     cursor: pointer;
-    top: -29px;
+    top: -30px;
     right: 0;
     width: 30px;
     height: 30px;
     text-align: center;
-    border: 1px solid #ededed;
+    border-top: 1px solid #ededed;
+    border-left: 1px solid #ededed;
+    border-right: 1px solid #ededed;
 }
 .photo-remove i {
     color: #CC020A;
