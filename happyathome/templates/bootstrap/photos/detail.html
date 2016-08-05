@@ -201,6 +201,8 @@
 </div>
 
 <script>
+var click_flag = true;
+
 $('.content-avatar').click(function(){
     document.location.href ="{{ url_for('users.info',id='') }}" + $(this).attr('id');
 });
@@ -209,12 +211,16 @@ $('.comment-list').delegate('.comment-avatar', 'click', function() {
     document.location.href ="{{ url_for('users.info',id='') }}" + $(this).attr('name');
 });
 
-$('.content-share').mouseover(function(){
-    $(this).find('#share-icon').toggleClass('active');
-    $('.content-share-sns').show();
-}).mouseout(function() {
-    $(this).find('#share-icon').toggleClass('active');
-    $('.content-share-sns').hide();
+$('.content-share').click(function(){
+    if( click_flag ){
+        $(this).find('#share-icon').toggleClass('active');
+        $('.content-share-sns').show();
+        click_flag = false;
+    }else{
+        $(this).find('#share-icon').toggleClass('active');
+        $('.content-share-sns').hide();
+        click_flag = true;
+    }
 });
 
 $('.content-share-twitter').click(function(){
