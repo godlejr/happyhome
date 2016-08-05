@@ -559,7 +559,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     float:left;
 }
 
-.content-share-sns.content-share-facebook{
+.content-share-sns .content-share-facebook{
     position: absolute;
     cursor: pointer;
     right: 56px;
@@ -569,7 +569,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 56px;
 }
 
-.content-share-sns.content-share-kakao{
+.content-share-sns .content-share-kakao{
     position: absolute;
     cursor: pointer;
     right: 112px;
@@ -579,7 +579,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 56px;
 }
 
-.content-share-sns.content-share-twitter{
+.content-share-sns .content-share-twitter{
     position: absolute;
     cursor: pointer;
     right: 168px;
