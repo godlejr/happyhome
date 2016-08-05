@@ -325,10 +325,10 @@ class Professional(db.Model, BaseMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     business_no = db.Column(db.Unicode(15), nullable=False)
-    phone = db.Column(db.Unicode(15))
-    address = db.Column(db.Unicode(255))
-    homepage = db.Column(db.Unicode(45))
-    greeting = db.Column(db.Text)
+    phone = db.Column(db.Unicode(15), default="")
+    address = db.Column(db.Unicode(255), default="")
+    homepage = db.Column(db.Unicode(45), default="")
+    greeting = db.Column(db.Text, default="")
 
     user = db.relationship('User', backref=backref('user_professionals'))
 
