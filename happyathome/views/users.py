@@ -28,18 +28,24 @@ def info(id=None):
     if not id:
         return redirect(url_for('users.info', id=session['user_id']))
     user = User.query.filter_by(id=id).first()
+
     magazine_count =  Magazine.query.filter_by(user_id=id).count()
     photo_count = Photo.query.filter_by(user_id=id).count()
     photoscrap_count = PhotoScrap.query.filter_by(user_id=id).count()
     following_count = Follow.query.filter_by(user_id=id).count()
     follower_count = Follow.query.filter_by(follow_id=id).count()
-    comment_count = Comment.query.filter_by(user_id=id).filter_by(deleted=0).filter_by(depth=0).count()
-
-
+    comment_count = Comment.query.filter_by(user_id=id, deleted=0, depth=0).count()
+    question_count = Comment.query. \
+        filter(Comment.deleted == 0). \
+        filter(Comment.depth == 0). \
+        filter(Comment.user_id != id). \
+        filter(Comment.magazines.any(Magazine.user_id == id)). \
+        count()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html', user=user,
                            magazine_count=magazine_count, photo_count=photo_count, photoscrap_count=photoscrap_count,
-                           following_count=following_count, follower_count=follower_count, comment_count=comment_count
+                           following_count=following_count, follower_count=follower_count, comment_count=comment_count,
+                           question_count=question_count
                            )
 
 
