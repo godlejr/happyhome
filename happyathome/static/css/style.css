@@ -365,7 +365,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-avatar {
     display: table-cell;
-    cursor:pointer;
+    cursor: pointer;
     vertical-align: middle;
     width: 56px;
     height: 56px;
@@ -2508,6 +2508,17 @@ input[type=file] {
     background-image:url(/static/img/professional/Q-green.png);
 }
 
+.content-board {
+    padding: 40px 64px;
+    width: 100%;
+    max-width: 822px;
+    margin: 0 auto;
+    border-top: 2px solid #000000;
+    border-left: 1px solid #ededed;
+    border-right: 1px solid #ededed;
+    border-bottom: 1px solid #ededed;
+    background-color: #ffffff;
+}
 .board-content {
     width: 100%;
 }
@@ -2520,7 +2531,6 @@ input[type=file] {
 .board-list {
     width: 100%;
     margin-top: 30px;
-    border: 1px solid #eeeeee;
 }
 
 .user-menu {
@@ -2647,4 +2657,78 @@ button.btn-danger {
     padding: 7px 30px;
     border: 1px solid #CC020A;
     background-color: #ffffff;
+}
+
+.content-board .input-field {
+    margin-top: 40px;
+}
+.content-board .input-field textarea {
+    display: inline-block;
+    width: calc(100% - 62px);
+    height: 60px;
+    vertical-align: middle;
+    border: 0;
+    background-color: #e8e8e8;
+}
+.content-board .input-field button {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    vertical-align: middle;
+    border: 1px solid #e8e8e8;
+    background-color: #ffffff;
+}
+.content-board .board-lists {
+    width: 100%;
+    margin-top: 40px;
+    border-top: 1px solid #ededed;
+}
+.content-board .board-list {
+    padding: 15px 40px;
+    width: 100%;
+    margin-top: 0;
+    border-bottom: 1px solid #ededed;
+}
+.content-board .board-list.reply {
+    padding-left: 60px;
+    background-color: #ededed;
+}
+.content-board .board-list .board-author {
+    float: left;
+    width: 100%;
+}
+.content-board .board-author {
+    clear: both;
+}
+.content-board .board-content {
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 55px;
+    font-size: 12px;
+}
+.content-board .user-avatar {
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    width: 26px;
+    height: 26px;
+    border: 1px solid #ebeaef;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.content-board .user-name {
+    font-size: 12px;
+    font-weight: 700;
+}
+.content-board .board-date {
+    color: #a0a0a0;
+    font-size: 12px;
+    margin-left: 15px;
+}
+.content-board .board-control {
+    font-size: 12px;
+    margin-left: 15px;
 }
