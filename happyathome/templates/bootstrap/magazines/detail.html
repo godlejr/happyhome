@@ -22,7 +22,9 @@
         <div class="content-main">
 
             <div class="content-section">
-                <div class="content-remove"><i class="material-icons">delete_forever</i></div>
+                {% if post.user_id == session.user_id %}
+                    <div class="content-remove"><i class="material-icons">delete_forever</i></div>
+                {% endif %}
                 <div class="content-header">
                     <div class="magazine-title">
                         {{ post.title }}
