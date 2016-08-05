@@ -7,7 +7,9 @@
             <div class="board-title">해피 Q&A</div>
 
             <div class="input-field">
-                <textarea name="board_content"></textarea><button type="submit">질문<br>하기</button>
+                <form id="boardForm" method="POST" action="{{ url_for('boards.new', board_id=board_id) }}">
+                    <textarea id="boardContent" name="board_content"></textarea><button type="submit">질문<br>하기</button>
+                </form>
             </div>
             <div class="board-lists">
                 {% for post in posts %}
@@ -31,13 +33,23 @@
                     </div>
                 {% endfor %}
             </div>
+
+            <div class="pagination-nav">{{ func.render_pagination('boards.list', pagination) }}</div>
         </div>
     </div>
-
-    <div class="pagination-nav">{{ func.render_pagination('boards.list', pagination) }}</div>
 </div>
 
 <script>
+$('#boardForm').submit(function() {
+    if (!$('#boardContent').val()) {
+        alert('질문을 입력해주세요.');
+        $('#boardContent').focus();
+        return false;
+    }
+
+    return true;
+});
+
 function delPost(board_id, post_id) {
     if (confirm("질문을 삭제하시겠습니까")) {
         document.location.href = "/board/" + board_id + "/delete/" + post_id;

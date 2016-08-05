@@ -350,3 +350,8 @@ class Board(db.Model, BaseMixin):
     @hybrid_property
     def is_deleted(self):
         return self.deleted
+
+    @hybrid_property
+    def max1_group_id(self):
+        group_id = db.session.query(func.max(Board.group_id)).one()[0]
+        return (group_id + 1) if group_id else 1

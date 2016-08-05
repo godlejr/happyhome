@@ -20,8 +20,22 @@ def list(board_id, page):
     offset = (10 * (page - 1)) if page != 1 else 0
     posts = posts.order_by(Board.group_id.desc(), Board.depth.asc(), Board.sort.asc()).limit(10).offset(offset).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/boards/list.html',
+                           board_id=board_id,
                            posts=posts,
                            pagination=pagination)
+
+
+@boards.route('/<board_id>/new', methods=['POST'])
+def new(board_id):
+    if request.method == 'POST':
+        post = Board()
+        post.board_id = board_id
+        post.group_id = post.max1_group_id
+        post.user_id = session['user_id']
+        post.content = request.form['board_content']
+        db.session.add(post)
+        db.session.commit()
+    return redirect(url_for('boards.list', board_id=board_id))
 
 
 @boards.route('/<board_id>/delete/<id>')
