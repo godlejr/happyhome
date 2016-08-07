@@ -6,19 +6,22 @@
         <div class="content-board">
             <div class="board-title">해피 Q&A</div>
 
+            {% if post.user_id == session.user_id %}
             <div class="input-field">
                 <form id="boardForm" method="POST" action="{{ url_for('boards.new', board_id=board_id) }}">
                     <textarea id="boardContent" name="board_content"></textarea><button type="submit">질문<br>하기</button>
                 </form>
             </div>
+            {% endif %}
+
             <div class="board-lists">
                 {% for post in posts %}
                     <div class="board-list {% if post.depth %}reply{% endif %}">
                         <div class="board-author">
                             {% if not post.depth %}
-                            <strong>Q.</strong>
+                                <strong>Q.</strong>
                             {% else %}
-                            <strong>A.</strong>
+                                <strong>A.</strong>
                             {% endif %}
                             <span class="user-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }})"></span>
                             <span class="user-name">{{ post.user.name }}</span>
