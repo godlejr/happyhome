@@ -6,7 +6,7 @@
         <div class="content-board">
             <div class="board-title">해피 Q&A</div>
 
-            {% if post.user_id == session.user_id %}
+            {% if session.user_id %}
             <div class="input-field">
                 <form id="boardForm" method="POST" action="{{ url_for('boards.new', board_id=board_id) }}">
                     <textarea id="boardContent" name="board_content"></textarea><button type="submit">질문<br>하기</button>
