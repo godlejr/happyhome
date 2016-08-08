@@ -35,6 +35,7 @@ def info(id=None):
     following_count = Follow.query.filter_by(user_id=id).count()
     follower_count = Follow.query.filter_by(follow_id=id).count()
     comment_count = Comment.query.filter_by(user_id=id, deleted=0, depth=0).count()
+
     magazine_question_count = Comment.query. \
         filter(Comment.deleted == 0). \
         filter(Comment.depth == 0). \
@@ -187,7 +188,7 @@ def scrap_gallery(id, page):
 
 @users.route('/<id>/question')
 def question(id):
-    post = db.session.query(User).filter(User.id == id).first()
+    post = User.query.filter_by(id=id).first()
     photo_comments = db.session.execute('''
         SELECT  pt.id      AS  id
         ,       pt.content AS	photo_name
@@ -276,13 +277,12 @@ def question(id):
 @users.route('/<id>/edit_professional_info', methods=['GET', 'POST'])
 @login_required
 def edit_professional_info(id):
-    user = db.session.query(User).filter_by(id=id).first()
-    professional = Professional.query.filter(Professional.user_id == id).first()
+    user = User.query.filter_by(id=id).first()
+    professional = Professional.query.filter_by(user_id=id).first()
     form = ProfessionalUpdateForm(request.form)
 
     if request.method == 'POST':
         user.name = form.name.data
-        professional.user_id = id
         professional.business_no = form.business_no.data
         professional.homepage = form.homepage.data
         professional.address = form.address.data
@@ -302,7 +302,7 @@ def edit_professional_info(id):
 @users.route('/<id>/edit_professional', methods=['GET', 'POST'])
 @login_required
 def edit_professional(id):
-    user = db.session.query(User).filter_by(id=id).first()
+    user = User.query.filter_by(id=id).first()
     professional = Professional()
     form = ProfessionalUpdateForm(request.form)
 
@@ -329,7 +329,7 @@ def edit_professional(id):
 @users.route('/<id>/password/edit', methods=['GET', 'POST'])
 @login_required
 def edit_password(id):
-    user = db.session.query(User).filter_by(id=id).first()
+    user = User.query.filter_by(id=id).first()
     form = PasswordUpdateForm(request.form)
     if request.method == 'POST':
         if form.validate():
