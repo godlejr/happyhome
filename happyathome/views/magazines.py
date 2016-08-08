@@ -1,3 +1,4 @@
+import base64
 import os
 import boto3
 import html2text
@@ -10,6 +11,13 @@ from happyathome.models import db, File, Magazine, Comment, MagazineComment, Cat
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
+
+
+@magazines.context_processor
+def utility_processor():
+    def url_for_s3(s3path, filename=''):
+        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
+    return dict(url_for_s3=url_for_s3)
 
 
 @magazines.context_processor
@@ -66,6 +74,9 @@ def detail(id):
 @magazines.route('/new', methods=['GET', 'POST'])
 @login_required
 def new():
+    categories = Category.query.all()
+    residences = Residence.query.all()
+    rooms = Room.query.all()
     if request.method == 'POST':
         h = html2text.HTML2Text()
         h.ignore_links = True
@@ -108,16 +119,68 @@ def new():
             magazine.photos.append(photo)
         db.session.add(magazine)
         db.session.commit()
-
         return redirect(url_for('magazines.list'))
-
-    categories = db.session.query(Category).all()
-    residences = db.session.query(Residence).all()
-    rooms = db.session.query(Room).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/new.html',
                            categories=categories,
                            residences=residences,
                            rooms=rooms)
+
+
+@magazines.route('/<id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit(id):
+    magazine = Magazine.query.filter_by(user_id=session['user_id'], id=id).first()
+    categories = Category.query.all()
+    residences = Residence.query.all()
+    rooms = Room.query.all()
+    if request.method == 'POST':
+        h = html2text.HTML2Text()
+        h.ignore_links = True
+        h.ignore_images = True
+        h.ignore_emphasis = True
+
+        magazine.user_id = session['user_id']
+        magazine.category_id = request.form['category_id']
+        magazine.residence_id = request.form['residence_id']
+        magazine.title = request.form['title']
+        magazine.size = request.form['size']
+        magazine.location = request.form['location']
+        magazine.cost = request.form['cost']
+        magazine.content = request.form['content']
+        magazine.content_txt = h.handle(request.form['content'])
+
+        Photo.query.filter_by(user_id=session['user_id'], magazine_id=magazine.id).delete()
+
+        photo_files = request.form.getlist('file_src')
+        for idx, photo_file in enumerate(photo_files):
+            photo_blob = base64.b64decode(photo_file.split(',')[1])
+            photo_name = secure_filename(''.join((shortuuid.uuid(), '.jpg')))
+
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob,
+                                                                              ContentType='image/jpeg')
+
+            file = File()
+            file.type = 1
+            file.name = photo_name
+            file.ext = 'jpg'
+            file.size = len(photo_blob)
+
+            photo = Photo()
+            photo.file = file
+            photo.user_id = session['user_id']
+            photo.room_id = request.form.getlist('room_id')[idx]
+            photo.content = request.form.getlist('photo_content')[idx]
+
+            magazine.photos.append(photo)
+        db.session.add(magazine)
+        db.session.commit()
+        return redirect(url_for('magazines.detail', id=id))
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html',
+                           categories=categories,
+                           residences=residences,
+                           rooms=rooms,
+                           magazine=magazine)
 
 
 @magazines.route('/like', methods=['GET', 'POST'])

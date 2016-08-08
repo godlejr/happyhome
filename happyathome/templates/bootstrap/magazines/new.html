@@ -11,36 +11,36 @@
                     <select id="category_id" name="category_id">
                         <option value="" disabled selected>테마를 선택해주세요</option>
                         {% for category in categories %}
-                            <option value="{{ category.id }}" {% if category.id == magazine.category_id %}selected{% endif %}>{{ category.name }}</option>
+                            <option value="{{ category.id }}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
 
                     <select id="residence_id"  name="residence_id">
                         <option value="" disabled selected>주택을 선택해주세요</option>
                         {% for residence in residences %}
-                            <option value="{{ residence.id }}" {% if residence.id == magazine.residence_id %}selected{% endif %}>{{ residence.name }}</option>
+                            <option value="{{ residence.id }}">{{ residence.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="input-field">
-                    <input id="formTitle" name="title" type="text" placeholder="제목을 입력해주세요" value="{{ magazine.title }}" />
+                    <input id="formTitle" name="title" type="text" placeholder="제목을 입력해주세요" />
                 </div>
 
                 <div class="input-field">
-                    <input id="formSize" name="size" type="text" placeholder="평수를 입력해주세요" value="{{ magazine.size }}" />
+                    <input id="formSize" name="size" type="text" placeholder="평수를 입력해주세요" />
                 </div>
 
                 <div class="input-field">
-                    <input id="formLocation" name="location" type="text" placeholder="위치를 입력해주세요" value="{{ magazine.location }}" />
+                    <input id="formLocation" name="location" type="text" placeholder="위치를 입력해주세요" />
                 </div>
 
                 <div class="input-field">
-                    <input id="formCost" name="cost" type="text" placeholder="비용을 입력해주세요" value="{{ magazine.cost }}" />
+                    <input id="formCost" name="cost" type="text" placeholder="비용을 입력해주세요" />
                 </div>
 
                 <div class="input-field">
-                    <textarea id="formContent" name="content" placeholder="내용을 입력해주세요">{{ magazine.content }}</textarea>
+                    <textarea id="formContent" name="content" placeholder="내용을 입력해주세요"></textarea>
                 </div>
 
                 <br/>
@@ -64,7 +64,6 @@
 var $photoId,
     $photoFile,
     $photoFileId,
-    $photoFileSrc,
     $photoFileName,
     $photoPreview,
     $photoPreviewLoading;
@@ -78,7 +77,6 @@ $('#photos').on('click', '.photo-remove', function(e) {
 
     $photoPreviewLoading = $('#photoPreviewLoading-' + $photoId);
     $photoPreview = $('#photoPreview-' + $photoId);
-    $photoFileSrc = $('#photoFileSrc-' + $photoId);
     $photoFile = $('#photoFile-' + $photoId);
     $photoFile.click();
 }).on('change', '.photo-file', function() {
@@ -92,7 +90,32 @@ $('#photos').on('click', '.photo-remove', function(e) {
             return false;
         }
 
-        loadPhoto($photoPreview[0], $photoFileSrc[0], $photoFile[0]);
+        loadPhoto($photoPreview[0], $photoFile[0]);
+/*
+        var reader = new FileReader();
+        reader.readAsDataURL($photoFile[0].files[0])
+        reader.onload = function(e) {
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('photos.upload') }}",
+                data: {
+                    file_name: $photoFile.val(),
+                    file_data: e.target.result
+                }
+            }).success(function(data) {
+                $photoPreview.append("<img src=http://static.inotone.co.kr/data/img/" + data.file_name + " />");
+                $photoPreview.find('img').load(function() {
+                    $photoPreviewLoading.hide();
+
+                    if (this.naturalWidth / this.naturalHeight == 2) {
+                        $('#contentType').prop('checked', true);
+                    } else {
+                        $('#contentType').prop('checked', false);
+                    };
+                });
+            });
+        }
+*/
     }
 });
 
@@ -126,7 +149,7 @@ $('#contentForm').submit(function() {
     return true;
 });
 
-function loadPhoto(photoPreview, photoFileSrc, dataURL) {
+function loadPhoto(photoPreview, dataURL) {
     var reader = new FileReader();
 
     reader.readAsDataURL(dataURL.files[0]);
@@ -134,37 +157,13 @@ function loadPhoto(photoPreview, photoFileSrc, dataURL) {
         var img = new Image();
         img.src = e.target.result;
         img.onload = function() {
-            photoFileSrc.value = this.src;
             photoPreview.appendChild(this);
             photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
         };
     }
 }
 
-function loadS3Photo(photoPreview, photoFileSrc, url) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function(e) {
-            var img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                photoFileSrc.value = this.src;
-
-                photoPreview.appendChild(this);
-                photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
-            };
-        }
-        reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', url);
-    xhr.send();
-}
-
-function photoFileTmpl(id, photoContent) {
-    photoContent = photoContent || '';
-
+function photoFileTmpl(id) {
     var tmpl =
     '<div class="input-field" id="photoField-' + id + '">';
 
@@ -177,15 +176,14 @@ function photoFileTmpl(id, photoContent) {
         '<div class="photo-preview-loading" id="photoPreviewLoading-' + id + '"></div>' +
         '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
         '<input type="hidden" id="photoFileId-' + id + '" name="file_id" />' +
-        '<input type="hidden" id="photoFileSrc-' + id + '" name="file_src" />' +
         '<input type="hidden" id="photoFileName-' + id + '" name="file_name" />' +
         '<select id="photoRoom-' + id + '" name="room_id">' +
-            '<option value="">공간을 선택해주세요</option>' +
+            '<option value="" disabled selected>공간을 선택해주세요</option>' +
             {% for room in rooms %}
                 '<option value="{{ room.id }}">{{ room.name }}</option>' +
             {% endfor %}
         '</select>' +
-        '<textarea id="photoContent-' + id + '" name="photo_content" class="margin-top-20" placeholder="사진에 대한 설명을 등록해주세요.">' + photoContent + '</textarea>' +
+        '<textarea name="photo_content" class="margin-top-20" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
         '<hr>' +
     '</div>';
 
@@ -193,9 +191,7 @@ function photoFileTmpl(id, photoContent) {
 }
 
 function photosUnload() {
-    if ($photoPreview) {
-        $photoPreview.children().remove();
-    }
+    $photoPreview.children().remove();
     $('#contentType').prop('checked', false);
     $('.rooms>label').removeClass('active');
 
@@ -232,12 +228,6 @@ $('#addBtnPhoto').click(function() {
     $(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
 });
 
-
-{% for photo in magazine.photos %}
-    $('#addBtnPhoto').val({{ loop.index }});
-    $(photoFileTmpl({{ loop.index }}, "{{ photo.content|replace('\r', '\\r')|replace('\n', '\\n') }}")).appendTo("#photos");
-    $("#photoRoom-{{ loop.index }}").val("{{ photo.room_id }}");
-    loadS3Photo(document.getElementById("photoPreview-{{ loop.index }}"), document.getElementById("photoFileSrc-{{ loop.index }}"), "{{ url_for_s3('S3_IMG_DIRECTORY', filename=photo.file.name) }}");
-{% endfor %}
+$(photoFileTmpl($('#addBtnPhoto').val())).appendTo("#photos");
 </script>
 {% endblock %}

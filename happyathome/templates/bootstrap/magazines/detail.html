@@ -23,6 +23,7 @@
 
             <div class="content-section">
                 {% if post.user_id == session.user_id %}
+                    <div class="content-edit"><i class="material-icons">mode_edit</i></div>
                     <div class="content-remove"><i class="material-icons">delete_forever</i></div>
                 {% endif %}
                 <div class="content-header">
@@ -412,6 +413,10 @@ $('.scrap-icon').click(function(event) {
     {% else %}
         document.location.href = "{{ url_for('main.login', next=request_url) }}";
     {% endif %}
+});
+
+$('.content-edit').click(function() {
+    document.location.href = "{{ url_for('magazines.edit', id=post.id) }}";
 });
 
 $('.content-remove').click(function() {
