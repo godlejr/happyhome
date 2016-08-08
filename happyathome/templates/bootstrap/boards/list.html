@@ -3,18 +3,60 @@
 {% block content %}
 <div class="content">
     <div class="content-body">
-        <div class="board-content">
+        <div class="content-board">
             <div class="board-title">해피 Q&A</div>
-            <div class="board-list">
+
+            {% if session.user_id %}
+            <div class="input-field">
+                <form id="boardForm" method="POST" action="{{ url_for('boards.new', board_id=board_id) }}">
+                    <textarea id="boardContent" name="board_content"></textarea><button type="submit">질문<br>하기</button>
+                </form>
+            </div>
+            {% endif %}
+
+            <div class="board-lists">
                 {% for post in posts %}
-                    <div class="board-content">{{ post.content }}</div>
-                    <div class="board-author">{{ post.user.name }}</div>
-                    <div class="board-date">{{ post.created_date }}</div>
+                    <div class="board-list {% if post.depth %}reply{% endif %}">
+                        <div class="board-author">
+                            {% if not post.depth %}
+                                <strong>Q.</strong>
+                            {% else %}
+                                <strong>A.</strong>
+                            {% endif %}
+                            <span class="user-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }})"></span>
+                            <span class="user-name">{{ post.user.name }}</span>
+                            <span class="board-date">{{ post.created_date }}</span>
+                            {% if post.user_id == session.user_id %}
+                                <span class="board-control">
+                                    <a href="javascript:;" onclick="delPost({{ post.board_id }}, {{ post.id }})">삭제</a>
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div class="board-content">{{ post.content }}</div>
+                    </div>
                 {% endfor %}
             </div>
+
+            <div class="pagination-nav">{{ func.render_pagination('boards.list', pagination) }}</div>
         </div>
     </div>
-
-    <div class="pagination-nav">{{ func.render_pagination('professionals.list', pagination) }}</div>
 </div>
+
+<script>
+$('#boardForm').submit(function() {
+    if (!$('#boardContent').val()) {
+        alert('질문을 입력해주세요.');
+        $('#boardContent').focus();
+        return false;
+    }
+
+    return true;
+});
+
+function delPost(board_id, post_id) {
+    if (confirm("질문을 삭제하시겠습니까")) {
+        document.location.href = "/board/" + board_id + "/delete/" + post_id;
+    }
+}
+</script>
 {% endblock %}

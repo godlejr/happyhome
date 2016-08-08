@@ -22,6 +22,9 @@
         <div class="content-main">
 
             <div class="content-section">
+                {% if post.user_id == session.user_id %}
+                    <div class="content-remove"><i class="material-icons">delete_forever</i></div>
+                {% endif %}
                 <div class="content-header">
                     <div class="magazine-title">
                         {{ post.title }}
@@ -411,6 +414,11 @@ $('.scrap-icon').click(function(event) {
     {% else %}
         document.location.href = "{{ url_for('main.login', next=request_url) }}";
     {% endif %}
+});
+
+$('.content-remove').click(function() {
+    if(confirm('스토리를 삭제하시겠습니까?')) {
+    }
 });
 </script>
 {% endblock %}
