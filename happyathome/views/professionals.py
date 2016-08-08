@@ -30,9 +30,9 @@ def list(page):
 
 @professionals.route('/<id>')
 def detail(id):
-    user = db.session.query(User).filter_by(id=id).first()
-    professional = db.session.query(Professional).filter(Professional.user_id == user.id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == user.id).order_by(Magazine.id.desc()).limit(4).all()
+    user = User.query.filter_by(id=id).first()
+    professional = Professional.query.filter_by(user_id=user.id).first()
+    magazines = Magazine.query.filter_by(user_id=user.id).order_by(Magazine.id.desc()).limit(4).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/detail.html',
                            user=user,
@@ -43,16 +43,16 @@ def detail(id):
 @professionals.route('/<id>/story', defaults={'page': 1})
 @professionals.route('/<id>/story/page/<int:page>')
 def story(id, page):
-    user = db.session.query(User).filter_by(id=id).first()
-    magazines = db.session.query(Magazine).filter(Magazine.user_id == user.id).order_by(Magazine.id.desc())
+    user = User.query.filter_by(id=id).first()
+    magazines = Magazine.query.filter(user_id=user.id).order_by(Magazine.id.desc())
     magazines_count = magazines.count()
-    pagination = Pagination(page, 6, magazines.count())
+    pagination = Pagination(page, 15, magazines.count())
 
     if page != 1:
-        offset = 6 * (page - 1)
+        offset = 15 * (page - 1)
     else:
         offset = 0
-    magazines = magazines.limit(6).offset(offset).all()
+    magazines = magazines.limit(15).offset(offset).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/story.html', user=user,
                            current_app=current_app, magazines=magazines, pagination=pagination,
@@ -62,9 +62,9 @@ def story(id, page):
 @professionals.route('/<id>/gallery', defaults={'page': 1})
 @professionals.route('/<id>/gallery/page/<int:page>')
 def gallery(id, page):
-    user = db.session.query(User).filter_by(id=id).first()
-    photos = db.session.query(Photo).filter(Photo.user_id == user.id).order_by(Photo.id.desc())
-    pagination = Pagination(page, 8, photos.count())
+    user = User.query.filter_by(id=id).first()
+    photos = Photo.query.filter_by(user_id=user.id).order_by(Photo.id.desc())
+    pagination = Pagination(page, 15, photos.count())
 
     if session:
         if session['user_id'] == user.id:
@@ -76,10 +76,10 @@ def gallery(id, page):
                                    current_app=current_app)
 
     if page != 1:
-        offset = 6 * (page - 1)
+        offset = 15 * (page - 1)
     else:
         offset = 0
-    photos = photos.limit(12).offset(offset).all()
+    photos = photos.limit(15).offset(offset).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/gallery.html',
                            user=user,
                            photos=photos,
@@ -190,7 +190,6 @@ def scrap(id):
                            photoscraps_count=photoscraps_count,
                            magazinescraps=magazinescraps,
                            magazinescraps_count=magazinescraps_count)
-
 
 
 @professionals.route('/<id>/scrap/story', defaults={'page': 1})
