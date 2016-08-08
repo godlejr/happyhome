@@ -23,7 +23,7 @@ def list(page):
     else:
         offset = 0
 
-    posts = posts.limit(6).offset(offset).all()
+    posts = posts.order_by(Professional.id.desc()).limit(6).offset(offset).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/list.html', posts=posts,
                            current_app=current_app, pagination=pagination)
 
