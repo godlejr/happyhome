@@ -292,7 +292,7 @@ def edit_professional(id):
         db.session.add(professional)
         db.session.commit()
 
-        return redirect(url_for('users.edit_info', id=id))
+        return redirect(url_for('users.edit_profile', id=id))
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html',
                            user=user,
@@ -309,7 +309,7 @@ def edit_password(id):
             db.session.add(user)
             db.session.commit()
 
-            return redirect(url_for('users.edit_info', id=id))
+            return redirect(url_for('users.edit_profile', id=id))
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_password.html', user=user, form=form)
 

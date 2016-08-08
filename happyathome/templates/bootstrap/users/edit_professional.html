@@ -9,23 +9,23 @@
     </div>
     <div class="edit_field">
         <div class="edit_title">사업자 번호</div>
-        {{ form.business_no(class="edit_form_field" , placeholder=form.business_no.label.text, value=user.user_professionals[0].business_no) }}
+        {{ form.business_no(class="edit_form_field" , placeholder=form.business_no.label.text )}}
     </div>
     <div class="edit_field">
         <div class="edit_title">주소</div>
-        {{ form.address(class="edit_form_field" , placeholder=form.address.label.text, value=user.user_professionals[0].address) }}
+        {{ form.address(class="edit_form_field" , placeholder=form.address.label.text )}}
     </div>
     <div class="edit_field">
         <div class="edit_title">전화번호</div>
-        {{ form.phone(class="edit_form_field" , placeholder=form.phone.label.text, value=user.user_professionals[0].phone) }}
+        {{ form.phone(class="edit_form_field" , placeholder=form.phone.label.text) }}
     </div>
     <div class="edit_field">
         <div class="edit_title">홈페이지</div>
-        {{ form.homepage(class="edit_form_field" , placeholder=form.homepage.label.text, value=user.user_professionals[0].homepage) }}
+        {{ form.homepage(class="edit_form_field" , placeholder=form.homepage.label.text) }}
     </div>
     <div class="edit_field">
         <div class="edit_title">소개</div>
-        <textarea class="edit_textarea_form" placeholder="소개를 입력하세요" name="greeting">{{ user.user_professionals[0].greeting }}</textarea>
+        <textarea class="edit_textarea_form" placeholder="소개를 입력하세요" name="greeting"></textarea>
     </div>
 
     <button class="btn-submit right" type="submit">변경완료</button>
