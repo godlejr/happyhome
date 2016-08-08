@@ -218,7 +218,7 @@ def comment_remove():
         return jsonify({
             'ok': 1
         })
-<<<<<<< HEAD
+
 
 @magazines.route('/<id>/delete')
 @login_required
@@ -236,5 +236,4 @@ def delete(id):
 
     return redirect(url_for('magazines.list'))
 
-=======
->>>>>>> 652a1449b7dc8a9328f5823c22bc4055830f2cb4
+
