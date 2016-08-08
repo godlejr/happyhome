@@ -228,6 +228,7 @@ def comment_new(id):
 
 
 @magazines.route('/comment_reply', methods=['POST'])
+@login_required
 def comment_reply():
     if request.method == 'POST':
         comment = Comment()
@@ -259,6 +260,7 @@ def comment_reply():
 
 
 @magazines.route('/comment_edit', methods=['POST'])
+@login_required
 def comment_edit():
     if request.method == 'POST':
         comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
@@ -273,6 +275,7 @@ def comment_edit():
 
 
 @magazines.route('/comment_remove', methods=['POST'])
+@login_required
 def comment_remove():
     if request.method == 'POST':
         db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).update({ 'deleted' : True })
