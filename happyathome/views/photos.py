@@ -5,7 +5,8 @@ import shortuuid
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User
+from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, \
+    Magazine
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
@@ -233,3 +234,37 @@ def comment_remove():
         return jsonify({
             'ok': 1
         })
+
+
+@photos.route('/magazine_check', methods=['POST'])
+def magazine_check():
+    if request.method == 'POST':
+        photo = Photo.query.filter_by(id=request.form.get('photo_id')).first()
+
+        if photo.magazine_id :
+            magazine = Magazine.query.filter_by(id=photo.magazine_id).first();
+            return jsonify({
+                'check': 1,
+                'magazine_name':magazine.title
+            })
+
+        return jsonify({
+            'check': 2,
+            'photo_id':request.form.get('photo_id')
+        })
+
+
+@photos.route('/<id>/delete')
+@login_required
+def delete(id):
+    db.session.query(Comment).filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session=False)
+    photo = db.session.query(Photo).filter_by(id=id)
+    file_name = photo.first().file.name
+
+    s3 = boto3.resource('s3')
+    s3.Object('static.inotone.co.kr', 'data/img/%s' % file_name).delete()
+
+    photo.delete()
+    db.session.commit()
+
+    return redirect(url_for('photos.list'))

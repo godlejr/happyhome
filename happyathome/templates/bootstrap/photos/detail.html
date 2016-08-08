@@ -404,8 +404,24 @@ $('.content-scrap').click(function(event) {
 });
 
 $('.photo-remove').click(function() {
-    if (confirm('사진을 삭제하시겠습니까?')) {
-    }
+    $.ajax({
+        type:"POST",
+        url: "{{ url_for('photos.magazine_check') }}",
+        data: {
+            photo_id: "{{ post.id }}"
+        }
+    }).success(function(data){
+        if(data.check==2){
+            if (confirm('사진을 삭제하시겠습니까?')){
+                document.location.href = "{{ url_for('photos.delete', id=post.id) }}";
+            }
+        }else{
+            if (confirm(data.magazine_name+'의 포토입니다. 해당 스토리를 삭제해주세요')){
+
+            }
+        }
+    });
+
 });
 </script>
 {% endblock %}
