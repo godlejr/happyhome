@@ -19,6 +19,7 @@ def utility_processor():
         return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
     return dict(url_for_s3=url_for_s3)
 
+
 @photos.route('/', defaults={'page': 1})
 @photos.route('/page/<int:page>')
 def list(page):
@@ -181,6 +182,7 @@ def scrap():
 
 
 @photos.route('/comment_reply', methods=['POST'])
+@login_required
 def comment_reply():
     if request.method == 'POST':
         comment = Comment()
@@ -212,6 +214,7 @@ def comment_reply():
 
 
 @photos.route('/comment_edit', methods=['POST'])
+@login_required
 def comment_edit():
     if request.method == 'POST':
         comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
@@ -226,6 +229,7 @@ def comment_edit():
 
 
 @photos.route('/comment_remove', methods=['POST'])
+@login_required
 def comment_remove():
     if request.method == 'POST':
         db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).update({ 'deleted' : True })
@@ -237,6 +241,7 @@ def comment_remove():
 
 
 @photos.route('/magazine_check', methods=['POST'])
+@login_required
 def magazine_check():
     if request.method == 'POST':
         photo = Photo.query.filter_by(id=request.form.get('photo_id')).first()

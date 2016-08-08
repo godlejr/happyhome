@@ -272,7 +272,9 @@ def question(id):
                            magazine_comments_count=magazine_comments_count,
                            current_app=current_app)
 
+
 @users.route('/<id>/edit_professional_info', methods=['GET', 'POST'])
+@login_required
 def edit_professional_info(id):
     user = db.session.query(User).filter_by(id=id).first()
     professional = Professional.query.filter(Professional.user_id == id).first()
@@ -298,6 +300,7 @@ def edit_professional_info(id):
 
 
 @users.route('/<id>/edit_professional', methods=['GET', 'POST'])
+@login_required
 def edit_professional(id):
     user = db.session.query(User).filter_by(id=id).first()
     professional = Professional()
@@ -324,6 +327,7 @@ def edit_professional(id):
 
 
 @users.route('/<id>/password/edit', methods=['GET', 'POST'])
+@login_required
 def edit_password(id):
     user = db.session.query(User).filter_by(id=id).first()
     form = PasswordUpdateForm(request.form)
@@ -339,6 +343,7 @@ def edit_password(id):
 
 
 @users.route('/<id>/edit', methods=['GET', 'POST'])
+@login_required
 def edit_profile(id):
     user = User.query.filter_by(id=session['user_id']).first()
     form = UpdateForm(request.form)
@@ -369,6 +374,7 @@ def edit_profile(id):
 
 
 @users.route('/profile_upload', methods=['POST'])
+@login_required
 def profile_upload():
     if request.method == "POST":
         photo_data = request.form.get('file_data').split(',')[1]
@@ -384,6 +390,7 @@ def profile_upload():
 
 
 @users.route('/profile_unload', methods=['POST'])
+@login_required
 def profile_unload():
     if request.form.get('pre_file_name') != request.form.get('file_name'):
         s3 = boto3.resource('s3')
@@ -395,6 +402,7 @@ def profile_unload():
 
 
 @users.route('/cover_upload', methods=['POST'])
+@login_required
 def cover_upload():
     if request.method == "POST":
         photo_data = request.form.get('file_data').split(',')[1]
@@ -410,6 +418,7 @@ def cover_upload():
 
 
 @users.route('/cover_unload', methods=['POST'])
+@login_required
 def cover_unload():
     if request.form.get('pre_file_name') != request.form.get('file_name'):
         s3 = boto3.resource('s3')
@@ -421,6 +430,7 @@ def cover_unload():
 
 
 @users.route('/following', methods=['POST'])
+@login_required
 def following():
     if request.method == 'POST':
         follow = Follow.query.filter_by(user_id=session['user_id']).filter_by(follow_id=request.form.get('follow_id'))
