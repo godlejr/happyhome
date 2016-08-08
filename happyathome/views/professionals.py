@@ -17,9 +17,9 @@ def utility_processor():
 @professionals.route('/page/<int:page>')
 def list(page):
     posts = db.session.query(Professional)
-    pagination = Pagination(page, 2, posts.count())
+    pagination = Pagination(page, 6, posts.count())
     if page != 1:
-        offset = 2 * (page - 1)
+        offset = 6 * (page - 1)
     else:
         offset = 0
 
