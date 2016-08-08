@@ -1526,14 +1526,14 @@ span.share-icon.active {
     letter-spacing: -1px;
     margin: 0;
     width: 100%;
-    max-width: 560px;
+    max-width: 554px;
     border-bottom: 1px solid skyblue;
  }
 
  .edit_textarea_form{
     border: 0;
     width: 100%;
-    max-width: 560px;
+    max-width: 554px;
     height: 100px;
     padding: 15px;
     resize: none;

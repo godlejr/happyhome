@@ -11,11 +11,13 @@ from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
 
+
 @magazines.context_processor
 def utility_processor():
     def url_for_s3(s3path, filename=''):
         return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
     return dict(url_for_s3=url_for_s3)
+
 
 @magazines.route('/', defaults={'page': 1})
 @magazines.route('/page/<int:page>')
@@ -71,7 +73,7 @@ def new():
         h.ignore_emphasis = True
 
         magazine = Magazine()
-        magazine.user_id = '1'
+        magazine.user_id = session['user_id']
         magazine.category_id = request.form['category_id']
         magazine.residence_id = request.form['residence_id']
         magazine.title = request.form['title']
@@ -99,7 +101,7 @@ def new():
 
             photo = Photo()
             photo.file = file
-            photo.user_id = '1'
+            photo.user_id = session['user_id']
             photo.room_id = request.form.getlist('room_id')[idx]
             photo.content = request.form.getlist('photo_content')[idx]
 
@@ -140,7 +142,6 @@ def scrap():
         'magazine_id': magazine_id,
         'count': MagazineScrap.query.filter_by(magazine_id=magazine_id).count()
     })
-
 
 
 @magazines.route('/<id>/comments/new', methods=['GET', 'POST'])
@@ -194,7 +195,6 @@ def comment_reply():
         })
 
 
-
 @magazines.route('/comment_edit', methods=['POST'])
 def comment_edit():
     if request.method == 'POST':
@@ -218,6 +218,7 @@ def comment_remove():
         return jsonify({
             'ok': 1
         })
+<<<<<<< HEAD
 
 @magazines.route('/<id>/delete')
 @login_required
@@ -235,3 +236,5 @@ def delete(id):
 
     return redirect(url_for('magazines.list'))
 
+=======
+>>>>>>> 652a1449b7dc8a9328f5823c22bc4055830f2cb4
