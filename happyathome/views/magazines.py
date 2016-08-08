@@ -219,4 +219,19 @@ def comment_remove():
             'ok': 1
         })
 
+@magazines.route('/<id>/delete')
+@login_required
+def delete(id):
+    db.session.query(Comment).filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session=False)
+    magazine = db.session.query(Magazine).filter_by(id=id)
+    photos = db.session.query(Photo).filter(Photo.magazine_id == id).all()
+
+    for photo in photos:
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
+
+    magazine.delete()
+    db.session.commit()
+
+    return redirect(url_for('magazines.list'))
 

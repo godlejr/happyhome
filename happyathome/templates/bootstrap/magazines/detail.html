@@ -417,7 +417,8 @@ $('.scrap-icon').click(function(event) {
 });
 
 $('.content-remove').click(function() {
-    if(confirm('스토리를 삭제하시겠습니까?')) {
+    if (confirm('스토리를 삭제하시겠습니까?')){
+        document.location.href = "{{ url_for('magazines.delete', id=post.id) }}";
     }
 });
 </script>
