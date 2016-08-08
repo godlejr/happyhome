@@ -275,26 +275,27 @@ def question(id):
 
 @users.route('/<id>/professional/edit', methods=['GET', 'POST'])
 def edit_professional(id):
-    post = db.session.query(User).filter_by(id=id).first()
+    user = db.session.query(User).filter_by(id=id).first()
     professional = Professional()
     form = ProfessionalUpdateForm(request.form)
 
     if request.method == 'POST':
-        post.name = form.name.data
-        post.level = 2
+        user.name = form.name.data
+        user.level = 2
         professional.user_id = id
         professional.business_no = form.business_no.data
         professional.homepage = form.homepage.data
         professional.address = form.address.data
         professional.phone = form.phone.data
-        professional.greeting = request.form.get('pro_intro')
-        db.session.add(post)
+        professional.greeting = request.form.get('greeting')
+        db.session.add(user)
         db.session.add(professional)
         db.session.commit()
 
         return redirect(url_for('users.edit_info', id=id))
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html',
+                           user=user,
                            form=form)
 
 
