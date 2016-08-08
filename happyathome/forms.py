@@ -43,7 +43,6 @@ class PasswordUpdateForm(Form):
 class UpdateForm(Form):
     name = StringField('이름')
     email = StringField('이메일', validators['email'])
-    homepage = StringField('http://')
 
 
 class JoinForm(Form):

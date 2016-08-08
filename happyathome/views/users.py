@@ -272,8 +272,32 @@ def question(id):
                            magazine_comments_count=magazine_comments_count,
                            current_app=current_app)
 
+@users.route('/<id>/edit_professional_info', methods=['GET', 'POST'])
+def edit_professional_info(id):
+    user = db.session.query(User).filter_by(id=id).first()
+    professional = Professional.query.filter(Professional.user_id == id).first()
+    form = ProfessionalUpdateForm(request.form)
 
-@users.route('/<id>/professional/edit', methods=['GET', 'POST'])
+    if request.method == 'POST':
+        user.name = form.name.data
+        professional.user_id = id
+        professional.business_no = form.business_no.data
+        professional.homepage = form.homepage.data
+        professional.address = form.address.data
+        professional.phone = form.phone.data
+        professional.greeting = request.form.get('greeting')
+        db.session.add(user)
+        db.session.add(professional)
+        db.session.commit()
+
+        return redirect(url_for('users.edit_profile', id=id))
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional_info.html',
+                           user=user,
+                           form=form)
+
+
+@users.route('/<id>/edit_professional', methods=['GET', 'POST'])
 def edit_professional(id):
     user = db.session.query(User).filter_by(id=id).first()
     professional = Professional()
@@ -320,7 +344,6 @@ def edit_profile(id):
     form = UpdateForm(request.form)
     if request.method == 'POST':
         user.name = form.name.data
-        user.homepage = form.homepage.data
 
         if request.form['sex_check'] == '1':
             user.sex = 'M'
@@ -328,14 +351,16 @@ def edit_profile(id):
             user.sex = 'F'
 
         if user.avatar != request.form.get('profileFileName'):
-            s3 = boto3.resource('s3')
-            s3.Object('static.inotone.co.kr', 'data/user/%s' % user.avatar).delete()
-            user.avatar = request.form.get('profileFileName')
+            if user.avatar != 'avatar.jpg':
+                s3 = boto3.resource('s3')
+                s3.Object('static.inotone.co.kr', 'data/user/%s' % user.avatar).delete()
+                user.avatar = request.form.get('profileFileName')
 
         if user.cover != request.form.get('coverFileName'):
-            s3 = boto3.resource('s3')
-            s3.Object('static.inotone.co.kr', 'data/cover/%s' % user.cover).delete()
-            user.cover = request.form.get('coverFileName')
+            if user.avatar != 'cover.jpg':
+                s3 = boto3.resource('s3')
+                s3.Object('static.inotone.co.kr', 'data/cover/%s' % user.cover).delete()
+                user.cover = request.form.get('coverFileName')
 
         db.session.add(user)
         db.session.commit()
