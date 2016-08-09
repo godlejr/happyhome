@@ -26,16 +26,18 @@
                             <span class="user-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }})"></span>
                             <span class="user-name">{{ post.user.name }}</span>
                             <span class="board-date">{{ post.created_date }}</span>
-                            {% if not post.is_reply and session and session.user_level > 1 %}
-                                <span class="board-control">
-                                    <a href="javascript:;" onclick="replyPost({{ post.id }}, this)">답변</a>
-                                </span>
-                            {% endif %}
-                            {% if session and post.user_id == session.user_id %}
-                                <span class="board-control">
-                                    <a href="javascript:;" onclick="modify({{ post.id }})">수정</a>
-                                    <a href="javascript:;" onclick="deletePost({{ post.id }})">삭제</a>
-                                </span>
+                            {% if session %}
+                                {% if not post.is_reply and session.user_level > 1 %}
+                                    <span class="board-control">
+                                        <a href="javascript:;" onclick="replyPost({{ post.id }}, this)">답변</a>
+                                    </span>
+                                {% endif %}
+                                {% if post.user_id == session.user_id %}
+                                    <span class="board-control">
+                                        <a href="javascript:;" onclick="modify({{ post.id }})">수정</a>
+                                        <a href="javascript:;" onclick="deletePost({{ post.id }})">삭제</a>
+                                    </span>
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="board-content">{{ post.content }}</div>
