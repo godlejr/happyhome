@@ -29,14 +29,14 @@ def login():
             user = User.query.filter_by(email=form.email.data).first()
             if user:
                 if not check_password_hash(user.password, form.password.data):
-                    flash('password is wrong')
+                    flash('비밀번호가 잘못되었습니다.')
                 else:
                     session['user_id'] = user.id
                     session['user_email'] = user.email
                     session['user_level'] = user.level
                     return redirect(request.args.get('next', url_for('main.index')))
             else:
-                flash('there is no your ID')
+                flash('회원아이디가 잘못되었습니다.')
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/login.html', form=form)
 
 
