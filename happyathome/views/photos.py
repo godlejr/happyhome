@@ -13,6 +13,7 @@ from werkzeug.utils import secure_filename
 
 photos = Blueprint('photos', __name__)
 
+
 @photos.context_processor
 def utility_processor():
     def url_for_s3(s3path, filename=''):

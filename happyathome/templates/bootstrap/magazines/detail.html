@@ -98,11 +98,11 @@
                         <a href="{{ url_for('magazines.list', residence_id=post.residence_id) }}">{{ post.residence.name }}</a>
                     </div>
 
-                    {% if post.category.category_magazines|length > 1 %}
+                    {% if category_magazines|length > 1 %}
                     <div class="content-relative">
                         <div class="relative-title"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a>의 다른 매거진</div>
-                        {% for category_magazine in post.category.category_magazines %}
-                            {% if category_magazine.photos and category_magazine.id != post.id %}
+                        {% for category_magazine in category_magazines %}
+                            {% if category_magazine.photos %}
                                 <div class="relative-list">
                                     <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ category_magazine.photos[0].file.name }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
@@ -118,11 +118,11 @@
                     </div>
                     {% endif %}
 
-                    {% if post.residence.residence_magazines|length > 1 %}
+                    {% if residence_magazines|length > 1 %}
                     <div class="content-relative">
                         <div class="relative-title"><a href="{{ url_for('magazines.list', residence_id=post.residence_id) }}">{{ post.residence.name }}</a>의 다른 매거진</div>
-                        {% for residence_magazine in post.residence.residence_magazines %}
-                            {% if residence_magazine.photos and residence_magazine.id != post.id %}
+                        {% for residence_magazine in residence_magazines %}
+                            {% if residence_magazine.photos %}
                                 <div class="relative-list">
                                     <div class="relative-image"><a href="{{ url_for('magazines.detail', id=residence_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ residence_magazine.photos[0].file.name }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
@@ -138,11 +138,11 @@
                     </div>
                     {% endif %}
 
-                    {% if post.user.user_magazines|length > 1 %}
+                    {% if user_magazines|length > 1 %}
                     <div class="content-relative">
                         <div class="relative-title">{{ post.user.name }}의 다른 매거진</div>
-                        {% for user_magazine in post.user.user_magazines %}
-                            {% if user_magazine.photos and user_magazine.id != post.id %}
+                        {% for user_magazine in user_magazines %}
+                            {% if user_magazine.photos %}
                                 <div class="relative-list">
                                     <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_magazine.photos[0].file.name }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">

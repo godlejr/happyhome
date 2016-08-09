@@ -68,7 +68,20 @@ def detail(id):
     db.session.commit()
 
     comments = Comment.query.filter(Comment.magazines.any(magazine_id=id)).order_by(Comment.group_id.desc()).order_by(Comment.depth.asc()).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post, comments=comments)
+    category = Category.query.filter(Category.id == post.category_id).first()
+    category_magazines = Magazine.query.filter(Magazine.category_id == category.id).filter(Magazine.id != post.id).limit(4).all()
+
+    residence = Residence.query.filter(Residence.id == post.residence_id).first()
+    residence_magazines = Magazine.query.filter(Magazine.residence_id == residence.id).filter(Magazine.id != post.id).limit(4).all()
+
+    user = User.query.filter(User.id == post.user_id).first()
+    user_magazines = Magazine.query.filter(Magazine.user_id == user.id ).filter(Magazine.id != post.id).limit(4).all()
+
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post,
+                           comments=comments,
+                           category_magazines=category_magazines, residence_magazines=residence_magazines,
+                           user_magazines=user_magazines
+                           )
 
 
 @magazines.route('/new', methods=['GET', 'POST'])
