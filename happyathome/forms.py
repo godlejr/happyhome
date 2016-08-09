@@ -10,7 +10,7 @@ validators = {
     ],
     'password': [
         DataRequired(),
-        Length(min=6, max=50),
+        Length(min=6, max=50, message='6자 이상의 비밀번호를 입력하세요'),
         EqualTo('confirm', message='동일한 비밀번호를 입력해주세요.')
     ],
 
