@@ -44,7 +44,7 @@ def detail(id):
 @professionals.route('/<id>/story/page/<int:page>')
 def story(id, page):
     user = User.query.filter_by(id=id).first()
-    magazines = Magazine.query.filter(user_id=user.id).order_by(Magazine.id.desc())
+    magazines = Magazine.query.filter_by(user_id=user.id).order_by(Magazine.id.desc())
     magazines_count = magazines.count()
     pagination = Pagination(page, 15, magazines.count())
 
