@@ -8,11 +8,15 @@
                 <legend>사진을 등록해주세요.</legend>
 
                 <div class="input-field">
-                    <div class="photo-preview" id="photoPreview"></div>
+                    <div class="photo-preview" id="photoPreview">
+                        {% if photo.file.name %}
+                            <img class="edit-profile-photo" src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}">
+                        {% endif %}
+                    </div>
                     <div class="photo-preview-loading"></div>
                     <input type="file" class="photo-file" id="photoFile" name="photo_file" />
-                    <input type="hidden" id="photoFileId" name="file_id" />
                     <input type="hidden" id="photoFileName" name="file_name" />
+                    <input type="hidden" id="photo_data" name="photo_data" />
                 </div>
 
                 <div class="input-field">
@@ -29,7 +33,7 @@
                 </div>
 
                 <div class="input-field">
-                    <textarea class="materialize-textarea" id="textArea" name="content" placeholder="사진에 대한 설명을 등록해주세요."></textarea>
+                    <textarea class="materialize-textarea" id="textArea" name="content" placeholder="사진에 대한 설명을 등록해주세요.">{{ photo.content }}</textarea>
                 </div>
 
                 <div class="input-field">
@@ -110,11 +114,12 @@ $photoFile.change(function() {
                 url: "{{ url_for('photos.upload') }}",
                 data: {
                     file_name: $photoFile.val(),
-                    file_data: e.target.result
+                    file_data: e.target.result,
+                    photo_id: {{ photo.id }}
                 }
             }).success(function(data) {
-                $('#photoFileId').val(data.file_id);
                 $('#photoFileName').val(data.file_name);
+                $('#photo_data').val(data.photo_data);
                 $photoPreview.append("<img src=http://static.inotone.co.kr/data/img/" + data.file_name + " />");
                 $photoPreview.find('img').load(function() {
                     $photoPreviewLoading.hide();
@@ -135,8 +140,7 @@ function photosUnload() {
     $('#contentType').prop('checked', false);
     $('.rooms>label').removeClass('active');
 
-    var $photoFileId = $('#photoFileId'),
-        $photoFileName = $('#photoFileName');
+    var  $photoFileName = $('#photoFileName');
 
     if ($photoFileName.val()) {
         $.ajax({
@@ -145,10 +149,10 @@ function photosUnload() {
             cache: false,
             url: "{{ url_for('photos.unload') }}",
             data: {
-                file_name: $photoFileName.val()
+                file_name: $photoFileName.val(),
+                pre_file_name: "{{ photo.file.name }}"
             }
         }).success(function(data) {
-            $photoFileId.val('');
             $photoFileName.val('');
         });
     }
@@ -163,19 +167,6 @@ window.onbeforeunload = function(e) {
     e.returnValue = "변경사항이 저장되지 않을 수 있습니다.";
 };
 
-function loadPhoto(photoPreview, dataURL, callback) {
-    var reader = new FileReader();
 
-    reader.readAsDataURL(dataURL.files[0]);
-    reader.onload = function (e) {
-        var img = new Image();
-        img.src = e.target.result;
-        img.onload = function() {
-            photoPreview.appendChild(this);
-            photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
-            callback();
-        };
-    }
-}
 </script>
 {% endblock %}

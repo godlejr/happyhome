@@ -1,6 +1,7 @@
 import base64
 import os
 import boto3
+import html2text
 import shortuuid
 from flask import session
 from flask_login import login_required
@@ -85,6 +86,36 @@ def upload():
         photo_data = request.form.get('file_data').split(',')[1]
         photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
 
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data), ContentType='image/jpeg')
+
+        return jsonify({
+            'file_name': photo_name,
+            'photo_data': photo_data
+        })
+
+
+@photos.route('/unload', methods=['POST'])
+@login_required
+def unload():
+    if request.form.get('pre_file_name') != request.form.get('file_name'):
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % request.form.get('file_name')).delete()
+
+    return jsonify({
+        'file_name': request.form.get('file_name')
+    })
+
+
+@photos.route('/new', methods=['GET', 'POST'])
+@login_required
+def new():
+    photo = Photo()
+    rooms = db.session.query(Room).all()
+    if request.method == 'POST':
+
+        photo_name = request.form['file_name']
+        photo_data = request.form['photo_data']
         file = File()
         file.type = 1
         file.name = photo_name
@@ -95,33 +126,6 @@ def upload():
         db.session.flush()
         db.session.commit()
 
-        s3 = boto3.resource('s3')
-        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data), ContentType='image/jpeg')
-
-        return jsonify({
-            'file_id': file.id,
-            'file_name': photo_name
-        })
-
-
-@photos.route('/unload', methods=['POST'])
-@login_required
-def unload():
-    s3 = boto3.resource('s3')
-    s3.Object('static.inotone.co.kr', 'data/img/%s' % request.form.get('file_name')).delete()
-    return jsonify({
-        'file_name': request.form.get('file_name')
-    })
-
-
-@photos.route('/new', methods=['GET', 'POST'])
-@login_required
-def new():
-    if request.method == 'POST':
-        if request.form.getlist('content_type'):
-            db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
-
-        photo = Photo()
         photo.user_id = session['user_id']
         photo.file_id = request.form['file_id']
         photo.room_id = request.form['room_id']
@@ -130,10 +134,52 @@ def new():
         db.session.add(photo)
         db.session.commit()
 
-        return redirect(url_for('photos.list'))
+        if request.form.getlist('content_type'):
+            db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
 
-    rooms = db.session.query(Room).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html', rooms=rooms)
+        return redirect(url_for('photos.list'))
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html', rooms=rooms, photo=photo)
+
+
+@photos.route('/<id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit(id):
+    photo = Photo.query.filter_by(user_id=session['user_id'], id=id).first()
+    pre_file = File.query.filter(File.id == photo.file_id).first()
+    rooms = Room.query.all()
+    if request.method == 'POST':
+
+        photo_name = request.form['file_name']
+        photo_data = request.form['photo_data']
+
+        if pre_file.name != photo_name:
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/user/%s' % pre_file.name).delete()
+            pre_file.type = 1
+            pre_file.name = photo_name
+            pre_file.ext = photo_name.split('.')[1]
+            pre_file.size = (len(photo_data) * 3) / 4
+
+            db.session.add(pre_file)
+            db.session.flush()
+            db.session.commit()
+
+        photo.user_id = session['user_id']
+        photo.room_id = request.form['room_id']
+        photo.content = request.form['content']
+
+        db.session.add(photo)
+        db.session.commit()
+
+        if request.form.getlist('content_type'):
+            db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
+
+        return redirect(url_for('photos.detail', id=id))
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html',
+                           rooms=rooms,
+                           photo=photo)
+
+
 
 
 @photos.route('/<id>/comments/new', methods=['GET', 'POST'])

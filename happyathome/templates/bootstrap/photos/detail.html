@@ -32,6 +32,7 @@
                         {% if post.is_vr %}
                             <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}">
                                 {% if post.user_id == session.user_id %}
+                                    <div class="photo-edit" ><i class="material-icons">mode_edit</i></div>
                                     <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
                                 {% endif %}
                             </div>
@@ -48,6 +49,7 @@
                         {% else %}
                             <div class="content-photo" photo-id="{{ post.id }}">
                                 {% if post.user_id == session.user_id %}
+                                    <div class="photo-edit"><i class="material-icons">mode_edit</i></div>
                                     <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
                                 {% endif %}
                                 <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
@@ -421,6 +423,10 @@ $('.photo-remove').click(function() {
             }
         }
     });
+});
+
+$('.photo-edit').click(function() {
+    document.location.href = "{{ url_for('photos.edit', id=post.id) }}";
 });
 </script>
 {% endblock %}
