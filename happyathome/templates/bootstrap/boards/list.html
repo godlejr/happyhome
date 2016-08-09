@@ -26,7 +26,7 @@
                             <span class="user-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }})"></span>
                             <span class="user-name">{{ post.user.name }}</span>
                             <span class="board-date">{{ post.created_date }}</span>
-                            {% if not post.is_reply and post.user.is_pro %}
+                            {% if not post.is_reply and session.user_level > 1 %}
                                 <span class="board-control">
                                     <a href="javascript:;" onclick="replyPost({{ post.id }}, this)">답변</a>
                                 </span>
