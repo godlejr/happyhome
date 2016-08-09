@@ -32,8 +32,8 @@
                         {% if post.is_vr %}
                             <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}">
                                 {% if post.user_id == session.user_id %}
-                                    <div class="photo-edit" ><i class="material-icons">mode_edit</i></div>
-                                    <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
+                                    <div class="photo-edit"></div>
+                                    <div class="photo-remove" photo-id="{{ post.id }}"></div>
                                 {% endif %}
                             </div>
 
@@ -49,8 +49,8 @@
                         {% else %}
                             <div class="content-photo" photo-id="{{ post.id }}">
                                 {% if post.user_id == session.user_id %}
-                                    <div class="photo-edit"><i class="material-icons">mode_edit</i></div>
-                                    <div class="photo-remove" photo-id="{{ post.id }}"><i class="material-icons">clear</i></div>
+                                    <div class="photo-edit"></div>
+                                    <div class="photo-remove" photo-id="{{ post.id }}"></div>
                                 {% endif %}
                                 <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
                                 <div class="content-like">
