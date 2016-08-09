@@ -4,67 +4,61 @@
 
 {% block content %}
 <div class="content">
-    <div class="login-row">
-        <form class="login-form" method="POST">
-            <div class="login-header">
-                <div class="login-text">회원가입</div>
+    <form class="login-form" method="POST">
+        <div class="login-header">
+            <img src="{{ url_for('static', filename='img/main/join_img.jpg') }}" width="98" height="97">
+        </div>
+        <div class="login-form-group">
+            <div class="login-check">
+                <input type="radio" class="login radio" name="login_check" id="users" value="1"/> <label for="users">일반회원</label>
+            </div><div class="login-check">
+                <input type="radio" class="login radio" name="login_check" id="pros" value="2" checked="checked"/> <label for="pros">사업자회원</label>
             </div>
-            <div class="login-form-group">
-                <div class="login-form-fieldset">
-                    <div class="login-check">일반회원<input type="radio" class="login radio" name="login_check" id="users"
-                                                        value="1" checked="checked"/></div>
-                     <div class="login-check">사업자회원<input type="radio" class="login radio" name="login_check" id="pros"
-                                                         value="2"/></div>
-                </div>
-            </div>
+        </div>
 
-            <div class="login-form-group">
-                <div class="login-form-fieldset">
-                    {{ form.email(class="login-form-field", placeholder=form.email.label.text) }}
-                </div>
-            </div>
+        <div class="login-form-group">
+            {{ form.email(class="login-form-field", placeholder=form.email.label.text) }}
+        </div>
 
-            <div class="login-form-group" id="name">
-                <div class="login-form-fieldset">
-                    {{ form.name(class="login-form-field", placeholder=form.name.label.text) }}
-                </div>
-            </div>
+        <div class="login-form-group" id="name">
+            {{ form.name(class="login-form-field", placeholder=form.name.label.text) }}
+        </div>
 
-            <div class="login-form-group">
-                <div class="login-form-fieldset">
-                    {{ form.password(class="login-form-field", placeholder=form.password.label.text) }}
-                </div>
+        <div class="login-form-group">
+            {{ form.password(class="login-form-field", placeholder=form.password.label.text) }}
+        </div>
+
+        <div class="login-form-group">
+            {{ form.confirm(class="login-form-field", placeholder=form.confirm.label.text) }}
+        </div>
+
+        <div class="login-form-group" id="business_no">
+            {{ form.business_no(class="login-form-field", placeholder=form.business_no.label.text) }}
+        </div>
+
+        <div class="login-form-group">
+            <div class="agreement">
+                {{ form.agreement }} <a href="/agreement">이용약관</a> 및 <a href="/privacy">개인정보 취급방침</a> 동의
             </div>
-            <div class="login-form-group">
-                <div class="login-form-fieldset">
-                    {{ form.confirm(class="login-form-field", placeholder=form.confirm.label.text) }}
-                </div>
-            </div>
-            <div class="login-form-group" id="business_no" hidden="hidden">
-                <div class="login-form-fieldset">
-                    {{ form.business_no(class="login-form-field", placeholder=form.business_no.label.text) }}
-                </div>
-            </div>
-            <div class="login-form-group">
-                <div class="login-form-fieldset">
-                    {{ form.agreement }} <a href="/agreement">이용약관</a>에 동의합니다.
-                </div>
-            </div>
-            {% with messages = get_flashed_messages() %}
+        </div>
+
+        {% with messages = get_flashed_messages() %}
             {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <div>{{ message }}</div>
-                {% endfor %}
-            </ul>
+                <div class="message">
+                    <ul>
+                        {% for message in messages %}
+                            <div>{{ message }}</div>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endif %}
-            {% endwith %}
-            <div class="login-form-group">
-                <button type="submit" class="login-button">회원가입</button>
-            </div>
-            <!--social register -->
-        </form>
-    </div>
+        {% endwith %}
+
+        <div class="login-form-group">
+            <button type="submit" class="btn-submit">회원가입</button>
+        </div>
+        <!--social register -->
+    </form>
 </div>
 
 <script>

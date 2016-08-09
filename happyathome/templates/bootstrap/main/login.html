@@ -4,177 +4,169 @@
 
 {% block content %}
 <div class="content">
-    <article class="login-row">
-        <div class="login-form">
-            <form method="POST">
-                <div class="login-header">
-                    <div class="login-text">로그인</div>
-                </div>
-                <div class="login-form-group">
-                    <div class="login-form-fieldset">
-                        {{ form.email(class="login-form-field", placeholder=form.email.label.text) }}
-                    </div>
-                </div>
+    <div class="login-form">
+        <form method="POST">
+            <div class="login-header">
+                <img src="{{ url_for('static', filename='img/main/log_img.jpg') }}" width="98" height="97">
+            </div>
+            <div class="login-form-group">
+                {{ form.email(class="login-form-field", placeholder="e메일을 입력하세요.") }}
+            </div>
 
-                <div class="login-form-group">
-                    <div class="login-form-fieldset">
-                        {{ form.password(class="login-form-field", placeholder=form.password.label.text) }}
-                    </div>
-                </div>
-                {% with messages = get_flashed_messages() %}
+            <div class="login-form-group">
+                {{ form.password(class="login-form-field", placeholder="비밀번호를 입력하세요.") }}
+            </div>
+
+            {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
+                    <div class="message">
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
-                {% endwith %}
-                <div class="login-form-group">
-                    <button type="submit" class="login-button">로그인</button>
-                </div>
-            </form>
+            {% endwith %}
 
-            <!--facebook login-->
+            <div class="login-form-group">
+                <button type="submit" class="btn-submit">로그인</button>
+            </div>
 
-            <form name="fbForm" class="login-form-group" method="post">
-                <button type="button" id="fb-btn" class="login-button">facebook로그인</button>
-            </form>
+        </form>
 
-        </div>
+        <hr>
+
+        <form name="fbForm" class="login-form-group" method="post">
+            <div class="login-form-group">
+                <button type="button" id="fb-btn" class="btn-default">facebook로그인</button>
+            </div>
+        </form>
+
+    </div>
         <!--kakao login
         <a id="custom-login-btn" href="javascript:loginWithKakao()">
             <img src="http://mud-kage.kakao.co.kr/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" width="150"/>
         </a>
         <!--google login-->
         <!--  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>-->
-    </article>
 </div>
 
 
 <!--facebook login-->
 <script>
-        //button event
-         $('#fb-btn').click(function () {
-             facebookRegist();
-         });
+//button event
+ $('#fb-btn').click(function () {
+     facebookRegist();
+ });
 
 
-        // 페이스북 SDK 초기화
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '1743693419236952'    // Website with Facebook Login 사이트 : 일단 test 용으로 용퓌 계정상에서 app 생성
-                , status: true   // check login status
-                , cookie: true   // enable cookies to allow the server to access the session
-                , xfbml: true    // parse XFBML
-                //, oauth: true
-            });
-        };
+// 페이스북 SDK 초기화
+window.fbAsyncInit = function () {
+    FB.init({
+        appId: '1743693419236952'    // Website with Facebook Login 사이트 : 일단 test 용으로 용퓌 계정상에서 app 생성
+        , status: true   // check login status
+        , cookie: true   // enable cookies to allow the server to access the session
+        , xfbml: true    // parse XFBML
+        //, oauth: true
+    });
+};
 
-        // 페이스북 SDK(js) 로딩 (페이지 로딩 속도 향상을 위해 사용)
-        (function (d) {
-            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement('script');
-            js.id = id;
-            js.async = true;
-            //js.src = "//connect.facebook.net/en_US/all.js";
-            js.src = "http://connect.facebook.net/ko_KR/all.js";
-            ref.parentNode.insertBefore(js, ref);
-        }(document));
+// 페이스북 SDK(js) 로딩 (페이지 로딩 속도 향상을 위해 사용)
+(function (d) {
+    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+    if (d.getElementById(id)) {
+        return;
+    }
+    js = d.createElement('script');
+    js.id = id;
+    js.async = true;
+    //js.src = "//connect.facebook.net/en_US/all.js";
+    js.src = "http://connect.facebook.net/ko_KR/all.js";
+    ref.parentNode.insertBefore(js, ref);
+}(document));
 
-         // 페이스북 계정으로 회원 가입
-        function facebookRegist() {
-             alert(1);
-            // 페이스북 로그인 상태 체크
-            FB.getLoginStatus(function (response) {
+ // 페이스북 계정으로 회원 가입
+function facebookRegist() {
+    // 페이스북 로그인 상태 체크
+    FB.getLoginStatus(function (response) {
 
-                if (response.status == "connected") {
-                    // 페이스북 로그인 YES! and 앱 허가 YES!
-                            alert(2);
-                    handleFacebookRegist(response);
+        if (response.status == "connected") {
+            // 페이스북 로그인 YES! and 앱 허가 YES!
+                    alert(2);
+            handleFacebookRegist(response);
 
-                } else if (response.status == "not_authorized") {
-                    // 페이스북 로그인 YES! but 앱 허가 NO!
-                    FB.login(function (response) {
-                            alert(3);
-                                handleFacebookRegist(response);
-                            }, {scope: 'publish_stream, email, user_birthday, user_likes, publish_actions, read_stream'});
-                } else {    // 페이스북 로그아웃 상태.
-                    FB.login(function (response) {
-                    alert(4);
-                                handleFacebookRegist(response);
-                            },{scope: 'publish_stream, email, user_birthday, user_likes, publish_actions, read_stream'});
-                }
-            });
+        } else if (response.status == "not_authorized") {
+            // 페이스북 로그인 YES! but 앱 허가 NO!
+            FB.login(function (response) {
+                    alert(3);
+                        handleFacebookRegist(response);
+                    }, {scope: 'publish_stream, email, user_birthday, user_likes, publish_actions, read_stream'});
+        } else {    // 페이스북 로그아웃 상태.
+            FB.login(function (response) {
+                        handleFacebookRegist(response);
+                    },{scope: 'publish_stream, email, user_birthday, user_likes, publish_actions, read_stream'});
         }
+    });
+}
 
-        // 회원가입 핸들러
-        function handleFacebookRegist(response) {
+// 회원가입 핸들러
+function handleFacebookRegist(response) {
 
-            var accessToken = response.authResponse.accessToken;
-            var userId, userName, fbId, userBirth;
+    var accessToken = response.authResponse.accessToken;
+    var userId, userName, fbId, userBirth;
 
-            FB.api('/me', function (user) {
-                userId = user.email;    // 페이스북 email
-                userName = user.name;   // 페이스북 name
-                fbId = user.id;         // 페이스북 id
-                userBirth = user.birthday;  // 페이스북 생일 : mm/dd/yyyy
-                alert(accessToken);
-                alert(userName);
-                alert(userBirth);
-                $('input[name=fbAccessToken]').val(accessToken);
+    FB.api('/me', function (user) {
+        userId = user.email;    // 페이스북 email
+        userName = user.name;   // 페이스북 name
+        fbId = user.id;         // 페이스북 id
+        userBirth = user.birthday;  // 페이스북 생일 : mm/dd/yyyy
+        alert(accessToken);
+        alert(userName);
+        alert(userBirth);
+        $('input[name=fbAccessToken]').val(accessToken);
 
-                $.ajax({
-                    type: "post",
-                    url: "/login/facebook",
-                    dataType: "json",
-                    json: "callback",
-                    data: {
-                        accessToken: accessToken
-                    },
-                    beforeSend: function () {
-                        $('#ajax_load_indicator').fadeIn('fast');
-                    },
-                    success: function (data) {
-                        if (data.result == true) {
-                            alert("이미 가입이 되어있습니다.");
-                            return;
-                        } else {
-                            if (confirm("Facebook 계정으로 가입하시겠습니까?\n\rFacebook 계정으로 가입시 추가정보를 입력하셔야 합니다.")) {
-                                //var $form = $("<form></form>");
-                                //$form.attr("action",'/login/facebooksignup');
-                                //$form.attr("method","post");
-                                //$form.appendTo("body");
-                                //$form.append("<input type="hidden" name="userName" value=""+ userName +"">");
-                                //$form.append("<input type="hidden" name="userId" value=""+ userId +"">");
-                                //$form.append("<input type="hidden" name="fbId" value=""+ fbId +"">");
-                                //$form.append("<input type="hidden" name="userBirth" value=""+ userBirth +"">");    // mm/dd/yyyy 형식으로 받음.(짤라서 쓰던가 하믄 됨.)
-                                //$form.submit();
-                            }
-                            return;
-                        }
-                    },
-                    error: function (data, status, err) {
-                        alert("서버와의 통신이 실패했습니다.");
-                        alert(err)
-                        return;
-                    },
-                    complete: function () {
-                        $('#ajax_load_indicator').fadeOut();
+        $.ajax({
+            type: "post",
+            url: "/login/facebook",
+            dataType: "json",
+            json: "callback",
+            data: {
+                accessToken: accessToken
+            },
+            beforeSend: function () {
+                $('#ajax_load_indicator').fadeIn('fast');
+            },
+            success: function (data) {
+                if (data.result == true) {
+                    alert("이미 가입이 되어있습니다.");
+                    return;
+                } else {
+                    if (confirm("Facebook 계정으로 가입하시겠습니까?\n\rFacebook 계정으로 가입시 추가정보를 입력하셔야 합니다.")) {
+                        //var $form = $("<form></form>");
+                        //$form.attr("action",'/login/facebooksignup');
+                        //$form.attr("method","post");
+                        //$form.appendTo("body");
+                        //$form.append("<input type="hidden" name="userName" value=""+ userName +"">");
+                        //$form.append("<input type="hidden" name="userId" value=""+ userId +"">");
+                        //$form.append("<input type="hidden" name="fbId" value=""+ fbId +"">");
+                        //$form.append("<input type="hidden" name="userBirth" value=""+ userBirth +"">");    // mm/dd/yyyy 형식으로 받음.(짤라서 쓰던가 하믄 됨.)
+                        //$form.submit();
                     }
-                });
-            });
-        }
-
-
-
-
-
-
-
+                    return;
+                }
+            },
+            error: function (data, status, err) {
+                alert("서버와의 통신이 실패했습니다.");
+                alert(err)
+                return;
+            },
+            complete: function () {
+                $('#ajax_load_indicator').fadeOut();
+            }
+        });
+    });
+}
 </script>
 
 <!--kakao login-->
@@ -195,12 +187,6 @@
       });
     };
   //]]>
-
-
-
-
-
-
 </script>
 
 <!--google login-->
@@ -221,11 +207,5 @@
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
       };
-
-
-
-
-
 </script>
-
 {% endblock %}
