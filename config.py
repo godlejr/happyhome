@@ -1,3 +1,6 @@
+import os
+
+
 class Config(object):
     DEBUG = False
     TESTING = False
@@ -26,6 +29,10 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
+    SECRET_KEY = os.getenv('SECRET_KEY') or '6943938e-c7fd-461b-bc68-4e7350983d51'
+    TEMPLATE_THEME = 'bootstrap'
+    NO_IMG = 'noimg.JPG'
+    REDIS_URL = '52.78.113.21'
 
 
 class StagingConfig(Config):

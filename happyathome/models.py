@@ -4,7 +4,6 @@ from markupsafe import Markup
 from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import backref
-from sqlalchemy.util import hybridmethod
 
 db = SQLAlchemy()
 
@@ -63,25 +62,30 @@ class User(db.Model, BaseMixin):
 
     follow = db.relationship('Follow', back_populates='user')
 
-    @hybridmethod
+    @hybrid_property
+    def is_pro(self):
+        return True if self.level == 2 else False
+
+    @hybrid_property
+    def is_authenticated(self):
+        """Email 인증 여부 확인"""
+        return True if self.authenticated else False
+
+    @hybrid_method
     def follow_check(self, session_id, follow_id):
         return Follow.query.filter_by(user_id=session_id).filter_by(follow_id=follow_id).first()
 
-    @hybridmethod
+    @hybrid_method
     def following_count(self, user_id):
         return Follow.query.filter_by(user_id=user_id).count()
 
-    @hybridmethod
+    @hybrid_method
     def follower_count(self, user_id):
         return Follow.query.filter_by(follow_id=user_id).count()
 
-    @hybridmethod
+    @hybrid_method
     def follow_user(self, id):
         return User.query.filter(User.id == id).first()
-
-    def is_authenticated(self):
-        """Email 인증 여부 확인"""
-        return self.authenticated
 
     def __repr__(self):
         return "%s(%s)" % (self.name, self.email)
@@ -347,6 +351,10 @@ class Board(db.Model, BaseMixin):
     user = db.relationship('User', backref=backref('user_boards'))
 
     @hybrid_property
+    def is_reply(self):
+        return True if self.depth else False
+
+    @hybrid_property
     def is_deleted(self):
         return self.deleted
 
@@ -354,3 +362,8 @@ class Board(db.Model, BaseMixin):
     def max1_group_id(self):
         group_id = db.session.query(func.max(Board.group_id)).one()[0]
         return (group_id + 1) if group_id else 1
+
+    @hybrid_property
+    def max1_depth(self):
+        depth = db.session.query(func.max(Board.depth)).filter_by(board_id=self.board_id, group_id=self.group_id).one()[0]
+        return (depth + 1) if depth else 1

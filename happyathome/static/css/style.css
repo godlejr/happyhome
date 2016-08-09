@@ -21,6 +21,7 @@ table    { border-collapse: collapse; }
 .left { float: left !important; }
 .right { float: right !important; }
 .margin-top-20 { margin-top: 20px; }
+.hide { display: none; }
 
 /******* 공통 레이아웃 *********/
 a:link { text-decoration:none; }
@@ -2716,7 +2717,7 @@ button.btn-danger {
 .content-board .input-field {
     margin-top: 40px;
 }
-.content-board .input-field textarea {
+.content-board form textarea {
     display: inline-block;
     width: calc(100% - 62px);
     height: 60px;
@@ -2724,7 +2725,7 @@ button.btn-danger {
     border: 0;
     background-color: #e8e8e8;
 }
-.content-board .input-field button {
+.content-board form button {
     display: inline-block;
     width: 60px;
     height: 60px;
@@ -2739,26 +2740,21 @@ button.btn-danger {
     border-top: 1px solid #ededed;
 }
 .content-board .board-list {
-    padding: 15px 40px;
+    padding: 15px 0 15px 40px;
     width: 100%;
     margin-top: 0;
     border-bottom: 1px solid #ededed;
 }
 .content-board .board-list.reply {
-    padding-left: 60px;
+    padding-left: 62px;
     background-color: #ededed;
 }
 .content-board .board-list .board-author {
-    float: left;
     width: 100%;
 }
-.content-board .board-author {
-    clear: both;
-}
 .content-board .board-content {
-    display: inline-block;
-    margin-top: 10px;
-    margin-left: 55px;
+    padding-top: 10px;
+    padding-left: 55px;
     font-size: 12px;
 }
 .content-board .user-avatar {
