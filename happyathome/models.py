@@ -69,7 +69,7 @@ class User(db.Model, BaseMixin):
     @hybrid_property
     def is_authenticated(self):
         """Email 인증 여부 확인"""
-        return self.authenticated
+        return True if self.authenticated else False
 
     @hybrid_method
     def follow_check(self, session_id, follow_id):

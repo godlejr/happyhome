@@ -27,6 +27,7 @@ def list(id, page):
 
 
 @boards.route('/<board_id>/new', methods=['GET', 'POST'])
+@login_required
 def new(board_id):
     if request.method == 'POST':
         post = Board()
@@ -40,6 +41,7 @@ def new(board_id):
 
 
 @boards.route('/<board_id>/<post_id>/reply', methods=['POST'])
+@login_required
 def reply(board_id, post_id):
     user = User.query.filter_by(id=session['user_id']).first()
     board = Board.query.filter_by(id=post_id).first()
@@ -56,6 +58,7 @@ def reply(board_id, post_id):
 
 
 @boards.route('/<board_id>/<post_id>/delete')
+@login_required
 def delete(board_id, post_id):
     post = Board.query.filter_by(user_id=session['user_id'], board_id=board_id, id=post_id)
     board = post.first()
