@@ -58,7 +58,7 @@ class User(db.Model, BaseMixin):
     accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
     level = db.Column(db.Integer)
     cover = db.Column(db.Unicode(255), default='cover.jpg',nullable=False)
-    avatar = db.Column(db.Unicode(255), default='avatar.jpg',nullable=False )
+    avatar = db.Column(db.Unicode(255), default='avatar.png',nullable=False )
 
     follow = db.relationship('Follow', back_populates='user')
 
