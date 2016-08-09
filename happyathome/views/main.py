@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
 from happyathome.forms import JoinForm, LoginForm
-from happyathome.models import db, User, Magazine, Category, Residence, Professional, Photo
+from happyathome.models import db, User, Magazine, Professional, Photo
 from sqlalchemy.dialects.postgresql import json
 from werkzeug.security import generate_password_hash, check_password_hash
 
