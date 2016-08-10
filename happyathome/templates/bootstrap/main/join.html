@@ -43,15 +43,15 @@
         </div>
 
         {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="message">
-                    <ul>
-                        {% for message in messages %}
-                            <div>{{ message }}</div>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
+                {% if messages %}
+                    <div class="message">
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
         {% endwith %}
 
         <div class="login-form-group">
