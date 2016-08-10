@@ -3,7 +3,7 @@ from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib import sqla
 from flask_login import current_user
 from happyathome import User
-from happyathome.models import Category, Magazine, Photo, Comment, db
+from happyathome.models import Category, Magazine, Photo, Comment, db, Board
 from werkzeug.utils import redirect
 
 
@@ -46,12 +46,6 @@ class ClassAdminPhoto( sqla.ModelView):
     def is_accessible(self):
         return current_user.is_admin
 
-    @expose('/')
-    def index(self):
-        if session.get('user_level') != 9:
-            return redirect(url_for('main.index'))
-        return super(ClassAdminPhoto, self).index()
-
 
 class ClassAdminMagazine(sqla.ModelView):
     column_display_pk = True
@@ -62,15 +56,6 @@ class ClassAdminMagazine(sqla.ModelView):
 
     column_labels = dict(user='사용자', category='범주', title='제목', content='내용', photos='사진들')
 
-    def is_accessible(self):
-        return current_user.is_admin
-
-    @expose('/')
-    def index(self):
-        if session.get('user_level') != 9:
-            return redirect(url_for('main.index'))
-        return super(ClassAdminMagazine, self).index()
-
 
 class CommentAdminFile(sqla.ModelView):
     column_display_pk = True
@@ -80,11 +65,14 @@ class CommentAdminFile(sqla.ModelView):
 
     column_labels = dict(user='사용자', content='내용')
 
-    def is_accessible(self):
-        return current_user.is_admin
 
-    @expose('/')
-    def index(self):
-        if session.get('user_level') != 9:
-            return redirect(url_for('main.index'))
-        return super(CommentAdminFile, self).index()
+class BoardAdminFile(sqla.ModelView):
+    column_display_pk = True
+
+    column_list = ('user', 'content')
+    form_columns = ['user', 'content']
+    column_searchable_list = (User.name, User.email, Board.content)
+
+    column_labels = dict(user='사용자', content='내용')
+
+

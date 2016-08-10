@@ -2,12 +2,14 @@ import os
 import config
 from flask_admin import Admin
 from flask_login import LoginManager
-from happyathome.models import db, User, File, Photo, Magazine, MagazineComment, PhotoComment, Comment
+from happyathome.models import db, User, File, Photo, Magazine, MagazineComment, PhotoComment, Comment, Board
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from happyathome.utils import RedisSessionInterface
-from happyathome.views.admin import  UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView
+from happyathome.views.admin import  UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView, \
+    BoardAdminFile
 from redis import Redis
+from werkzeug.utils import redirect
 
 
 def create_app(config_name):
@@ -37,6 +39,7 @@ def create_app(config_name):
     admin.add_view(ClassAdminPhoto(Photo, db.session, name='포토', category='분류관리', endpoint='photo'))
     admin.add_view(ClassAdminMagazine(Magazine, db.session, name='매거진', category='분류관리', endpoint='magazine'))
     admin.add_view(CommentAdminFile(Comment, db.session, name='댓글', category='댓글관리', endpoint='comment'))
+    admin.add_view(BoardAdminFile(Board, db.session, name='해피QnA', category='댓글관리',endpoint='board'))
 
     # Application Blueprints
     from happyathome.views.main import main as main_blueprint
@@ -54,6 +57,7 @@ def create_app(config_name):
     app.register_blueprint(users_blueprint, url_prefix='/user')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
+    app.errorhandler(403)(lambda e: redirect('/'))
 
     login_manager = LoginManager()
     login_manager.init_app(app)
