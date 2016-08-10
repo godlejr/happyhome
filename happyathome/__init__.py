@@ -8,6 +8,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from happyathome.utils import RedisSessionInterface
 from happyathome.views.admin import  UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView
 from redis import Redis
+from werkzeug.utils import redirect
 
 
 def create_app(config_name):
@@ -54,6 +55,7 @@ def create_app(config_name):
     app.register_blueprint(users_blueprint, url_prefix='/user')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
+    app.errorhandler(403)(lambda e: redirect('/'))
 
     login_manager = LoginManager()
     login_manager.init_app(app)
