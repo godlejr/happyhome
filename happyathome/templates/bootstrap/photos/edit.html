@@ -27,9 +27,11 @@
                 <div class="input-field">
                     <select id="room_id" name="room_id">
                         <option value="" disabled selected>공간을 선택해주세요</option>
-                        {% for room in rooms %}
-                            <option value="{{ room.id }}">{{ room.name }}</option>
-                        {% endfor %}
+                        {% if pre_room %}
+                            {% for room in rooms %}
+                                <option value="{{ room.id }}" {% if pre_room.id == room.id %} selected="selected" {% endif %}>{{ room.name }}</option>
+                            {% endfor %}
+                        {% endif %}
                     </select>
                 </div>
 
