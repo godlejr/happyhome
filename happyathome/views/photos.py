@@ -110,20 +110,15 @@ def new():
     rooms = db.session.query(Room).all()
     if request.method == 'POST':
         photo_name = request.form['file_name']
-        photo_data = request.form['photo_data']
 
         file = File()
         file.type = 1
         file.name = photo_name
         file.ext = photo_name.split('.')[1]
-        file.size = (len(photo_data) * 3) / 4
+        file.size = 0
 
-        db.session.add(file)
-        db.session.flush()
-        db.session.commit()
-
+        photo.file = file
         photo.user_id = session['user_id']
-        photo.file_id = request.form['file_id']
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
 
@@ -141,41 +136,36 @@ def new():
 @login_required
 def edit(id):
     photo = Photo.query.filter_by(user_id=session['user_id'], id=id).first()
-    pre_file = File.query.filter(File.id == photo.file_id).first()
-    pre_room = Room.query.filter(Room.id == photo.room_id).first()
+    pre_file = File.query.filter_by(id=photo.file_id).first()
     rooms = Room.query.all()
     if request.method == 'POST':
-
         photo_name = request.form['file_name']
-        photo_data = request.form['photo_data']
 
         if pre_file.name != photo_name:
             s3 = boto3.resource('s3')
             s3.Object('static.inotone.co.kr', 'data/user/%s' % pre_file.name).delete()
+
             pre_file.type = 1
             pre_file.name = photo_name
             pre_file.ext = photo_name.split('.')[1]
-            pre_file.size = (len(photo_data) * 3) / 4
+            pre_file.size = 0
 
             db.session.add(pre_file)
-            db.session.flush()
-            db.session.commit()
 
         photo.user_id = session['user_id']
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
 
-        db.session.add(photo)
-        db.session.commit()
-
         if request.form.getlist('content_type'):
             db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
+
+        db.session.add(photo)
+        db.session.commit()
 
         return redirect(url_for('photos.detail', id=id))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html',
                            rooms=rooms,
-                           photo=photo,
-                           pre_room=pre_room)
+                           photo=photo)
 
 
 @photos.route('/<id>/comments/new', methods=['GET', 'POST'])
