@@ -6,7 +6,7 @@ from happyathome.models import db, User, File, Photo, Magazine, MagazineComment,
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from happyathome.utils import RedisSessionInterface
-from happyathome.views.admin import MyView, UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile
+from happyathome.views.admin import  UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView
 from redis import Redis
 
 
@@ -32,7 +32,8 @@ def create_app(config_name):
     app.session_interface = RedisSessionInterface(redis)
 
     # admin
-    admin = Admin(app, name='Happy@Home', template_mode='bootstrap3')
+    admin = Admin(app, name='Happy@Home', template_mode='bootstrap3', index_view=MyAdminIndexView())
+
     admin.add_view(UserAdmin(User, db.session, name='사용자관리'))
     admin.add_view(ClassAdminPhoto(Photo, db.session, name='포토', category='분류관리'))
     admin.add_view(ClassAdminMagazine(Magazine, db.session, name='매거진', category='분류관리'))

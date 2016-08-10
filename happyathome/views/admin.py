@@ -1,18 +1,22 @@
-from flask import current_app
-from flask_admin import BaseView, expose
+from flask import current_app, session, url_for
+from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib import sqla
 from happyathome import User
 from happyathome.models import Category, Magazine, Photo, Comment
+from werkzeug.utils import redirect
 
 
-class MyView(BaseView):
-    @expose('/')
-    def User(self):
-        return self.render(current_app.config['TEMPLATE_THEME'] + '/admin/index.html')
+class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        if session['user_level'] != 9:
+            return redirect(url_for('main.index'))
+        else:
+            return True
 
 
 # admin class
 class UserAdmin(sqla.ModelView):
+
     column_display_pk = True
     # Disable model creation
 
@@ -26,6 +30,7 @@ class UserAdmin(sqla.ModelView):
 
 
 class ClassAdminPhoto(sqla.ModelView):
+
     column_display_pk = True
 
     # Override displayed fields

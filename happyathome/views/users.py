@@ -356,7 +356,7 @@ def edit_profile(id):
             user.sex = 'F'
 
         if user.avatar != request.form.get('profileFileName'):
-            if user.avatar != 'avatar.jpg':
+            if user.avatar != 'avatar.png':
                 s3 = boto3.resource('s3')
                 s3.Object('static.inotone.co.kr', 'data/user/%s' % user.avatar).delete()
                 user.avatar = request.form.get('profileFileName')
