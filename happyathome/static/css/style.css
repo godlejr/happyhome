@@ -2355,6 +2355,8 @@ input[type=file] {
     margin-top: 20px;
     font-size: 14px;
     line-height: 170%;
+    white-space: pre-wrap;
+    text-align: justify;
 }
 .user-project {
     width: 100%;
