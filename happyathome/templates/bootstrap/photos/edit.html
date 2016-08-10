@@ -139,7 +139,9 @@ $photoFile.change(function() {
 });
 
 function photosUnload() {
-    $photoPreview.children().remove();
+    if ($photoPreview) {
+        $photoPreview.children().remove();
+    }
     $('#contentType').prop('checked', false);
     $('.rooms>label').removeClass('active');
 
