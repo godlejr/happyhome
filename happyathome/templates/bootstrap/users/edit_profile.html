@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="edit_field">
-        <div class="edit_title">프로필 사진</div>
+        <div class="edit_title">프로필/로고</div>
         <div class="edit-profile-preview" id="profilePreview">
             {% if user.avatar %}
                 <img class="edit-profile-photo" src="http://static.inotone.co.kr/data/user/{{ user.avatar }}">
@@ -38,7 +38,7 @@
     </div>
 
     <div class="edit_field">
-        <div class="edit_title">커버 사진</div>
+        <div class="edit_title">배경 사진</div>
         <div class="edit-profile-preview" id="coverPreview">
             {% if user.cover %}
                 <img class="edit-cover-photo" src="http://static.inotone.co.kr/data/cover/{{ user.cover }}">
