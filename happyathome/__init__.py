@@ -36,8 +36,8 @@ def create_app(config_name):
     # admin
     admin = Admin(app, name='Happy@Home', template_mode='bootstrap3', index_view=MyAdminIndexView())
     admin.add_view(UserAdmin(User, db.session, name='사용자관리', endpoint='user'))
-    admin.add_view(ClassAdminPhoto(Photo, db.session, name='포토', category='분류관리', endpoint='photo'))
-    admin.add_view(ClassAdminMagazine(Magazine, db.session, name='매거진', category='분류관리', endpoint='magazine'))
+    admin.add_view(ClassAdminPhoto(Photo, db.session, name='포토', category='컨텐츠관리', endpoint='photo'))
+    admin.add_view(ClassAdminMagazine(Magazine, db.session, name='매거진', category='컨텐츠관리', endpoint='magazine'))
     admin.add_view(CommentAdminFile(Comment, db.session, name='댓글', category='댓글관리', endpoint='comment'))
     admin.add_view(BoardAdminFile(Board, db.session, name='해피QnA', category='댓글관리',endpoint='board'))
 

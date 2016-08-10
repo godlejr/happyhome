@@ -9,7 +9,10 @@ from werkzeug.utils import redirect
 
 class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):
+        if not session.get('user_id'):
+            return False
         return current_user.is_admin
+
 
     @expose('/')
     def index(self):
