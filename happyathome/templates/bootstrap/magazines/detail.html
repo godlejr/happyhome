@@ -100,7 +100,7 @@
 
                     {% if category_magazines|length > 1 %}
                     <div class="content-relative">
-                        <div class="relative-title"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a>의 다른 매거진</div>
+                        <div class="relative-title"><a href="{{ url_for('magazines.list', category_id=post.category_id) }}">{{ post.category.name }}</a>의 다른 스토리</div>
                         {% for category_magazine in category_magazines %}
                             {% if category_magazine.photos %}
                                 <div class="relative-list">
@@ -120,7 +120,7 @@
 
                     {% if residence_magazines|length > 1 %}
                     <div class="content-relative">
-                        <div class="relative-title"><a href="{{ url_for('magazines.list', residence_id=post.residence_id) }}">{{ post.residence.name }}</a>의 다른 매거진</div>
+                        <div class="relative-title"><a href="{{ url_for('magazines.list', residence_id=post.residence_id) }}">{{ post.residence.name }}</a>의 다른 스토리</div>
                         {% for residence_magazine in residence_magazines %}
                             {% if residence_magazine.photos %}
                                 <div class="relative-list">
@@ -140,7 +140,7 @@
 
                     {% if user_magazines|length > 1 %}
                     <div class="content-relative">
-                        <div class="relative-title">{{ post.user.name }}의 다른 매거진</div>
+                        <div class="relative-title">{{ post.user.name }}의 다른 스토리</div>
                         {% for user_magazine in user_magazines %}
                             {% if user_magazine.photos %}
                                 <div class="relative-list">

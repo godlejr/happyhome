@@ -1,17 +1,17 @@
-from flask import current_app, session, url_for
+from flask import current_app, session, url_for, g
 from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib import sqla
 from happyathome import User
-from happyathome.models import Category, Magazine, Photo, Comment
+from happyathome.models import Category, Magazine, Photo, Comment, db
 from werkzeug.utils import redirect
 
 
 class MyAdminIndexView(AdminIndexView):
-    def is_accessible(self):
-        if session['user_level'] != 9:
+    @expose('/')
+    def index(self):
+        if session.get('user_level') !=9 :
             return redirect(url_for('main.index'))
-        else:
-            return True
+        return super(MyAdminIndexView, self).index()
 
 
 # admin class
@@ -29,7 +29,7 @@ class UserAdmin(sqla.ModelView):
     column_labels = dict(id='No', name='이름', email='이메일', authenticated='인증', accesscode='소셜아이디')
 
 
-class ClassAdminPhoto(sqla.ModelView):
+class ClassAdminPhoto( sqla.ModelView):
 
     column_display_pk = True
 
