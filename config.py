@@ -10,7 +10,7 @@ class Config(object):
     TEMPLATE_THEME = 'bootstrap'
     NO_IMG = 'noimg.JPG'
     REDIS_URL = '52.78.113.21'
-    S3_BUCKET_NAME = 'https://static.inotone.co.kr'
+    S3_BUCKET_NAME = 'http://static.inotone.co.kr'
     S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'
     S3_COVER_DIRECTORY = '/data/cover/'
