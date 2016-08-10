@@ -1,27 +1,23 @@
 from flask import current_app, session, url_for, g
 from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib import sqla
+from flask_login import current_user
 from happyathome import User
 from happyathome.models import Category, Magazine, Photo, Comment, db
 from werkzeug.utils import redirect
 
 
 class MyAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.is_admin
+
     @expose('/')
     def index(self):
-        if session.get('user_level') !=9 :
-            return redirect(url_for('main.index'))
         return super(MyAdminIndexView, self).index()
 
 
 # admin class
 class UserAdmin(sqla.ModelView):
-    @expose('/')
-    def index(self):
-        if session.get('user_level') != 9:
-            return redirect(url_for('main.index'))
-        return self.render(self._template)
-
     column_display_pk = True
     # Disable model creation
 
@@ -33,14 +29,11 @@ class UserAdmin(sqla.ModelView):
     # change field name
     column_labels = dict(id='No', name='이름', email='이메일', authenticated='인증', accesscode='소셜아이디')
 
+    def is_accessible(self):
+        return current_user.is_admin
+
 
 class ClassAdminPhoto( sqla.ModelView):
-    @expose('/')
-    def index(self):
-        if session.get('user_level') != 9:
-            return redirect(url_for('main.index'))
-        return super(ClassAdminPhoto, self).index()
-
     column_display_pk = True
 
     # Override displayed fields
@@ -50,14 +43,17 @@ class ClassAdminPhoto( sqla.ModelView):
     # change field name
     column_labels = dict(user='사용자', file='파일', content='내용', magazine='매거진')
 
+    def is_accessible(self):
+        return current_user.is_admin
 
-class ClassAdminMagazine(sqla.ModelView):
     @expose('/')
     def index(self):
         if session.get('user_level') != 9:
             return redirect(url_for('main.index'))
-        return super(ClassAdminMagazine, self).index()
+        return super(ClassAdminPhoto, self).index()
 
+
+class ClassAdminMagazine(sqla.ModelView):
     column_display_pk = True
 
     column_list = ('user', 'category', 'title', 'content')
@@ -66,17 +62,29 @@ class ClassAdminMagazine(sqla.ModelView):
 
     column_labels = dict(user='사용자', category='범주', title='제목', content='내용', photos='사진들')
 
+    def is_accessible(self):
+        return current_user.is_admin
 
-class CommentAdminFile(sqla.ModelView):
     @expose('/')
     def index(self):
         if session.get('user_level') != 9:
             return redirect(url_for('main.index'))
-        return super(CommentAdminFile, self).index()
+        return super(ClassAdminMagazine, self).index()
 
+
+class CommentAdminFile(sqla.ModelView):
     column_display_pk = True
     column_list = ('user', 'content')
     form_columns = ['user', 'content']
     column_searchable_list = (User.name, User.email, Comment.content)
 
     column_labels = dict(user='사용자', content='내용')
+
+    def is_accessible(self):
+        return current_user.is_admin
+
+    @expose('/')
+    def index(self):
+        if session.get('user_level') != 9:
+            return redirect(url_for('main.index'))
+        return super(CommentAdminFile, self).index()

@@ -63,6 +63,10 @@ class User(db.Model, BaseMixin):
     follow = db.relationship('Follow', back_populates='user')
 
     @hybrid_property
+    def is_admin(self):
+        return True if self.level == 9 else False
+
+    @hybrid_property
     def is_pro(self):
         return True if self.level == 2 else False
 
