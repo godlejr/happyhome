@@ -3,7 +3,7 @@ from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib import sqla
 from flask_login import current_user
 from happyathome import User
-from happyathome.models import Category, Magazine, Photo, Comment, db
+from happyathome.models import Category, Magazine, Photo, Comment, db, Board
 from werkzeug.utils import redirect
 
 
@@ -64,4 +64,15 @@ class CommentAdminFile(sqla.ModelView):
     column_searchable_list = (User.name, User.email, Comment.content)
 
     column_labels = dict(user='사용자', content='내용')
+
+
+class BoardAdminFile(sqla.ModelView):
+    column_display_pk = True
+
+    column_list = ('user', 'content')
+    form_columns = ['user', 'content']
+    column_searchable_list = (User.name, User.email, Board.content)
+
+    column_labels = dict(user='사용자', content='내용')
+
 
