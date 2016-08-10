@@ -6,12 +6,12 @@
         {% if session.user_id == user.id %}
             <div class="user-menu">
                 <ul>
-                    <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정</li>
-                    <li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경</li>
+                    <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정
+                    </li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경
                     {% if user.level !=2 %}
-                        <li href="{{ url_for('users.edit_professional', id=user.id) }}">사업자로 변경</li>
+                        </li><li href="{{ url_for('users.edit_professional', id=user.id) }}">사업자로 변경</li>
                     {% else %}
-                        <li href="{{ url_for('users.edit_professional_info', id=user.id) }}">사업자정보 수정</li>
+                        </li><li href="{{ url_for('users.edit_professional_info', id=user.id) }}">사업자정보 수정</li>
                     {% endif %}
                 </ul>
             </div>

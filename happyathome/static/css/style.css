@@ -2270,7 +2270,7 @@ input[type=file] {
     display: none;
 }
 
-.photo-edit{
+.photo-remove {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -2281,9 +2281,9 @@ input[type=file] {
     background-size: auto;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url(/static/img/gallery/mod_i.jpg);
+    background-image: url(/static/img/gallery/del_i.jpg);
 }
-.photo-remove {
+.photo-edit {
     position: absolute;
     cursor: pointer;
     top: 47px;
@@ -2294,7 +2294,7 @@ input[type=file] {
     background-size: auto;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url(/static/img/gallery/del_i.jpg);
+    background-image: url(/static/img/gallery/mod_i.jpg);
 }
 .photo-file-form {
     position: relative;
