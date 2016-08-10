@@ -16,6 +16,11 @@ class MyAdminIndexView(AdminIndexView):
 
 # admin class
 class UserAdmin(sqla.ModelView):
+    @expose('/')
+    def index(self):
+        if session.get('user_level') != 9:
+            return redirect(url_for('main.index'))
+        return self.render(self._template)
 
     column_display_pk = True
     # Disable model creation
@@ -30,6 +35,11 @@ class UserAdmin(sqla.ModelView):
 
 
 class ClassAdminPhoto( sqla.ModelView):
+    @expose('/')
+    def index(self):
+        if session.get('user_level') != 9:
+            return redirect(url_for('main.index'))
+        return super(ClassAdminPhoto, self).index()
 
     column_display_pk = True
 
@@ -42,6 +52,12 @@ class ClassAdminPhoto( sqla.ModelView):
 
 
 class ClassAdminMagazine(sqla.ModelView):
+    @expose('/')
+    def index(self):
+        if session.get('user_level') != 9:
+            return redirect(url_for('main.index'))
+        return super(ClassAdminMagazine, self).index()
+
     column_display_pk = True
 
     column_list = ('user', 'category', 'title', 'content')
@@ -52,6 +68,12 @@ class ClassAdminMagazine(sqla.ModelView):
 
 
 class CommentAdminFile(sqla.ModelView):
+    @expose('/')
+    def index(self):
+        if session.get('user_level') != 9:
+            return redirect(url_for('main.index'))
+        return super(CommentAdminFile, self).index()
+
     column_display_pk = True
     column_list = ('user', 'content')
     form_columns = ['user', 'content']

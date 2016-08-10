@@ -10,6 +10,7 @@
                 <div class="input-field">
                     <div class="photo-preview" id="photoPreview">
                         {% if photo.file.name %}
+                            <input type="hidden" id="preFileName" name="file_name" value="{{ photo.file.name }}"/>
                             <img class="edit-profile-photo" src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}">
                         {% endif %}
                     </div>
@@ -72,7 +73,7 @@ $('button[type=reset]').click(function() {
 $('#photoForm').submit(function() {
     window.onunload = window.onbeforeunload = undefined;
 
-    if (!$('#photoFile').val()) {
+    if (!$('#photoFile').val() && !$('#preFileName').val()) {
         alert('사진 파일을 선택해주세요.');
         return false;
     }
