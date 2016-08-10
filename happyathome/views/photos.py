@@ -46,7 +46,7 @@ def list(page):
 
     cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/list.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/list.html',
                            cards=cards,
                            rooms=rooms,
                            room_id=room_id,
@@ -178,8 +178,6 @@ def edit(id):
     return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html',
                            rooms=rooms,
                            photo=photo)
-
-
 
 
 @photos.route('/<id>/comments/new', methods=['GET', 'POST'])

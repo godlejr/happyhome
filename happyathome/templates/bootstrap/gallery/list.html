@@ -1,0 +1,55 @@
+{% extends "bootstrap/photos/base.html" %}
+
+{% block content_body %}
+<div class="content">
+    <div class="cards">
+        {% for card in cards %}
+            <div class="card" id="{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
+                {% if card.is_vr  %}
+                    <div class="card-media"><span class="vr-icon"></span></div>
+                {% elif card.is_mov  %}
+                    <div class="card-media"><span class="mov-icon"></span></div>
+                {% endif %}
+                <div class="card-info gallery">
+                    <div class="card-author">
+                        <a href="{{ url_for('users.info',id = card.user.id) }}"><div class="card-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=card.user.avatar) }}) "></div></a>
+                        <a class="card-user" href="{{ url_for('users.info',id = card.user.id) }}">{{ card.user.name }}</a>
+                        <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ card.content[:50] }}</div>
+                        <div class="card-icon">
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_photos|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_photos|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ card.comments|length }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-overlay"></div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="pagination-nav">{{ func.render_pagination('photos.list', pagination) }}</div>
+</div>
+
+<script>
+$('select.form-control').change(function() {
+    document.location.href = "{{ url_for('photos.list') }}" +
+                             "?room_id=" + $('#rooms').val();
+});
+
+$('.card').click(function() {
+    document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('id');
+});
+
+$('.card-overlay').mouseover(function() {
+    $(this).parent().find('.card-info').animate({
+        bottom: 0
+    });
+}).mouseout(function() {
+    $(this).parent().find('.card-info').animate({
+        bottom: "-74px"
+    });
+});
+</script>
+{% endblock %}

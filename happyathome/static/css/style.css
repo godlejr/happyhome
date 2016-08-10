@@ -38,7 +38,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
               width:1184px; height:90px; }
  .log       { float:left;
               width:299px;
-              padding-top:16px; }
+              padding-top: 26px; }
  .nav       { float:left;
               width:885px; }
  .search    { float:left;
@@ -59,13 +59,16 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
  .gnb           { width:885px; }
 
  .gnb_nav_h1    { float:left;
-                  width:175px; }
+                  width:175px;
+                  margin-top: 10px; }
 
- .gnb_nav_h1 a  { font-size:18px; font-weight: 700; color:#2b2b2b; }
+ .gnb_nav_h1 a  { font-size:18px; font-weight: 700; color:#2b2b2b; text-decoration: none; }
 
  .gnb_nav_h2    { float:left;
-                  width:160px; }
- .gnb_nav_h2 a  { font-size:18px; font-weight: 700; color:#2b2b2b; }
+                  width:160px;
+                  margin-top: 10px; }
+
+ .gnb_nav_h2 a  { font-size:18px; font-weight: 700; color:#2b2b2b; text-decoration: none; }
 
  .write_i       { float:left;
                   margin-top:14px; margin-left:136px; }
@@ -931,6 +934,7 @@ span.share-icon.active {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    overflow: hidden;
 }
 .card:after {
     content: "";
@@ -962,7 +966,7 @@ span.share-icon.active {
     bottom: 0;
     padding: 0;
     width: 100%;
-    height: 120px;
+    height: 122px;
 }
 .card .card-author {
     position: absolute;
@@ -974,8 +978,6 @@ span.share-icon.active {
     color: #ffffff;
     background-color: rgba(0, 0, 0, 0.6);
 }
-
-
 .card .card-avatar {
     display: flex;
     width: 26px;
@@ -994,8 +996,6 @@ span.share-icon.active {
     width: 100%;
     max-width: 280px;
 }
-
-
 .card .card-hits {
     float: left;
     width: 50px;
@@ -1061,6 +1061,30 @@ span.share-icon.active {
     height: 44px;
     background-color: #ffffff;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
+}
+.card .card-info.gallery {
+    height: 112px;
+    bottom: -74px;
+}
+.card .card-info.gallery .card-content {
+    height: 74px;
+    padding: 0 0 10px 40px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+.card .card-info.gallery .card-content div {
+    color: #ffffff;
+}
+.card .card-info.gallery .card-content .card-text {
+    padding: 15px 10px 15px 0;
+}
+.card .card-info.gallery .card-content .card-icon {
+    margin-top: 4px;
+}
+.card .card-overlay {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .pros {
