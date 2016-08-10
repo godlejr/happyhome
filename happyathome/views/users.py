@@ -359,13 +359,15 @@ def edit_profile(id):
             if user.avatar != 'avatar.png':
                 s3 = boto3.resource('s3')
                 s3.Object('static.inotone.co.kr', 'data/user/%s' % user.avatar).delete()
-                user.avatar = request.form.get('profileFileName')
+
+        user.avatar = request.form.get('profileFileName')
 
         if user.cover != request.form.get('coverFileName'):
-            if user.avatar != 'cover.jpg':
+            if user.cover != 'cover.jpg':
                 s3 = boto3.resource('s3')
                 s3.Object('static.inotone.co.kr', 'data/cover/%s' % user.cover).delete()
-                user.cover = request.form.get('coverFileName')
+
+        user.cover = request.form.get('coverFileName')
 
         db.session.add(user)
         db.session.commit()
