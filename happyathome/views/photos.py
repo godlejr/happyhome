@@ -146,6 +146,7 @@ def new():
 def edit(id):
     photo = Photo.query.filter_by(user_id=session['user_id'], id=id).first()
     pre_file = File.query.filter(File.id == photo.file_id).first()
+    pre_room = Room.query.filter(Room.id == photo.room_id).first()
     rooms = Room.query.all()
     if request.method == 'POST':
 
@@ -177,7 +178,8 @@ def edit(id):
         return redirect(url_for('photos.detail', id=id))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html',
                            rooms=rooms,
-                           photo=photo)
+                           photo=photo,
+                           pre_room=pre_room)
 
 
 @photos.route('/<id>/comments/new', methods=['GET', 'POST'])

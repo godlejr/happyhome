@@ -52,6 +52,10 @@ def join():
     if request.method == 'POST':
         if form.validate():
             user = User()
+            if User.query.filter_by(email = form.email.data).first():
+                flash('사용중인 이메일입니다.')
+                return render_template(current_app.config['TEMPLATE_THEME'] + '/main/join.html', form=form)
+
             user.email = form.email.data
             user.name = form.name.data
             user.password = generate_password_hash(form.password.data)
