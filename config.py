@@ -10,7 +10,7 @@ class Config(object):
     TEMPLATE_THEME = 'bootstrap'
     NO_IMG = 'noimg.JPG'
     REDIS_URL = '52.78.113.21'
-    S3_BUCKET_NAME = 'http://static.inotone.co.kr'
+    S3_BUCKET_NAME = 'https://static.inotone.co.kr'
     S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'
     S3_COVER_DIRECTORY = '/data/cover/'
@@ -29,10 +29,9 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SECRET_KEY = os.getenv('SECRET_KEY') or '6943938e-c7fd-461b-bc68-4e7350983d51'
-    TEMPLATE_THEME = 'bootstrap'
-    NO_IMG = 'noimg.JPG'
     REDIS_URL = '52.78.113.21'
+    TEMPLATE_THEME = 'bootstrap'
+    SECRET_KEY = os.getenv('SECRET_KEY') or 'OvPU1Vj0SRi3wdFz+glCQgRoSwbWneW4'
 
 
 class StagingConfig(Config):
