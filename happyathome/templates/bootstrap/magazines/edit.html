@@ -128,37 +128,38 @@ $('#contentForm').submit(function() {
 
 function loadPhoto(photoPreview, photoFileSrc, dataURL) {
     var reader = new FileReader();
-
-    reader.readAsDataURL(dataURL.files[0]);
-    reader.onload = function (e) {
+    reader.onload = function(evt) {
         var img = new Image();
-        img.src = e.target.result;
+        img.src = evt.target.result;
         img.onload = function() {
             photoFileSrc.value = this.src;
             photoPreview.appendChild(this);
             photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
         };
     }
+    reader.readAsDataURL(dataURL.files[0]);
 }
 
 function loadS3Photo(photoPreview, photoFileSrc, url) {
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function(e) {
-            var img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                photoFileSrc.value = this.src;
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == xhr.DONE) {
+            var reader = new FileReader();
+            reader.onload = function(evt) {
+                var img = new Image();
+                img.src = evt.target.result;
+                img.onload = function() {
+                    photoFileSrc.value = this.src;
 
-                photoPreview.appendChild(this);
-                photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
-            };
+                    photoPreview.appendChild(this);
+                    photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
+                };
+            }
+            reader.readAsDataURL(xhr.response);
         }
-        reader.readAsDataURL(xhr.response);
     };
     xhr.open('GET', url);
+    xhr.responseType = 'blob';
     xhr.send();
 }
 
@@ -169,7 +170,7 @@ function photoFileTmpl(id, photoContent) {
     '<div class="input-field" id="photoField-' + id + '">';
 
     if (id != 1) {
-        tmpl += '<div class="photo-remove" id-value="' + id + '"><i class="material-icons">clear</i></div>';
+        tmpl += '<div class="photo-remove" id-value="' + id + '"></div>';
     }
 
     tmpl +=
@@ -186,7 +187,6 @@ function photoFileTmpl(id, photoContent) {
             {% endfor %}
         '</select>' +
         '<textarea id="photoContent-' + id + '" name="photo_content" class="margin-top-20" placeholder="사진에 대한 설명을 등록해주세요.">' + photoContent + '</textarea>' +
-        '<hr>' +
     '</div>';
 
     return tmpl;
