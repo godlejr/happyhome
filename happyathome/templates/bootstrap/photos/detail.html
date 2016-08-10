@@ -157,15 +157,15 @@
 
                     {% if magazine_photos %}
                         <div class="content-relative">
-                            <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 포토</div>
+                            <div class="relative-title"><a href="{{ url_for('magazines.detail', id=post.magazine_id) }}">{{ post.magazine.title }}</a>의 갤러리</div>
                             <ul class="relative-photos">
                                 {% for photo in magazine_photos %}
                                     <li>
                                         <div class="relative-photo-wrap">
                                             <a href="{{ url_for('photos.detail', id=photo.id) }}">
-                                                {% if photo.file.type == 2 %}
+                                                {% if photo.is_vr %}
                                                     <div class="relative-photo vr-wrap"></div>
-                                                {% elif photo.file.type == 3 %}
+                                                {% elif photo.is_mov %}
                                                     <div class="relative-photo mov-wrap"></div>
                                                 {% else %}
                                                     <div class="relative-photo"></div>
@@ -181,15 +181,15 @@
 
                     {% if user_photos %}
                         <div class="content-relative">
-                            <div class="relative-title">{{ post.user.name }}의 다른 포토</div>
+                            <div class="relative-title">{{ post.user.name }}의 다른 갤러리</div>
                             <ul class="relative-photos">
                             {% for user_photo in user_photos %}
                                 <li>
                                     <div class="relative-photo-wrap">
                                         <a href="{{ url_for('photos.detail', id=user_photo.id) }}">
-                                            {% if user_photo.file.type == 2 %}
+                                            {% if user_photo.is_vr %}
                                                 <div class="relative-photo vr-wrap"></div>
-                                            {% elif user_photo.file.type == 3 %}
+                                            {% elif user_photo.is_mov %}
                                                 <div class="relative-photo mov-wrap"></div>
                                             {% else %}
                                                 <div class="relative-photo"></div>

@@ -693,13 +693,13 @@ span.share-icon.active {
     background-image: url(/static/img/gallery/kakao_icon.png);
 }
 .content-text {
+    color: #484e52;
     margin: 20px 0;
     font-size: 14px;
     line-height: 30px;
-    white-space: pre-wrap;
-    word-wrap: break-all;
     text-align: justify;
-    color: #484e52;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 .content-side {
     flex: none;
