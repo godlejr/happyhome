@@ -9,6 +9,7 @@
 
                 <div class="input-field">
                     <div class="photo-preview" id="photoPreview">
+                        <input type="hidden" id="preFileName" name="file_name" value="{{ photo.file.name|default('' ,true) }}"/>
                         {% if photo.file.name %}
                             <img class="edit-profile-photo" src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}">
                         {% endif %}
@@ -25,7 +26,7 @@
 
                 <div class="input-field">
                     <select id="room_id" name="room_id">
-                        <option value="" disabled>공간을 선택해주세요</option>
+                        <option value="">공간을 선택해주세요</option>
                         {% for room in rooms %}
                             <option value="{{ room.id }}" {% if room.id == photo.room_id %}selected{% endif %}>{{ room.name }}</option>
                         {% endfor %}
@@ -72,7 +73,7 @@ $('button[type=reset]').click(function() {
 $('#photoForm').submit(function() {
     window.onunload = window.onbeforeunload = undefined;
 
-    if (!$('#photoFile').val()) {
+    if (!$('#photoFile').val() && !$('#preFileName').val()) {
         alert('사진 파일을 선택해주세요.');
         return false;
     }
@@ -115,7 +116,7 @@ $photoFile.change(function() {
                 data: {
                     file_name: $photoFile.val(),
                     file_data: e.target.result,
-                    photo_id: {{ photo.id }}
+                    {% if photo.id %}photo_id: {{ photo.id }}{% endif %}
                 }
             }).success(function(data) {
                 $('#photoFileName').val(data.file_name);
@@ -136,7 +137,9 @@ $photoFile.change(function() {
 });
 
 function photosUnload() {
-    $photoPreview.children().remove();
+    if ($photoPreview) {
+        $photoPreview.children().remove();
+    }
     $('#contentType').prop('checked', false);
     $('.rooms>label').removeClass('active');
 

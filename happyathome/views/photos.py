@@ -1,15 +1,12 @@
 import base64
 import os
 import boto3
-import html2text
 import shortuuid
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, \
-    Magazine
+from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, Magazine
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
-from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
 photos = Blueprint('photos', __name__)
@@ -60,8 +57,7 @@ def detail(id):
     post.hits += 1
     db.session.commit()
 
-    comments = Comment.query.filter(Comment.photos.any(photo_id=id)).order_by(Comment.group_id.desc()).order_by(
-        Comment.depth.asc()).all()
+    comments = Comment.query.filter(Comment.photos.any(photo_id=id)).order_by(Comment.group_id.desc(), Comment.depth.asc()).order_by().all()
     user_photos = db.session.query(Photo). \
         filter(Photo.id != id). \
         filter(Photo.user_id == post.user_id). \
@@ -113,9 +109,9 @@ def new():
     photo = Photo()
     rooms = db.session.query(Room).all()
     if request.method == 'POST':
-
         photo_name = request.form['file_name']
         photo_data = request.form['photo_data']
+
         file = File()
         file.type = 1
         file.name = photo_name
@@ -131,11 +127,11 @@ def new():
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
 
-        db.session.add(photo)
-        db.session.commit()
-
         if request.form.getlist('content_type'):
             db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
+
+        db.session.add(photo)
+        db.session.commit()
 
         return redirect(url_for('photos.list'))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html', rooms=rooms, photo=photo)
