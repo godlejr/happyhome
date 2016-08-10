@@ -168,7 +168,7 @@ function photoFileTmpl(id) {
     '<div class="input-field" id="photoField-' + id + '">';
 
     if (id != 1) {
-        tmpl += '<div class="photo-remove" id-value="' + id + '"><i class="material-icons">clear</i></div>';
+        tmpl += '<div class="photo-remove" id-value="' + id + '"></div>';
     }
 
     tmpl +=
@@ -184,7 +184,6 @@ function photoFileTmpl(id) {
             {% endfor %}
         '</select>' +
         '<textarea name="photo_content" class="margin-top-20" placeholder="사진에 대한 설명을 등록해주세요."></textarea>' +
-        '<hr>' +
     '</div>';
 
     return tmpl;

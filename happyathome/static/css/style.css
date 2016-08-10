@@ -783,14 +783,14 @@ span.share-icon.active {
     font-size: 13px;
 }
 .content-comment {
-    padding: 15px 3px;
+    padding: 15px 0;
     font-size: 13px;
 }
 .content-comment .comment-form textarea {
     vertical-align: middle;
 }
 .content-comment .comment-text {
-    width: calc(100% - 60px);
+    width: calc(100% - 55px);
     height: 55px;
     border: 0;
     background-color: #eaebee;
@@ -818,6 +818,7 @@ span.share-icon.active {
     height: 55px;
     border: 1px solid #e8e8e8;
     background-color: #ffffff;
+    vertical-align: middle;
 }
 .content-comment .comment-list {
     margin-top: 10px;
@@ -1079,12 +1080,6 @@ span.share-icon.active {
 }
 .card .card-info.gallery .card-content .card-icon {
     margin-top: 4px;
-}
-.card .card-overlay {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
 }
 
 .pros {

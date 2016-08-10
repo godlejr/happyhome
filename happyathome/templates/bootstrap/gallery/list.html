@@ -25,7 +25,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-overlay"></div>
             </div>
         {% endfor %}
     </div>
@@ -42,14 +41,17 @@ $('.card').click(function() {
     document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('id');
 });
 
-$('.card-overlay').mouseover(function() {
-    $(this).parent().find('.card-info').animate({
-        bottom: 0
-    });
-}).mouseout(function() {
-    $(this).parent().find('.card-info').animate({
-        bottom: "-74px"
-    });
-});
+$('.card').hover(
+    function() {
+        $(this).find('.card-info').stop().animate({
+            bottom: 0
+        });
+    },
+    function() {
+        $(this).find('.card-info').stop().animate({
+            bottom: "-74px"
+        });
+    }
+);
 </script>
 {% endblock %}

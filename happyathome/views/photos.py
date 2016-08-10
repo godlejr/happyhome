@@ -138,7 +138,7 @@ def new():
             db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
 
         return redirect(url_for('photos.list'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html', rooms=rooms, photo=photo)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html', rooms=rooms, photo=photo)
 
 
 @photos.route('/<id>/edit', methods=['GET', 'POST'])
@@ -175,7 +175,7 @@ def edit(id):
             db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
 
         return redirect(url_for('photos.detail', id=id))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/photos/edit.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html',
                            rooms=rooms,
                            photo=photo)
 
