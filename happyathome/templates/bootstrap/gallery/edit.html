@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="input-field">
-                    <input type="checkbox" id="contentType" name="content_type" value="2"> <label for="contentType">360 VR 이미지입니다.</label>
+                    <input type="checkbox" id="contentType" name="content_type" value="2" {% if photo.is_vr %}checked{% endif %}> <label for="contentType">360 VR 이미지입니다.</label>
                 </div>
 
                 <div class="input-field">

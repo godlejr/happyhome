@@ -1,3 +1,6 @@
+/*!
+ * Copyright Inotone Co., lTD.
+ */
 var Carousel = (function() {
     var Carousel = function() {
         this.fov = 75;
