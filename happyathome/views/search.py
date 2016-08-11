@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app,render_template
+from flask import Blueprint, current_app,render_template,request
 from happyathome.models import Photo, Magazine
 
 search = Blueprint('search', __name__)
@@ -11,14 +11,15 @@ def utility_processor():
     return dict(url_for_s3=url_for_s3)
 
 
-@search.route('/search=<search>')
-def list(search):
-    photo = Photo.query.filter(Photo.content.like("%" + search + "%"))
+@search.route('/list')
+def list():
+    keyword = request.args.get('keyword')
+    photo = Photo.query.filter(Photo.content.like("%" + keyword + "%"))
     photo_count = photo.count()
     photos = photo.all()
 
-    magazine = Magazine.query.filter(Magazine.title.like("%" + search + "%")).filter(
-        Magazine.content.like("%" + search + "%"))
+    magazine = Magazine.query.filter(Magazine.title.like("%" + keyword + "%")).filter(
+        Magazine.content.like("%" + keyword + "%"))
     magazine_count = magazine.count()
     magazines = magazine.all()
 
