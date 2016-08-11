@@ -87,7 +87,7 @@ def privacy():
 
 
 @main.route('/agreement', methods=['GET', 'POST'])
-def privacy():
+def agreement():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/agreement.html')
 
 
