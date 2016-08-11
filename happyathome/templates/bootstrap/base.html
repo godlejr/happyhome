@@ -27,7 +27,7 @@
         <div class="log"><a href="/"><img src="{{ url_for('static', filename='img/brand_logo.jpg') }}" width="93" height="47"/></a></div>
             <div class="nav">
                 <div class="search">
-                    <div class="search_field"><input name="textfield" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
+                    <div class="search_field"><input id="search_field" name="textfield" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
                     <div class="search_btn"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" /></div>
                 </div>
                 {% if not session.user_id %}
@@ -74,6 +74,10 @@
 <script>
 $('#familySite').change(function() {
     if ($(this).val()) window.open($(this).val());
+});
+
+$('.search_btn').click(function(){
+    document.location.href = "{{ url_for('search.list', search='') }}" + $('#search_field').val();
 });
 </script>
 
