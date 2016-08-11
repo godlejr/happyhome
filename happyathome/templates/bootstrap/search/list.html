@@ -1,0 +1,45 @@
+{% extends "bootstrap/search/base.html" %}
+
+{% block content %}
+<div class="content-body body-main">
+    <div class="user-contents">
+        <div class="user-title">검색관련 스토리({{ magazine_count }})</div>
+        <div class="cards">
+            {% for magazine in magazines %}
+                <div class="card" href="{{ url_for('magazines.detail', id=magazine.id) }}"
+                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazine.photos[0].file.name) }})">
+                    {% if magazine.has_vr %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% elif magazine.has_mov %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
+                        <div class="card-title">{{ magazine.title }}</div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="user-title">검색관련 갤러리({{ photo_count }})</div>
+        <div class="cards">
+            {% for photo in photos %}
+                <div class="card" href="{{ url_for('photos.detail', id=photo.id) }}"
+                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photo.file.name) }})">
+                    {% if photo.is_vr %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% elif photo.is_mov %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
+                        <div class="card-title">{{ photo.content }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+$('.card').click(function() {
+    document.location.href = $(this).attr('href');
+});
+
+
+</script>
+{% endblock %}
