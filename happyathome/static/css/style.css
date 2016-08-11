@@ -208,12 +208,24 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     cursor: pointer;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
     background-size: 20px;
     background-repeat: no-repeat;
     background-position: center;
     background-color: rgba(33, 200, 44, 0.3);
 }
+
+.magazine-title
+.content-share-set span{
+    display: inline-block;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(33, 200, 44, 0.3);
+}
+
 .content-body {
     display: flex;
     width: 100%;
@@ -573,7 +585,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-share-set .content-share-facebook{
     position: absolute;
     cursor: pointer;
-    right: -65px;
+    right: 31px;
     float: left;
     width: 30px;
     height: 30px;
@@ -582,7 +594,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-share-set .content-share-kakao{
     position: absolute;
     cursor: pointer;
-    right: -35px;
+    right: 61px;
     float: left;
     width: 30px;
     height: 30px;
@@ -591,7 +603,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-share-set .content-share-twitter{
     position: absolute;
     cursor: pointer;
-    right: -5px;
+    right: 91px;
     float: left;
     width: 30px;
     height: 30px;

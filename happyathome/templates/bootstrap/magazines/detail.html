@@ -32,18 +32,20 @@
                         <div class="content-button" magazine-id="{{ post.id }}">
                             <span class="like-icon {% if post.is_active('MagazineLike', session.user_id) %}active{% endif %}"></span>
                             <span class="scrap-icon {% if post.is_active('MagazineScrap', session.user_id) %}active{% endif %}"></span>
+                            <div class="content-share-set" hidden="hidden">
+                                <div class="content-share-facebook">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon"></span></a>
+                                </div>
+                                <div class="content-share-kakao">
+                                    <a href="https://story.kakao.com/share?url=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon" id="kakaostory-share-button"></span></a>
+                                </div>
+                                <div class="content-share-twitter"><span class="share-icon"></span>
+                            </div>
+                        </div>
                             <span class="share-icon"></span>
                         </div>
 
-                        <div class="content-share-set" hidden="hidden">
-                            <div class="content-share-facebook">
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon"></span></a>
-                            </div>
-                            <div class="content-share-kakao">
-                                <a href="https://story.kakao.com/share?url=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon" id="kakaostory-share-button"></span></a>
-                            </div>
-                            <div class="content-share-twitter"><span class="share-icon"></span></div>
-                        </div>
+
                     </div>
                     <div class="magazine-header">
                         <div class="magazine-info">
@@ -226,17 +228,13 @@
 </div>
 
 <script>
-var click_flag = true;
-$('.content-button').find('.share-icon').click(function(){
-    if( click_flag ){
+
+$('.content-button').find('.share-icon').mouseover(function(){
         $(this).toggleClass('active');
         $('.content-share-set').show();
-        click_flag = false;
-    }else{
+}).mouseout(function(){
         $(this).toggleClass('active');
         $('.content-share-set').hide();
-        click_flag = true;
-    }
 });
 
 $('.content-share-twitter').click(function(){
