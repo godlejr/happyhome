@@ -40,7 +40,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
               width:1184px; height:90px; }
  .log       { float:left;
               width:299px;
-              padding-top: 26px; }
+              padding-top: 22px; }
  .nav       { float:left;
               width:885px; }
  .search    { float:left;
@@ -991,7 +991,7 @@ span.share-icon.active {
     padding: 6px 0 6px 9px;
     width: 100%;
     color: #ffffff;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 .card .card-avatar {
     display: flex;
@@ -1078,22 +1078,23 @@ span.share-icon.active {
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
 .card .card-info.gallery {
-    height: 112px;
-    bottom: -74px;
+    height: 102px;
+    bottom: -64px;
 }
 .card .card-info.gallery .card-content {
-    height: 74px;
-    padding: 0 0 10px 40px;
-    background-color: rgba(0, 0, 0, 0.6);
+    height: 64px;
+    padding: 0 0 0 40px;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 .card .card-info.gallery .card-content div {
     color: #ffffff;
 }
 .card .card-info.gallery .card-content .card-text {
-    padding: 15px 10px 15px 0;
+    padding: 7px 15px 5px 0;
 }
-.card .card-info.gallery .card-content .card-icon {
-    margin-top: 4px;
+.card .card-info.gallery .card-content .card-icon .icon {
+    padding: 0;
+    margin: 3px 0;
 }
 
 .pros {

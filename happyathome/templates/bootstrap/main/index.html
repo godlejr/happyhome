@@ -5,7 +5,7 @@
 
 <div class="content">
     <div class="content-title">해피홈 추천 테마</div>
-    <div class="cards">
+    <div class="cards magazines">
         {% for card in magazines %}
             {% if card.photos %}
             <div class="card" id="magazines-{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.photos[0].file.name }})">
@@ -39,31 +39,30 @@
     </div>
 
     <div class="content-title">해피홈 갤러리</div>
-    <div class="cards">
+    <div class="cards photos">
         {% for card in photos %}
-        <div class="card" id="photos-{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
-            {% if card.file.type == 2  %}
-                <div class="card-media"><span class="vr-icon"></span></div>
-            {% endif %}
-            {% if card.file.type == 3  %}
-                <div class="card-media"><span class="mov-icon"></span></div>
-            {% endif %}
-            <div class="card-info">
-                <div class="card-author">
-                    <a href="{{ url_for('users.info',id = card.user.id) }}"><div class="card-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=card.user.avatar) }}) "></div></a>
-                    <a class="card-user" href="{{ url_for('users.info',id = card.user.id) }}">{{ card.user.name }}</a>
-                    <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
-                </div>
-                <div class="card-content">
-                    <div class="card-text">{{ card.content[:70] }}</div>
-                    <div class="card-icon">
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_photos|length }}</div>
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_photos|length }}</div>
-                        <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ card.comments|length }}</div>
+            <div class="card" id="photos-{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
+                {% if card.is_vr  %}
+                    <div class="card-media"><span class="vr-icon"></span></div>
+                {% elif card.is_mov  %}
+                    <div class="card-media"><span class="mov-icon"></span></div>
+                {% endif %}
+                <div class="card-info gallery">
+                    <div class="card-author">
+                        <a href="{{ url_for('users.info',id = card.user.id) }}"><div class="card-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=card.user.avatar) }})"></div></a>
+                        <a class="card-user" href="{{ url_for('users.info',id = card.user.id) }}">{{ card.user.name }}</a>
+                        <div class="card-hits"><img src="{{ url_for('static', filename='img/main/view_i.png') }}" /> {{ card.hits }}</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ card.content[:50] }}</div>
+                        <div class="card-icon">
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> {{ card.like_photos|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> {{ card.scrap_photos|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> {{ card.comments|length }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>
@@ -79,5 +78,18 @@ $('.card').click(function() {
     } else {
     }
 });
+
+$('.photos .card').hover(
+    function() {
+        $(this).find('.card-info').stop().animate({
+            bottom: 0
+        });
+    },
+    function() {
+        $(this).find('.card-info').stop().animate({
+            bottom: "-64px"
+        });
+    }
+);
 </script>
 {% endblock %}
