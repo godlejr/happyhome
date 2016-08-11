@@ -4,7 +4,7 @@
 {% block header %}
 <meta property="og:title" content="{{ post.user.name }}" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://dev.inotone.co.kr/story/{{ post.id }}" />
+<meta property="og:url" content="http://www.happyathome.co.kr/story/{{ post.id }}" />
 <meta property="og:image" content="http://static.inotone.co.kr/data/img/{{ post.photos[0].file.name }}" />
 <meta property="og:description" content="{{ post.content }}" />
 <meta property="og:image:width" content="300" />
@@ -37,10 +37,10 @@
 
                         <div class="content-share-set" hidden="hidden">
                             <div class="content-share-facebook">
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=http://dev.inotone.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon"></span></a>
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon"></span></a>
                             </div>
                             <div class="content-share-kakao">
-                                <a href="https://story.kakao.com/share?url=http://dev.inotone.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon" id="kakaostory-share-button"></span></a>
+                                <a href="https://story.kakao.com/share?url=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon" id="kakaostory-share-button"></span></a>
                             </div>
                             <div class="content-share-twitter"><span class="share-icon"></span></div>
                         </div>
@@ -240,7 +240,7 @@ $('.content-button').find('.share-icon').click(function(){
 });
 
 $('.content-share-twitter').click(function(){
-    twitter( 'http://dev.inotone.co.kr/story/{{post.id}}' ,'{{ post.user.name }}');
+    twitter( 'http://www.happyathome.co.kr/story/{{post.id}}' ,'{{ post.user.name }}');
 });
 
 twitter=function(url,text){
