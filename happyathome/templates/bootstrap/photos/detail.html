@@ -21,7 +21,7 @@
 
 {% block content %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
-<script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+<script src="{{ url_for('static', filename='js/carousel.min.js') }}"></script>
 
 <div class="content">
     <div class="content-body">
@@ -37,7 +37,7 @@
                                 {% endif %}
                             </div>
 
-                            <script src="{{ url_for('static', filename='js/carousel.js') }}"></script>
+                            <script src="{{ url_for('static', filename='js/carousel.min.js') }}"></script>
                             <script>
                             new Carousel().viewer("photo360", {
                                 action: true,
