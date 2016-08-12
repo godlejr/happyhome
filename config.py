@@ -16,6 +16,13 @@ class Config(object):
     S3_COVER_DIRECTORY = '/data/cover/'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USERNAME = 'inotone.kr@gmail.com'
+    MAIL_PASSWORD = '1miglobal'
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_POOL_TIMEOUT = 10
     SQLALCHEMY_POOL_RECYCLE = 1800

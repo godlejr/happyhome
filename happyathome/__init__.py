@@ -2,12 +2,15 @@ import os
 import config
 from flask_admin import Admin
 from flask_login import LoginManager
+from flask_mail import Mail
+from flask_redis import FlaskRedis
 from happyathome.models import db, User, File, Photo, Magazine, MagazineComment, PhotoComment, Comment, Board
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from happyathome.utils import RedisSessionInterface
 from happyathome.views.admin import UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView, BoardAdminFile
-from redis import Redis
+from happyathome.views.main import mail
+from redis import StrictRedis
 from werkzeug.utils import redirect
 
 
@@ -23,14 +26,17 @@ def create_app(config_name):
     app = Flask(__name__, template_folder=template_folder)
     app.jinja_env.auto_reload = True
     app.jinja_env.autoescape = False
+
     config.init_app(app, config_name)
     db.init_app(app)
+    mail.init_app(app)
+
+    redis = StrictRedis(host=app.config['REDIS_URL'])
+    app.redis = redis
+    app.session_interface = RedisSessionInterface(redis)
 
     toolbar = DebugToolbarExtension()
     toolbar.init_app(app)
-
-    redis = Redis(host=app.config['REDIS_URL'])
-    app.session_interface = RedisSessionInterface(redis)
 
     # admin
     admin = Admin(app, name='Happy@Home', template_mode='bootstrap3', index_view=MyAdminIndexView())

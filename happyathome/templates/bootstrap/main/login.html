@@ -32,16 +32,17 @@
             <div class="login-form-group">
                 <button type="submit" class="btn-submit">로그인</button>
             </div>
-
         </form>
-
+        <div class="login-form-group">
+            <a href="{{ url_for('main.password') }}">비밀번호 재설정하기</a>
+        </div>
         <hr>
 
-        <form name="fbForm" class="login-form-group" method="post">
+        <div name="fbForm" class="login-form-group" method="post">
             <div class="login-form-group">
                 <button type="button" id="fb-btn" class="btn-default">facebook로그인</button>
             </div>
-        </form>
+        </div>
 
     </div>
         <!--kakao login
@@ -56,9 +57,9 @@
 <!--facebook login-->
 <script>
 //button event
- $('#fb-btn').click(function () {
-     checkLoginState();
- });
+$('#fb-btn').click(function(){
+    checkLoginState();
+});
 
 //facebook 초기 설정
 function statusChangeCallback(response) {
@@ -88,7 +89,7 @@ function checkLoginState() {
 
 window.fbAsyncInit = function() {
     FB.init({
-        appId      : '{your-app-id}',
+        appId      : '588264208044970',
         cookie     : true,  // enable cookies to allow the server to access
                             // the session
         xfbml      : true,  // parse social plugins on this page
