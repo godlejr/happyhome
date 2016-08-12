@@ -99,22 +99,24 @@ def agreement():
 @main.route('/confirm_key', methods=['GET', 'POST'])
 def confirm_key():
     if current_app.redis.get(request.args.get('key')):
-        return redirect(url_for('main.edit_password', email=request.args.get('key')))
+        return redirect(url_for('main.edit_password', key=request.args.get('key')))
     return redirect(url_for('main.index'))
 
 
 @main.route('/edit_password', methods=['GET', 'POST'])
-def edit_password(email):
+def edit_password():
     form = JoinForm(request.form)
     if request.method == 'POST':
+        email = current_app.redis.get(request.args.get('key'))
+
         if form.validate():
-            user=User.query.filter_by(email=email).first()
+            user = User.query.filter_by(email=email).first()
             user.password = form.password.data
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('main.index'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/edit_password.html',form=form)
 
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/edit_password.html',form=form)
 
 
 @main.route('/password', methods=['GET', 'POST'])
@@ -126,14 +128,13 @@ def password():
             current_app.redis.append(password_token, form.email.data)
             current_app.redis.expire(password_token, 3600)
 
-            msg = Message(
-                'Hello',
-                sender='inotone.kr@google.com',
-                recipients=[form.email.data])
-            msg.html = '<form action="http://www.happyathome.co.kr/confirm_key" >' \
-                       '<input hidden="hidden" name="key" value="'+password_token+'"/>' \
-                                                                                  '<button type="submit">비밀번호 변경url</button>' \
-                       '</form>'
+            msg = Message('Hello', sender='inotone.kr@google.com', recipients=[form.email.data])
+            msg.html = '''
+            <form action="http://www.happyathome.co.kr/confirm_key">
+            <input hidden="hidden" name="key" value="%s"/>
+            <button type="submit">비밀번호 변경url</button>
+            </form>
+           ''' % password_token
             mail.send(msg)
 
         return redirect(url_for('main.login'))
