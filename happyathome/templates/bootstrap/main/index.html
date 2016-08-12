@@ -1,15 +1,12 @@
 {% extends "bootstrap/base.html" %}
 
 {% block content %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.cycle2/2.1.6/jquery.cycle2.min.js"></script>
-<div class="cycle-slideshow img_section"
-     data-cycle-fx="scrollHorz"
-     data-cycle-center-horz="true"
-     data-cycle-center-vert="true"
-     data-cycle-speed="500">
-    <img src="{{ url_for('static', filename='img/main/slide/01.jpg') }}" width="100%">
-    <img src="{{ url_for('static', filename='img/main/slide/02.jpg') }}" width="100%">
-    <img src="{{ url_for('static', filename='img/main/slide/03.jpg') }}" width="100%">
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+<div class="img_section">
+    <div style="background-image:url({{ url_for('static', filename='img/main/slide/01.jpg') }})"></div>
+    <div style="background-image:url({{ url_for('static', filename='img/main/slide/02.jpg') }})"></div>
+    <div style="background-image:url({{ url_for('static', filename='img/main/slide/03.jpg') }})"></div>
 </div>
 
 <div class="content">
@@ -77,6 +74,12 @@
 </div>
 
 <script>
+$('.img_section').slick({
+    arrows: false,
+    autoplay: true,
+    autoplaySpeed: 3000
+});
+
 $('.card').click(function() {
     var $contents = $(this).attr('id').split('-');
 
