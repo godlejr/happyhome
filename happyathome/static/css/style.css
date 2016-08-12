@@ -2798,6 +2798,9 @@ button.btn-danger {
         margin-left: auto;
         margin-right: auto;
     }
+    .card .card-content .card-icon {
+        display: none;
+    }
     .content-main {
         margin: 0 auto;
     }
