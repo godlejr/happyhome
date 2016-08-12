@@ -1,7 +1,16 @@
 {% extends "bootstrap/base.html" %}
 
 {% block content %}
-<div class="img_section"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.cycle2/2.1.6/jquery.cycle2.min.js"></script>
+<div class="cycle-slideshow img_section"
+     data-cycle-fx="scrollHorz"
+     data-cycle-center-horz="true"
+     data-cycle-center-vert="true"
+     data-cycle-speed="500">
+    <img src="{{ url_for('static', filename='img/main/slide/01.jpg') }}" width="100%">
+    <img src="{{ url_for('static', filename='img/main/slide/02.jpg') }}" width="100%">
+    <img src="{{ url_for('static', filename='img/main/slide/03.jpg') }}" width="100%">
+</div>
 
 <div class="content">
     <div class="content-title">해피홈 추천 테마</div>
