@@ -1,8 +1,8 @@
 {% extends "bootstrap/base.html" %}
 
 {% block content %}
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
-<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
+<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
 <div class="img_section">
     <div style="background-image:url({{ url_for('static', filename='img/main/slide/01.jpg') }})"></div>
     <div style="background-image:url({{ url_for('static', filename='img/main/slide/02.jpg') }})"></div>
@@ -74,7 +74,9 @@
 </div>
 
 <script>
-$('.img_section').slick({
+$('.img_section').on('init', function() {
+    $('.img_section div').css('display', 'block');
+}).slick({
     arrows: false,
     autoplay: true,
     autoplaySpeed: 3000
