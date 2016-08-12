@@ -33,24 +33,23 @@
                 <button type="submit" class="btn-submit">로그인</button>
             </div>
         </form>
-        <div class="login-form-group">
+        <div class="login-anchor">
             <a href="{{ url_for('main.password') }}">비밀번호 재설정하기</a>
+        </div>
+
+        <div class="login-anchor">아이디가 없으신가요?
+            <a href="{{ url_for('main.join') }}">회원가입</a>
         </div>
         <hr>
 
-        <div name="fbForm" class="login-form-group" method="post">
+        <div name="fbForm" hidden="hidden" class="login-form-group" method="post">
             <div class="login-form-group">
                 <button type="button" id="fb-btn" class="btn-default">facebook로그인</button>
             </div>
         </div>
 
     </div>
-        <!--kakao login
-        <a id="custom-login-btn" href="javascript:loginWithKakao()">
-            <img src="http://mud-kage.kakao.co.kr/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" width="150"/>
-        </a>
-        <!--google login-->
-        <!--  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>-->
+
 </div>
 
 
@@ -122,43 +121,4 @@ function testAPI() {
 }
 </script>
 
-<!--kakao login-->
-<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script type='text/javascript'>
-  //<![CDATA[
-    // 사용할 앱의 JavaScript 키를 설정해 주세요.
-    Kakao.init('073f6b19b39951b4ae75599f4e74079a');
-    function loginWithKakao() {
-      // 로그인 창을 띄웁니다.
-      Kakao.Auth.login({
-        success: function(authObj) {
-            //로그인 완료
-        },
-        fail: function(err) {
-          alert(JSON.stringify(err));
-        }
-      });
-    };
-  //]]>
-</script>
-
-<!--google login-->
-<meta name="google-signin-client_id" content="443256889958-198b1okbcp4bv3a5vjr2brrcajhsemec.apps.googleusercontent.com">
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<script>
-      function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-      };
-</script>
 {% endblock %}

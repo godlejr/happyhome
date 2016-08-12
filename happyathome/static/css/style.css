@@ -2243,6 +2243,13 @@ span.share-icon.active {
     text-decoration: underline;
 }
 
+.login-anchor {
+    margin: 10px;
+}
+.login-anchor a{
+    text-decoration:underline;
+}
+
 
 /******* footer **********/
 #footer { width:100%; height:116px; background-color:#3e4448; }

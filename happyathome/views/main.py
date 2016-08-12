@@ -1,8 +1,6 @@
-from datetime import datetime, timedelta, time
 import shortuuid
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
 from flask_mail import Mail, Message
-
 from happyathome.forms import JoinForm, LoginForm
 from happyathome.models import db, User, Magazine, Professional, Photo
 from sqlalchemy.dialects.postgresql import json
@@ -114,6 +112,7 @@ def edit_password(key):
             user.password = generate_password_hash(form.password.data)
             db.session.add(user)
             db.session.commit()
+
             return redirect(url_for('main.index'))
         else:
             flash('동일한 비밀번호를 입력하세요')
@@ -137,10 +136,9 @@ def password():
             </form>
            ''' %password_token
             mail.send(msg)
-
+            flash('기존 이메일로 비밀번호변경 관련 url을 보냈습니다. 확인해주세요.')
         return redirect(url_for('main.login'))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/password.html',form=form)
-
 
 
 @main.route('/login/facebook', methods=['POST'])
