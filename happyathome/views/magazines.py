@@ -4,20 +4,13 @@ import boto3
 import html2text
 import shortuuid
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app, session
-from flask_login import login_required
+from flask_login import login_required, current_user
 from happyathome.forms import Pagination
 from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room, User, \
     del_or_create, MagazineLike, MagazineScrap
 from werkzeug.utils import secure_filename
 
 magazines = Blueprint('magazines', __name__)
-
-
-@magazines.context_processor
-def utility_processor():
-    def url_for_s3(s3path, filename=''):
-        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
-    return dict(url_for_s3=url_for_s3)
 
 
 @magazines.context_processor
@@ -142,17 +135,19 @@ def new():
 @magazines.route('/<id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    magazine = Magazine.query.filter_by(user_id=session['user_id'], id=id).first()
+    magazine = Magazine.query.filter_by(id=id, user_id=current_user.id).first()
     categories = Category.query.all()
     residences = Residence.query.all()
     rooms = Room.query.all()
     if request.method == 'POST':
+        s3 = boto3.resource('s3')
+
         h = html2text.HTML2Text()
         h.ignore_links = True
         h.ignore_images = True
         h.ignore_emphasis = True
 
-        magazine.user_id = session['user_id']
+        magazine.user_id = current_user.id
         magazine.category_id = request.form['category_id']
         magazine.residence_id = request.form['residence_id']
         magazine.title = request.form['title']
@@ -162,31 +157,44 @@ def edit(id):
         magazine.content = request.form['content']
         magazine.content_txt = h.handle(request.form['content'])
 
-        Photo.query.filter_by(user_id=session['user_id'], magazine_id=magazine.id).delete()
-
-        photo_files = request.form.getlist('file_src')
-        for idx, photo_file in enumerate(photo_files):
-            photo_blob = base64.b64decode(photo_file.split(',')[1])
-            photo_name = secure_filename(''.join((shortuuid.uuid(), '.jpg')))
-
-            s3 = boto3.resource('s3')
-            s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob,
-                                                                              ContentType='image/jpeg')
-
-            file = File()
-            file.type = 1
-            file.name = photo_name
-            file.ext = 'jpg'
-            file.size = len(photo_blob)
-
-            photo = Photo()
-            photo.file = file
-            photo.user_id = session['user_id']
+        photo_ids = request.form.getlist('photo_id')
+        for idx, photo_id in enumerate(photo_ids):
+            photo = Photo.query.filter_by(id=photo_id, magazine_id=id, user_id=current_user.id).first()
+            if not photo:
+                photo = Photo()
+                photo.magazine_id = id
+                photo.user_id = current_user.id
             photo.room_id = request.form.getlist('room_id')[idx]
             photo.content = request.form.getlist('photo_content')[idx]
 
-            magazine.photos.append(photo)
-        db.session.add(magazine)
+            photo_file = request.files.getlist('photo_file')[idx]
+            if photo_file:
+                photo_blob = photo_file.read()
+                photo_name = secure_filename(''.join((shortuuid.uuid(), '.jpg')))
+
+                s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob, ContentType='image/jpeg')
+                if photo.file:
+                    s3_file = s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name)
+                    if s3_file:
+                        s3_file.delete()
+
+                file = File()
+                file.type = 1
+                file.name = photo_name
+                file.ext = 'jpg'
+                file.size = len(photo_blob)
+
+                photo.file = file
+            db.session.add(photo)
+        db.session.commit()
+
+        photo_delete_ids = request.form.getlist('photo_delete_id')
+        for photo_delete_id in photo_delete_ids:
+            photo = Photo.query.filter_by(id=photo_delete_id, user_id=current_user.id).first()
+            s3_file = s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name)
+            if s3_file:
+                s3_file.delete()
+            db.session.delete(photo)
         db.session.commit()
         return redirect(url_for('magazines.detail', id=id))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html',
