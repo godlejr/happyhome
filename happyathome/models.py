@@ -54,7 +54,7 @@ class User(db.Model, BaseMixin):
     name = db.Column(db.Unicode(255), nullable=False)
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
-    authenticated = db.Column(db.Boolean, default=False)
+    authenticated = db.Column(db.Boolean, default=1)
     accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
     level = db.Column(db.Integer)
     cover = db.Column(db.Unicode(255), default='cover.jpg',nullable=False)
