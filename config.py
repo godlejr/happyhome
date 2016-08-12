@@ -9,7 +9,7 @@ class Config(object):
     SECRET_KEY = 'secret'
     TEMPLATE_THEME = 'bootstrap'
     NO_IMG = 'noimg.JPG'
-    REDIS_URL = '52.78.113.21'
+    REDIS_URL = 'redis://52.78.113.21/0'
     S3_BUCKET_NAME = 'http://static.inotone.co.kr'
     S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'

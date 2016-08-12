@@ -8,6 +8,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from happyathome.utils import RedisSessionInterface
 from happyathome.views.admin import UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView, BoardAdminFile
 from happyathome.views.main import mail
+from redis import Redis
 from redis import StrictRedis
 from werkzeug.utils import redirect
 
@@ -29,7 +30,7 @@ def create_app(config_name):
     db.init_app(app)
     mail.init_app(app)
 
-    redis = StrictRedis(host=app.config['REDIS_URL'])
+    redis = Redis.from_url(app.config['REDIS_URL'])
     app.redis = redis
     app.session_interface = RedisSessionInterface(redis)
 
