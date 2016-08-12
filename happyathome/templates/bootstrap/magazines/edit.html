@@ -102,6 +102,8 @@ $('#photos').on('click', '.photo-remove', function(e) {
 $('#contentForm').submit(function() {
     window.onunload = window.onbeforeunload = undefined;
 
+    var rtn = true;
+
     if (!$('#category_id').val()) {
         alert('테마를 선택해주세요.');
         $('#category_id').focus();
@@ -126,7 +128,16 @@ $('#contentForm').submit(function() {
         return false;
     }
 
-    return true;
+    $('select[name=room_id]').each(function() {
+        if (!$(this).val()) {
+            alert('공간을 선택해주세요.');
+            $(this).focus();
+            rtn = false;
+            return rtn;
+        }
+    });
+
+    return rtn;
 });
 
 function loadPhoto(photoPreview, dataURL) {

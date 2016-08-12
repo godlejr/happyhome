@@ -91,36 +91,13 @@ $('#photos').on('click', '.photo-remove', function(e) {
         }
 
         loadPhoto($photoPreview[0], $photoFile[0]);
-/*
-        var reader = new FileReader();
-        reader.readAsDataURL($photoFile[0].files[0])
-        reader.onload = function(e) {
-            $.ajax({
-                type: "POST",
-                url: "{{ url_for('photos.upload') }}",
-                data: {
-                    file_name: $photoFile.val(),
-                    file_data: e.target.result
-                }
-            }).success(function(data) {
-                $photoPreview.append("<img src=http://static.inotone.co.kr/data/img/" + data.file_name + " />");
-                $photoPreview.find('img').load(function() {
-                    $photoPreviewLoading.hide();
-
-                    if (this.naturalWidth / this.naturalHeight == 2) {
-                        $('#contentType').prop('checked', true);
-                    } else {
-                        $('#contentType').prop('checked', false);
-                    };
-                });
-            });
-        }
-*/
     }
 });
 
 $('#contentForm').submit(function() {
     window.onunload = window.onbeforeunload = undefined;
+
+    var rtn = true;
 
     if (!$('#category_id').val()) {
         alert('테마를 선택해주세요.');
@@ -146,7 +123,16 @@ $('#contentForm').submit(function() {
         return false;
     }
 
-    return true;
+    $('select[name=room_id]').each(function() {
+        if (!$(this).val()) {
+            alert('공간을 선택해주세요.');
+            $(this).focus();
+            rtn = false;
+            return rtn;
+        }
+    });
+
+    return rtn;
 });
 
 function loadPhoto(photoPreview, dataURL) {
@@ -178,7 +164,7 @@ function photoFileTmpl(id) {
         '<input type="hidden" id="photoFileId-' + id + '" name="file_id" />' +
         '<input type="hidden" id="photoFileName-' + id + '" name="file_name" />' +
         '<select id="photoRoom-' + id + '" name="room_id">' +
-            '<option value="" disabled selected>공간을 선택해주세요</option>' +
+            '<option value="">공간을 선택해주세요</option>' +
             {% for room in rooms %}
                 '<option value="{{ room.id }}">{{ room.name }}</option>' +
             {% endfor %}
@@ -188,36 +174,6 @@ function photoFileTmpl(id) {
 
     return tmpl;
 }
-
-function photosUnload() {
-    if ($photoPreview) {
-        $photoPreview.children().remove();
-    }
-    $('#contentType').prop('checked', false);
-    $('.rooms>label').removeClass('active');
-
-    var $photoFileId = $('#photoFileId'),
-        $photoFileName = $('#photoFileName');
-
-    if ($photoFileName.val()) {
-        $.ajax({
-            type: "POST",
-            async: false,
-            cache: false,
-            url: "{{ url_for('photos.unload') }}",
-            data: {
-                file_name: $photoFileName.val()
-            }
-        }).success(function(data) {
-            $photoFileId.val('');
-            $photoFileName.val('');
-        });
-    }
-}
-
-window.onunload = function() {
-    photosUnload();
-};
 
 window.onbeforeunload = function(e) {
     e = e || window.event;
