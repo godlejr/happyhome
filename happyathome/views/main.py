@@ -99,8 +99,8 @@ def agreement():
 @main.route('/confirm_key', methods=['GET', 'POST'])
 def confirm_key():
     if current_app.redis.get(request.args.get('key')):
-        return redirect(url_for('main.edit_password',email=request.args.get('key')))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html')
+        return redirect(url_for('main.edit_password', email=request.args.get('key')))
+    return redirect(url_for('main.index'))
 
 
 @main.route('/edit_password', methods=['GET', 'POST'])
@@ -113,7 +113,7 @@ def edit_password(email):
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('main.index'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/edit_password.html')
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/edit_password.html',form=form)
 
 
 
