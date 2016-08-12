@@ -1,10 +1,15 @@
+from datetime import datetime, timedelta, time
+import shortuuid
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
+from flask_mail import Mail, Message
+
 from happyathome.forms import JoinForm, LoginForm
 from happyathome.models import db, User, Magazine, Professional, Photo
 from sqlalchemy.dialects.postgresql import json
 from werkzeug.security import generate_password_hash, check_password_hash
 
 main = Blueprint('main', __name__)
+mail = Mail()
 
 
 @main.context_processor
@@ -89,6 +94,50 @@ def privacy():
 @main.route('/agreement', methods=['GET', 'POST'])
 def agreement():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/agreement.html')
+
+
+@main.route('/confirm_key', methods=['GET', 'POST'])
+def confirm_key():
+    if current_app.redis.get(request.args.get('key')):
+        return redirect(url_for('main.edit_password',email=request.args.get('key')))
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html')
+
+
+@main.route('/edit_password', methods=['GET', 'POST'])
+def edit_password(email):
+    form = JoinForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            user=User.query.filter_by(email=email).first()
+            user.password = form.password.data
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('main.index'))
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/edit_password.html')
+
+
+
+@main.route('/password', methods=['GET', 'POST'])
+def password():
+    form = LoginForm(request.form)
+    if request.method == 'POST':
+        if User.query.filter_by(email=form.email.data).first():
+            password_token = shortuuid.uuid()
+            current_app.redis.append(password_token, form.email.data)
+            current_app.redis.expire(password_token, 3600)
+
+            msg = Message(
+                'Hello',
+                sender='inotone.kr@google.com',
+                recipients=[form.email.data])
+            msg.html = '<form action="http://www.happyathome.co.kr/confirm_key" >' \
+                       '<input hidden="hidden" name="key" value="'+password_token+'"/>' \
+                                                                                  '<button type="submit">비밀번호 변경url</button>' \
+                       '</form>'
+            mail.send(msg)
+
+        return redirect(url_for('main.login'))
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/password.html',form=form)
 
 
 
