@@ -26,10 +26,10 @@
     <div class="top">
         <div class="log"><a href="/"><img src="{{ url_for('static', filename='img/brand_logo.jpg') }}" width="93" height="47"/></a></div>
             <div class="nav">
-                <div class="search">
-                    <div class="search_field"><input name="textfield" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
-                    <div class="search_btn"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" /></div>
-                </div>
+                <form class="search" action="{{ url_for('search.list') }}">
+                    <div class="search_field"><input id="search_text" name="keyword" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
+                    <div class="search_btn"><button class="search-button" type="submit"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" /></button></div>
+                </form>
                 {% if not session.user_id %}
                     <div class="login_01"><a href="{{ url_for('main.login') }}">로그인</a></div>
                     <div class="login_02"><a href="{{ url_for('main.join') }}">회원가입</a></div>
@@ -75,6 +75,9 @@
 $('#familySite').change(function() {
     if ($(this).val()) window.open($(this).val());
 });
+
+
+
 </script>
 
 </body>

@@ -47,6 +47,7 @@ def create_app(config_name):
     from happyathome.views.professionals import professionals as pros_blueprint
     from happyathome.views.boards import boards as boards_blueprint
     from happyathome.views.users import users as users_blueprint
+    from happyathome.views.search import search as search_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(magazines_blueprint, url_prefix='/story')
@@ -54,6 +55,7 @@ def create_app(config_name):
     app.register_blueprint(pros_blueprint, url_prefix='/professional')
     app.register_blueprint(boards_blueprint, url_prefix='/board')
     app.register_blueprint(users_blueprint, url_prefix='/user')
+    app.register_blueprint(search_blueprint, url_prefix='/search')
 
     app.errorhandler(404)(lambda e: render_template('error/404.html'))
     app.errorhandler(403)(lambda e: redirect('/'))

@@ -81,6 +81,17 @@ def join():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/join.html', form=form)
 
 
+@main.route('/privacy', methods=['GET', 'POST'])
+def privacy():
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/privacy.html')
+
+
+@main.route('/agreement', methods=['GET', 'POST'])
+def agreement():
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/agreement.html')
+
+
+
 @main.route('/login/facebook', methods=['POST'])
 def signUpUser():
     accessToken = request.form['accessToken'];
