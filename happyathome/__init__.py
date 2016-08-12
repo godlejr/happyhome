@@ -3,7 +3,6 @@ import config
 from flask_admin import Admin
 from flask_login import LoginManager
 from flask_mail import Mail
-from flask_redis import FlaskRedis
 from happyathome.models import db, User, File, Photo, Magazine, MagazineComment, PhotoComment, Comment, Board
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
