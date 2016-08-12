@@ -2,13 +2,6 @@
 
 
 {% block header %}
-<meta property="og:title" content="{{ post.user.name }}" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="http://www.happyathome.co.kr/story/{{ post.id }}" />
-<meta property="og:image" content="http://static.inotone.co.kr/data/img/{{ post.photos[0].file.name }}" />
-<meta property="og:description" content="{{ post.content }}" />
-<meta property="og:image:width" content="300" />
-<meta property="og:image:height" content="300" />
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
 {% endblock %}
@@ -44,8 +37,6 @@
                         </div>
                             <span class="share-icon"></span>
                         </div>
-
-
                     </div>
                     <div class="magazine-header">
                         <div class="magazine-info">
