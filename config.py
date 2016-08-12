@@ -17,11 +17,11 @@ class Config(object):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
+    MAIL_PORT = 465
     MAIL_USERNAME = 'inotone.kr@gmail.com'
     MAIL_PASSWORD = '1miglobal'
-    MAIL_USE_TLS = True
-    MAIL_USE_SSL = False
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
 
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_POOL_TIMEOUT = 10
