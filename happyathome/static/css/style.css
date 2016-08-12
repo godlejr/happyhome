@@ -1101,26 +1101,23 @@ span.share-icon.active {
 }
 
 .pros {
-    display: inline-block;
     width: 100%;
+    max-width: 822px;
     padding-top: 40px;
+    margin: 0 auto;
 }
 .pro-card {
-    display: flex;
-    float: left;
     cursor: pointer;
-    margin: 11px;
-    width: 50%;
-    max-width: 581px;
-    height: 287px;
+    margin-bottom: 22px;
+    width: 822px;
     background-color: #ffffff;
     border: 1px solid #ebeaef;
 }
 .pro-card .pro-photo {
     position: relative;
-    flex: none;
+    float: left;
     width: 285px;
-    height: 285px;
+    height: 200px;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -1146,8 +1143,10 @@ span.share-icon.active {
     font-size: 16px;
 }
 .pro-card .pro-detail {
-    flex: 1;
+    height: 200px;
+    margin-left: 285px;
     padding: 0 20px;
+    overflow: hidden;
 }
 .pro-card .pro-info {
     width: 100%;
@@ -1187,7 +1186,7 @@ span.share-icon.active {
 .pro-card .pro-greeting {
     width: 100%;
     height: 100%;
-    max-height: 160px;
+    max-height: 70px;
     line-height: 170%;
     font-size: 14px;
     overflow: hidden;
