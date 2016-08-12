@@ -5,11 +5,11 @@ from math import ceil
 
 validators = {
     'email': [
-        DataRequired(),
+        DataRequired(message='이메일을 입력해주세요'),
         Email(message='Email 형식이 맞지 않습니다.')
     ],
     'password': [
-        DataRequired(),
+        DataRequired(message='비밀번호를 입력해주세요'),
         Length(min=6, max=50, message='6자 이상의 비밀번호를 입력하세요'),
         EqualTo('confirm', message='동일한 비밀번호를 입력해주세요.')
     ],
@@ -18,18 +18,21 @@ validators = {
         DataRequired()
     ],
     'name': [
-        DataRequired(),
+        DataRequired(message='이름 또는 상호명을 입력해주세요'),
         Length(min=2, max=35)
     ],
     'agreement': [
-        DataRequired()
+        DataRequired(message='개인정보취급방침과 서비스약관에 동의해주세요.')
+    ],
+    'business_no': [
+        DataRequired(message='사업자번호를 입력하세요.')
     ]
 }
 
 
 class ProfessionalUpdateForm(Form):
     name = StringField('이름')
-    business_no = StringField('"-"를 포함하세요')
+    business_no = StringField('"-"를 포함하세요', validators['business_no'])
     address = StringField('ex) 경기도 수원시 장안구 창훈로 19번길 6 00빌딩 000호')
     phone = StringField('ex) 010-0000-0000')
     homepage = StringField('http://')
@@ -51,7 +54,7 @@ class JoinForm(Form):
     password = PasswordField('비밀번호', validators['password'])
     confirm = PasswordField('비밀번호 확인')
     agreement = BooleanField('동의', validators['agreement'])
-    business_no = StringField('사업자번호('"-"'를 포함하세요)')
+    business_no = StringField('사업자번호('"-"'를 포함하세요)', validators['business_no'])
 
 
 class LoginForm(Form):

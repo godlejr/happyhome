@@ -42,16 +42,59 @@
             </div>
         </div>
 
+
         {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="message">
-                        <ul>
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
+        {% if form.email.errors %}
+        <div class="message">
+            <ul>
+                {% for message in form.email.errors %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if form.name.errors %}
+        <div class="message">
+            <ul>
+                {% for message in form.name.errors %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+
+        {% if form.password.errors %}
+        <div class="message">
+            <ul>
+                {% for message in form.password.errors %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        {% if form.business_no.errors %}
+        <div class="message">
+            <ul>
+                {% for message in form.business_no.errors %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+
+         {% if form.agreement.errors %}
+        <div class="message">
+            <ul>
+                {% for message in form.agreement.errors %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
         {% endwith %}
 
         <div class="login-form-group">

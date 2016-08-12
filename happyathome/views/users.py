@@ -282,17 +282,18 @@ def edit_professional_info(id):
     form = ProfessionalUpdateForm(request.form)
 
     if request.method == 'POST':
-        user.name = form.name.data
-        professional.business_no = form.business_no.data
-        professional.homepage = form.homepage.data
-        professional.address = form.address.data
-        professional.phone = form.phone.data
-        professional.greeting = request.form.get('greeting')
-        db.session.add(user)
-        db.session.add(professional)
-        db.session.commit()
+        if form.validate():
+            user.name = form.name.data
+            professional.business_no = form.business_no.data
+            professional.homepage = form.homepage.data
+            professional.address = form.address.data
+            professional.phone = form.phone.data
+            professional.greeting = request.form.get('greeting')
+            db.session.add(user)
+            db.session.add(professional)
+            db.session.commit()
 
-        return redirect(url_for('users.edit_profile', id=id))
+            return redirect(url_for('users.edit_profile', id=id))
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional_info.html',
                            user=user,
@@ -307,19 +308,20 @@ def edit_professional(id):
     form = ProfessionalUpdateForm(request.form)
 
     if request.method == 'POST':
-        user.name = form.name.data
-        user.level = 2
-        professional.user_id = id
-        professional.business_no = form.business_no.data
-        professional.homepage = form.homepage.data
-        professional.address = form.address.data
-        professional.phone = form.phone.data
-        professional.greeting = request.form.get('greeting')
-        db.session.add(user)
-        db.session.add(professional)
-        db.session.commit()
+        if form.validate():
+            user.name = form.name.data
+            user.level = 2
+            professional.user_id = id
+            professional.business_no = form.business_no.data
+            professional.homepage = form.homepage.data
+            professional.address = form.address.data
+            professional.phone = form.phone.data
+            professional.greeting = request.form.get('greeting')
+            db.session.add(user)
+            db.session.add(professional)
+            db.session.commit()
 
-        return redirect(url_for('users.edit_profile', id=id))
+            return redirect(url_for('users.edit_profile', id=id))
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html',
                            user=user,

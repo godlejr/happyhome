@@ -28,6 +28,18 @@
         <textarea class="edit_textarea_form" placeholder="소개를 입력하세요" name="greeting"></textarea>
     </div>
 
+    {% with messages = get_flashed_messages() %}
+    {% if form.business_no.errors %}
+    <div class="message">
+        <ul>
+            {% for message in form.business_no.errors %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <button class="btn-submit right" type="submit">변경완료</button>
 </form>
 {% endblock %}
