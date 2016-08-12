@@ -103,19 +103,20 @@ def confirm_key():
     return redirect(url_for('main.index'))
 
 
-@main.route('/edit_password', methods=['GET', 'POST'])
-def edit_password():
+@main.route('/edit_password/<key>', methods=['GET', 'POST'])
+def edit_password(key):
     form = JoinForm(request.form)
     if request.method == 'POST':
-        email = current_app.redis.get(request.args.get('key'))
-
-        if form.validate():
+        if form.password.data.__eq__(form.confirm.data):
+            email = current_app.redis.get(key)
+            current_app.redis.delete(key)
             user = User.query.filter_by(email=email).first()
-            user.password = form.password.data
+            user.password = generate_password_hash(form.password.data)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('main.index'))
-
+        else:
+            flash('동일한 비밀번호를 입력하세요')
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/edit_password.html',form=form)
 
 
@@ -134,7 +135,7 @@ def password():
             <input hidden="hidden" name="key" value="%s"/>
             <button type="submit">비밀번호 변경url</button>
             </form>
-           ''' % password_token
+           ''' %password_token
             mail.send(msg)
 
         return redirect(url_for('main.login'))
