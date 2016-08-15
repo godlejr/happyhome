@@ -2581,6 +2581,9 @@ input[type=file] {
 }
 .board-content {
     width: 100%;
+    line-height: 170%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 .board-title {
     width: 100%;
