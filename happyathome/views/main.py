@@ -19,8 +19,8 @@ def utility_processor():
 
 @main.route('/')
 def index():
-    magazines = Magazine.query.order_by(Magazine.id.desc()).limit(6).all()
-    photos = Photo.query.order_by(Photo.id.desc()).limit(6).all()
+    magazines = Magazine.query.order_by(Magazine.hits.desc(), Magazine.id.desc()).limit(6).all()
+    photos = Photo.query.order_by(Photo.hits.desc(), Photo.id.desc()).limit(6).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/index.html', magazines=magazines, photos=photos)
 
 
