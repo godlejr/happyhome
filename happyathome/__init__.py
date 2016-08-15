@@ -9,7 +9,6 @@ from happyathome.utils import RedisSessionInterface
 from happyathome.views.admin import UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView, BoardAdminFile
 from happyathome.views.main import mail
 from redis import Redis
-from redis import StrictRedis
 from werkzeug.utils import redirect
 
 
