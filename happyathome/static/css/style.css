@@ -2579,12 +2579,6 @@ input[type=file] {
     border-bottom: 1px solid #ededed;
     background-color: #ffffff;
 }
-.board-content {
-    width: 100%;
-    line-height: 170%;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-}
 .board-title {
     width: 100%;
     color: #000000;
@@ -2758,7 +2752,7 @@ button.btn-danger {
     border-bottom: 1px solid #ededed;
 }
 .content-board .board-list.reply {
-    padding-left: 62px;
+    padding-left: 60px;
     background-color: #ededed;
 }
 .content-board .board-list .board-author {
@@ -2766,8 +2760,14 @@ button.btn-danger {
 }
 .content-board .board-content {
     padding-top: 10px;
-    padding-left: 55px;
+    padding-left: 54px;
+    padding-right: 30px;
     font-size: 12px;
+    width: 100%;
+    line-height: 170%;
+    text-align: justify;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 .content-board .user-avatar {
     display: inline-block;
