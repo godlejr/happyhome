@@ -37,7 +37,7 @@ def login():
                     session['user_id'] = user.id
                     session['user_email'] = user.email
                     session['user_level'] = user.level
-                    return redirect(request.args.get('next', url_for('main.index')))
+                    return redirect(request.args.get("next") or url_for('main.index'))
             else:
                 flash('회원아이디가 잘못되었습니다.')
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/login.html', form=form)

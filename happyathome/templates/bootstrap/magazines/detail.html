@@ -376,7 +376,7 @@ $('.like-icon').click(function(event) {
 
         event.stopPropagation();
     {% else %}
-        document.location.href = "{{ url_for('main.login', next=request_url) }}";
+        document.location.href = "{{ url_for('main.login', next=request.path) }}";
     {% endif %}
 });
 
@@ -399,7 +399,7 @@ $('.scrap-icon').click(function(event) {
 
         event.stopPropagation();
     {% else %}
-        document.location.href = "{{ url_for('main.login', next=request_url) }}";
+        document.location.href = "{{ url_for('main.login', next=request.path) }}";
     {% endif %}
 });
 

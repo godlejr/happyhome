@@ -50,6 +50,8 @@ $(".user-follow").click(function(){
                 $('.follewer-count').text(parseInt($('.follewer-count').text()) + data.ok);
             });
         {% endif %}
+    {% else %}
+        document.location.href = "{{ url_for('main.login', next=request.path) }}";
     {% endif %}
 });
 </script>
