@@ -81,7 +81,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
                   margin-top:14px; margin-left:1px;
                   font-size:13px; color:#2b2b2b; }
  .img_section  { position:relative; padding:0; margin:0 auto;
-                 width: 100%; height: 296px;
+                 width: 100%; height: 399px;
                  background-color:#3b2d28; text-align:center;
                  border-top: 3px solid #3b2d28; }
  .img_section div {
@@ -94,7 +94,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     background-position: center;
  }
 #filter        { float:left;
-                 width:100%; height:65px; background-color:#484e52; }
+                 width:100%; height:65px; background-color:#3b2d28; }
 #f_nav         { padding:0; margin:0 auto; position: relative;
                  width:1184px; height:65px; }
 #themeMenu {
@@ -2793,6 +2793,41 @@ button.btn-danger {
 .content-board .board-control {
     font-size: 12px;
     margin-left: 15px;
+}
+
+
+.error-body {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+.error-msg h2 {
+    margin-top: 20px;
+    padding: 20px 0;
+}
+.error-btn {
+    padding: 40px;
+}
+
+a.btn-primary {
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 7px 30px;
+    border: 1px solid #46AB76;
+    background-color: #5EB788;
+    text-decoration: none;
+}
+a.btn-cancel {
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 7px 30px;
+    border: 1px solid #3E4448;
+    background-color: #54595D;
+    text-decoration: none;
 }
 
 @media screen and (max-width: 830px) {
