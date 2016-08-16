@@ -32,7 +32,7 @@
 
         <div class="login-form-group">
             <div class="agreement">
-                {{ form.agreement }} <a href="/agreement">이용약관</a> 및 <a href="/privacy">개인정보 취급방침</a> 동의
+                {{ form.agreement }} <a target="_blank" href="{{ url_for('main.agreement') }}">이용약관</a> 및 <a target="_blank" href="{{ url_for('main.privacy') }}">개인정보 취급방침</a> 동의
             </div>
         </div>
 

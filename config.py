@@ -18,8 +18,8 @@ class Config(object):
 
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
-    MAIL_USERNAME = 'djkim@inotone.co.kr'
-    MAIL_PASSWORD = 'kbs1029!@'
+    MAIL_USERNAME = 'dev@inotone.co.kr'
+    MAIL_PASSWORD = '1miglobal'
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
 

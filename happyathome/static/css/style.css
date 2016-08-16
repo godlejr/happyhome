@@ -2288,9 +2288,11 @@ span.share-icon.active {
  .cr_3  { float:left;
           padding-top:60px; margin-left:8px;
           font-size:12px; color:#9fa2a4; font-weight:bold; }
+ .cr_3 a{ text-decoration:none; font-size:12px; color:#9fa2a4; font-weight:bold; }
  .cr_4  { float:left;
           padding-top:60px; margin-left:25px;
           font-size:12px; color:#9fa2a4; font-weight:bold; }
+ .cr_4 a{ text-decoration:none; font-size:12px; color:#9fa2a4; font-weight:bold; }
  .selectbox  { float:left;
                padding-top:57px; margin-left:15px; }
 
@@ -2748,6 +2750,16 @@ button.btn-danger {
     margin-top: 40px;
     border-top: 1px solid #ededed;
 }
+.content-board .content {
+    width: 100%;
+    margin-top: 40px;
+    border-top: 1px solid #ededed;
+    white-space: pre-wrap;
+    text-align: justify;
+    font-size: 14px;
+    line-height: 20px;
+}
+
 .content-board .board-list {
     padding: 15px 0 15px 40px;
     width: 100%;
