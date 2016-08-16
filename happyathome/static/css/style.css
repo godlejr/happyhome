@@ -2199,7 +2199,7 @@ span.share-icon.active {
 .login-form {
     width: 370px;
     margin: 30px auto;
-    padding: 30px 40px 50px 40px;
+    padding: 30px 40px;
     background: #fff;
     border-top: 2px solid #000000;
     border-left: 1px solid #eeeeee;
@@ -2258,7 +2258,8 @@ span.share-icon.active {
 }
 
 .login-anchor {
-    margin: 10px;
+    margin: 20px 10px;
+    font-size: 14px;
 }
 .login-anchor a{
     text-decoration:underline;
