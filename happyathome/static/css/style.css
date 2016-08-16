@@ -2815,6 +2815,7 @@ button.btn-danger {
 .error-body {
     width: 100%;
     margin: 0 auto;
+    padding-top: 40px;
     text-align: center;
 }
 .error-msg h2 {
