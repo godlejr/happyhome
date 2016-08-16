@@ -1,5 +1,5 @@
 from flask_sqlalchemy import xrange
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from wtforms import Form, BooleanField, StringField, PasswordField, validators, RadioField
 from wtforms.validators import Email, Length, EqualTo, DataRequired
 from math import ceil
 
@@ -55,6 +55,7 @@ class JoinForm(Form):
     confirm = PasswordField('비밀번호 확인')
     agreement = BooleanField('동의', validators['agreement'])
     business_no = StringField('사업자번호('"-"'를 포함하세요)', validators['business_no'])
+    joiner = RadioField('joiner', choices=[('1', '일반회원'), ('2', '사업자 회원')],default='2')
 
 
 class LoginForm(Form):

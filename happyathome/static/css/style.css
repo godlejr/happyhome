@@ -2224,11 +2224,14 @@ span.share-icon.active {
     background-color: #eeeeee;
 }
 .login-check {
-    display: inline-block;
-    width: 50%;
+    display: flex;
     height: 40px;
     vertical-align: middle;
 }
+.login-check li{
+    margin-right: 70px;
+}
+
 .login-check label {
     font-size: 14px;
     color: #3B9D6A;
