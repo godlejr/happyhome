@@ -8,13 +8,7 @@
         <div class="login-header">
             <img src="{{ url_for('static', filename='img/main/join_img.jpg') }}" width="98" height="97">
         </div>
-        <div class="login-form-group">
-            <div class="login-check">
-                <input type="radio" class="login radio" name="login_check" id="users" value="1"/> <label for="users">일반회원</label>
-            </div><div class="login-check">
-                <input type="radio" class="login radio" name="login_check" id="pros" value="2" checked="checked"/> <label for="pros">사업자회원</label>
-            </div>
-        </div>
+        <div class="login-form-group">{{ form.joiner(class="login-form-field",class="login-check", placeholder=form.joiner.label.text) }} </div>
 
         <div class="login-form-group">
             {{ form.email(class="login-form-field", placeholder=form.email.label.text) }}
@@ -33,17 +27,27 @@
         </div>
 
         <div class="login-form-group" id="business_no">
-            {{ form.business_no(class="login-form-field", placeholder=form.business_no.label.text) }}
+            {{ form.business_no(class="login-form-field", id="temper_business_no", value="" ,placeholder=form.business_no.label.text) }}
         </div>
 
         <div class="login-form-group">
             <div class="agreement">
-                {{ form.agreement }} <a href="/agreement">이용약관</a> 및 <a href="/privacy">개인정보 취급방침</a> 동의
+                {{ form.agreement }} <a target="_blank" href="{{ url_for('main.agreement') }}">이용약관</a> 및 <a target="_blank" href="{{ url_for('main.privacy') }}">개인정보 취급방침</a> 동의
             </div>
         </div>
 
-
         {% with messages = get_flashed_messages() %}
+
+        {% if messages %}
+            <div class="message">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
         {% if form.email.errors %}
         <div class="message">
             <ul>
@@ -105,12 +109,24 @@
 </div>
 
 <script>
+if ($('input[name="joiner"]:radio:checked').val() == 1){
+    $('#business_no').hide();
+    $('#temper_business_no').val('1');
+}else{
+    $('#temper_business_no').val('');
+    $('#business_no').show();
+}
 
-$('input[name="login_check"]').change(function(){
-    if($(this).val() == "1")
+$('input[name="joiner"]').change(function(){
+    if($(this).val() == "1"){
         $('#business_no').hide();
-    else
+        $('#temper_business_no').val('1');
+    }else{
+        $('#temper_business_no').val('');
         $('#business_no').show();
+    }
 });
+
+
 </script>
 {% endblock %}

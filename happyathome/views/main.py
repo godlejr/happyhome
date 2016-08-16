@@ -63,7 +63,7 @@ def join():
             user.name = form.name.data
             user.password = generate_password_hash(form.password.data)
 
-            if request.form['login_check'] == '2':
+            if form.joiner.data == '2':
                 user.level = 2
                 db.session.add(user)
                 db.session.commit()
