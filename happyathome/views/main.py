@@ -128,7 +128,7 @@ def password():
             current_app.redis.append(password_token, form.email.data)
             current_app.redis.expire(password_token, 3600)
 
-            msg = Message('Hello', sender='inotone.kr@google.com', recipients=[form.email.data])
+            msg = Message('(no_reply) 해피앳홈 비밀번호 변경관련 메일', sender='inotone.kr@google.com', recipients=[form.email.data])
             msg.html = '''
             <form action="http://www.happyathome.co.kr/confirm_key">
             <input hidden="hidden" name="key" value="%s"/>
