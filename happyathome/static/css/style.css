@@ -33,6 +33,10 @@ textarea { overflow: auto; }
     background-image: url('/static/img/main/H_icon.png');
 }
 
+.slick-dots li button:before {
+    font-size: 10px !important;
+}
+
 /******* 공통 레이아웃 *********/
 a:link { text-decoration:none; }
 a:visited { text-decoration:none; }
@@ -90,12 +94,13 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
  .write_t       { float:left;
                   margin-top:14px; margin-left:1px;
                   font-size:13px; color:#2b2b2b; }
- .img_section  { position:relative; padding:0; margin:0 auto;
+ .img-section  { position:relative; padding:0; margin:0 auto;
                  width: 100%; height: 399px;
                  background-color:#3b2d28; text-align:center;
                  border-top: 3px solid #3b2d28; }
- .img_section div {
+ .img-section div {
     display: none;
+    cursor: pointer;
     height: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -529,7 +534,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 70px;
     height: 70px;
     border: 1px solid #ebeaef;
-    border-radius: 50px;
+    border-radius: 50%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -869,7 +874,7 @@ span.share-icon.active {
     cursor:pointer;
     width: 26px;
     height: 26px;
-    border-radius: 50px;
+    border-radius: 50%;
     background-color: #ffffff;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1021,7 +1026,7 @@ span.share-icon.active {
     display: flex;
     width: 26px;
     height: 26px;
-    border-radius: 50px;
+    border-radius: 50%;
     background-color: #ffffff;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1179,7 +1184,7 @@ span.share-icon.active {
     width: 50px;
     height: 50px;
     border: 1px solid #ebeaef;
-    border-radius: 50px;
+    border-radius: 50%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
