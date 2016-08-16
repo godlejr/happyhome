@@ -12,7 +12,7 @@
 </div>
 
 <div class="content">
-    <div class="content-title">해피홈 추천 테마</div>
+    <div class="content-title"><span class="H-icon"></span> 해피홈 추천 테마</div>
     <div class="cards magazines">
         {% for card in magazines %}
             {% if card.photos %}
@@ -46,7 +46,7 @@
         {% endfor %}
     </div>
 
-    <div class="content-title">해피홈 갤러리</div>
+    <div class="content-title"><span class="H-icon"></span> 해피홈 갤러리</div>
     <div class="cards photos">
         {% for card in photos %}
             <div class="card" id="photos-{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">

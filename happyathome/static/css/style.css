@@ -22,6 +22,16 @@ textarea { overflow: auto; }
 .right { float: right !important; }
 .margin-top-20 { margin-top: 20px; }
 .hide { display: none; }
+.H-icon {
+    width: 31px;
+    height: 27px;
+    display: inline-block;
+    vertical-align: bottom;
+    background-size: 31px 27px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('/static/img/main/H_icon.png');
+}
 
 /******* 공통 레이아웃 *********/
 a:link { text-decoration:none; }
@@ -208,7 +218,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 80px;
 }
 .content-title {
-    font-size: 18px;
+    line-height: 24px;
+    font-size: 24px;
     font-weight: 700;
     padding-top: 40px;
     text-align: center;
