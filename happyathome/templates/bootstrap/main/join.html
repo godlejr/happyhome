@@ -37,68 +37,67 @@
         </div>
 
         {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="message">
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
 
-        {% if messages %}
+            {% if form.email.errors %}
             <div class="message">
                 <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
+                    {% for message in form.email.errors %}
+                    <li>{{ message }}</li>
                     {% endfor %}
                 </ul>
             </div>
-        {% endif %}
+            {% endif %}
 
-        {% if form.email.errors %}
-        <div class="message">
-            <ul>
-                {% for message in form.email.errors %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-        {% if form.name.errors %}
-        <div class="message">
-            <ul>
-                {% for message in form.name.errors %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+            {% if form.name.errors %}
+            <div class="message">
+                <ul>
+                    {% for message in form.name.errors %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
 
-        {% if form.password.errors %}
-        <div class="message">
-            <ul>
-                {% for message in form.password.errors %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+            {% if form.password.errors %}
+            <div class="message">
+                <ul>
+                    {% for message in form.password.errors %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-        {% if form.business_no.errors %}
-        <div class="message">
-            <ul>
-                {% for message in form.business_no.errors %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+            {% if form.business_no.errors %}
+            <div class="message">
+                <ul>
+                    {% for message in form.business_no.errors %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
 
-         {% if form.agreement.errors %}
-        <div class="message">
-            <ul>
-                {% for message in form.agreement.errors %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+             {% if form.agreement.errors %}
+            <div class="message">
+                <ul>
+                    {% for message in form.agreement.errors %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
         {% endwith %}
 
         <div class="login-form-group">
@@ -109,24 +108,22 @@
 </div>
 
 <script>
-if ($('input[name="joiner"]:radio:checked').val() == 1){
+if ($('input[name="joiner"]:radio:checked').val() == 1) {
     $('#business_no').hide();
     $('#temper_business_no').val('1');
-}else{
+} else {
     $('#temper_business_no').val('');
     $('#business_no').show();
 }
 
-$('input[name="joiner"]').change(function(){
-    if($(this).val() == "1"){
+$('input[name="joiner"]').change(function() {
+    if ($(this).val() == "1") {
         $('#business_no').hide();
         $('#temper_business_no').val('1');
-    }else{
+    } else {
         $('#temper_business_no').val('');
         $('#business_no').show();
     }
 });
-
-
 </script>
 {% endblock %}
