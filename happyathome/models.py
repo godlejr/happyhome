@@ -210,6 +210,9 @@ class Photo(db.Model, BaseMixin):
     def is_active(self, model, user_id):
         return getattr(sys.modules[__name__], model).query.filter_by(photo_id=self.id, user_id=user_id).first()
 
+    def __repr__(self):
+        return "%s-[%s]%s-%s" % (self.user.name, self.magazine_id, self.magazine.title, self.id)
+
 
 class PhotoLike(db.Model, BaseMixin):
     """포토-좋아요 연결고리"""
@@ -283,6 +286,9 @@ class Magazine(db.Model, BaseMixin):
     @hybrid_method
     def is_active(self, model, user_id):
         return getattr(sys.modules[__name__], model).query.filter_by(magazine_id=self.id, user_id=user_id).first()
+
+    def __repr__(self):
+        return "%s(%s)" % (self.title, self.id)
 
 
 class MagazineLike(db.Model, BaseMixin):

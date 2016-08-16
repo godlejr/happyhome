@@ -2870,6 +2870,22 @@ a.btn-cancel {
 }
 
 @media screen and (max-width: 830px) {
+    .top {
+        width: 100%;
+    }
+    .log {
+        width: 100%;
+        text-align: center;
+    }
+    .nav {
+        display: none;
+    }
+    .img-section {
+        height: 170px;
+    }
+    .content {
+        max-width: 350px;
+    }
     .card {
         float: none;
         margin-left: auto;
@@ -2882,6 +2898,21 @@ a.btn-cancel {
         margin: 0 auto;
     }
     .content-side {
+        display: none;
+    }
+    .bot {
+        width: 100%;
+    }
+    #footer {
+        height: 200px;
+    }
+    #footer .cr_1 {
+        width: 100%;
+    }
+    #footer .cr_2,
+    #footer .cr_3,
+    #footer .cr_4,
+    #footer .selectbox {
         display: none;
     }
 }

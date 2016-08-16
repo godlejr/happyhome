@@ -125,22 +125,46 @@ def edit_password(key):
 def password():
     form = LoginForm(request.form)
     if request.method == 'POST':
-        if User.query.filter_by(email=form.email.data).first():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
             password_token = shortuuid.uuid()
             current_app.redis.append(password_token, form.email.data)
             current_app.redis.expire(password_token, 3600)
 
-            msg = Message('(no_reply) 해피앳홈 비밀번호 변경관련 메일', sender='inotone.kr@google.com', recipients=[form.email.data])
+            msg = Message('해피홈 비밀번호 변경 메일', sender='해피홈', recipients=[form.email.data])
             msg.html = '''
-            <form action="http://www.happyathome.co.kr/confirm_key">
-            <input hidden="hidden" name="key" value="%s"/>
-            <button type="submit">비밀번호 변경url</button>
-            </form>
-           ''' %password_token
+                <div style="width:600px;border:1px solid #e0e0e0">
+                    <div style="padding:10px 20px">
+                        <div style="float:left">
+                            <span style="cursor:pointer;display:inline-block;width:93px;height:47px;background-size:93px 47px;background-repeat:no-repeat;background-position:center;background-image:url(http://static.inotone.co.kr/img/happyathome.jpg)"></span>
+                        </div>
+                        <div style="text-align:right;margin-left:100px;padding-top:30px;font-size:14px;font-family:'맑은 고딕',sans-serif">행복공간 크리에이터</div>
+                    </div>
+                    <div style="font-size:14px;padding:60px 40px;background-color:#f4f4f4;border-top:3px solid #303030;box-sizing:border-box">
+                        <div style="font-family:'맑은 고딕',sans-serif">
+                            <p style="font-size:14px;margin:10px 0">{0}님, 안녕하세요.</p>
+                            <p style="font-size:14px;margin:10px 0">비밀번호 재설정 안내 메일입니다.</p>
+                            <p style="font-size:14px;margin:10px 0">* 만약 본인이 비밀번호 재설정 신청을 한 것이 아니라면, 본 메일을 무시해주세요.</p>
+                            <p style="font-size:14px;margin:10px 0">{0}님이 비밀번호를 변경하기 전에는 계정의 비밀번호는 바뀌지 않습니다.</p>
+                        </div>
+                        <div style="margin-top:60px;text-align:center">
+                            <a href="http://www.happyathome.co.kr/confirm_key?key={1}" target="_blank" style="cursor:pointer;color:#ffffff;font-size:14px;font-weight:700;padding:7px 30px;border:1px solid #46AB76;background-color:#5EB788;text-decoration:none;font-family:'맑은 고딕',sans-serif">비밀번호 재설정 하러가기</a>
+                        </div>
+                    </div>
+                    <div style="padding:10px 40px;color:#b4b4b4;background-color:#54595D;box-sizing:border-box;font-family:'맑은 고딕',sans-serif">
+                        <p style="font-size:12px;margin:2px 0">상호명 | INOTONE</p>
+                        <p style="font-size:12px;margin:2px 0">대표이사 | 김경태</p>
+                        <p style="font-size:12px;margin:2px 0">사업자등록번호 | 478-86-00420</p>
+                        <p style="font-size:12px;margin:2px 0">주소 | 서울특별시 강남구 봉은사로84길 8, 5층(삼성동, 유승빌딩)</p>
+                        <p style="font-size:12px;margin:2px 0">이메일 | contact@inotone.co.kr</p>
+                        <p style="font-size:12px;margin:2px 0">Copyright (C)2016 by Inotone Co., LTD. All Rights Reserved</p>
+                    </div>
+                </div>
+            '''.format(user.name, password_token)
             mail.send(msg)
             flash('기존 이메일로 비밀번호변경 관련 url을 보냈습니다. 확인해주세요.')
         return redirect(url_for('main.login'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/password.html',form=form)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/password.html', form=form)
 
 
 @main.route('/email_check',methods=['POST'])
@@ -155,7 +179,7 @@ def email_check():
 
 @main.route('/login/facebook', methods=['POST'])
 def signUpUser():
-    accessToken = request.form['accessToken'];
+    accessToken = request.form['accessToken']
 
     name = 'facebook user'
     if db.session.query(User).filter(User.accesscode == accessToken) is None:
