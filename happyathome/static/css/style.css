@@ -529,7 +529,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 70px;
     height: 70px;
     border: 1px solid #ebeaef;
-    border-radius: 50px;
+    border-radius: 50%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -869,7 +869,7 @@ span.share-icon.active {
     cursor:pointer;
     width: 26px;
     height: 26px;
-    border-radius: 50px;
+    border-radius: 50%;
     background-color: #ffffff;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1021,7 +1021,7 @@ span.share-icon.active {
     display: flex;
     width: 26px;
     height: 26px;
-    border-radius: 50px;
+    border-radius: 50%;
     background-color: #ffffff;
     background-size: cover;
     background-repeat: no-repeat;
@@ -1179,7 +1179,7 @@ span.share-icon.active {
     width: 50px;
     height: 50px;
     border: 1px solid #ebeaef;
-    border-radius: 50px;
+    border-radius: 50%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
