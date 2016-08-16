@@ -23,17 +23,10 @@ def utility_processor():
 
 @users.route('/')
 @users.route('/<id>')
+@login_required
 def info(id=None):
     if not id:
-        return redirect(url_for('main.login', next=url_for('user.info')))
-    else:
-        if id == current_user.get_id():
-            return redirect(url_for('users.info', id=current_user.get_id()))
-        else:
-            if id == current_user.get_id():
-                return redirect(url_for('users.info', id=current_user.get_id()))
-            else:
-                return redirect(url_for('professionals.detail', id=id))
+        return redirect(url_for('users.info', id=current_user.id))
 
     user = User.query.filter_by(id=id).first()
     magazine_count =  Magazine.query.filter_by(user_id=id).count()
