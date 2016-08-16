@@ -67,7 +67,7 @@ def gallery(id, page):
     pagination = Pagination(page, 15, photos.count())
 
     if session:
-        if session['user_id'] == user.id:
+        if session.get('user_id') == user.id:
             photos = photos.limit(4).all()
             return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/gallery.html',
                                    user=user,

@@ -36,18 +36,20 @@
 
 <script>
 $(".user-follow").click(function(){
-    {% if user.id == session.user_id %}
-        document.location.href = "{{ url_for('users.follow', id=user.id) }}";
-    {% else %}
-        $.ajax({
-            type: "POST",
-            url: "{{ url_for('users.following') }}",
-            data: {
-                follow_id: "{{ user.id }}"
-            }
-        }).success(function(data) {
-            $('.follewer-count').text(parseInt($('.follewer-count').text()) + data.ok);
-        });
+    {% if session.user_id %}
+        {% if user.id == session.user_id %}
+            document.location.href = "{{ url_for('users.follow', id=user.id) }}";
+        {% else %}
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('users.following') }}",
+                data: {
+                    follow_id: "{{ user.id }}"
+                }
+            }).success(function(data) {
+                $('.follewer-count').text(parseInt($('.follewer-count').text()) + data.ok);
+            });
+        {% endif %}
     {% endif %}
 });
 </script>
