@@ -5,7 +5,7 @@ import boto3
 import shortuuid
 
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
-from flask_login import login_required
+from flask_login import login_required, current_user
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
 from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap, Comment, MagazineScrap
 from werkzeug.security import generate_password_hash
@@ -23,12 +23,19 @@ def utility_processor():
 
 @users.route('/')
 @users.route('/<id>')
-@login_required
 def info(id=None):
     if not id:
-        return redirect(url_for('users.info', id=session['user_id']))
-    user = User.query.filter_by(id=id).first()
+        return redirect(url_for('main.login', next=url_for('user.info')))
+    else:
+        if id == current_user.get_id():
+            return redirect(url_for('users.info', id=current_user.get_id()))
+        else:
+            if id == current_user.get_id():
+                return redirect(url_for('users.info', id=current_user.get_id()))
+            else:
+                return redirect(url_for('professionals.detail', id=id))
 
+    user = User.query.filter_by(id=id).first()
     magazine_count =  Magazine.query.filter_by(user_id=id).count()
     photo_count = Photo.query.filter_by(user_id=id).count()
     photoscrap_count = PhotoScrap.query.filter_by(user_id=id).count()
@@ -52,11 +59,15 @@ def info(id=None):
 
     question_count = magazine_question_count + photo_question_count
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html', user=user,
-                           magazine_count=magazine_count, photo_count=photo_count, photoscrap_count=photoscrap_count,
-                           following_count=following_count, follower_count=follower_count, comment_count=comment_count,
-                           question_count=question_count
-                           )
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/users/info.html',
+                           user=user,
+                           magazine_count=magazine_count,
+                           photo_count=photo_count,
+                           photoscrap_count=photoscrap_count,
+                           following_count=following_count,
+                           follower_count=follower_count,
+                           comment_count=comment_count,
+                           question_count=question_count)
 
 
 @users.route('/<id>/gallery', defaults={'page': 1})

@@ -1,23 +1,23 @@
-<html>
+{% extends "bootstrap/base.html" %}
 
-<head>
-    <title>Happy@Home</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #0000aa;
-            color: #ffffff;
-            text-align: center;
-        }
-    </style>
-</head>
-
-<body>
-<img src="{{ url_for('static', filename='img/bluescreen.png') }}" />
-</body>
-
-</html>
+{% block content %}
+<div class="content">
+    <div class="content-body">
+        <div class="error-body">
+            <div class="error-icon"><img src="{{ url_for('static', filename='img/error/error_icon.png') }}"/></div>
+            <div class="error-msg">
+                <h2>요청하신 페이지를 찾을 수 없습니다.</h2>
+                <div class="error-detail">
+                    서비스 이용에 불편을 드려 죄송합니다.<br>
+                    메인페이지로 이동 후 원하는 정보에 대한 페이지로 연결해주시기 바랍니다.
+                </div>
+                <div class="error-btn">
+                    <a href="/" class="btn-primary">메인페이지</a>
+                    &nbsp; &nbsp;
+                    <a href="javascript:history.back()" class="btn-cancel">이전 페이지로 가기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
