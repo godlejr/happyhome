@@ -1,5 +1,6 @@
 import shortuuid
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed, \
+    jsonify
 from flask_mail import Mail, Message
 from happyathome.forms import JoinForm, LoginForm
 from happyathome.models import db, User, Magazine, Professional, Photo
@@ -53,11 +54,12 @@ def logout():
 def join():
     form = JoinForm(request.form)
     if request.method == 'POST':
+        if User.query.filter_by(email=request.form.get('email')).first():
+            flash('사용중인 이메일입니다.')
         if form.validate():
             user = User()
-            if User.query.filter_by(email = form.email.data).first():
-                flash('사용중인 이메일입니다.')
-                return render_template(current_app.config['TEMPLATE_THEME'] + '/main/join.html', form=form)
+            if User.query.filter_by(email=request.form.get('email')).first():
+                return redirect(url_for('main.join'))
 
             user.email = form.email.data
             user.name = form.name.data
@@ -163,6 +165,16 @@ def password():
             flash('기존 이메일로 비밀번호변경 관련 url을 보냈습니다. 확인해주세요.')
         return redirect(url_for('main.login'))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/password.html', form=form)
+
+
+@main.route('/email_check',methods=['POST'])
+def email_check():
+    if request.method == 'POST':
+        if User.query.filter_by(email=request.form.get('email')).first():
+            flash('사용중인 이메일입니다.')
+            return jsonify({
+                'ok': 1
+            })
 
 
 @main.route('/login/facebook', methods=['POST'])

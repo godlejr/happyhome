@@ -31,7 +31,7 @@ validators = {
 
 
 class ProfessionalUpdateForm(Form):
-    name = StringField('이름')
+    name = StringField('이름',  validators['name'])
     business_no = StringField('"-"를 포함하세요', validators['business_no'])
     address = StringField('ex) 경기도 수원시 장안구 창훈로 19번길 6 00빌딩 000호')
     phone = StringField('ex) 010-0000-0000')
@@ -44,12 +44,12 @@ class PasswordUpdateForm(Form):
 
 
 class UpdateForm(Form):
-    name = StringField('이름')
+    name = StringField('이름',  validators['name'])
     email = StringField('이메일', validators['email'])
 
 
 class JoinForm(Form):
-    name = StringField('이름')
+    name = StringField('이름',  validators['name'])
     email = StringField('이메일', validators['email'])
     password = PasswordField('비밀번호', validators['password'])
     confirm = PasswordField('비밀번호 확인')

@@ -11,7 +11,7 @@
         <div class="login-form-group">{{ form.joiner(class="login-form-field",class="login-check", placeholder=form.joiner.label.text) }} </div>
 
         <div class="login-form-group">
-            {{ form.email(class="login-form-field", placeholder=form.email.label.text) }}
+            {{ form.email(class="login-form-field", id="email" ,placeholder=form.email.label.text) }}
         </div>
 
         <div class="login-form-group" id="name">
@@ -89,7 +89,7 @@
             {% endif %}
 
 
-             {% if form.agreement.errors %}
+        {% if form.agreement.errors %}
             <div class="message">
                 <ul>
                     {% for message in form.agreement.errors %}
