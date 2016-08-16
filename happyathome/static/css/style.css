@@ -33,6 +33,10 @@ textarea { overflow: auto; }
     background-image: url('/static/img/main/H_icon.png');
 }
 
+.slick-dots li button:before {
+    font-size: 10px !important;
+}
+
 /******* 공통 레이아웃 *********/
 a:link { text-decoration:none; }
 a:visited { text-decoration:none; }
