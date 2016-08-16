@@ -99,7 +99,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 100%;
     margin-left: auto;
     margin-right: auto;
-    background-size: auto;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
  }
