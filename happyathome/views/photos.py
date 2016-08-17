@@ -49,7 +49,8 @@ def list(page):
                            cards=cards,
                            rooms=rooms,
                            room_id=room_id,
-                           pagination=pagination)
+                           pagination=pagination,
+                           query_string=request.query_string.decode('utf-8'))
 
 
 @photos.route('/<id>')

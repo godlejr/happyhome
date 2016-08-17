@@ -34,7 +34,7 @@
             {% endif %}
         {% endfor %}
     </div>
-    <div class="pagination-nav">{{ func.render_pagination('magazines.list', pagination) }}</div>
+    <div class="pagination-nav">{{ func.render_pagination('magazines.list', pagination, None, query_string) }}</div>
 </div>
 
 <script>

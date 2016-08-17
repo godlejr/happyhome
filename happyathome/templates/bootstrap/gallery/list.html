@@ -33,7 +33,7 @@
             </div>
         {% endfor %}
     </div>
-    <div class="pagination-nav">{{ func.render_pagination('photos.list', pagination) }}</div>
+    <div class="pagination-nav">{{ func.render_pagination('photos.list', pagination, None, query_string) }}</div>
 </div>
 
 <script>

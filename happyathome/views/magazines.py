@@ -1,4 +1,3 @@
-import base64
 import os
 import boto3
 import html2text
@@ -51,7 +50,9 @@ def list(page):
                            categories=categories,
                            residences=residences,
                            category_id=category_id,
-                           residence_id=residence_id, pagination=pagination)
+                           residence_id=residence_id,
+                           pagination=pagination,
+                           query_string=request.query_string.decode('utf-8'))
 
 
 @magazines.route('/<id>')
