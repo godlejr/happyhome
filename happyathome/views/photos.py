@@ -7,6 +7,7 @@ from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, Magazine
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
+from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
 photos = Blueprint('photos', __name__)
@@ -25,6 +26,8 @@ def list(page):
     media = request.args.get('media', '')
     level = request.args.get('level', '')
     room_id = request.args.get('room_id', '')
+    likes = request.args.get('likes', '')
+    recent = request.args.get('recent', '')
     rooms = db.session.query(Room).all()
     cards = db.session.query(Photo)
 
@@ -41,7 +44,15 @@ def list(page):
     else:
         offset = 0
 
-    cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
+    if likes:
+        cards = cards.outerjoin(PhotoLike).group_by(Photo.id).order_by(
+            func.count(PhotoLike.photo_id).desc()).limit(
+            12).offset(offset).all()
+    elif recent:
+        cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
+    else:
+        cards = cards.order_by(Photo.hits.desc()).limit(12).offset(offset).all()
+
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/list.html',
                            cards=cards,

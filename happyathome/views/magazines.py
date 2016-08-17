@@ -8,7 +8,9 @@ from flask_login import login_required, current_user
 from happyathome.forms import Pagination
 from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room, User, \
     del_or_create, MagazineLike, MagazineScrap
+from sqlalchemy import func
 from werkzeug.utils import secure_filename
+from wtforms.validators import length
 
 magazines = Blueprint('magazines', __name__)
 
@@ -27,6 +29,8 @@ def list(page):
     media = request.args.get('media', '')
     category_id = request.args.get('category_id', '')
     residence_id = request.args.get('residence_id', '')
+    likes = request.args.get('likes', '')
+    recent = request.args.get('recent', '')
 
     if media:
         cards = cards.filter(Magazine.photos.any(Photo.file.has(type=media)))
@@ -41,7 +45,14 @@ def list(page):
     else:
         offset = 0
 
-    cards = cards.order_by(Magazine.id.desc()).limit(12).offset(offset).all()
+    if likes:
+        cards = cards.outerjoin(MagazineLike).group_by(Magazine.id).order_by(func.count(MagazineLike.magazine_id).desc()).limit(
+            12).offset(offset).all()
+    elif recent:
+        cards = cards.order_by(Magazine.id.desc()).limit(12).offset(offset).all()
+    else:
+        cards = cards.order_by(Magazine.hits.desc()).limit(12).offset(offset).all()
+
     categories = db.session.query(Category).all()
     residences = db.session.query(Residence).all()
 
