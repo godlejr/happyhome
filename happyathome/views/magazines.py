@@ -244,19 +244,20 @@ def scrap():
 @login_required
 def comment_new(id):
     if request.method == 'POST':
-        comment = Comment()
-        comment.user_id = session['user_id']
-        comment.group_id = comment.max1_group_id
-        comment.content = request.form['comment']
-        db.session.add(comment)
-        db.session.commit()
+        if request.form['comment'] != "":
+            comment = Comment()
+            comment.user_id = session['user_id']
+            comment.group_id = comment.max1_group_id
+            comment.content = request.form['comment']
+            db.session.add(comment)
+            db.session.commit()
 
-        magazine_comment = MagazineComment()
-        magazine_comment.magazine_id = id
-        magazine_comment.comment_id = comment.id
+            magazine_comment = MagazineComment()
+            magazine_comment.magazine_id = id
+            magazine_comment.comment_id = comment.id
 
-        db.session.add(magazine_comment)
-        db.session.commit()
+            db.session.add(magazine_comment)
+            db.session.commit()
     return redirect(url_for('magazines.detail', id=id))
 
 
@@ -264,47 +265,49 @@ def comment_new(id):
 @login_required
 def comment_reply():
     if request.method == 'POST':
-        comment = Comment()
-        comment.user_id = session['user_id']
-        comment.group_id = request.form.get('group_id')
-        comment.content = request.form.get('content')
-        comment.depth = 1
-        db.session.add(comment)
-        db.session.commit()
+        if request.form.get('content') != "":
+            comment = Comment()
+            comment.user_id = session['user_id']
+            comment.group_id = request.form.get('group_id')
+            comment.content = request.form.get('content')
+            comment.depth = 1
+            db.session.add(comment)
+            db.session.commit()
 
-        magazine_comment = MagazineComment()
-        magazine_comment.magazine_id = request.form.get('magazine_id')
-        magazine_comment.comment_id = comment.id
+            magazine_comment = MagazineComment()
+            magazine_comment.magazine_id = request.form.get('magazine_id')
+            magazine_comment.comment_id = comment.id
 
-        db.session.add(magazine_comment)
-        db.session.commit()
+            db.session.add(magazine_comment)
+            db.session.commit()
 
-        user = db.session.query(User).filter(User.id == session['user_id']).first();
+            user = db.session.query(User).filter(User.id == session['user_id']).first();
 
-        return jsonify({
-            'comment_id':comment.id,
-            'user_id':session['user_id'],
-            'user_name':user.name,
-            'created_date':comment.created_date,
-            'comment': comment.content,
-            'group_id': comment.get_parent_id(comment.group_id),
-            'avatar': user.avatar
-        })
+            return jsonify({
+                'comment_id':comment.id,
+                'user_id':session['user_id'],
+                'user_name':user.name,
+                'created_date':comment.created_date,
+                'comment': comment.content,
+                'group_id': comment.get_parent_id(comment.group_id),
+                'avatar': user.avatar
+            })
 
 
 @magazines.route('/comment_edit', methods=['POST'])
 @login_required
 def comment_edit():
     if request.method == 'POST':
-        comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
-        comment.content = request.form.get('content')
+        if request.form.get('content') != "":
+            comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
+            comment.content = request.form.get('content')
 
-        db.session.add(comment)
-        db.session.commit()
+            db.session.add(comment)
+            db.session.commit()
 
-        return jsonify({
-            'comment': comment.content
-        })
+            return jsonify({
+                'comment': comment.content
+            })
 
 
 @magazines.route('/comment_remove', methods=['POST'])
