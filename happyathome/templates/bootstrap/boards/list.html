@@ -34,7 +34,6 @@
                                 {% endif %}
                                 {% if post.user_id == current_user.id %}
                                     <span class="board-control">
-                                        <a href="javascript:;" onclick="modify({{ post.id }})">수정</a>
                                         <a href="javascript:;" onclick="deletePost({{ post.id }})">삭제</a>
                                     </span>
                                 {% endif %}
