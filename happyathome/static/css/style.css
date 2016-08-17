@@ -112,20 +112,24 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
                  width:100%; height:65px; background-color:#3b2d28; }
 #f_nav         { padding:0; margin:0 auto; position: relative;
                  width:1184px; height:65px; }
+
+#sortMenu {
+    left: 310px;
+}
 #themeMenu {
-    left: 351px;
+    left: 460px;
 }
 #roomMenu {
-    left: 351px;
+    left: 460px;
 }
 #residenceMenu {
     left: 521px;
 }
 #authorMenu {
-    left: 521px;
+    left: 625px;
 }
 #mediaMenu {
-    left: 698px;
+    left: 820px;
 }
  .f_menu     { position: absolute;
                 display: none;
@@ -146,7 +150,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 
 #f1            { position:relative;
                  padding:0; margin:7px auto 0 auto;
-                 width:590px; height:27px; }
+                 width:700px; height:27px; }
 .f_nav_h1      { float:left;
                  margin-top:11px; margin-left:100px; }
 .f_nav_h2      { float:left;
@@ -156,7 +160,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
                  margin-top:11px; margin-left:122px; }
 #f2           { position:relative;
                 padding:0; margin:0 auto;
-                width:700px; height:26px; }
+                width:790px; height:26px; }
 .f2_nav_h1    { float:left;
                 width:160px; height:25px;
                 margin-top:7px; margin-left:143px; padding-left:9px;
@@ -490,7 +494,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     color: #484e52;
     font-size: 14px;
 }
-.content-user span {
+.content-date {
     color: #9d9e9e;
     font-size: 12px;
     margin-left: 16px;

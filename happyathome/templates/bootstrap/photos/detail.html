@@ -146,11 +146,12 @@
                     <div class="content-info">
                         <div class="content-avatar" id="{{ post.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
                         <div class="content-author">
-                            <div class="content-user"><a href="{{ url_for('users.info',id = post.user.id) }}">{{ post.user.name }}</a> <span>{{ post.created_date }}</span></div>
+                            <div class="content-user"><a href="{{ url_for('users.info',id = post.user.id) }}">{{ post.user.name }}</a></div>
                             <div class="content-score">
                                 <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> <span class="count-text like">{{ post.like_photos|length }}</span></div>
                                 <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> <span class="count-text scrap">{{ post.scrap_photos|length }}</span></div>
                                 <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> <span class="count-text comment">{{ post.comments|length }}</span></div>
+                                <span class="content-date">{{ post.created_date }}</span>
                             </div>
                         </div>
                     </div>

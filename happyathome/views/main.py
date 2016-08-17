@@ -167,16 +167,6 @@ def password():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/password.html', form=form)
 
 
-@main.route('/email_check',methods=['POST'])
-def email_check():
-    if request.method == 'POST':
-        if User.query.filter_by(email=request.form.get('email')).first():
-            flash('사용중인 이메일입니다.')
-            return jsonify({
-                'ok': 1
-            })
-
-
 @main.route('/login/facebook', methods=['POST'])
 def signUpUser():
     accessToken = request.form['accessToken']
