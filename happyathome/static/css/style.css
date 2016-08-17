@@ -229,6 +229,26 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     padding-top: 40px;
     text-align: center;
 }
+.content-banner {
+    width: 100%;
+    padding: 0 11px;
+}
+.content-banner img {
+    display: block;
+}
+.content-banner-row {
+    width: 100%;
+    clear: both;
+}
+.content-banner .content-banner-2 {
+    float: left;
+}
+.content-banner .content-banner-1 {
+    margin-left: 804px;
+}
+.content-banner .content-banner-3 {
+    margin-top: 22px;
+}
 .magazine-title .content-button {
     float: right;
 }
