@@ -42,7 +42,7 @@ def list(page):
     else:
         offset = 0
 
-    cards = cards.order_by(Photo.hits.desc()).limit(12).offset(offset).all()
+    cards = cards.order_by(Photo.hits.desc(), Photo.id.desc()).limit(12).offset(offset).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/list.html',
                            col=col,
