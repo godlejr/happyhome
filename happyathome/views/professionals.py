@@ -1,7 +1,11 @@
-from flask import Blueprint, render_template, current_app
+import datetime
+
+from flask import Blueprint, render_template, current_app, request, url_for
 from flask import session
+from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment, MagazineScrap
+from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment, MagazineScrap, Review
+from werkzeug.utils import redirect
 
 professionals = Blueprint('professionals', __name__)
 
@@ -228,3 +232,47 @@ def scrap_gallery(id, page):
                            pagination=pagination,
                            photoscraps=photoscraps,
                            photoscraps_count=photoscraps_count)
+
+
+@professionals.route('/<id>/review', defaults={'page': 1})
+@professionals.route('/<id>/review/page/<int:page>')
+def review(id, page):
+    professional = db.session.query(Professional).filter_by(id=id).first()
+    user = db.session.query(User).filter_by(id=professional.user_id).first()
+    reviews = db.session.query(Review).filter(Review.professional_id==professional.id).order_by(Review.id.desc())
+    pagination = Pagination(page, 6, reviews.count())
+    review_count=reviews.count()
+
+    if page != 1:
+        offset = 6 * (page - 1)
+    else:
+        offset = 0
+
+    reviews = reviews.limit(6).offset(offset).all()
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/review.html',
+                           professional=professional,
+                           reviews=reviews,
+                           user=user,
+                           current_app=current_app,
+                           review_count=review_count,
+                           pagination=pagination)
+
+
+@professionals.route('/<id>/review/new', methods=['GET', 'POST'])
+@login_required
+def review_new(id):
+    if request.method == 'POST':
+        if request.form['review_comment'] != "":
+            review = Review()
+            review.score = request.form['review_star']
+            if not request.form['review_date'].__eq__('프로젝트 일시 선택'):
+                date_object = datetime.datetime.strptime(request.form['review_date'], '%m/%d/%Y')
+                review.project_at = date_object
+            review.content = request.form['review_comment']
+            review.professional_id = id
+            review.user_id = session['user_id']
+
+            db.session.add(review)
+            db.session.commit()
+
+    return redirect(url_for('professionals.review', id=id))

@@ -1,0 +1,75 @@
+{% extends 'bootstrap/professionals/content.html' %}
+
+{% block content_body %}
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+
+<div class="content-body">
+    <div class="user-contents">
+        <div class="content-list">
+            <div class="user-title">리뷰 ({{ review_count }})</div>
+            {% for review in reviews %}
+            <div class="review-list">
+                <div class="review-content-body">
+                    <div>
+                        <div class="review-star">
+                            {% for i in range(0, review.score) %}
+                            <i class="material-icons">grade</i>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="review-item">-리뷰자: {{ review.user.name }}</div>
+                    <div class="review-item">-프로젝트 일시: {{ review.project_date }}</div>
+                    <div class="review-item">-리뷰등록 일시: {{ review.created_date }}</div>
+                    <div class="review-content">{{ review.content }}</div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="pagination-nav">
+                {{ func.render_pagination('professionals.gallery', pagination, user.id) }}
+            </div>
+             <div class="review-title">리뷰하기</div>
+             <div class="review-list">
+                <div class="review-comment">
+                    <form method="POST" action="{{ url_for('professionals.review_new', id=professional.id) }}">
+                        <div class="star">
+                            <input class="star star-5" id="star-5" type="radio" value="5" name="review_star"/>
+                            <label class="star star-5" for="star-5"></label>
+                            <input class="star star-4" id="star-4" type="radio" value="4" name="review_star"/>
+                            <label class="star star-4" for="star-4"></label>
+                            <input class="star star-3" id="star-3" checked="checked" value="3" type="radio" name="review_star"/>
+                            <label class="star star-3" for="star-3"></label>
+                            <input class="star star-2" id="star-2" type="radio" value="2" name="review_star"/>
+                            <label class="star star-2" for="star-2"></label>
+                            <input class="star star-1" id="star-1" type="radio" value="1" name="review_star"/>
+                            <label class="star star-1" for="star-1"></label>
+                        </div>
+
+                        <input type="text" name="review_date" class="date-picker" id="testDatepicker" readonly  value="프로젝트 일시 선택">
+                        <textarea class="comment-text" id="textArea" name="review_comment"></textarea>
+                        <button type="submit" class="btn-comment">리뷰</button>
+                    </form>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+<script>
+window.onunload = window.onbeforeunload = undefined;
+
+$(function() {
+    $( "#testDatepicker" ).datepicker({
+         changeMonth: true,
+         dayNames: ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'],
+         dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+         monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+         monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+  });
+});
+
+
+</script>
+{% endblock %}
