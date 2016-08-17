@@ -18,17 +18,17 @@
 <a href="{{ url_for(endpoint, id=id) }}">{{ display }}</a>
 {% endmacro %}
 
-{% macro render_pagination(endpoint, pagination, id=None) %}
+{% macro render_pagination(endpoint, pagination, id=None, query_string=None) %}
 <!-- pagination -->
 <ul class="custom-pagination">
     {% if pagination.has_prev %}
-        <a href="{{ url_for(endpoint, page=pagination.page - 1, id=id) }}"><li>&#8592;</li></a>
+        <a href="{{ url_for(endpoint, page=pagination.page - 1, id=id) }}{% if query_string %}?{{ query_string }}{% endif %}"><li>&#8592;</li></a>
     {% endif %}
 
     {% for page in pagination.iter_pages() %}
         {% if page %}
             {% if page != pagination.page %}
-                <a href="{{ url_for(endpoint, page=page, id=id) }}"><li>{{ page }}</li></a>
+                <a href="{{ url_for(endpoint, page=page, id=id) }}{% if query_string %}?{{ query_string }}{% endif %}"><li>{{ page }}</li></a>
             {% else %}
                 <li class="active">{{ page }}</li>
             {% endif %}
@@ -38,7 +38,7 @@
     {% endfor %}
 
     {% if pagination.has_next %}
-        <a href="{{ url_for(endpoint, page=pagination.page + 1, id=id) }}"><li>&#8594;</li></a>
+        <a href="{{ url_for(endpoint, page=pagination.page + 1, id=id) }}{% if query_string %}?{{ query_string }}{% endif %}"><li>&#8594;</li></a>
     {% endif %}
 </ul>
 {% endmacro %}
