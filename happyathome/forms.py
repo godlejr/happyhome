@@ -14,8 +14,9 @@ class BusinessCheck(object):
         number = list(map(int,str(field.data)))
         key = [1, 3, 7, 1, 3, 7, 1, 3, 5]
         sum = 0
+
         for i in range(0, 9):
-            sum += (number[i] * key[i])
+            sum += number[i] * key[i]
 
         sum += int((number[8] * 5) / 10)
         magic = sum % 10
