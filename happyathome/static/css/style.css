@@ -2243,6 +2243,12 @@ span.share-icon.active {
     font-weight:bold;
 }
 
+.align{
+    float:right;
+    font-size: 15px;
+    margin-right: 12px;
+    padding: 6px;
+}
 
 /******* login & join*******/
 .login-header{

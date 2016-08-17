@@ -1,7 +1,30 @@
 from flask_sqlalchemy import xrange
 from wtforms import Form, BooleanField, StringField, PasswordField, validators, RadioField
-from wtforms.validators import Email, Length, EqualTo, DataRequired
+from wtforms.validators import Email, Length, EqualTo, DataRequired, ValidationError
 from math import ceil
+
+
+class BusinessCheck(object):
+    def __init__(self, message=None):
+        if not message:
+            message = u'유효한 사업자 번호가 아닙니다.'
+        self.message = message
+
+    def __call__(self, form, field):
+        number = list(map(int,str(field.data)))
+        key = [1, 3, 7, 1, 3, 7, 1, 3, 5]
+        sum = 0
+
+        for i in range(0, 8):
+            sum += number[i] * key[i]
+
+        sum += int((number[8] * 5) / 10)
+        magic = sum % 10
+        master = (10 - magic) % 10
+
+        if master != number[9]:
+            raise ValidationError(self.message)
+
 
 validators = {
     'email': [
@@ -25,14 +48,16 @@ validators = {
         DataRequired(message='개인정보취급방침과 서비스약관에 동의해주세요.')
     ],
     'business_no': [
-        DataRequired(message='사업자번호를 입력하세요.')
+        DataRequired(message='사업자번호를 입력하세요.'),
+        Length(min=10, max=10, message='사업자번호는 10자리의 숫자입니다.'),
+        BusinessCheck(message='유효한 사업자번호를 입력하세요.')
     ]
 }
 
 
 class ProfessionalUpdateForm(Form):
-    name = StringField('이름',  validators['name'])
-    business_no = StringField('"-"를 포함하세요', validators['business_no'])
+    name = StringField('이름', validators['name'])
+    business_no = StringField('사업자번호('"-"'를 빼고 입력하세요)', validators['business_no'])
     address = StringField('ex) 경기도 수원시 장안구 창훈로 19번길 6 00빌딩 000호')
     phone = StringField('ex) 010-0000-0000')
     homepage = StringField('http://')
@@ -44,18 +69,18 @@ class PasswordUpdateForm(Form):
 
 
 class UpdateForm(Form):
-    name = StringField('이름',  validators['name'])
+    name = StringField('이름', validators['name'])
     email = StringField('이메일', validators['email'])
 
 
 class JoinForm(Form):
-    name = StringField('이름',  validators['name'])
+    name = StringField('이름', validators['name'])
     email = StringField('이메일', validators['email'])
     password = PasswordField('비밀번호', validators['password'])
     confirm = PasswordField('비밀번호 확인')
     agreement = BooleanField('동의', validators['agreement'])
-    business_no = StringField('사업자번호('"-"'를 포함하세요)', validators['business_no'])
-    joiner = RadioField('joiner', choices=[('1', '일반회원'), ('2', '사업자 회원')],default='2')
+    business_no = StringField('사업자번호('"-"'를 빼고 입력하세요)', validators['business_no'])
+    joiner = RadioField('joiner', choices=[('1', '일반회원'), ('2', '사업자 회원')], default='2')
 
 
 class LoginForm(Form):
@@ -85,9 +110,9 @@ class Pagination(object):
                    right_current=5, right_edge=0):
         last = 0
         for num in xrange(1, self.pages + 1):
-            if num <= left_edge or (num > self.page - left_current -1 and num < self.page + right_current) or num > self.pages - right_edge:
+            if num <= left_edge or (
+                    num > self.page - left_current - 1 and num < self.page + right_current) or num > self.pages - right_edge:
                 if last + 1 != num:
                     yield None
                 yield num
                 last = num
-

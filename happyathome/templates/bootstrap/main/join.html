@@ -27,7 +27,7 @@
         </div>
 
         <div class="login-form-group" id="business_no">
-            {{ form.business_no(class="login-form-field", id="temper_business_no", value="" ,placeholder=form.business_no.label.text) }}
+            {{ form.business_no(class="login-form-field", id="temper_business_no",maxlength=10, value="" ,placeholder=form.business_no.label.text) }}
         </div>
 
         <div class="login-form-group">
@@ -110,7 +110,7 @@
 <script>
 if ($('input[name="joiner"]:radio:checked').val() == 1) {
     $('#business_no').hide();
-    $('#temper_business_no').val('1');
+    $('#temper_business_no').val('0000000000');
 } else {
     $('#temper_business_no').val('');
     $('#business_no').show();
@@ -119,11 +119,13 @@ if ($('input[name="joiner"]:radio:checked').val() == 1) {
 $('input[name="joiner"]').change(function() {
     if ($(this).val() == "1") {
         $('#business_no').hide();
-        $('#temper_business_no').val('1');
+        $('#temper_business_no').val('0000000000');
     } else {
         $('#temper_business_no').val('');
         $('#business_no').show();
     }
 });
+
+
 </script>
 {% endblock %}
