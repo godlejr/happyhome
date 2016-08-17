@@ -2,7 +2,12 @@
 
 {% block content_body %}
 <div class="content">
-    <div class="cards">
+    <div class="cards col-{{ col }}">
+        <div class="cards-cols-opt">
+            <ul>
+                <li><img src="{{ url_for('static', filename='img/gallery/col-3.png') }}"> <a href="{{ url_for('photos.list', col=3) }}">3줄 보기</a></li><li><img src="{{ url_for('static', filename='img/gallery/col-4.png') }}"> <a href="{{ url_for('photos.list') }}">4줄 보기</a></li>
+            </ul>
+        </div>
         {% for card in cards %}
             <div class="card" id="{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
                 {% if card.is_vr  %}

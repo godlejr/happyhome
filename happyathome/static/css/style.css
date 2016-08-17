@@ -223,8 +223,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     height: 80px;
 }
 .content-title {
-    line-height: 24px;
-    font-size: 24px;
+    line-height: 20px;
+    font-size: 20px;
     font-weight: 700;
     padding-top: 40px;
     text-align: center;
@@ -278,7 +278,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     position: relative;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.085);
+    background-color: rgba(0, 0, 0, 0.15);
 }
 .content-cover .content-user {
     color: #484e52;
@@ -358,7 +358,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     border-radius: 50%;
     font-weight: 700;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #5799A7;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -964,6 +964,49 @@ span.share-icon.active {
     display: inline-block;
     padding-top: 40px;
 }
+.cards.col-3 .card {
+    width: 33.33333%;
+    max-width: 380px;
+    max-height: 380px;
+}
+.cards.col-4 .card {
+    width: 25%;
+    max-width: 279px;
+    max-height: 279px;
+}
+.cards-cols-opt {
+    display: block;
+    width: 100%;
+    min-height: 1px;
+    text-align: right;
+    margin-bottom: 5px;
+}
+.cards-cols-opt ul {
+    display: inline-block;
+    clear: both;
+    width: 180px;
+    margin-right: 2px;
+}
+.cards-cols-opt li {
+    display: inline;
+    padding: 0 11px;
+    font-size: 12px;
+    color: #000000;
+    text-align: center;
+    vertical-align: middle;
+}
+.cards-cols-opt li img {
+    vertical-align: middle;
+}
+.cards-cols-opt li a {
+    color: #000000;
+}
+.cards-cols-opt li a:hover {
+    text-decoration: underline;
+}
+.cards-cols-opt li:last-child {
+    border-left: 1px solid #000000;
+}
 .card {
     position: relative;
     cursor: pointer;
@@ -1119,7 +1162,9 @@ span.share-icon.active {
     color: #ffffff;
 }
 .card .card-info.gallery .card-content .card-text {
-    padding: 7px 15px 5px 0;
+    padding: 12px 15px 12px 0;
+    height: 60px;
+    overflow: hidden;
 }
 .card .card-info.gallery .card-content .card-icon .icon {
     padding: 0;
@@ -2882,6 +2927,7 @@ a.btn-cancel {
     }
     .card {
         float: none;
+        width: 100%;
         margin-left: auto;
         margin-right: auto;
     }

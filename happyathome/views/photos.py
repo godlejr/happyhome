@@ -22,6 +22,7 @@ def utility_processor():
 @photos.route('/', defaults={'page': 1})
 @photos.route('/page/<int:page>')
 def list(page):
+    col = request.args.get('col', 4)
     media = request.args.get('media', '')
     level = request.args.get('level', '')
     room_id = request.args.get('room_id', '')
@@ -41,9 +42,10 @@ def list(page):
     else:
         offset = 0
 
-    cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
+    cards = cards.order_by(Photo.hits.desc()).limit(12).offset(offset).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/list.html',
+                           col=col,
                            cards=cards,
                            rooms=rooms,
                            room_id=room_id,
