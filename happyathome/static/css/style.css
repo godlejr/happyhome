@@ -2831,6 +2831,8 @@ button.btn-danger {
     vertical-align: middle;
     border: 0;
     background-color: #e8e8e8;
+    box-sizing: border-box;
+    padding: 10px;
 }
 .content-board form button {
     display: inline-block;

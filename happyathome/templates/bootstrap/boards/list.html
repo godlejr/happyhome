@@ -6,13 +6,11 @@
         <div class="content-board">
             <div class="board-title">해피 Q&A</div>
 
-            {% if current_user.id %}
             <div class="input-field">
                 <form id="boardForm" method="POST" action="{{ url_for('boards.new', board_id=board_id) }}">
-                    <textarea id="boardContent" name="board_content"></textarea><button type="submit">질문<br>하기</button>
+                    <textarea id="boardContent" name="board_content" placeholder="홈인테리어/스타일링에 관한 질문은 무엇이든 물어보세요. 해피@홈의 전문가들이 답변해드립니다."></textarea><button type="submit">질문<br>하기</button>
                 </form>
             </div>
-            {% endif %}
 
             <div class="board-lists">
                 {% for post in posts %}
@@ -56,13 +54,17 @@
 
 <script>
 $('#boardForm').submit(function() {
-    if (!$('#boardContent').val()) {
-        alert('질문을 입력해주세요.');
-        $('#boardContent').focus();
-        return false;
-    }
+    {% if current_user.id %}
+        if (!$('#boardContent').val()) {
+            alert('질문을 입력해주세요.');
+            $('#boardContent').focus();
+            return false;
+        }
 
-    return true;
+        return true;
+    {% else %}
+        document.locaiont.href = "{{ url_for('main.login', next=request.path) }}";
+    {% endif %}
 });
 
 function deletePost(post_id) {
