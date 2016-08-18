@@ -33,7 +33,7 @@
              <div class="review-title">리뷰하기</div>
              <div class="review-list">
                 <div class="review-comment">
-                    <form method="POST" action="{{ url_for('professionals.review_new', id=professional.id) }}">
+                    <form method="POST" action="{{ url_for('professionals.review_new', id=user.id) }}">
                         <div class="star">
                             <input class="star star-5" id="star-5" type="radio" value="5" name="review_star"/>
                             <label class="star star-5" for="star-5"></label>

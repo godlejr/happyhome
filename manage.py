@@ -3,7 +3,7 @@ import os
 from flask import url_for
 from happyathome import create_app
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app(os.getenv('FLASK_CONFIG') or 'production')
 
 
 @app.context_processor

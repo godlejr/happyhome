@@ -237,8 +237,8 @@ def scrap_gallery(id, page):
 @professionals.route('/<id>/review', defaults={'page': 1})
 @professionals.route('/<id>/review/page/<int:page>')
 def review(id, page):
-    professional = db.session.query(Professional).filter_by(id=id).first()
-    user = db.session.query(User).filter_by(id=professional.user_id).first()
+    user = db.session.query(User).filter_by(id=id).first()
+    professional = db.session.query(Professional).filter_by(user_id=user.id).first()
     reviews = db.session.query(Review).filter(Review.professional_id==professional.id).order_by(Review.id.desc())
     pagination = Pagination(page, 6, reviews.count())
     review_count=reviews.count()
@@ -262,6 +262,7 @@ def review(id, page):
 @login_required
 def review_new(id):
     if request.method == 'POST':
+        professional= Professional.query.filter_by(user_id=id).first()
         if request.form['review_comment'] != "":
             review = Review()
             review.score = request.form['review_star']
@@ -269,7 +270,7 @@ def review_new(id):
                 date_object = datetime.datetime.strptime(request.form['review_date'], '%m/%d/%Y')
                 review.project_at = date_object
             review.content = request.form['review_comment']
-            review.professional_id = id
+            review.professional_id = professional.id
             review.user_id = session['user_id']
 
             db.session.add(review)
