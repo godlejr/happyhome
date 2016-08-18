@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Blueprint, render_template, current_app, request, url_for
+from flask import Blueprint, render_template, current_app, request, url_for, jsonify
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
@@ -266,9 +266,6 @@ def review_new(id):
         if request.form['review_comment'] != "":
             review = Review()
             review.score = request.form['review_star']
-            if not request.form['review_date'].__eq__('프로젝트 일시 선택'):
-                date_object = datetime.datetime.strptime(request.form['review_date'], '%m/%d/%Y')
-                review.project_at = date_object
             review.content = request.form['review_comment']
             review.professional_id = professional.id
             review.user_id = session['user_id']
@@ -277,3 +274,33 @@ def review_new(id):
             db.session.commit()
 
     return redirect(url_for('professionals.review', id=id))
+
+
+@professionals.route('/review_edit', methods=['POST'])
+@login_required
+def review_edit():
+    if request.method == 'POST':
+        if request.form.get('content') != "":
+            review = db.session.query(Review).filter(Review.id == request.form.get('review_id')).first()
+            review.content = request.form.get('content')
+
+            db.session.add(review)
+            db.session.commit()
+
+            return jsonify({
+                'comment': review.content
+            })
+
+
+@professionals.route('/review_remove', methods=['POST'])
+@login_required
+def review_remove():
+    if request.method == 'POST':
+        db.session.query(Review).filter(Review.id == request.form.get('review_id')).delete()
+        db.session.commit()
+
+        return jsonify({
+            'ok': 1
+        })
+
+

@@ -977,11 +977,13 @@ span.share-icon.active {
     padding: 2px 0 10px 0;
     margin: 0 0 15px 32px;
     border-bottom: 1px solid #eaebee;
+    word-break: break-all;
 }
 
 .comment-reply-content{
     padding: 2px 0 10px 0;
     margin: 0 0 0 32px;
+    word-break: break-all;
 }
 
 
@@ -2583,7 +2585,9 @@ input[type=file] {
     border: 1px solid #eaebee;
 }
 .user-contents .user-title {
-    padding: 25px 64px;
+    margin: 25px 64px;
+    padding: 25px;
+    border-bottom: 1px solid #e0e0e0;
 }
 .user-contents .cards {
     display: block;
@@ -2622,40 +2626,65 @@ input[type=file] {
     font-weight: 700;
 }
 
-
+.review-star-item{
+    float: left;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+    margin-right:10px;
+    color: #0b8699;
+}
 
 .review-comment {
     padding: 15px 0;
     font-size: 13px;
+    margin-left:120px;
 }
 .review-comment .comment-form textarea {
     vertical-align: middle;
 }
 .review-comment .comment-text {
     width: calc(100% - 55px);
-    height: 55px;
+    height: 75px;
     border: 0;
     background-color: #eaebee;
 }
 
 .review-comment .btn-comment {
     width: 55px;
-    height: 55px;
+    height: 75px;
     border: 1px solid #e8e8e8;
     background-color: #ffffff;
     vertical-align: middle;
     float: right;
 }
 
+.review-edit-text {
+    font-size: 15px;
+    padding: 12px 5px;
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    left: 15px;
+    top: 60px;
+    max-height: 500px;
+    border: 0;
+    background-color: #eaebee;
+}
+
 div.stars {
   width: 270px;
   display: inline-block;
+}
+.star{
+    padding: 4px;
+    float: left;
 }
 
 input.star { display: none; }
 
 label.star {
-    float: right;
+    float: left;
     padding: 3px;
     font-size: 15px;
     color: #e0e0e0;
@@ -2664,12 +2693,12 @@ label.star {
 
 input.star:checked ~ label.star:before {
     content: '\f005';
-    color: #FD4;
+    color: #0b8699;;
     transition: all .25s;
 }
 
 input.star-5:checked ~ label.star:before {
-    color: #FE7;
+    color: #0b8699;;
 }
 
 input.star-1:checked ~ label.star:before { color: #F62; }
@@ -2689,38 +2718,118 @@ label.star:before {
 }
 
 .review-star i {
-    color: black;
+    color: #0b8699;
     font-size: 12px;
 }
 
 .review-star{
+    float:left;
     padding:5px;
     margin-left: 10px;
 }
 
 .review-item{
+    float:left;
     font-size: 14px;
     font-weight:bold;
     padding:5px;
     margin-left: 10px;
 }
 
-.review-content{
-    font-size: 15px;
+.review-date{
+    font-size: 12px;
     padding:5px;
+    color: #9d9e9e;
     margin-left: 10px;
 }
 
-.review-list {
-    padding: 0px 64px;
-    margin-bottom: 20px;
-    clear: both;
-}
-.review-list .review-content-body {
-    font-size: 14px;
-    background-color: #f8f8f8;
+.review-content{
+    font-size: 15px;
+    padding: 12px 5px;
+    margin-left: 10px;
+    word-break: break-all;
 }
 
+.review-edit{
+    cursor:pointer;
+    margin-left:5px;
+    margin-right:2px;
+    font-size: 12px;
+}
+
+.review-remove{
+    cursor:pointer;
+    font-size: 12px;
+}
+
+.review-finish{
+    position: absolute;
+    font-size: 15px;
+    right: 107px;
+    top: 60px;
+    cursor: pointer;
+    width: 55px;
+    height: 59px;
+    border: 1px solid #e8e8e8;
+    background-color: #ffffff;
+    vertical-align: middle;
+    float: right;
+}
+
+.review-list {
+    clear: both;
+    clear: both;
+    min-height: 150px;
+    margin: 20px 64px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.review-bottom{
+    clear: both;
+    clear: both;
+    min-height: 150px;
+    margin: 20px 64px;
+}
+.review-list .review-content-body {
+    margin-top: 9px;
+    margin-left: 120px;
+    font-size: 14px;
+    padding-top: 20px;
+    position:relative;
+}
+
+.review-list .review-image {
+    float: left;
+    width: 82px;
+    height: 82px;
+    margin: 20px;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.review-client{
+    display: flex;
+    float: left;
+    width: 50px;
+    height: 26px;
+    margin-right: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image:url(/static/img/professional/client.png);
+}
+
+.review-member{
+    display: flex;
+    float: left;
+    width: 50px;
+    height: 26px;
+    margin-right: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image:url(/static/img/professional/member.png);
+}
 
 
 .qna-list {

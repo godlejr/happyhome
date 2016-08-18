@@ -385,8 +385,7 @@ class Review(db.Model, BaseMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     professional_id = db.Column(db.Integer, db.ForeignKey('professionals.id'))
-    project_at = db.Column(db.DateTime)
-    score = db.Column(db.Integer)
+    score = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_Reviews'))

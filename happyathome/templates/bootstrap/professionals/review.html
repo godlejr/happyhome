@@ -12,28 +12,35 @@
             <div class="user-title">리뷰 ({{ review_count }})</div>
             {% for review in reviews %}
             <div class="review-list">
-                <div class="review-content-body">
-                    <div>
-                        <div class="review-star">
-                            {% for i in range(0, review.score) %}
-                            <i class="material-icons">grade</i>
-                            {% endfor %}
-                        </div>
+                <div class="review-image" id="reviews" name="{{ review.user_id }}"
+                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] + review.user.avatar }})">
+                </div>
+                <div class="review-content-body" id="{{ review.id }}">
+                    <div class="review-item">{{ review.user.name }}</div>
+                    <div class="review-star">
+                        {% for i in range(0, review.score) %}
+                        <i class="material-icons">grade</i>
+                        {% endfor %}
                     </div>
-                    <div class="review-item">-리뷰자: {{ review.user.name }}</div>
-                    <div class="review-item">-프로젝트 일시: {{ review.project_date }}</div>
-                    <div class="review-item">-리뷰등록 일시: {{ review.created_date }}</div>
+                    <span class="{% if review.user.level == 2 %}review-member{% elif review.user.level ==1 %}review-client{% endif %}"></span>
+                    <div class="review-date">{{ review.created_date }}
+                        {% if review.user_id == session.user_id %}
+                        <span class="review-edit">수정</span>
+                        <span class="review-remove">삭제</span>
+                        {% endif %}
+                    </div>
                     <div class="review-content">{{ review.content }}</div>
+                    <button class="review-finish" hidden="hidden" >완료</button>
                 </div>
             </div>
             {% endfor %}
             <div class="pagination-nav">
                 {{ func.render_pagination('professionals.gallery', pagination, user.id) }}
             </div>
-             <div class="review-title">리뷰하기</div>
-             <div class="review-list">
+             <div class="review-bottom">
                 <div class="review-comment">
                     <form method="POST" action="{{ url_for('professionals.review_new', id=user.id) }}">
+                        <div class="review-star-item">별점 주기</div>
                         <div class="star">
                             <input class="star star-5" id="star-5" type="radio" value="5" name="review_star"/>
                             <label class="star star-5" for="star-5"></label>
@@ -47,9 +54,8 @@
                             <label class="star star-1" for="star-1"></label>
                         </div>
 
-                        <input type="text" name="review_date" class="date-picker" id="testDatepicker" readonly  value="프로젝트 일시 선택">
                         <textarea class="comment-text" id="textArea" name="review_comment"></textarea>
-                        <button type="submit" class="btn-comment">리뷰</button>
+                        <button type="submit" class="btn-comment">리뷰하기</button>
                     </form>
                 </div>
              </div>
@@ -58,18 +64,58 @@
 </div>
 
 <script>
-window.onunload = window.onbeforeunload = undefined;
+$('.review-edit').click(function() {
+    var id = $(this).parent().parent().attr('id'),
+        content = $(this).parent().next(),
+        value =  content.text(),
+        finishObj = $(this).parent().next().next();
 
-$(function() {
-    $( "#testDatepicker" ).datepicker({
-         changeMonth: true,
-         dayNames: ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'],
-         dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
-         monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
-         monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
-  });
+    if ($(this).text() == '수정') {
+        content.replaceWith('<textarea class="review-edit-text">'+ value + '</textarea>');
+        finishObj.show();
+        $(this).text('취소');
+    } else {
+        content.replaceWith('<div class="review-content">'+ value + '</div>');
+        finishObj.hide();
+        $(this).text('수정');
+    }
+    return false;
+});
+
+$('.review-finish').click(function() {
+    var self = this;
+    var id = $(self).parent().attr('id');
+    var review = $(self).prev();
+    $.ajax({
+        type:"POST",
+        url: "{{ url_for('professionals.review_edit') }}",
+        data:{
+            review_id: id
+            ,content: review.val()
+            }
+    }).success(function(data){
+            $(self).hide();
+            var edit = $(self).prev().prev().find('.review-edit');
+            edit.text('수정');
+            edit.show();
+            review.replaceWith('<div class="review-content">' + data.comment + '</div>');
+    });
 });
 
 
+$('.review-remove').click(function() {
+    var self = this;
+    var id = $(self).parent().parent().attr('id');
+
+    $.ajax({
+        type:"POST",
+        url:"{{ url_for('professionals.review_remove') }}",
+        data:{
+            review_id: id
+        }
+    }).success(function(data){
+        $(self).parent().parent().parent().remove();
+    });
+});
 </script>
 {% endblock %}
