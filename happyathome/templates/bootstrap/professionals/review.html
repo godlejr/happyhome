@@ -16,7 +16,7 @@
                      style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] + review.user.avatar }})">
                 </div>
                 <div class="review-content-body" id="{{ review.id }}">
-                    <div class="review-item">{{ review.user.name }}</div>
+                     <a href="{{ url_for('users.info',id = review.user_id) }}"><div class="review-item">{{ review.user.name }}</div></a>
                     <div class="review-star">
                         {% for i in range(0, review.score) %}
                         <i class="material-icons">grade</i>
@@ -116,6 +116,10 @@ $('.review-remove').click(function() {
     }).success(function(data){
         $(self).parent().parent().parent().remove();
     });
+});
+
+$('.review-image').click(function() {
+    document.location.href ="{{ url_for('users.info',id='') }}" + $(this).attr('name');
 });
 </script>
 {% endblock %}
