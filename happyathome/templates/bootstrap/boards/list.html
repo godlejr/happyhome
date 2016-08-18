@@ -63,9 +63,15 @@ $('#boardForm').submit(function() {
 
         return true;
     {% else %}
-        document.locaiont.href = "{{ url_for('main.login', next=request.path) }}";
+        document.location.href = "{{ url_for('main.login', next=request.path) }}";
     {% endif %}
 });
+
+{% if not current_user.id %}
+$('#boardContent').attr('readonly', true).click(function() {
+    document.location.href = "{{ url_for('main.login', next=request.path) }}";
+});
+{% endif %}
 
 function deletePost(post_id) {
     if (confirm("질문을 삭제하시겠습니까")) {
