@@ -1,0 +1,125 @@
+{% extends 'bootstrap/professionals/content.html' %}
+
+{% block content_body %}
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+
+<div class="content-body">
+    <div class="user-contents">
+        <div class="content-list">
+            <div class="user-title">리뷰 ({{ review_count }})</div>
+            {% for review in reviews %}
+            <div class="review-list">
+                <div class="review-image" id="reviews" name="{{ review.user_id }}"
+                     style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_USER_DIRECTORY'] + review.user.avatar }})">
+                </div>
+                <div class="review-content-body" id="{{ review.id }}">
+                     <a href="{{ url_for('users.info',id = review.user_id) }}"><div class="review-item">{{ review.user.name }}</div></a>
+                    <div class="review-star">
+                        {% for i in range(0, review.score) %}
+                        <i class="material-icons">grade</i>
+                        {% endfor %}
+                    </div>
+                    <span class="{% if review.user.level == 2 %}review-member{% elif review.user.level ==1 %}review-client{% endif %}"></span>
+                    <div class="review-date">{{ review.created_date }}
+                        {% if review.user_id == session.user_id %}
+                        <span class="review-edit">수정</span>
+                        <span class="review-remove">삭제</span>
+                        {% endif %}
+                    </div>
+                    <div class="review-content">{{ review.content }}</div>
+                    <button class="review-finish" hidden="hidden" >완료</button>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="pagination-nav">
+                {{ func.render_pagination('professionals.gallery', pagination, user.id) }}
+            </div>
+             <div class="review-bottom">
+                <div class="review-comment">
+                    <form method="POST" action="{{ url_for('professionals.review_new', id=user.id) }}">
+                        <div class="review-star-item">별점 주기</div>
+                        <div class="star">
+                            <input class="star star-5" id="star-5" type="radio" value="5" name="review_star"/>
+                            <label class="star star-5" for="star-5"></label>
+                            <input class="star star-4" id="star-4" type="radio" value="4" name="review_star"/>
+                            <label class="star star-4" for="star-4"></label>
+                            <input class="star star-3" id="star-3" checked="checked" value="3" type="radio" name="review_star"/>
+                            <label class="star star-3" for="star-3"></label>
+                            <input class="star star-2" id="star-2" type="radio" value="2" name="review_star"/>
+                            <label class="star star-2" for="star-2"></label>
+                            <input class="star star-1" id="star-1" type="radio" value="1" name="review_star"/>
+                            <label class="star star-1" for="star-1"></label>
+                        </div>
+
+                        <textarea class="comment-text" id="textArea" name="review_comment"></textarea>
+                        <button type="submit" class="btn-comment">리뷰하기</button>
+                    </form>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$('.review-edit').click(function() {
+    var id = $(this).parent().parent().attr('id'),
+        content = $(this).parent().next(),
+        value =  content.text(),
+        finishObj = $(this).parent().next().next();
+
+    if ($(this).text() == '수정') {
+        content.replaceWith('<textarea class="review-edit-text">'+ value + '</textarea>');
+        finishObj.show();
+        $(this).text('취소');
+    } else {
+        content.replaceWith('<div class="review-content">'+ value + '</div>');
+        finishObj.hide();
+        $(this).text('수정');
+    }
+    return false;
+});
+
+$('.review-finish').click(function() {
+    var self = this;
+    var id = $(self).parent().attr('id');
+    var review = $(self).prev();
+    $.ajax({
+        type:"POST",
+        url: "{{ url_for('professionals.review_edit') }}",
+        data:{
+            review_id: id
+            ,content: review.val()
+            }
+    }).success(function(data){
+            $(self).hide();
+            var edit = $(self).prev().prev().find('.review-edit');
+            edit.text('수정');
+            edit.show();
+            review.replaceWith('<div class="review-content">' + data.comment + '</div>');
+    });
+});
+
+
+$('.review-remove').click(function() {
+    var self = this;
+    var id = $(self).parent().parent().attr('id');
+
+    $.ajax({
+        type:"POST",
+        url:"{{ url_for('professionals.review_remove') }}",
+        data:{
+            review_id: id
+        }
+    }).success(function(data){
+        $(self).parent().parent().parent().remove();
+    });
+});
+
+$('.review-image').click(function() {
+    document.location.href ="{{ url_for('users.info',id='') }}" + $(this).attr('name');
+});
+</script>
+{% endblock %}

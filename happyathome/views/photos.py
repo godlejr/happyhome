@@ -77,8 +77,8 @@ def detail(id):
     user_photos = db.session.query(Photo). \
         filter(Photo.id != id). \
         filter(Photo.user_id == post.user_id). \
-        order_by(Photo.id.desc()). \
-        limit(6). \
+        order_by(Photo.hits.desc()). \
+        limit(8). \
         all()
     if post.magazine_id:
         magazine_photos = db.session.query(Photo).filter(Photo.magazine_id == post.magazine_id).all()

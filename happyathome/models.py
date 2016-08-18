@@ -377,3 +377,20 @@ class Board(db.Model, BaseMixin):
     def max1_depth(self):
         depth = db.session.query(func.max(Board.depth)).filter_by(board_id=self.board_id, group_id=self.group_id).one()[0]
         return (depth + 1) if depth else 1
+
+
+class Review(db.Model, BaseMixin):
+    """댓글 내역"""
+    __tablename__ = 'reviews'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    professional_id = db.Column(db.Integer, db.ForeignKey('professionals.id'))
+    score = db.Column(db.Integer, nullable=False)
+    content = db.Column(db.Text)
+
+    user = db.relationship('User', backref=backref('user_Reviews'))
+    professional = db.relationship('Professional', backref=backref('professional_Reviews'))
+
+    @property
+    def project_date(self):
+        return self.project_at.strftime('%Y-%m-%d')
