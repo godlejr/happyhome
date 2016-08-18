@@ -236,7 +236,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .content-banner {
     width: 100%;
     padding: 0 11px;
-    margin-top: 22px;
+    margin-top: 90px;
+    margin-bottom: 20px;
 }
 .content-banner img {
     display: block;
