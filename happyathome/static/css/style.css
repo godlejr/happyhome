@@ -126,9 +126,10 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .filter-container ul {
     display: inline-block;
 }
-.filter-container li {
+.filter-container>ul>li {
     float: left;
-    width: 170px;
+    width: 130px;
+    margin: 0 20px;
     text-align: center;
     box-sizing: border-box;
 }
@@ -141,7 +142,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .filter-container .filter-body {
     position: relative;
     cursor: pointer;
-    height: 17px;
     margin-top: 4px;
 }
 .filter-container .filter-selected {
