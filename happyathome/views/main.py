@@ -167,20 +167,38 @@ def password():
     return render_template(current_app.config['TEMPLATE_THEME'] + '/main/password.html', form=form)
 
 
-@main.route('/login/facebook', methods=['POST'])
-def signUpUser():
-    accessToken = request.form['accessToken']
+@main.route('/facebook_login', methods=['POST'])
+def facebook_login():
+    userName = request.form.get('user_name')
+    userEmail = request.form.get('user_email')
+    user = db.session.query(User).filter(User.email == userEmail).first()
 
-    name = 'facebook user'
-    if db.session.query(User).filter(User.accesscode == accessToken) is None:
+    if not user:
         user = User()
-        user.name = name
-        user.accesscode = accessToken
+        user.email = userEmail
+        user.name = userName
+        user.password ="ABLFJBDALSJFBU10!@*#!2820"
+        user.level =1
         db.session.add(user)
+        db.session.flush()
         db.session.commit()
-        return json.dumps({'status': 'OK', 'accessToken': accessToken})
 
-    return json.dumps({'status': 'OK', 'accessToken': accessToken})
+        session['user_id'] = user.id
+        session['user_email'] = user.email
+        session['user_level'] = user.level
+
+        return jsonify({
+            'ok': 1
+        })
+    else:
+        session['user_id'] = user.id
+        session['user_email'] = user.email
+        session['user_level'] = user.level
+
+        return jsonify({
+            'ok': 1
+        })
+
 
 
 @main.route('/users')

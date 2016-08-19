@@ -42,7 +42,7 @@
         </div>
         <hr>
 
-        <div name="fbForm" hidden="hidden" class="login-form-group" method="post">
+        <div name="fbForm"  class="login-form-group" method="post">
             <div class="login-form-group">
                 <button type="button" id="fb-btn" class="btn-default">facebook로그인</button>
             </div>
@@ -65,20 +65,46 @@ function statusChangeCallback(response) {
     console.log('statusChangeCallback');
     console.log(response);
 
-    if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-      // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
+    if (response.status === 'connected') {                   // Logged into your app and Facebook.
+            FB.login(function (response) {handleFacebookRegist(response); },
+            {scope: 'public_profile, email'});
+    } else if (response.status === 'not_authorized') {       // The person is logged into Facebook, but not your app.
+            FB.login(function (response) {handleFacebookRegist(response); },
+            {scope: 'public_profile, email'});
     } else {
-      // The person is not logged into Facebook, so we're not sure if
-      // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
+            FB.login(function (response) {handleFacebookRegist(response); },
+            {scope: 'public_profile, email'});
     }
 }
+
+
+
+function handleFacebookRegist(response) {
+    var accessToken = response.authResponse.accessToken;
+    var userName, userEmail;
+
+    FB.api('/me', {fields: 'name'}, function (user) {
+        userName = user.name;  
+
+        FB.api('/me',{fields: 'email'}, function (user) {
+            userEmail = user.email;
+
+            $.ajax({
+                type:"POST",
+                url: "{{ url_for('main.facebook_login')}}",
+                data:{
+                    user_name: userName,
+                    user_email: userEmail
+                }
+            }).success(function(data) {
+                document.location.href = "{{ url_for('main.index') }}";
+            }).error(function(request, status, error) {
+                alert('facebook error: facebook 로그인을 확인 후 다시 시도해주세요.')
+                document.location.href = "{{ url_for('main.login') }}";
+            });
+        });
+    });
+} 
 
 function checkLoginState() {
     FB.getLoginStatus(function(response) {
@@ -93,12 +119,7 @@ window.fbAsyncInit = function() {
                             // the session
         xfbml      : true,  // parse social plugins on this page
         version    : 'v2.5' // use graph api version 2.5
-});
-
-
-FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-});
+    });
 };
 
 
@@ -112,11 +133,10 @@ FB.getLoginStatus(function(response) {
 
 
 function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
+    console.log('Welcome!  Fetching your information.d대다받애ㅐ해... ');
     FB.api('/me', function(response) {
           console.log('Successful login for: ' + response.name);
-          document.getElementById('status').innerHTML =
-            'Thanks for logging in, ' + response.name + '!';
+
     });
 }
 </script>
