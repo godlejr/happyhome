@@ -12,6 +12,17 @@
 </div>
 
 <div class="content">
+    <div class="content-title"><span class="H-icon"></span> 해피홈 특집 테마</div>
+    <div class="content-banner">
+        <div class="banner-row">
+            <div class="content-banner-2"><img src="{{ url_for('static', filename='img/main/banner-2.jpg') }}" width="782" height="267"></div>
+            <div class="content-banner-1"><a href="{{ url_for('magazines.detail', id=122) }}"><img src="{{ url_for('static', filename='img/main/banner-1.jpg') }}" width="380" height="267"></a></div>
+        </div>
+        <div class="banner-row">
+            <div class="content-banner-3"><img src="{{ url_for('static', filename='img/main/banner-3.jpg') }}" width="1184" height="113"></div>
+        </div>
+    </div>
+
     <div class="content-title"><span class="H-icon"></span> 해피홈 추천 테마</div>
     <div class="cards magazines">
         {% for card in magazines %}
@@ -44,16 +55,6 @@
             </div>
             {% endif %}
         {% endfor %}
-    </div>
-
-    <div class="content-banner">
-        <div class="banner-row">
-            <div class="content-banner-2"><img src="{{ url_for('static', filename='img/main/banner-2.jpg') }}" width="782" height="267"></div>
-            <div class="content-banner-1"><img src="{{ url_for('static', filename='img/main/banner-1.jpg') }}" width="380" height="267"></div>
-        </div>
-        <div class="banner-row">
-            <div class="content-banner-3"><img src="{{ url_for('static', filename='img/main/banner-3.jpg') }}" width="1184" height="113"></div>
-        </div>
     </div>
 
     <div class="content-title"><span class="H-icon"></span> 해피홈 갤러리</div>

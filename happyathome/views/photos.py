@@ -5,7 +5,8 @@ import shortuuid
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, Magazine
+from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, \
+    Magazine
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
@@ -17,6 +18,7 @@ photos = Blueprint('photos', __name__)
 def utility_processor():
     def url_for_s3(s3path, filename=''):
         return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config[s3path], filename))
+
     return dict(url_for_s3=url_for_s3)
 
 
@@ -46,9 +48,9 @@ def list(page):
         offset = 0
 
     if likes:
-        cards = cards.outerjoin(PhotoLike).group_by(Photo.id).order_by(
-            func.count(PhotoLike.photo_id).desc()).limit(
-            12).offset(offset).all()
+        cards = cards.outerjoin(PhotoLike). \
+            group_by(Photo.id).order_by(func.count(PhotoLike.photo_id).desc()). \
+            limit(12).offset(offset).all()
     elif recent:
         cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
     else:
@@ -70,7 +72,8 @@ def detail(id):
     post.hits += 1
     db.session.commit()
 
-    comments = Comment.query.filter(Comment.photos.any(photo_id=id)).order_by(Comment.group_id.desc(), Comment.depth.asc()).order_by().all()
+    comments = Comment.query.filter(Comment.photos.any(photo_id=id)).order_by(Comment.group_id.desc(),
+                                                                              Comment.depth.asc()).order_by().all()
     user_photos = db.session.query(Photo). \
         filter(Photo.id != id). \
         filter(Photo.user_id == post.user_id). \
@@ -96,7 +99,8 @@ def upload():
         photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
 
         s3 = boto3.resource('s3')
-        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data), ContentType='image/jpeg')
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data),
+                                                                          ContentType='image/jpeg')
 
         return jsonify({
             'file_name': photo_name,
@@ -250,10 +254,10 @@ def comment_reply():
             user = db.session.query(User).filter(User.id == session['user_id']).first();
 
             return jsonify({
-                'comment_id':comment.id,
-                'user_id':session['user_id'],
-                'user_name':user.name,
-                'created_date':comment.created_date,
+                'comment_id': comment.id,
+                'user_id': session['user_id'],
+                'user_name': user.name,
+                'created_date': comment.created_date,
                 'comment': comment.content,
                 'group_id': comment.get_parent_id(comment.group_id),
                 'avatar': user.avatar
@@ -280,7 +284,7 @@ def comment_edit():
 @login_required
 def comment_remove():
     if request.method == 'POST':
-        db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).update({ 'deleted' : True })
+        db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).update({'deleted': True})
         db.session.commit()
 
         return jsonify({
@@ -294,16 +298,16 @@ def magazine_check():
     if request.method == 'POST':
         photo = Photo.query.filter_by(id=request.form.get('photo_id')).first()
 
-        if photo.magazine_id :
+        if photo.magazine_id:
             magazine = Magazine.query.filter_by(id=photo.magazine_id).first();
             return jsonify({
                 'check': 1,
-                'magazine_name':magazine.title
+                'magazine_name': magazine.title
             })
 
         return jsonify({
             'check': 2,
-            'photo_id':request.form.get('photo_id')
+            'photo_id': request.form.get('photo_id')
         })
 
 
