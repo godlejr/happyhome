@@ -129,7 +129,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .filter-container>ul>li {
     float: left;
     width: 130px;
-    margin: 0 20px;
+    margin: 0 15px;
     text-align: center;
     box-sizing: border-box;
 }
@@ -3225,8 +3225,17 @@ a.btn-cancel {
     .img-section {
         height: 170px;
     }
+    .filter-container>ul>li {
+        width: auto;
+    }
+    .filter-container>ul>li:last-child {
+        display: none;
+    }
     .content {
         max-width: 350px;
+    }
+    .cards-cols-opt {
+        display: none;
     }
     .card {
         float: none;
@@ -3236,6 +3245,9 @@ a.btn-cancel {
     }
     .card .card-content .card-icon {
         display: none;
+    }
+    .cards.col-4 .card {
+        width: auto;
     }
     .content-main {
         margin: 0 auto;
