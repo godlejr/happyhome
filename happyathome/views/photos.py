@@ -31,8 +31,9 @@ def list(page):
     room_id = request.args.get('room_id', '')
     likes = request.args.get('likes', '')
     recent = request.args.get('recent', '')
-    rooms = db.session.query(Room).all()
+    rooms = Room.query.all()
     cards = db.session.query(Photo)
+    room = Room.query.filter_by(id=room_id).first()
 
     if media:
         cards = cards.filter(Photo.file.has(type=media))
@@ -58,9 +59,9 @@ def list(page):
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/list.html',
                            col=col,
-                           cards=cards,
+                           room=room,
                            rooms=rooms,
-                           room_id=room_id,
+                           cards=cards,
                            pagination=pagination,
                            query_string=request.query_string.decode('utf-8'))
 

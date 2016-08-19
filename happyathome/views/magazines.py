@@ -52,16 +52,19 @@ def list(page):
     else:
         cards = cards.order_by(Magazine.hits.desc()).limit(12).offset(offset).all()
 
-    categories = db.session.query(Category).all()
-    residences = db.session.query(Residence).all()
+    categories = Category.query.all()
+    residences = Residence.query.all()
+
+    category = Category.query.filter_by(id=category_id).first() if category_id else None
+    residence = Residence.query.filter_by(id=residence_id).first() if residence_id else None
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
                            cards=cards,
                            media=media,
+                           category=category,
                            categories=categories,
+                           residence=residence,
                            residences=residences,
-                           category_id=category_id,
-                           residence_id=residence_id,
                            pagination=pagination,
                            query_string=request.query_string.decode('utf-8'))
 
