@@ -29,8 +29,8 @@ def list(page):
     media = request.args.get('media', '')
     level = request.args.get('level', '')
     room_id = request.args.get('room_id', '')
-    likes = request.args.get('likes', '')
-    recent = request.args.get('recent', '')
+    sort = request.args.get('sort', '')
+
     rooms = Room.query.all()
     cards = db.session.query(Photo)
     room = Room.query.filter_by(id=room_id).first()
@@ -48,11 +48,11 @@ def list(page):
     else:
         offset = 0
 
-    if likes:
+    if sort == 'likes':
         cards = cards.outerjoin(PhotoLike). \
             group_by(Photo.id).order_by(func.count(PhotoLike.photo_id).desc()). \
             limit(12).offset(offset).all()
-    elif recent:
+    elif sort == 'recent':
         cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
     else:
         cards = cards.order_by(Photo.hits.desc()).limit(12).offset(offset).all()

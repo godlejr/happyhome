@@ -9,14 +9,22 @@
             <li>
                 <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 정렬</div>
                 <div class="filter-body">
-                    <div class="filter-selected">조회순</div>
+                    <div class="filter-selected">
+                        {% if request.args.get('sort') == 'likes' %}
+                            인기순
+                        {% elif request.args.get('sort') == 'recent' %}
+                            최신순
+                        {% else %}
+                            조회순
+                        {% endif %}
+                    </div>
                     <div class="filter-menu">
                         <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
                         <div class="filter-items">
                             <ul>
                                 <li class="filter-item"><a href="{{ url_for('photos.list') }}">조회순</a></li>
-                                <li class="filter-item"><a href="{{ url_for('photos.list', likes='likes') }}">인기순</a></li>
-                                <li class="filter-item"><a href="{{ url_for('photos.list', recent='recent') }}">최신순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('photos.list', sort='likes') }}">인기순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('photos.list', sort='recent') }}">최신순</a></li>
                             </ul>
                         </div>
                     </div>
@@ -42,7 +50,17 @@
             <li>
                 <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 미디어</div>
                 <div class="filter-body">
-                    <div class="filter-selected">전체</div>
+                    <div class="filter-selected">
+                        {% if request.args.get('media') == '1' %}
+                            사진
+                        {% elif request.args.get('media') == '2' %}
+                            VR360
+                        {% elif request.args.get('media') == '3' %}
+                            동영상
+                        {% else %}
+                            전체
+                        {% endif %}
+                    </div>
                     <div class="filter-menu">
                         <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
                         <div class="filter-items">

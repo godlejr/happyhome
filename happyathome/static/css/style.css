@@ -141,11 +141,11 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .filter-container .filter-body {
     position: relative;
-    cursor: pointer;
     margin-top: 4px;
 }
 .filter-container .filter-selected {
     display: inline-block;
+    cursor: default;
     min-width: 64px;
     color: #ffffff;
     font-size: 12px;
@@ -190,46 +190,6 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     box-sizing: border-box;
     white-space: nowrap;
 }
- .filter-items .h2    { width:152px;
-                    padding-top:11px;
-                    padding-left:28px;
-                    font-size:13px; color:#2b2b2b; }
-
-
-#f_nav         { padding:0; margin:0 auto; position: relative;
-                 width:1184px; height:65px; }
-
-#sortMenu {
-    left: 310px;
-}
-#roomMenu {
-    left: 460px;
-}
-#residenceMenu {
-    left: 625px;
-}
-#authorMenu {
-    left: 625px;
-}
-#mediaMenu {
-    left: 820px;
-}
- .f_menu     { position: absolute;
-                display: none;
-                 width:152px;
-                 z-index: 1000; }
- .f_menu .box1  { width:100%; height:5px; display: flex; }
- .f_menu .box1 img { margin: 0 auto;}
- .f_menu .box2  { width:100%; padding-bottom:17px; background-color: rgba(255, 255, 255, 0.9); }
- .f_menu .box2 a { color: #030303; font-size: 13px;}
- .f_menu .h1    { width:152px;
-                    padding-top:16px;
-                    padding-left:28px;
-                    font-size:13px; color:#2b2b2b; }
- .f_menu .h2    { width:152px;
-                    padding-top:11px;
-                    padding-left:28px;
-                    font-size:13px; color:#2b2b2b; }
 
 #f1            { position:relative;
                  padding:0; margin:7px auto 0 auto;
