@@ -14,7 +14,7 @@
     <div class="edit_field">
         <div class="edit_title">주소</div>
         <input type="button" class="address-button" onclick="happyhome_DaumPostcode()" value="주소 찾기"><br>
-        {{ form.address(class="edit_form_field" ,id="address" , placeholder=form.address.label.text )}}
+        {{ form.address(class="edit_form_field" ,id="address" , placeholder=form.address.label.text ,value=user.user_professionals[0].address)}}
 
         <div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
             <img src="//i1.daumcdn.net/localimg/localimages/07/postcode/320/close.png" id="btnFoldWrap"
