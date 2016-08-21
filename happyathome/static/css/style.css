@@ -1300,6 +1300,9 @@ span.share-icon.active {
     white-space: pre-wrap;
 }
 
+.social-login{
+    margin-top:2px;
+}
 /******* professionals *******/
 /*pro_hp*/
 .hp-row{
@@ -2259,6 +2262,14 @@ span.share-icon.active {
 }
 .follow-button.display_none{
     display:none;
+}
+
+.address-button{
+    width: 100px;
+    height: 30px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    cursor: pointer;
 }
 
 /******* scrap *******/
