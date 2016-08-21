@@ -4,78 +4,104 @@
 
 {% block content %}
 <div id="filter">
-    <div id="f_nav">
-        <div id="f1">
-            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">정렬</div>
-            <div class="f_nav_h1"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">테마</div>
-            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">주택</div>
-            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">미디어</div>
-        </div>
-        <div id="f2">
-            <div class="f2_nav_h1">
-                <div class="f2_all" for="sort"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-            <div class="f2_nav_h2">
-                <div class="f2_all" for="theme"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-            <div class="f2_nav_h2">
-                <div class="f2_all" for="residence"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-            <div class="f2_nav_h3">
-                <div class="f2_all" for="media"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-        </div>
-        <div id="sortMenu" class="f_menu" for="sort">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h2"><a href="{{ url_for('magazines.list') }}">조회순</a></div>
-                <div class="h2"><a href="{{ url_for('magazines.list', likes='likes') }}">인기순</a></div>
-                <div class="h2"><a href="{{ url_for('magazines.list', recent='recent') }}">최신순</a></div>
-            </div>
-        </div>
-
-        <div id="themeMenu" class="f_menu" for="theme">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h1"><a href="{{ url_for('magazines.list') }}">전체</a></div>
-                {% for category in categories %}
-                    <div class="h2"><a href="{{ url_for('magazines.list', category_id=category.id) }}">{{ category.name }}</a></div>
-                {% endfor %}
-            </div>
-        </div>
-        <div id="residenceMenu" class="f_menu" for="residence">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h1"><a href="{{ url_for('magazines.list') }}">전체</a></div>
-                {% for residence in residences %}
-                    <div class="h2" value="{{ residence.id }}"><a href="{{ url_for('magazines.list', residence_id=residence.id) }}">{{ residence.name }}</a></div>
-                {% endfor %}
-            </div>
-        </div>
-        <div id="mediaMenu" class="f_menu" for="media">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h1"><a href="{{ url_for('magazines.list') }}">전체</a></div>
-                <div class="h2"><a href="{{ url_for('magazines.list', media=1) }}">사진</a></div>
-                <div class="h2"><a href="{{ url_for('magazines.list', media=2) }}">VR360</a></div>
-                <div class="h2"><a href="{{ url_for('magazines.list', media=3) }}">동영상</a></div>
-            </div>
-        </div>
+    <div class="filter-container">
+        <ul>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 정렬</div>
+                <div class="filter-body">
+                    <div class="filter-selected">
+                        {% if request.args.get('sort') == 'likes' %}
+                            인기순
+                        {% elif request.args.get('sort') == 'recent' %}
+                            최신순
+                        {% else %}
+                            조회순
+                        {% endif %}
+                    </div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list') }}">조회순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list', sort='likes') }}">인기순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list', sort='recent') }}">최신순</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 테마</div>
+                <div class="filter-body">
+                    <div class="filter-selected">{% if category %}{{ category.name }}{% else %}전체{% endif %}</div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list') }}">전체</a></li>
+                                {% for category in categories %}
+                                    <li class="filter-item"><a href="{{ url_for('magazines.list', category_id=category.id) }}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 주택</div>
+                <div class="filter-body">
+                    <div class="filter-selected">{% if residence %}{{ residence.name }}{% else %}전체{% endif %}</div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list') }}">전체</a></li>
+                                {% for residence in residences %}
+                                    <li class="filter-item"><a href="{{ url_for('magazines.list', residence_id=residence.id) }}">{{ residence.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 미디어</div>
+                <div class="filter-body">
+                    <div class="filter-selected">
+                        {% if request.args.get('media') == '1' %}
+                            사진
+                        {% elif request.args.get('media') == '2' %}
+                            VR360
+                        {% elif request.args.get('media') == '3' %}
+                            동영상
+                        {% else %}
+                            전체
+                        {% endif %}
+                    </div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list') }}">전체</a></li>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list', media=1) }}">사진</a></li>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list', media=2) }}">VR360</a></li>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list', media=3) }}">동영상</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 </div><!-- filter end -->
 
 {% block content_body %}{% endblock %}
 
 <script>
-$('.f2_all,.f_menu').mouseout(function() {
-    $('#' + $(this).attr('for') + 'Menu.f_menu').toggle();
-});
-$('.f2_all,.f_menu').mouseover(function() {
-    $('#' + $(this).attr('for') + 'Menu.f_menu').toggle();
+$('.filter-body').mouseover(function() {
+    $(this).find('.filter-menu').toggle();
+}).mouseout(function() {
+    $(this).find('.filter-menu').toggle();
 });
 </script>
 {% endblock %}

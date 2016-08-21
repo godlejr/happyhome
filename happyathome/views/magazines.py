@@ -28,8 +28,7 @@ def list(page):
     media = request.args.get('media', '')
     category_id = request.args.get('category_id', '')
     residence_id = request.args.get('residence_id', '')
-    likes = request.args.get('likes', '')
-    recent = request.args.get('recent', '')
+    sort = request.args.get('sort', '')
 
     if media:
         cards = cards.filter(Magazine.photos.any(Photo.file.has(type=media)))
@@ -44,24 +43,31 @@ def list(page):
     else:
         offset = 0
 
-    if likes:
-        cards = cards.outerjoin(MagazineLike).group_by(Magazine.id).order_by(func.count(MagazineLike.magazine_id).desc()).limit(
-            12).offset(offset).all()
-    elif recent:
+    if sort == 'likes':
+        cards = cards.outerjoin(MagazineLike).\
+            group_by(Magazine.id).\
+            order_by(func.count(MagazineLike.magazine_id).desc()).\
+            limit(12).\
+            offset(offset).\
+            all()
+    elif sort == 'recent':
         cards = cards.order_by(Magazine.id.desc()).limit(12).offset(offset).all()
     else:
         cards = cards.order_by(Magazine.hits.desc()).limit(12).offset(offset).all()
 
-    categories = db.session.query(Category).all()
-    residences = db.session.query(Residence).all()
+    categories = Category.query.all()
+    residences = Residence.query.all()
+
+    category = Category.query.filter_by(id=category_id).first() if category_id else None
+    residence = Residence.query.filter_by(id=residence_id).first() if residence_id else None
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
                            cards=cards,
                            media=media,
+                           category=category,
                            categories=categories,
+                           residence=residence,
                            residences=residences,
-                           category_id=category_id,
-                           residence_id=residence_id,
                            pagination=pagination,
                            query_string=request.query_string.decode('utf-8'))
 

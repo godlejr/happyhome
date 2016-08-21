@@ -4,80 +4,87 @@
 {% block header %}{% endblock %}
 {% block content %}
 <div id="filter">
-    <div id="f_nav">
-        <div id="f1">
-            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">정렬</div>
-            <div class="f_nav_h1"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">공간</div>
-            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">작성자</div>
-            <div class="f_nav_h3"><img src="{{ url_for('static', filename='img/story/f_i.png') }}" alt="" /></div>
-            <div class="f_nav_h2">미디어</div>
-        </div>
-        <div id="f2">
-            <div class="f2_nav_h1">
-                <div class="f2_all" for="sort"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-            <div class="f2_nav_h2">
-                <div class="f2_all" for="room"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-            <div class="f2_nav_h2">
-                <div class="f2_all" for="author"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-            <div class="f2_nav_h3">
-                <div class="f2_all" for="media"><img src="{{ url_for('static', filename='img/story/all_btn.png') }}" alt="" /></div>
-            </div>
-        </div>
-
-        <div id="sortMenu" class="f_menu" for="sort">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h2"><a href="{{ url_for('photos.list') }}">조회순</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', likes='likes') }}">인기순</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', recent='recent') }}">최신순</a></div>
-            </div>
-        </div>
-
-        <div id="roomMenu" class="f_menu" for="room">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h1"><a href="{{ url_for('photos.list') }}">전체</a></div>
-                {% for room in rooms %}
-                    <div class="h2"><a href="{{ url_for('photos.list', room_id=room.id) }}">{{ room.name }}</a></div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div id="authorMenu" class="f_menu" for="author">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h1"><a href="{{ url_for('photos.list') }}">전체</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', level=2) }}">프로</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', level=1) }}">일반</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', level=9) }}">에디터</a></div>
-            </div>
-        </div>
-        <div id="mediaMenu" class="f_menu" for="media">
-            <div class="box1"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-            <div class="box2">
-                <div class="h1"><a href="{{ url_for('photos.list') }}">전체</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', media=1) }}">사진</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', media=2) }}">VR360</a></div>
-                <div class="h2"><a href="{{ url_for('photos.list', media=3) }}">동영상</a></div>
-            </div>
-        </div>
+    <div class="filter-container">
+        <ul>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 정렬</div>
+                <div class="filter-body">
+                    <div class="filter-selected">
+                        {% if request.args.get('sort') == 'likes' %}
+                            인기순
+                        {% elif request.args.get('sort') == 'recent' %}
+                            최신순
+                        {% else %}
+                            조회순
+                        {% endif %}
+                    </div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('photos.list') }}">조회순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('photos.list', sort='likes') }}">인기순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('photos.list', sort='recent') }}">최신순</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 공간</div>
+                <div class="filter-body">
+                    <div class="filter-selected">{% if room %}{{ room.name }}{% else %}전체{% endif %}</div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('photos.list') }}">전체</a></li>
+                                {% for room in rooms %}
+                                    <li class="filter-item"><a href="{{ url_for('photos.list', room_id=room.id) }}">{{ room.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 미디어</div>
+                <div class="filter-body">
+                    <div class="filter-selected">
+                        {% if request.args.get('media') == '1' %}
+                            사진
+                        {% elif request.args.get('media') == '2' %}
+                            VR360
+                        {% elif request.args.get('media') == '3' %}
+                            동영상
+                        {% else %}
+                            전체
+                        {% endif %}
+                    </div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('photos.list') }}">전체</a></li>
+                                <li class="filter-item"><a href="{{ url_for('photos.list', media=1) }}">사진</a></li>
+                                <li class="filter-item"><a href="{{ url_for('photos.list', media=2) }}">VR360</a></li>
+                                <li class="filter-item"><a href="{{ url_for('photos.list', media=3) }}">동영상</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 </div><!-- filter end -->
 
 {% block content_body %}{% endblock %}
 
 <script>
-$('.f2_all,.f_menu').mouseout(function() {
-    $('#' + $(this).attr('for') + 'Menu.f_menu').toggle();
-});
-$('.f2_all,.f_menu').mouseover(function() {
-    $('#' + $(this).attr('for') + 'Menu.f_menu').toggle();
+$('.filter-body').mouseover(function() {
+    $(this).find('.filter-menu').toggle();
+}).mouseout(function() {
+    $(this).find('.filter-menu').toggle();
 });
 </script>
 {% endblock %}
