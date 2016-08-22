@@ -340,6 +340,7 @@ class Professional(db.Model, BaseMixin):
     business_no = db.Column(db.Unicode(15), nullable=False)
     phone = db.Column(db.Unicode(15), default="")
     address = db.Column(db.Unicode(255), default="")
+    sub_address = db.Column(db.Unicode(255), default="")
     homepage = db.Column(db.Unicode(45), default="")
     greeting = db.Column(db.Text, default="")
     sigungu_code = db.Column(db.Integer)
