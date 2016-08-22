@@ -73,7 +73,7 @@
                         <div class="card-hits"><img src="{{ url_for('static', filename='img/gallery/hits-icon.png') }}" /> {{ card.hits }}</div>
                     </div>
                     <div class="card-content">
-                        <div class="card-text">{{ card.content[:50] }}</div>
+                        <div class="card-text">{{ card.content|truncate(50, true) }}</div>
                         <div class="card-icon">
                             <div class="icon"><img src="{{ url_for('static', filename='img/gallery/like-icon.png') }}" /> {{ card.like_photos|length }}</div>
                             <div class="icon"><img src="{{ url_for('static', filename='img/gallery/scrap-icon.png') }}" /> {{ card.scrap_photos|length }}</div>
