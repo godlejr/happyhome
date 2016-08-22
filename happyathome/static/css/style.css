@@ -2492,7 +2492,6 @@ input[type=file] {
     width: 100%;
     height: 400px;
     max-width: 700px;
-    min-height: 200px;
     line-height: 395px;
     cursor: pointer;
     margin: 20px auto;
@@ -3198,7 +3197,7 @@ button.btn-danger {
     padding: 20px 0;
 }
 .error-btn {
-    padding: 40px;
+    padding: 40px 0;
 }
 
 a.btn-primary {
@@ -3243,6 +3242,7 @@ a.btn-cancel {
         display: none;
     }
     .content {
+        padding: 0 10px;
     }
     .cards-cols-opt {
         display: none;
@@ -3280,7 +3280,7 @@ a.btn-cancel {
     }
     #footer {
         height: 200px;
-        padding: 0 13px;
+        padding: 0 12px;
     }
     #footer .cr_1 {
         width: 100%;
