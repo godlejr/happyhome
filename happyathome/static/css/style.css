@@ -1714,6 +1714,14 @@ span.share-icon.active {
     margin-bottom: 30px;
 }
 
+.edit_field select{
+    border: 0px;
+    padding: 15px;
+    font-size: 15px;
+    letter-spacing: -1px;
+    border-bottom: 1px solid skyblue;
+}
+
  .edit_title{
     padding-bottom: 6px;
     font-size: 15px;

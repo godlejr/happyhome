@@ -11,6 +11,17 @@
         <div class="edit_title">사업자 번호</div>
         {{ form.business_no(class="edit_form_field" , maxlength=10, value=user.user_professionals[0].business_no)}}
     </div>
+
+    <div class="edit_field">
+        <div class="edit_title">업종</div>
+        <select id="business_id" name="business_id">
+            <option value="">업종을 선택해주세요</option>
+            {% for business in businesses %}
+            <option value="{{ business.id }}" {% if business.id== user.user_professionals[0].business_id %}selected{% endif %}>{{ business.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
     <div class="edit_field">
         <div class="edit_title">주소</div>
         <input type="button" class="address-button" onclick="happyhome_DaumPostcode()" value="주소 찾기"><br>

@@ -105,6 +105,16 @@ class Category(db.Model, BaseMixin):
         return self.name
 
 
+class Business(db.Model, BaseMixin):
+    """카테고리 정보"""
+    __tablename__ = 'businesses'
+
+    name = db.Column(db.Unicode(50), nullable=False)
+
+    def __repr__(self):
+        return self.name
+
+
 class Follow(db.Model, BaseMixin):
     """팔로우 정보"""
     __tablename__ = 'follows'
@@ -347,6 +357,7 @@ class Professional(db.Model, BaseMixin):
     post_code = db.Column(db.Integer)
     sido = db.Column(db.Unicode(255), default="")
     sigungu = db.Column(db.Unicode(255), default="")
+    business_id = db.Column(db.Integer, db.ForeignKey('businesses.id'))
 
     user = db.relationship('User', backref=backref('user_professionals'))
 

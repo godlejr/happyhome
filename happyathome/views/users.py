@@ -7,7 +7,8 @@ import shortuuid
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
 from flask_login import login_required, current_user
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
-from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap, Comment, MagazineScrap
+from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap, Comment, MagazineScrap, \
+    Business
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
@@ -283,6 +284,7 @@ def question(id):
 def edit_professional_info(id):
     user = User.query.filter_by(id=id).first()
     professional = Professional.query.filter_by(user_id=id).first()
+    businesses = Business.query.all()
     form = ProfessionalUpdateForm(request.form)
 
     if request.method == 'POST':
@@ -296,6 +298,7 @@ def edit_professional_info(id):
             professional.greeting = request.form.get('greeting')
             professional.sigungu_code = request.form['sigungucode']
             professional.post_code = request.form['postcode']
+            professional.business_id = request.form['business_id']
             professional.sido = request.form['sido']
             professional.sigungu = request.form['sigungu']
             db.session.add(user)
@@ -306,6 +309,7 @@ def edit_professional_info(id):
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional_info.html',
                            user=user,
+                           businesses=businesses,
                            form=form)
 
 
@@ -314,6 +318,7 @@ def edit_professional_info(id):
 def edit_professional(id):
     user = User.query.filter_by(id=id).first()
     professional = Professional()
+    businesses = Business.query.all()
     form = ProfessionalUpdateForm(request.form)
 
     if request.method == 'POST':
@@ -328,6 +333,7 @@ def edit_professional(id):
             professional.phone = form.phone.data
             professional.greeting = request.form.get('greeting')
             professional.post_code = request.form['postcode']
+            professional.business_id = request.form['business_id']
             professional.sigungu_code = request.form['sigungucode']
             professional.sido = request.form['sido']
             professional.sigungu = request.form['sigungu']
@@ -339,6 +345,7 @@ def edit_professional(id):
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html',
                            user=user,
+                           businesses=businesses,
                            form=form)
 
 
