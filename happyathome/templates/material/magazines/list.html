@@ -36,7 +36,7 @@
 
                             <div class="card-content">
                                 <h5>{{ magazine.title }}</h5>
-                                <p>{{ magazine.content[:180]|safe }}</p>
+                                <p>{{ magazine.content|truncate(170, true) }}</p>
                             </div>
                         </div>
                     </div>

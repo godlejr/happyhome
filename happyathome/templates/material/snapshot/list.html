@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="card-content">
-                            <p>{{ post.content[:34] }}...</p>
+                            <p>{{ post.content|truncate(30, true) }}...</p>
                         </div>
                         <div class="card-action">
                             <div class="chip">

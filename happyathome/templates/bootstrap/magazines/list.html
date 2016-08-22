@@ -6,10 +6,10 @@
         {% for card in cards %}
             {% if card.photos %}
             <div class="card" id="{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.photos[0].file.name }})">
-                {% if card.vr_count  %}
+                {% if card.vr_count %}
                     <div class="card-media"><span class="vr-icon"></span></div>
                 {% endif %}
-                {% if card.mov_count  %}
+                {% if card.mov_count %}
                     <div class="card-media"><span class="mov-icon"></span></div>
                 {% endif %}
                 <div class="card-info">
