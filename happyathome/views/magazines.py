@@ -9,7 +9,6 @@ from happyathome.models import db, File, Magazine, Comment, MagazineComment, Cat
     del_or_create, MagazineLike, MagazineScrap
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
-from wtforms.validators import length
 
 magazines = Blueprint('magazines', __name__)
 
@@ -61,7 +60,7 @@ def list(page):
     category = Category.query.filter_by(id=category_id).first() if category_id else None
     residence = Residence.query.filter_by(id=residence_id).first() if residence_id else None
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/list.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/story/list.html',
                            cards=cards,
                            media=media,
                            category=category,
@@ -88,7 +87,7 @@ def detail(id):
     user = User.query.filter(User.id == post.user_id).first()
     user_magazines = Magazine.query.filter(Magazine.user_id == user.id ).filter(Magazine.id != post.id).limit(4).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/detail.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/story/detail.html', post=post,
                            comments=comments,
                            category_magazines=category_magazines, residence_magazines=residence_magazines,
                            user_magazines=user_magazines
@@ -144,7 +143,7 @@ def new():
         db.session.add(magazine)
         db.session.commit()
         return redirect(url_for('magazines.list'))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/new.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/story/new.html',
                            categories=categories,
                            residences=residences,
                            rooms=rooms)
@@ -215,7 +214,7 @@ def edit(id):
             db.session.delete(photo)
         db.session.commit()
         return redirect(url_for('magazines.detail', id=id))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/magazines/edit.html',
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/story/edit.html',
                            categories=categories,
                            residences=residences,
                            rooms=rooms,
