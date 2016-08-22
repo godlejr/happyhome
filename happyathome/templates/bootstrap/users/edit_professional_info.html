@@ -17,8 +17,8 @@
         <input type="text" hidden="hidden" id="sigungucode" name="sigungucode" />
         <input type="text" hidden="hidden" id="sido" name="sido" />
         <input type="text" hidden="hidden" id="sigungu" name="sigungu" />
-        {{ form.address(class="edit_form_field" ,id="address" , placeholder=form.address.label.text ,value=user.user_professionals[0].address)}}
-
+        {{ form.address(class="edit_form_field" ,id="address" ,readonly=true, placeholder=form.address.label.text ,value=user.user_professionals[0].address)}}
+        {{ form.sub_address(class="edit_form_field" , placeholder=form.sub_address.label.text ,value=user.user_professionals[0].sub_address)}}
         <div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
             <img src="//i1.daumcdn.net/localimg/localimages/07/postcode/320/close.png" id="btnFoldWrap"
                  style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()"
