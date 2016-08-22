@@ -6,10 +6,6 @@
         <div class="content-cover">
             <div class="content-user">
                 <div class="user-avatar" {% if user.avatar %}style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=user.avatar) }})"{% endif %}></div>
-                <div class="user-star">
-                    <i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i>
-                    <span class="user-score">4.3</span>
-                </div>
                 <div class="user-name">{{ user.name }}</div>
             </div>
             <div class="content-menu">
