@@ -4,7 +4,8 @@ from flask import Blueprint, render_template, current_app, request, url_for, jso
 from flask import session
 from flask_login import login_required
 from happyathome.forms import Pagination
-from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment, MagazineScrap, Review
+from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment, MagazineScrap, Review, \
+    Business, Sido
 from werkzeug.utils import redirect
 
 professionals = Blueprint('professionals', __name__)
@@ -20,7 +21,18 @@ def utility_processor():
 @professionals.route('/', defaults={'page': 1})
 @professionals.route('/page/<int:page>')
 def list(page):
+    area_id = request.args.get('area_id')
+
+    business_id = request.args.get('business_id')
+    business = Business.query.filter_by(id=business_id).first()
+    businesses = Business.query.all()
+
     posts = db.session.query(Professional)
+    if business_id:
+        posts = posts.filter(Professional.business_id == business_id)
+    if area_id:
+        posts = posts.join(Sido, Professional.sido_code == Sido.sido_code).filter(Sido.area_id == area_id)
+
     pagination = Pagination(page, 6, posts.count())
     if page != 1:
         offset = 6 * (page - 1)
@@ -28,8 +40,13 @@ def list(page):
         offset = 0
 
     posts = posts.order_by(Professional.id.desc()).limit(6).offset(offset).all()
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/list.html', posts=posts,
-                           current_app=current_app, pagination=pagination)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/list.html',
+                           posts=posts,
+                           business=business,
+                           businesses=businesses,
+                           current_app=current_app,
+                           pagination=pagination,
+                           query_string=request.query_string.decode('utf-8'))
 
 
 @professionals.route('/<id>')

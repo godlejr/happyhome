@@ -296,6 +296,7 @@ def edit_professional_info(id):
             professional.sub_address = form.sub_address.data
             professional.phone = form.phone.data
             professional.greeting = request.form.get('greeting')
+            professional.sido_code = request.form['sigungucode'][:2]
             professional.sigungu_code = request.form['sigungucode']
             professional.post_code = request.form['postcode']
             professional.business_id = request.form['business_id']
@@ -334,6 +335,7 @@ def edit_professional(id):
             professional.greeting = request.form.get('greeting')
             professional.post_code = request.form['postcode']
             professional.business_id = request.form['business_id']
+            professional.sido_code = request.form['sigungucode'][:2]
             professional.sigungu_code = request.form['sigungucode']
             professional.sido = request.form['sido']
             professional.sigungu = request.form['sigungu']

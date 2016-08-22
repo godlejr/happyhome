@@ -106,13 +106,25 @@ class Category(db.Model, BaseMixin):
 
 
 class Business(db.Model, BaseMixin):
-    """카테고리 정보"""
+    """업종 정보"""
     __tablename__ = 'businesses'
 
     name = db.Column(db.Unicode(50), nullable=False)
 
     def __repr__(self):
         return self.name
+
+
+class Sido(db.Model, BaseMixin):
+    """시/도 정보"""
+    __tablename__ = 'sidos'
+
+    area_id = db.Column(db.Integer, nullable=False)
+    sido_code = db.Column(db.Unicode(2), nullable=False)
+    name = db.Column(db.Unicode(50), nullable=False)
+
+    def __repr__(self):
+        return self.sido_code
 
 
 class Follow(db.Model, BaseMixin):
@@ -353,7 +365,8 @@ class Professional(db.Model, BaseMixin):
     sub_address = db.Column(db.Unicode(255), default="")
     homepage = db.Column(db.Unicode(45), default="")
     greeting = db.Column(db.Text, default="")
-    sigungu_code = db.Column(db.Integer)
+    sido_code = db.Column(db.Unicode(2))
+    sigungu_code = db.Column(db.Unicode(5))
     post_code = db.Column(db.Integer)
     sido = db.Column(db.Unicode(255), default="")
     sigungu = db.Column(db.Unicode(255), default="")
