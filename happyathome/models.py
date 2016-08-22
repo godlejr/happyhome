@@ -374,6 +374,24 @@ class Professional(db.Model, BaseMixin):
 
     user = db.relationship('User', backref=backref('user_professionals'))
 
+    @hybrid_method
+    def get_score(self, professional_id):
+        reviews = Review.query.filter(Review.professional_id == professional_id).all()
+        sum = 0
+        for review in reviews:
+            sum += review.score
+
+        if not (len(reviews)).__eq__(0):
+            score = sum / (len(reviews))
+            score = round(score, 2)
+        else:
+            score = 0
+        return score
+
+    @hybrid_method
+    def get_integer(self, score):
+        score_integer =  int(round(score))
+        return score_integer
 
 class Board(db.Model, BaseMixin):
     """댓글 내역"""
@@ -423,3 +441,5 @@ class Review(db.Model, BaseMixin):
     @property
     def project_date(self):
         return self.project_at.strftime('%Y-%m-%d')
+
+

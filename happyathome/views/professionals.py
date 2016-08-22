@@ -40,6 +40,7 @@ def list(page):
         offset = 0
 
     posts = posts.order_by(Professional.id.desc()).limit(6).offset(offset).all()
+
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/list.html',
                            posts=posts,
                            business=business,

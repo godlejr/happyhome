@@ -1315,6 +1315,16 @@ span.share-icon.active {
     font-size: 16px;
     font-weight: 700;
 }
+
+.pro-card .pro-name-nostar {
+    margin-left: 50px;
+    padding-left: 20px;
+    margin-top: 15px;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 700;
+}
+
 .pro-card .pro-star {
     margin-top: 10px;
     margin-left: 50px;

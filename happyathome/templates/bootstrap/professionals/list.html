@@ -85,10 +85,14 @@
             <div class="pro-detail">
                 <div class="pro-info">
                     <div class="pro-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
-                    <div class="pro-name">{{ post.user.name }}</div>
-                    <div class="pro-star">
-                        <i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i><i class="material-icons">grade</i>
-                        <span class="pro-score">4.3</span>
+                        <div class="{% if post.get_score(post.id) != 0  %} pro-name {% else %} pro-name-nostar {% endif %}" >{{ post.user.name }}</div>
+                        <div class="pro-star">
+                        {% for i in range(0, post.get_integer(post.get_score(post.id))) %}
+                            <i class="material-icons">grade</i>
+                        {% endfor %}
+                        {% if post.get_score(post.id) != 0 %}
+                            <span class="pro-score">{{ post.get_score(post.id) }}</span>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="pro-greeting">{{ post.greeting|default('', true) }}</div>
