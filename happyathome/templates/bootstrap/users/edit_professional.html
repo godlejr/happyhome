@@ -15,6 +15,8 @@
         <div class="edit_title">주소</div>
         <input type="button" class="address-button" onclick="happyhome_DaumPostcode()" value="주소 찾기"><br>
         <input type="text" hidden="hidden" id="sigungucode" name="sigungucode" />
+        <input type="text" hidden="hidden" id="sido" name="sido" />
+        <input type="text" hidden="hidden" id="sigungu" name="sigungu" />
         {{ form.address(class="edit_form_field" ,id="address" , placeholder=form.address.label.text )}}
 
         <div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
@@ -91,6 +93,8 @@
                 //document.getElementById('sample3_postcode').value = data.zonecode; //5자리 새우편번호 사용
                 document.getElementById('address').value = fullAddr;
                 document.getElementById('sigungucode').value = data.sigunguCode;
+                document.getElementById('sigungu').value = data.sigungu;
+                document.getElementById('sido').value = data.sido;
 
                 // iframe을 넣은 element를 안보이게 한다.
                 // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)

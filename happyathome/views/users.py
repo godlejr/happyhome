@@ -294,6 +294,8 @@ def edit_professional_info(id):
             professional.phone = form.phone.data
             professional.greeting = request.form.get('greeting')
             professional.sigungu_code = request.form['sigungucode']
+            professional.sido = request.form['sido']
+            professional.sigungu = request.form['sigungu']
             db.session.add(user)
             db.session.add(professional)
             db.session.commit()
@@ -323,6 +325,8 @@ def edit_professional(id):
             professional.phone = form.phone.data
             professional.greeting = request.form.get('greeting')
             professional.sigungu_code = request.form['sigungucode']
+            professional.sido = request.form['sido']
+            professional.sigungu = request.form['sigungu']
             db.session.add(user)
             db.session.add(professional)
             db.session.commit()

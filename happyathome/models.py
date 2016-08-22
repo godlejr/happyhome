@@ -343,6 +343,8 @@ class Professional(db.Model, BaseMixin):
     homepage = db.Column(db.Unicode(45), default="")
     greeting = db.Column(db.Text, default="")
     sigungu_code = db.Column(db.Integer)
+    sido = db.Column(db.Unicode(255), default="")
+    sigungu = db.Column(db.Unicode(255), default="")
 
     user = db.relationship('User', backref=backref('user_professionals'))
 
