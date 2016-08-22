@@ -25,10 +25,10 @@
     <div class="edit_field">
         <div class="edit_title">주소</div>
         <input type="button" class="address-button" onclick="happyhome_DaumPostcode()" value="주소 찾기"><br>
-        <input type="text" hidden="hidden" id="sigungucode" name="sigungucode" />
-        <input type="text" hidden="hidden" id="sido" name="sido" />
-        <input type="text" hidden="hidden" id="sigungu" name="sigungu" />
-        <input type="text" hidden="hidden" id="postcode" name="postcode" />
+        <input type="text" hidden="hidden" id="sigungucode" name="sigungucode" value={{ user.user_professionals[0].sigungu_code }} />
+        <input type="text" hidden="hidden" id="sido" name="sido" value={{ user.user_professionals[0].sido }} />
+        <input type="text" hidden="hidden" id="sigungu" name="sigungu" value={{ user.user_professionals[0].sigungu }} />
+        <input type="text" hidden="hidden" id="postcode" name="postcode" value={{ user.user_professionals[0].post_code }} />
         {{ form.address(class="edit_form_field" ,id="address" ,readonly=true, placeholder=form.address.label.text ,value=user.user_professionals[0].address)}}
         {{ form.sub_address(class="edit_form_field" , placeholder=form.sub_address.label.text ,value=user.user_professionals[0].sub_address)}}
         <div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
