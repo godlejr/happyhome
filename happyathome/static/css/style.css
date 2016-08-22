@@ -1156,11 +1156,11 @@ span.share-icon.active {
     font-size: 14px;
     color: #ffffff;
     width: 100%;
-    max-width: 280px;
+    max-width: 281px;
 }
 .card .card-hits {
     float: left;
-    width: 55px;
+    width: 60px;
     padding: 4px 0 0 0;
     font-size: 12px;
     color: #ffffff;
