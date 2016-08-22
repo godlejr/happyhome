@@ -27,7 +27,13 @@
                         <li><a href="{{ url_for('users.user_following', id=user.id) }}"><span class="follewing-count">{{ user.following_count(user.id) }}</span> 팔로잉</a></li>
                     </ul>
                 </div>
-                <div class="user-follow" {% if user.id == session.user_id %}>나{% else %}style="background-image: url(/static/img/professional/top_fol_i.png);">{% endif %}</div>
+                <div class="user-follow"
+                    {% if user.id == current_user.id %}>
+                        style="background-image: url(/static/img/user/my-icon.png);"
+                    {% else %}
+                        style="background-image: url(/static/img/user/follow-icon.png);"
+                    {% endif %}
+                ></div>
             </div>
         </div>
     </div>

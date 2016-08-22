@@ -1,3 +1,8 @@
+"""
+gunicorn 실행 모듈
+
+/var/app/inotone/bin/gunicorn manage:app -w 3
+"""
 import os
 
 from flask import url_for
