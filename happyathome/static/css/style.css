@@ -407,10 +407,10 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     padding: 5px 0;
     color: #ffffff;
     width: 130px;
-    border: 1px solid #ffffff;
-    text-align: center;
     font-size: 16px;
     font-weight: 700;
+    text-align: center;
+    border: 1px solid #ffffff;
 }
 .user-follow-wrap {
     position: absolute;
@@ -428,16 +428,15 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     border-radius: 50%;
     font-weight: 700;
     text-align: center;
-    background-color: #5799A7;
-    background-size: contain;
+    background-size: auto;
     background-repeat: no-repeat;
     background-position: center;
 }
 .user-follows {
     position: absolute;
-    top: 36px;
-    right: 30px;
-    width: 170px;
+    top: 22px;
+    right: 60px;
+    width: 140px;
     font-size: 12px;
     font-weight: 700;
 }
