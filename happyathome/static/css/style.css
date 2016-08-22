@@ -1155,7 +1155,7 @@ span.share-icon.active {
     font-size: 14px;
     color: #ffffff;
     width: 100%;
-    max-width: 281px;
+    max-width: 277px;
 }
 .card .card-hits {
     float: left;
@@ -1203,7 +1203,7 @@ span.share-icon.active {
 .card .card-content .card-text {
     float: left;
     width: 100%;
-    max-width: 282px;
+    max-width: 278px;
     min-height: 1px;
     font-size: 13px;
     line-height: 170%;
@@ -1212,7 +1212,7 @@ span.share-icon.active {
 }
 .card .card-content .card-icon {
     float: left;
-    width: 50px;
+    width: 60px;
     font-size: 12px;
 }
 .card .card-content .card-icon div {

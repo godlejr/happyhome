@@ -22,11 +22,11 @@
                         <div class="card-hits"><img src="{{ url_for('static', filename='img/gallery/hits-icon.png') }}" width="13"/> {{ card.hits }}</div>
                     </div>
                     <div class="card-content">
-                        <div class="card-text">{{ card.content[:50] }}</div>
+                        <div class="card-text">{{ card.content|truncate(50) }}</div>
                         <div class="card-icon">
                             <div class="icon"><img src="{{ url_for('static', filename='img/gallery/like-icon.png') }}"  width="13"/> {{ card.like_photos|length }}</div>
                             <div class="icon"><img src="{{ url_for('static', filename='img/gallery/scrap-icon.png') }}"  width="13"/> {{ card.scrap_photos|length }}</div>
-                            <div class="icon"><img src="{{ url_for('static', filename='img/gallery/comment-icon.png') }}"  width="13"/> {{ card.comments|length }}</div>
+                            <div class="icon"><img src="{{ url_for('static', filename='img/gallery/comment-icon.png') }}" /> {{ card.comments|length }}</div>
                         </div>
                     </div>
                 </div>
