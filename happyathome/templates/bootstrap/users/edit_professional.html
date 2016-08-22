@@ -14,6 +14,7 @@
     <div class="edit_field">
         <div class="edit_title">주소</div>
         <input type="button" class="address-button" onclick="happyhome_DaumPostcode()" value="주소 찾기"><br>
+        <input type="text" hidden="hidden" id="sigungucode" name="sigungucode" />
         {{ form.address(class="edit_form_field" ,id="address" , placeholder=form.address.label.text )}}
 
         <div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
@@ -89,6 +90,7 @@
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 //document.getElementById('sample3_postcode').value = data.zonecode; //5자리 새우편번호 사용
                 document.getElementById('address').value = fullAddr;
+                document.getElementById('sigungucode').value = data.sigunguCode;
 
                 // iframe을 넣은 element를 안보이게 한다.
                 // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
@@ -96,6 +98,8 @@
 
                 // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
                 document.body.scrollTop = currentScroll;
+
+
             },
             // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
             onresize : function(size) {

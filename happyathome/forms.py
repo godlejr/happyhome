@@ -58,7 +58,7 @@ validators = {
 class ProfessionalUpdateForm(Form):
     name = StringField('이름', validators['name'])
     business_no = StringField('사업자번호('"-"'를 빼고 입력하세요)', validators['business_no'])
-    address = StringField('ex) 경기도 수원시 장안구 창훈로 19번길 6 00빌딩 000호')
+    address = StringField('주소찾기를 선택하세요.')
     phone = StringField('ex) 010-0000-0000')
     homepage = StringField('http://')
 
