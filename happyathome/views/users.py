@@ -4,7 +4,7 @@ import os
 import boto3
 import shortuuid
 
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session, flash
 from flask_login import login_required, current_user
 from happyathome.forms import Pagination, UpdateForm, PasswordUpdateForm, ProfessionalUpdateForm
 from happyathome.models import db, User, Photo, Magazine, Professional, Follow, PhotoScrap, Comment, MagazineScrap, \
@@ -349,27 +349,27 @@ def edit_professional_info(id):
 
     if request.method == 'POST':
         if form.validate():
-            user.name = form.name.data
-            professional.business_no = form.business_no.data
-            professional.homepage = form.homepage.data
-            professional.address = form.address.data
-            professional.sub_address = form.sub_address.data
-            professional.phone = form.phone.data
-            professional.greeting = request.form.get('greeting')
-            professional.sido_code = request.form['sigungucode'][:2]
-            professional.sigungu_code = request.form['sigungucode']
-            professional.post_code = request.form['postcode']
+            if request.form.get('business_id').__eq__(""):
+                flash('업종을 선택하세요.')
+            else:
+                user.name = form.name.data
+                professional.business_no = form.business_no.data
+                professional.homepage = form.homepage.data
+                professional.address = form.address.data
+                professional.sub_address = form.sub_address.data
+                professional.phone = form.phone.data
+                professional.greeting = request.form.get('greeting')
+                professional.sido_code = request.form['sigungucode'][:2]
+                professional.sigungu_code = request.form['sigungucode']
+                professional.post_code = request.form['postcode']
+                professional.business_id = request.form.get('business_id')
+                professional.sido = request.form['sido']
+                professional.sigungu = request.form['sigungu']
+                db.session.add(user)
+                db.session.add(professional)
+                db.session.commit()
 
-            if not request.form['business_id'].__eq__(""):
-                professional.business_id = request.form['business_id']
-
-            professional.sido = request.form['sido']
-            professional.sigungu = request.form['sigungu']
-            db.session.add(user)
-            db.session.add(professional)
-            db.session.commit()
-
-            return redirect(url_for('users.edit_profile', id=id))
+                return redirect(url_for('users.edit_profile', id=id))
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional_info.html',
                            user=user,
@@ -387,29 +387,32 @@ def edit_professional(id):
 
     if request.method == 'POST':
         if form.validate():
-            user.name = form.name.data
-            user.level = 2
-            professional.user_id = id
-            professional.business_no = form.business_no.data
-            professional.homepage = form.homepage.data
-            professional.address = form.address.data
-            professional.sub_address = form.sub_address.data
-            professional.phone = form.phone.data
-            professional.greeting = request.form.get('greeting')
-            professional.post_code = request.form['postcode']
+            if request.form.get('business_id').__eq__(""):
+                flash('업종을 선택하세요.')
+            else:
+                user.name = form.name.data
+                user.level = 2
+                professional.user_id = id
+                professional.business_no = form.business_no.data
+                professional.homepage = form.homepage.data
+                professional.address = form.address.data
+                professional.sub_address = form.sub_address.data
+                professional.phone = form.phone.data
+                professional.greeting = request.form.get('greeting')
+                professional.post_code = request.form['postcode']
 
-            if not request.form['business_id'].__eq__(""):
-                professional.business_id = request.form['business_id']
+                if not request.form['business_id'].__eq__(""):
+                    professional.business_id = request.form['business_id']
 
-            professional.sido_code = request.form['sigungucode'][:2]
-            professional.sigungu_code = request.form['sigungucode']
-            professional.sido = request.form['sido']
-            professional.sigungu = request.form['sigungu']
-            db.session.add(user)
-            db.session.add(professional)
-            db.session.commit()
+                professional.sido_code = request.form['sigungucode'][:2]
+                professional.sigungu_code = request.form['sigungucode']
+                professional.sido = request.form['sido']
+                professional.sigungu = request.form['sigungu']
+                db.session.add(user)
+                db.session.add(professional)
+                db.session.commit()
 
-            return redirect(url_for('users.edit_profile', id=id))
+                return redirect(url_for('users.edit_profile', id=id))
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/users/edit_professional.html',
                            user=user,
