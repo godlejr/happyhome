@@ -12,6 +12,18 @@
         {{ form.business_no(class="edit_form_field" ,maxlength=10 ,placeholder=form.business_no.label.text )}}
     </div>
 
+    {% with messages = get_flashed_messages() %}
+    {% if form.business_no.errors %}
+    <div class="message">
+        <ul>
+            {% for message in form.business_no.errors %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <div class="edit_field">
         <div class="edit_title">업종</div>
         <select id="business_id" name="business_id">
@@ -21,6 +33,18 @@
             {% endfor %}
         </select>
     </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="message">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% endwith %}
 
     <div class="edit_field">
         <div class="edit_title">주소</div>
@@ -49,27 +73,6 @@
         <div class="edit_title">소개</div>
         <textarea class="edit_textarea_form" placeholder="소개를 입력하세요" name="greeting"></textarea>
     </div>
-
-    {% with messages = get_flashed_messages() %}
-    {% if form.business_no.errors %}
-    <div class="message">
-        <ul>
-            {% for message in form.business_no.errors %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if messages %}
-        <div class="message">
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-    {% endwith %}
 
     <button class="btn-submit right" type="submit">변경완료</button>
 </form>
