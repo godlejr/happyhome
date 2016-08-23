@@ -6,7 +6,7 @@ from happyathome.models import db, User, File, Photo, Magazine, MagazineComment,
     Residence
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
-from happyathome.utils import RedisSessionInterface
+from happyathome.utils.redis_session import RedisSessionInterface
 from happyathome.views.admin import UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView, BoardAdminFile, \
     ClassAdminResidence, ClassAdminCategory
 from happyathome.views.main import mail
