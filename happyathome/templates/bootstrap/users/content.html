@@ -9,11 +9,22 @@
                 <div class="user-name">{{ user.name }}</div>
             </div>
             <div class="content-menu">
-                <a href="{{ url_for('users.info', id=user.id) }}"><div class="menu-item">소개</div></a>
-                <a href="{{ url_for('users.story', id=user.id) }}"><div class="menu-item">스토리</div></a>
-                <a href="{{ url_for('users.gallery', id=user.id) }}"><div class="menu-item">갤러리</div></a>
-                <a href="{{ url_for('users.scrap', id=user.id) }}"><div class="menu-item">스크랩</div></a>
+                <a href="{{ url_for('users.info', id=user.id) }}">
+                    <div class="menu-item">소개</div>
+                </a>
+                <a href="{{ url_for('users.story', id=user.id) }}">
+                    <div class="menu-item">스토리</div>
+                </a>
+                <a href="{{ url_for('users.gallery', id=user.id) }}">
+                    <div class="menu-item">갤러리</div>
+                </a>
+                <a href="{{ url_for('users.scrap', id=user.id) }}">
+                    <div class="menu-item">스크랩</div>
+                </a>
+
                 <div class="menu-item">Q&A</div>
+
+
             </div>
             <div class="user-follow-wrap">
                 <div class="user-follows">
