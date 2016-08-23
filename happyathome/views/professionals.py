@@ -115,7 +115,7 @@ def question(id):
     story_qna = db.session.execute('''
         SELECT	cm.id
         ,		cm.group_id
-        ,		cm.depth
+        ,		cm.depth    as  depth
         ,		cm.sort
         ,		cm.content
         ,		mz.id       as  magazine_id
@@ -157,41 +157,102 @@ def question(id):
         ,			cm.sort		ASC
         ,			cm.id		ASC
     ''' % id)
-    gallery_qna = db.session.execute('''
-            SELECT	cm.id
-            ,		cm.group_id
-            ,		cm.depth
-            ,		cm.sort
-            ,		cm.content
-            ,		ph.id       as  photo_id
-            ,		fi.name     as  file_name
-            FROM	comments	cm
-            ,		photos  	ph
-            ,       files       fi
-            WHERE	ph.file_id  =   fi.id
-            AND     cm.deleted	=	0
-            AND		EXISTS	(	SELECT	1
-                                FROM	photo_comments	pc
-                                WHERE	pc.photo_id     =	ph.id
-                                AND		pc.comment_id	=	cm.id
-                            )
-            AND		EXISTS	(	SELECT	1
-                                FROM	comments	re
-                                WHERE	re.group_id	=	cm.group_id
-                                AND		re.user_id	=	%s
-                                AND		re.depth	>	0
+
+    story_count = db.session.execute('''
+        SELECT	ROUND(((count(distinct cm.id)/2)-0.1),0) as count
+        FROM	comments	cm
+        ,		magazines	mz
+        ,		(	SELECT	ph.magazine_id
+                    ,		fi.name
+                    FROM	files	fi
+                    ,		photos	ph
+                    ,		(	SELECT	magazine_id
+                                ,		MIN(id)	id
+                                FROM	photos
                                 GROUP
-                                BY		re.group_id
-                            )
-            ORDER
-            BY			cm.group_id	DESC
-            ,			cm.depth	ASC
-            ,			cm.sort		ASC
-            ,			cm.id		ASC
-        ''' % id)
+                                BY		magazine_id
+                            )	pt
+                    WHERE	ph.id		=	pt.id
+                    AND		ph.file_id	=	fi.id
+                )	pf
+        WHERE	mz.id	    =	pf.magazine_id
+        AND		cm.deleted	=	0
+        AND		EXISTS	(	SELECT	1
+                            FROM	magazine_comments	mc
+                            WHERE	mc.magazine_id	=	mz.id
+                            AND		mc.comment_id	=	cm.id
+                        )
+        AND		EXISTS	(	SELECT	1
+                            FROM	comments	re
+                            WHERE	re.group_id	=	cm.group_id
+                            AND		re.user_id	=	%s
+                            AND		re.depth	>	0
+                            GROUP
+                            BY		re.group_id
+                        )
+        ORDER
+        BY			cm.group_id	DESC
+        ,			cm.depth	ASC
+        ,			cm.sort		ASC
+        ,			cm.id		ASC
+    ''' % id)
+
+    gallery_qna = db.session.execute('''
+        SELECT distinct
+            pt.id	 as photo_id,
+            pt.content 	as photo_content,
+            fi.name	as file_name,
+            cm.id	as	comment_id,
+            cm.content	as	content,
+            cm.group_id	as	group_id,
+            cm.depth	as	depth,
+            cm.created_at	as created_at
+        from	comments cm,
+                photo_comments pc,
+                photos pt,
+                files fi,
+                users ur
+        where 	cm.id = pc.comment_id
+        AND		pc.photo_id = pt.id
+        AND		pt.file_id = fi.id
+        AND 	pt.user_id = %s
+        AND		cm.deleted = 0
+        AND		cm.group_id = ( SELECT 	re.group_id
+                                from 	comments re
+                                where 	cm.group_id = re.group_id
+                                AND 	re.depth =1	)
+        ORDER BY cm.group_id desc,
+                cm.depth asc,
+                cm.sort	asc
+        limit 4
+    ''' % id)
+
+    gallery_count = db.session.execute('''
+        SELECT ROUND(((count(distinct cm.id)/2)-0.1),0) as count
+           from	comments cm,
+                   photo_comments pc,
+                   photos pt,
+                   files fi,
+                   users ur
+           where 	cm.id = pc.comment_id
+           AND		pc.photo_id = pt.id
+           AND		pt.file_id = fi.id
+           AND 	pt.user_id = %s
+           AND		cm.deleted = 0
+           AND		cm.group_id = ( SELECT 	re.group_id
+                                   from 	comments re
+                                   where 	cm.group_id = re.group_id
+                                   AND 	re.depth =1	)
+           ORDER BY cm.group_id desc,
+                   cm.depth asc,
+                   cm.sort	asc
+       ''' % id)
+
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/question.html',
                            user=user,
                            story_qna=story_qna,
+                           story_count=story_count,
+                           gallery_count=gallery_count,
                            gallery_qna=gallery_qna)
 
 

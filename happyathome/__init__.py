@@ -26,6 +26,7 @@ def create_app(config_name):
     app = Flask(__name__, template_folder=template_folder)
     app.jinja_env.auto_reload = True
     app.jinja_env.autoescape = False
+    app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
     config.init_app(app, config_name)
     db.init_app(app)

@@ -22,7 +22,9 @@
                     <div class="menu-item">스크랩</div>
                 </a>
 
-                <div class="menu-item">Q&A</div>
+                <a href="{{ url_for('users.question', id=user.id) }}">
+                    <div class="menu-item">Q&A</div>
+                </a>
 
 
             </div>

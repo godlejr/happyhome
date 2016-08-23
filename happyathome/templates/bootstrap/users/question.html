@@ -1,38 +1,88 @@
-{% extends 'bootstrap/users/menu.html' %}
+{% extends 'bootstrap/users/content.html' %}
 
 {% block content_body %}
-<div class="qna-row">
-
-    <div class="qna-title">
-        갤러리 Q&A {%if photo_comments_count %}{% for count in photo_comments_count %}({{ count.count }}){% endfor %}{% endif %}
-    </div>
-    {% for photo_comment in photo_comments %}
-    <div class="qna-content">
-        <div class="qna-img" id="photos" name="{{ photo_comment.id }}" style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + photo_comment.file_name }})">
+<div class="content-body">
+    <div class="user-contents">
+        <div class="content-list">
+            <div class="user-title">갤러리 Q&A {%if gallery_count %}{% for count in gallery_count %}({{ count.count }}){% endfor %}{% endif %}</div>
+            {% set story_id = 0 %}
+            {% set group_id = 0 %}
+            {% for qna in gallery_qna %}
+                {% if group_id != qna.group_id %}
+                    {% if qna.depth == 1 %}
+                    {% continue %}
+                    {% endif %}
+                    {% set group_id = qna.group_id %}
+                        <div class="qna-list">
+                            <a href="{{ url_for('photos.detail', id=qna.photo_id) }}">
+                                <div class="qna-image"
+                                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=qna.file_name) }})">
+                                </div>
+                            </a>
+                            <div class="qna-content-body">
+                                <div class="qna-content"><span class="q-green-icon"></span> {{ qna.content }}</div>
+                    {% else %}
+                        <div class="qna-hr"></div>
+                        <div class="qna-content"><span class="a-black-icon"></span> {{ qna.content }}</div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
-        <div class="qna-content-info">
-            <div class="qna-content-name">{{ photo_comment.photo_name }}</div>
-            <div class="qna-content-question">Q: {{ photo_comment.question }}</div>
-            <div class="qna-content-question">A: {{ photo_comment.answer }}</div>
+        <div class="content-list">
+            <div class="user-title">스토리 Q&A  {%if story_count %}{% for count in story_count %}({{ count.count }}){% endfor %}{% endif %}</div>
+            {% set story_id = 0 %}
+            {% set group_id = 0 %}
+            {% for qna in story_qna %}
+                {% if group_id != qna.group_id %}
+                    {% if qna.depth == 1 %}
+                    {% continue %}
+                    {% endif %}
+                    {% set group_id = qna.group_id %}
+                    <div class="qna-list">
+                        <a href="{{ url_for('magazines.detail', id=qna.magazine_id) }}">
+                            <div class="qna-image"
+                                 style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=qna.file_name) }})"></div>
+                        </a>
+                        <div class="qna-title"><a href="{{ url_for('magazines.detail', id=qna.magazine_id) }}">{{
+                            qna.magazine_title }}</a></div>
+                        <div class="qna-content-body">
+                            <div class="qna-content"><span class="q-green-icon"></span> {{ qna.content }}</div>
+                {% else %}
+                            <div class="qna-hr"></div>
+                            <div class="qna-content"><span class="a-black-icon"></span> {{ qna.content }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="content-list">
+            <div class="user-title">해피 Q&A ({{ 0 }})</div>
+            {% for qna in happy_qna %}
+                <div class="qna-list">
+                    <div class="qna-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=qna.photos[0].photo.file_name) }})"></div>
+                    <div class="qna-content-body">
+                        <div class="qna-content"><span class="q-green-icon"></span> {{ qna.content }}</div>
+                        <div class="qna-hr"></div>
+                        <div class="qna-content"><span class="a-black-icon"></span> {{ qna.content }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="content-list">
+            <div class="user-title">프로 Q&A ({{ 0 }})</div>
+            {% for qna in pro_qna %}
+                <div class="qna-list">
+                    <div class="qna-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=qna.photos[0].photo.file_name) }})"></div>
+                    <div class="qna-content-body">
+                        <div class="qna-content"><span class="q-green-icon"></span> {{ qna.content }}</div>
+                        <div class="qna-hr"></div>
+                        <div class="qna-content"><span class="a-black-icon"></span> {{ qna.content }}</div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
-
-    <div class="qna-title">
-        스토리 Q&A {%if magazine_comments_count %}{% for count in magazine_comments_count %}({{ count.count }}){% endfor %}{% endif %}
-    </div>
-    {% for magazine_comment in magazine_comments %}
-    <div class="qna-content">
-        <div class="qna-img" id="magazines" name="{{ magazine_comment.id }}" style="background-image:url( {{ current_app.config['S3_BUCKET_NAME'] + current_app.config['S3_IMG_DIRECTORY'] + magazine_comment.file_name }})">
-        </div>
-        <div class="qna-content-info">
-            <div class="qna-content-name">{{ magazine_comment.photo_name }}</div>
-            <div class="qna-content-question">Q: {{ magazine_comment.question }}</div>
-            <div class="qna-content-question">A: {{ magazine_comment.answer }}</div>
-        </div>
-    </div>
-    {% endfor %}
-
 </div>
 
 <script>
@@ -43,6 +93,5 @@
  $('#photos').click(function() {
     document.location.href = "{{ url_for('photos.detail', id='') }}" + $(this).attr('name');
 });
-
 </script>
 {% endblock %}
