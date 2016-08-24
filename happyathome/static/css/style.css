@@ -2982,9 +2982,18 @@ label.star:before {
     font-size: 20px;
     font-weight: 700;
 }
+
 .board-list {
     width: 100%;
     margin-top: 30px;
+}
+
+.sub-title{
+    width: 100%;
+    color: #000000;
+    font-size: 17px;
+    font-weight: 700;
+    padding-left: 50px;
 }
 
 .user-menu {

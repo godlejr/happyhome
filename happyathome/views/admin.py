@@ -1,9 +1,9 @@
-from flask import current_app, session, url_for, g
+from flask import current_app, session, render_template
 from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib import sqla
 from flask_login import current_user
 from happyathome import User
-from happyathome.models import Category, Magazine, Photo, Comment, Board, Residence, Business
+from happyathome.models import Category, Magazine, Photo, Comment, Board, Residence, Business, Room
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -14,7 +14,23 @@ class MyAdminIndexView(AdminIndexView):
 
     @expose('/')
     def index(self):
-        return super(MyAdminIndexView, self).index()
+        user_count = User.query.filter_by(level=1).count()
+        pro_count = User.query.filter_by(level=2).count()
+        rooms = Room.query.all()
+        categories = Category.query.all()
+
+        pro_story_count = Magazine.query.join(User).filter(User.level == 2).count()
+        pro_gallery_count = Photo.query.join(User).filter(User.level == 2).count()
+
+        board_total =  Board.query.count()
+        board_question_total = Board.query.filter(Board.depth == 0).count()
+        board_answer_total = Board.query.filter(Board.depth == 1 ).count()
+        return self.render(current_app.config['TEMPLATE_THEME'] + '/admin/index.html',
+                           rooms=rooms, user_count=user_count, pro_count=pro_count, pro_story_count=pro_story_count,
+                           board_total=board_total,
+                           pro_gallery_count=pro_gallery_count, board_question_total=board_question_total,
+                           board_answer_total=board_answer_total,
+                           categories=categories)
 
 
 # admin class
