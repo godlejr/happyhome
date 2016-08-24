@@ -3,12 +3,12 @@ import config
 from flask_admin import Admin
 from flask_login import LoginManager
 from happyathome.models import db, User, File, Photo, Magazine, MagazineComment, PhotoComment, Comment, Board, Category, \
-    Residence
+    Residence, Business
 from flask import Flask, render_template
 from flask_debugtoolbar import DebugToolbarExtension
 from happyathome.utils.redis_session import RedisSessionInterface
 from happyathome.views.admin import UserAdmin, ClassAdminMagazine, ClassAdminPhoto, CommentAdminFile, MyAdminIndexView, BoardAdminFile, \
-    ClassAdminResidence, ClassAdminCategory
+    ClassAdminResidence, ClassAdminCategory, ClassAdminBusiness
 from happyathome.views.main import mail
 from redis import Redis
 from werkzeug.utils import redirect
@@ -44,6 +44,7 @@ def create_app(config_name):
     admin.add_view(UserAdmin(User, db.session, name='사용자관리', endpoint='user'))
     admin.add_view(ClassAdminCategory(Category, db.session, name='테마', category='분류 관리', endpoint='category'))
     admin.add_view(ClassAdminResidence(Residence, db.session, name='장소', category='분류 관리', endpoint='residence'))
+    admin.add_view(ClassAdminBusiness(Business, db.session, name='업종', category='분류 관리', endpoint='business'))
     admin.add_view(ClassAdminPhoto(Photo, db.session, name='포토', category='컨텐츠 관리', endpoint='photo'))
     admin.add_view(ClassAdminMagazine(Magazine, db.session, name='매거진', category='컨텐츠 관리', endpoint='magazine'))
     admin.add_view(CommentAdminFile(Comment, db.session, name='댓글', category='댓글 관리', endpoint='comment'))

@@ -11,6 +11,7 @@
         <div class="edit_title">사업자 번호</div>
         {{ form.business_no(class="edit_form_field" , maxlength=10, value=user.user_professionals[0].business_no)}}
     </div>
+
     {% with messages = get_flashed_messages() %}
     {% if form.business_no.errors %}
     <div class="message">

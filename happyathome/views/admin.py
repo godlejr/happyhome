@@ -3,7 +3,7 @@ from flask_admin import BaseView, expose, AdminIndexView
 from flask_admin.contrib import sqla
 from flask_login import current_user
 from happyathome import User
-from happyathome.models import Category, Magazine, Photo, Comment, Board, Residence
+from happyathome.models import Category, Magazine, Photo, Comment, Board, Residence, Business
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -60,6 +60,19 @@ class ClassAdminResidence(sqla.ModelView):
         return current_user.is_admin
 
 
+class ClassAdminBusiness(sqla.ModelView):
+    column_display_pk = True
+
+    # Override displayed fields
+    column_list = ('name',)
+    form_columns = ('name',)
+    column_searchable_list = (Business.id, Business.name)
+    column_labels = dict(name='업종 이름')
+
+    def is_accessible(self):
+        return current_user.is_admin
+
+
 class ClassAdminPhoto(sqla.ModelView):
     column_display_pk = True
 
@@ -82,6 +95,9 @@ class ClassAdminMagazine(sqla.ModelView):
 
     column_labels = dict(user='사용자', category='범주', title='제목', content='내용', hits='조회수', photos='사진들')
 
+    def is_accessible(self):
+        return current_user.is_admin
+
 
 class CommentAdminFile(sqla.ModelView):
     column_display_pk = True
@@ -90,6 +106,9 @@ class CommentAdminFile(sqla.ModelView):
     column_searchable_list = (User.name, User.email, Comment.content)
 
     column_labels = dict(user='사용자', content='내용')
+
+    def is_accessible(self):
+        return current_user.is_admin
 
 
 class BoardAdminFile(sqla.ModelView):
@@ -101,4 +120,6 @@ class BoardAdminFile(sqla.ModelView):
 
     column_labels = dict(user='사용자', content='내용')
 
+    def is_accessible(self):
+        return current_user.is_admin
 
