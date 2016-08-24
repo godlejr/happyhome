@@ -5,30 +5,111 @@
     <div class="content-body">
         <div class="content-board">
             <div class="board-title">컨텐츠 누적통계</div>
+            <div class="status-content" >
+                <table class="content-table">
+                    <tr>
+                        <td>
+                            <div class="sub-title">스토리 카테고리별 컨텐츠 현황</div>
+                        </td>
+                        <td>
+                            <div class="sub-title">갤러리 카테고리별 컨텐츠 현황</div>
+                        </td>
+                    </tr>
 
-            <div class="content">
-                <div class="sub-title">회원수</div>
-                개인 회원 : {{ user_count }}명
-
-                업체 회원 : {{ pro_count }}명
-                <div class="sub-title">스토리 카테고리별 컨텐츠 현황</div>
-                {% for category in categories %}{{category.name}} : {{category.story_count(category.id)}}개
-                {% endfor %}
-                <div class="sub-title">갤러리 카테고리별 컨텐츠 현황</div>
-                {% for room in rooms %}{{room.name}} : {{room.gallery_count(room.id)}}개
-                {% endfor %}
-                <div class="sub-title">전문가 컨텐츠 현황</div>
-                스토리 : {{pro_story_count}}개
-
-                갤러리 : {{pro_gallery_count}}개
-                <div class="sub-title">해피 Q&A 현황</div>
-                전체 Q&A : {{board_total}}개
-
-                질의 : {{board_question_total}}개
-
-                답변 : {{board_answer_total}}개
-            </div>
-
+                    <tr>
+                        <td>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>카테고리</th>
+                                    <th>개수</th>
+                                </tr>
+                                {% for category in categories %}
+                                <tr>
+                                    <td>{{category.name}}</td>
+                                    <td>{{category.story_count(category.id)}}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>공간</th>
+                                    <th>개수</th>
+                                </tr>
+                                {% for room in rooms %}
+                                <tr>
+                                    <td>{{room.name}}</td>
+                                    <td>{{room.gallery_count(room.id)}}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                  </table>
+                <table class="content-table">
+                    <tr>
+                        <td>
+                            <div class="sub-title">회원수</div>
+                        </td>
+                        <td>
+                            <div class="sub-title">전문가 컨텐츠 현황</div>
+                        </td>
+                        <td>
+                            <div class="sub-title">해피 Q&A 현황</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>회원</th>
+                                    <th>인원수</th>
+                                </tr>
+                                <tr>
+                                    <td>개인 회원</td>
+                                    <td>{{ user_count }}</td>
+                                </tr>
+                                <tr>
+                                    <td>업체 회원</td>
+                                    <td>{{ pro_count }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>컨텐츠</th>
+                                    <th>개수</th>
+                                </tr>
+                                <tr>
+                                    <td>스토리</td>
+                                    <td>{{pro_story_count}}</td>
+                                </tr>
+                                <tr>
+                                    <td>갤러리</td>
+                                    <td>{{pro_gallery_count}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>컨텐츠</th>
+                                    <th>개수</th>
+                                </tr>
+                                <tr>
+                                    <td>질의</td>
+                                    <td>{{board_question_total}}</td>
+                                </tr>
+                                <tr>
+                                    <td>답변</td>
+                                    <td>{{board_answer_total}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
         </div>
     </div>
 </div>

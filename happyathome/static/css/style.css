@@ -2232,7 +2232,16 @@ span.share-icon.active {
     white-space: nowrap;
 }
 
+.display-table{
+    border: 1px solid #e0e0e0;
+    margin: 20px auto;
+}
 
+.display-table th, .display-table td{
+    border: 1px solid #e0e0e0;
+    padding: 8px;
+    text-align: center;
+}
 /******* follow *******/
 .follow-list {
     display: table;
@@ -2993,7 +3002,7 @@ label.star:before {
     color: #000000;
     font-size: 17px;
     font-weight: 700;
-    padding-left: 50px;
+    text-align: center;
 }
 
 .user-menu {
@@ -3052,12 +3061,14 @@ label.star:before {
 
 
 .table {
-    margin: 60px auto;
+    margin: 20px auto;
     border: 1px solid #cccccc !important;
 }
+
 .table th {
     width: 150px;
     height: 30px;
+    text-align:center;
     font-size: 14px;
     border: 1px solid #cccccc;
     background-color: #f9f9f9;
@@ -3162,6 +3173,20 @@ button.btn-danger {
     font-size: 14px;
     line-height: 20px;
 }
+
+.content-table{
+    margin: 30px auto;
+    width: 100%;
+}
+
+.content-board .status-content{
+    width: 100%;
+    margin-top: 40px;
+    border-top: 1px solid #ededed;
+    font-size: 14px;
+    line-height: 30px;
+}
+
 
 .content-board .board-list {
     padding: 15px 0 15px 40px;
