@@ -3179,6 +3179,10 @@ button.btn-danger {
     width: 100%;
 }
 
+.content-table td{
+    vertical-align:top;
+}
+
 .content-board .status-content{
     width: 100%;
     margin-top: 40px;
