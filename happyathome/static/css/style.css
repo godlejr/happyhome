@@ -116,7 +116,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .banner-write {
     position: absolute;
-    top: 66px;
+    top: 100px;
     left: calc(50% + 200px);
 }
 .banner-menu {
