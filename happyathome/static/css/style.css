@@ -178,6 +178,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     display: inline-block;
     width: 100%;
     margin: 0 auto 40px auto;
+    padding-left: 1px;
 }
 .tile {
     float: left;
@@ -186,6 +187,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .tile .card {
     margin: 0;
     padding: 0;
+    border: 0;
 }
 .tile.x1 {
     width: 25%;
