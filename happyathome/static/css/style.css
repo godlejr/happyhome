@@ -75,24 +75,34 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     height: 500px;
 }
-.index-menu {
+.index-banner {
     position: absolute;
     top: 0;
     width: 100%;
     height: 100%;
 }
-.index-banner {
+.index-banner .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.index-banner .content-body {
+    padding: 0;
+}
+.index-menu {
     position: relative;
     top: 0;
     width: 100%;
     height: 500px;
 }
-.index-banner .banner-line {
+.banner-line {
+    top: 0;
     height: 4px;
     background-repeat: repeat;
     background-image: url(/static/img/main/main_underline_bg.png);
 }
-.index-banner .brand-logo {
+.index-menu .brand-logo {
     position: absolute;
     width: 100px;
     height: 50px;
@@ -101,7 +111,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     text-align: center;
     background-color:#1d2828;
 }
-.index-banner .brand-logo img {
+.index-menu .brand-logo img {
     vertical-align: middle;
 }
 .banner-write {

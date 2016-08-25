@@ -54,18 +54,20 @@
         <div class="banner-item" style="background-image:url({{ url_for('static', filename='img/main/top-banner/banner02.jpg') }})" onclick="document.location.href='{{ url_for('boards.list', id=1) }}'"></div>
         <div class="banner-item" style="background-image:url({{ url_for('static', filename='img/main/top-banner/banner03.jpg') }})" onclick="document.location.href='{{ url_for('boards.list', id=1) }}'"></div>
     </div>
-    <div class="index-menu">
+    <div class="index-banner">
+        <div class="banner-line"></div>
         <div class="content">
-            <div class="index-banner">
-                <div class="banner-line"></div>
-                <div class="brand-logo"><a href="/"><img src="{{ url_for('static', filename='img/main/brand-logo.png') }}" width="86" height="26"></a></div>
-                <div class="banner-write"><a href="{{ url_for('users.info', id=current_user.id) }}"><img src="{{ url_for('static', filename='img/main/write.png') }}" width="66" height="91"></a></div>
-                <div class="banner-menu">
-                    <div class="menu-item"><div class="str-menu" href="{{ url_for('magazines.list') }}"></div></div>
-                    <div class="menu-item"><div class="gal-menu" href="{{ url_for('photos.list') }}"></div></div>
-                    <div class="menu-item"><div class="pro-menu" href="{{ url_for('professionals.list') }}"></div></div>
-                    <div class="menu-item"><div class="qna-menu" href="{{ url_for('boards.list', id=1) }}"></div></div>
-                    <div class="menu-item"><div class="evt-menu" href="/"></div></div>
+            <div class="content-body">
+                <div class="index-menu">
+                    <div class="brand-logo"><a href="/"><img src="{{ url_for('static', filename='img/main/brand-logo.png') }}" width="86" height="26"></a></div>
+                    <div class="banner-write"><a href="{{ url_for('users.info', id=current_user.id) }}"><img src="{{ url_for('static', filename='img/main/write.png') }}" width="66" height="91"></a></div>
+                    <div class="banner-menu">
+                        <div class="menu-item"><div class="str-menu" href="{{ url_for('magazines.list') }}"></div></div>
+                        <div class="menu-item"><div class="gal-menu" href="{{ url_for('photos.list') }}"></div></div>
+                        <div class="menu-item"><div class="pro-menu" href="{{ url_for('professionals.list') }}"></div></div>
+                        <div class="menu-item"><div class="qna-menu" href="{{ url_for('boards.list', id=1) }}"></div></div>
+                        <div class="menu-item"><div class="evt-menu" href="/"></div></div>
+                    </div>
                 </div>
             </div>
         </div>
