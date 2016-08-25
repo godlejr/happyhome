@@ -14,7 +14,7 @@ class Config(object):
     S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'
     S3_COVER_DIRECTORY = '/data/cover/'
-    UPLOAD_DIRECTORY = '/data/mov/'
+    UPLOAD_DIRECTORY = '/tmp/mov/'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     MAIL_SERVER = 'smtp.gmail.com'
