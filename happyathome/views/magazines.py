@@ -128,7 +128,7 @@ def new():
                                                                               ContentType=photo_file.content_type)
 
             file = File()
-            file.type = 1
+            file.type = request.form.getlist('content_type')[idx]
             file.name = photo_name
             file.ext = photo_name.split('.')[1]
             file.size = len(photo_blob)

@@ -9,7 +9,7 @@
                 <input type="hidden" id="photoFileName" name="file_name" />
                 <input type="hidden" id="preFileName" name="pre_file_name" value="{{ photo.file.name|default('', true) }}"/>
 
-                <legend>사진이나 동영상을 등록해주세요.</legend>
+                <legend>사진을 등록해주세요.</legend>
 
                 <div class="input-field">
                     <div class="photo-preview" id="photoPreview">
@@ -24,7 +24,6 @@
                     <select name="content_type" id="contentType">
                         <option value="1" {% if photo.is_photo %}selected{% endif %}>사진</option>
                         <option value="2" {% if photo.is_vr %}selected{% endif %}>VR/360</option>
-                        <option value="3" {% if photo.is_mov %}selected{% endif %}>동영상</option>
                     </select>
 
                     <select id="room_id" name="room_id">
