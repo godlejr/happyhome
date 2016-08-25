@@ -155,9 +155,18 @@ class File(db.Model, BaseMixin):
     __tablename__ = 'files'
 
     type = db.Column(db.Integer, nullable=False, default=1)
+    cid = db.Column(db.Unicode(50))
     name = db.Column(db.Unicode(255), nullable=False)
     ext = db.Column(db.Unicode(255), nullable=False)
     size = db.Column(db.Integer, nullable=False)
+
+    @hybrid_property
+    def youtube_url(self):
+        return 'https://www.youtube.com/embed/%s' % self.cid if self.cid else None
+
+    @hybrid_property
+    def youtube_thumb_url(self):
+        return 'https://i.ytimg.com/vi/%s/mqdefault.jpg' % self.cid if self.cid else None
 
     def __repr__(self):
         return Markup('<img src="http://static.inotone.co.kr/data/img/%s" width="100" height="100">') % self.name
@@ -221,12 +230,20 @@ class Photo(db.Model, BaseMixin):
     comments = db.relationship('PhotoComment', back_populates='photo')
 
     @hybrid_property
+    def is_photo(self):
+        return True if not self.file or self.file.type not in (2, 3) else False
+
+    @hybrid_property
     def is_vr(self):
         return True if self.file.type == 2 else False
 
     @hybrid_property
     def is_mov(self):
         return True if self.file.type == 3 else False
+
+    @hybrid_property
+    def is_youtube(self):
+        return True if self.file.type == 3 and self.file.cid else False
 
     @hybrid_method
     def is_active(self, model, user_id):
@@ -393,6 +410,7 @@ class Professional(db.Model, BaseMixin):
         score_integer =  int(round(score))
         return score_integer
 
+
 class Board(db.Model, BaseMixin):
     """댓글 내역"""
     __tablename__ = 'boards'
@@ -441,5 +459,3 @@ class Review(db.Model, BaseMixin):
     @property
     def project_date(self):
         return self.project_at.strftime('%Y-%m-%d')
-
-

@@ -1,10 +1,11 @@
+import os
+
 import shortuuid
-from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, message_flashed, \
-    jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app, session, jsonify
 from flask_mail import Mail, Message
 from happyathome.forms import JoinForm, LoginForm
 from happyathome.models import db, User, Magazine, Professional, Photo
-from sqlalchemy.dialects.postgresql import json
+from oauth2client import client
 from werkzeug.security import generate_password_hash, check_password_hash
 
 main = Blueprint('main', __name__)
@@ -200,6 +201,18 @@ def facebook_login():
         })
 
 
-@main.route('/users')
-def user_list():
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/main/user_list.html', users=User.query.all())
+@main.route('/oauth2callback')
+def oauth2callback():
+    flow = client.flow_from_clientsecrets(
+        os.path.join(current_app.root_path, 'google_api_secrets.json'),
+        scope=current_app.config['YOUTUBE_API_SCOPE'],
+        redirect_uri=url_for('main.oauth2callback', _external=True))
+
+    if 'code' not in request.args:
+        auth_uri = flow.step1_get_authorize_url()
+        return redirect(auth_uri)
+    else:
+        auth_code = request.args.get('code')
+        credentials = flow.step2_exchange(auth_code)
+        session['credentials'] = credentials.to_json()
+        return redirect(url_for('main.index'))

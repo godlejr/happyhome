@@ -16,6 +16,7 @@ body     { padding:0; margin:0 auto; background-color:#f4f4f4; height: 100%; }
 div      { box-sizing: border-box; }
 table    { border-collapse: collapse; }
 textarea { overflow: auto; }
+iframe   { display: block; }
 .icon>img { vertical-align: middle; }
 .input-disabled { border: 0 !important; }
 .left { float: left !important; }
@@ -647,7 +648,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 .content-photo.photo-360 {
     width: 650px;
-    height: 400px;
+    height: 366px;
 }
 .content-like {
     position: absolute;

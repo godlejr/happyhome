@@ -9,7 +9,13 @@
             </ul>
         </div>
         {% for card in cards %}
-            <div class="card" id="{{ card.id }}" style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})">
+            <div class="card" id="{{ card.id }}"
+                 {% if card.is_mov  %}
+                    style="background-image:url({{ card.file.youtube_thumb_url }})"
+                 {% else %}
+                    style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})"
+                 {% endif %}
+            >
                 {% if card.is_vr  %}
                     <div class="card-media"><span class="vr-icon"></span></div>
                 {% elif card.is_mov  %}

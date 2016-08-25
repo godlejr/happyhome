@@ -47,12 +47,18 @@
                             });
                             </script>
                         {% else %}
-                            <div class="content-photo" photo-id="{{ post.id }}">
-                                {% if post.user_id == session.user_id %}
+                            <div class="content-photo{% if post.is_mov %} youtube{% endif %}" photo-id="{{ post.id }}">
+                                {% if post.user_id == current_user.id %}
                                     <div class="photo-edit"></div>
                                     <div class="photo-remove" photo-id="{{ post.id }}"></div>
                                 {% endif %}
-                                <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+
+                                {% if post.is_mov %}
+                                    <iframe width="650" height="366" src="{{ post.file.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                                {% else %}
+                                    <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+                                {% endif %}
+
                                 <div class="content-like">
                                     <span class="like-icon{% if post.is_active('PhotoLike', session.user_id) %} active{% endif %}"></span>
                                 </div>
@@ -411,11 +417,11 @@ $('.photo-remove').click(function() {
             photo_id: "{{ post.id }}"
         }
     }).success(function(data){
-        if(data.check==2){
+        if (data.check==2) {
             if (confirm('사진을 삭제하시겠습니까?')){
                 document.location.href = "{{ url_for('photos.delete', id=post.id) }}";
             }
-        }else{
+        } else {
             if (confirm(data.magazine_name+'의 포토입니다. 해당 스토리를 삭제해주세요')){
 
             }

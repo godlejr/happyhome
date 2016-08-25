@@ -14,6 +14,7 @@ class Config(object):
     S3_IMG_DIRECTORY = '/data/img/'
     S3_USER_DIRECTORY = '/data/user/'
     S3_COVER_DIRECTORY = '/data/cover/'
+    UPLOAD_DIRECTORY = '/data/mov/'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     MAIL_SERVER = 'smtp.gmail.com'
@@ -22,6 +23,10 @@ class Config(object):
     MAIL_PASSWORD = '1miglobal'
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
+
+    YOUTUBE_API_SCOPE = "https://www.googleapis.com/auth/youtube"
+    YOUTUBE_API_SERVICE_NAME = "youtube"
+    YOUTUBE_API_VERSION = "v3"
 
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_POOL_TIMEOUT = 10

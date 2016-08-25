@@ -1,13 +1,17 @@
 import base64
 import os
 import boto3
+import httplib2
 import shortuuid
 from flask import session
-from flask_login import login_required
+from flask_login import login_required, current_user
+from googleapiclient import discovery
 from happyathome.forms import Pagination
+from happyathome.lib.youtube_api import initialize_upload
 from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, \
     Magazine
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
+from oauth2client import client
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
@@ -97,7 +101,7 @@ def detail(id):
 def upload():
     if request.method == "POST":
         photo_data = request.form.get('file_data').split(',')[1]
-        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1])))
+        photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(request.form.get('file_name'))[1].lower())))
 
         s3 = boto3.resource('s3')
         s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=base64.b64decode(photo_data),
@@ -125,26 +129,51 @@ def unload():
 @login_required
 def new():
     photo = Photo()
-    rooms = db.session.query(Room).all()
+    rooms = Room.query.all()
     if request.method == 'POST':
-        photo_name = request.form['file_name']
-
         file = File()
-        file.type = 1
+
+        if request.form['content_type'] == '3':
+            photo_file = request.files['photo_file']
+            photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1].lower())))
+            photo_path = os.path.join(current_app.config['UPLOAD_DIRECTORY'], photo_name)
+            photo_file.save(photo_path)
+            file.size = os.stat(photo_path).st_size
+        else:
+            photo_name = request.form['file_name']
+            file.size = 0
+        file.type = request.form['content_type']
         file.name = photo_name
         file.ext = photo_name.split('.')[1]
-        file.size = 0
 
         photo.file = file
         photo.user_id = session['user_id']
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
 
-        if request.form.getlist('content_type'):
-            db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
-
         db.session.add(photo)
+        db.session.flush()
         db.session.commit()
+
+        if request.form['content_type'] == '3':
+            if 'credentials' not in session:
+                return redirect(url_for('main.oauth2callback'))
+
+            credentials = client.OAuth2Credentials.from_json(session['credentials'])
+            if credentials.access_token_expired:
+                return redirect(url_for('main.oauth2callback'))
+            else:
+                youtube = discovery.build(current_app.config['YOUTUBE_API_SERVICE_NAME'],
+                                          current_app.config['YOUTUBE_API_VERSION'],
+                                          http=credentials.authorize(httplib2.Http()))
+                data = initialize_upload(youtube, {
+                    'title': '해피홈 갤러리 동영상 (%s)' % photo.id,
+                    'description': request.form['content'],
+                    'filepath': photo_path
+                })
+                if data.get('status') == '200':
+                    File.query.filter_by(id=file.id).update({'cid': data['response']['id']})
+                    db.session.commit()
 
         return redirect(url_for('photos.list'))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html', rooms=rooms, photo=photo)
@@ -184,6 +213,34 @@ def edit(id):
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html',
                            rooms=rooms,
                            photo=photo)
+
+
+@photos.route('/<id>/delete')
+@login_required
+def delete(id):
+    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session=False)
+    photo = Photo.query.filter_by(id=id, user_id=current_user.id).first()
+
+    if photo.is_youtube:
+        if 'credentials' not in session:
+            return redirect(url_for('main.oauth2callback'))
+
+        credentials = client.OAuth2Credentials.from_json(session['credentials'])
+        if credentials.access_token_expired:
+            return redirect(url_for('main.oauth2callback'))
+        else:
+            youtube = discovery.build(current_app.config['YOUTUBE_API_SERVICE_NAME'],
+                                      current_app.config['YOUTUBE_API_VERSION'],
+                                      http=credentials.authorize(httplib2.Http()))
+            res = youtube.videos().delete(id=photo.file.cid)
+    else:
+        s3 = boto3.resource('s3')
+        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
+
+    db.session.delete(photo)
+    db.session.commit()
+
+    return redirect(url_for('photos.list'))
 
 
 @photos.route('/<id>/comments/new', methods=['GET', 'POST'])
@@ -310,19 +367,3 @@ def magazine_check():
             'check': 2,
             'photo_id': request.form.get('photo_id')
         })
-
-
-@photos.route('/<id>/delete')
-@login_required
-def delete(id):
-    db.session.query(Comment).filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session=False)
-    photo = db.session.query(Photo).filter_by(id=id)
-    file_name = photo.first().file.name
-
-    s3 = boto3.resource('s3')
-    s3.Object('static.inotone.co.kr', 'data/img/%s' % file_name).delete()
-
-    photo.delete()
-    db.session.commit()
-
-    return redirect(url_for('photos.list'))
