@@ -178,6 +178,10 @@ function photoFileTmpl(id, removable, photoContent) {
         '<div class="photo-preview-loading" id="photoPreviewLoading-' + id + '"></div>' +
         '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
         '<input type="hidden" id="photoId-' + id + '" name="photo_id" value="' + id + '"/>' +
+         '<select name="content_type" id="contentType">'+
+         '<option value="1" >사진</option>'+
+         '<option value="2" >VR/360</option>'+
+         '</select>'+
         '<select id="photoRoom-' + id + '" name="room_id">' +
             '<option value="">공간을 선택해주세요</option>' +
             {%- for room in rooms %}
