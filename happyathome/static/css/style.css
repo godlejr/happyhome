@@ -105,6 +105,11 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 .index-banner .brand-logo img {
     vertical-align: middle;
 }
+.banner-write {
+    position: absolute;
+    top: 66px;
+    left: 65%;
+}
 .banner-menu {
     position: absolute;
     width: 100%;
