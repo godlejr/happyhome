@@ -1,5 +1,6 @@
 from flask import Blueprint, current_app,render_template,request
-from happyathome.models import Photo, Magazine
+from happyathome.models import Photo, Magazine, User
+from sqlalchemy import or_
 
 search = Blueprint('search', __name__)
 
@@ -14,12 +15,15 @@ def utility_processor():
 @search.route('/list')
 def list():
     keyword = request.args.get('keyword')
-    photo = Photo.query.filter(Photo.content.like("%" + keyword + "%"))
+    photo = Photo.query.join(User).filter(
+        or_(Photo.content.like("%" + keyword + "%"), User.name.like("%" + keyword + "%")))
     photo_count = photo.count()
     photos = photo.all()
 
-    magazine = Magazine.query.filter(Magazine.title.like("%" + keyword + "%")).filter(
-        Magazine.content.like("%" + keyword + "%"))
+    magazine = Magazine.query.join(User).filter(or_(Magazine.title.like("%" + keyword + "%"),
+                                                    User.name.like("%" + keyword + "%"))).filter(
+        or_(Magazine.content.like("%" + keyword + "%"),
+            User.name.like("%" + keyword + "%")))
     magazine_count = magazine.count()
     magazines = magazine.all()
 
