@@ -196,7 +196,7 @@ def edit(id):
                         s3_file.delete()
 
                 file = File()
-                file.type = 1
+                file.type = request.form.getlist('content_type')[idx]
                 file.name = photo_name
                 file.ext = 'jpg'
                 file.size = len(photo_blob)
