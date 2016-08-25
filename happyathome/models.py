@@ -104,6 +104,11 @@ class Category(db.Model, BaseMixin):
     def __repr__(self):
         return self.name
 
+    @hybrid_method
+    def story_count(self,category_id):
+        count =  Magazine.query.filter(Magazine.category_id == category_id).count()
+        return count
+
 
 class Business(db.Model, BaseMixin):
     """업종 정보"""
@@ -149,6 +154,10 @@ class Room(db.Model, BaseMixin):
 
     name = db.Column(db.Unicode(50), nullable=False)
 
+    @hybrid_method
+    def gallery_count(self, room_id):
+        count = Photo.query.filter(Photo.room_id == room_id).count()
+        return count
 
 class File(db.Model, BaseMixin):
     """파일 정보"""
