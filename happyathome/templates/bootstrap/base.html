@@ -37,19 +37,19 @@
 <div id="header">
     <div class="top">
         <div class="log"><a href="/"><img src="{{ url_for('static', filename='img/brand_logo.jpg') }}" width="93" height="47"/></a></div>
-            <div class="nav">
-                <form class="search" action="{{ url_for('search.list') }}">
-                    <div class="search_field"><input id="search_text" name="keyword" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
-                    <div class="search_btn"><button class="search-button" type="submit"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" /></button></div>
-                </form>
-                {% if not current_user.id %}
-                    <div class="login_01"><a href="{{ url_for('main.login') }}">로그인</a></div>
-                    <div class="login_02"><a href="{{ url_for('main.join') }}">회원가입</a></div>
-                {% else %}
-                    <div class="login_01 login"><a href="{{ url_for('main.logout') }}">로그아웃</a></div>
-                    <div class="login_02 login"><a href="{{ url_for('users.info', id=current_user.id) }}">마이페이지</a></div>
-                {% endif %}
-                <div class="gnb">
+        <div class="nav">
+            <form class="search" action="{{ url_for('search.list') }}">
+                <div class="search_field"><input id="search_text" name="keyword" type="text" style="background-repeat:no-repeat;border-color:transparent;border:transparent; margin:11px;" size="18" /></div>
+                <div class="search_btn"><button class="search-button" type="submit"><img src="{{ url_for('static', filename='img/main/search_i.jpg') }}" /></button></div>
+            </form>
+            {% if not current_user.id %}
+                <div class="login_01"><a href="{{ url_for('main.login') }}">로그인</a></div>
+                <div class="login_02"><a href="{{ url_for('main.join') }}">회원가입</a></div>
+            {% else %}
+                <div class="login_01 login"><a href="{{ url_for('main.logout') }}">로그아웃</a></div>
+                <div class="login_02 login"><a href="{{ url_for('users.info', id=current_user.id) }}">마이페이지</a></div>
+            {% endif %}
+            <div class="gnb">
                 <div class="gnb_nav_h1"><a href="{{ url_for('magazines.list') }}">스토리</a></div>
                 <div class="gnb_nav_h1"><a href="{{ url_for('photos.list') }}">갤러리</a></div>
                 <div class="gnb_nav_h1"><a href="{{ url_for('professionals.list')}}">전문가</a></div>
@@ -95,8 +95,6 @@ $('#familySite').change(function() {
   ga('create', 'UA-82648701-1', 'auto');
   ga('send', 'pageview');
 </script>
-
-
 </body>
 
 </html>
