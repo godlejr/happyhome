@@ -16,8 +16,18 @@ class MyAdminIndexView(AdminIndexView):
     def index(self):
         user_count = User.query.filter_by(level=1).count()
         pro_count = User.query.filter_by(level=2).count()
-        rooms = Room.query.all()
-        categories = Category.query.all()
+        rooms = Room.query
+        categories = Category.query
+
+        categories_sum = 0
+        for category in categories.all():
+            categories_sum += Magazine.query.filter(Magazine.category_id == category.id ).count()
+        categories = categories.all()
+
+        rooms_sum = 0
+        for room in rooms.all():
+            rooms_sum += Photo.query.filter(Photo.room_id == room.id ).count()
+        rooms = rooms.all()
 
         pro_story_count = Magazine.query.join(User).filter(User.level == 2).count()
         pro_gallery_count = Photo.query.join(User).filter(User.level == 2).count()
@@ -27,7 +37,7 @@ class MyAdminIndexView(AdminIndexView):
         board_answer_total = Board.query.filter(Board.depth == 1 ).count()
         return self.render(current_app.config['TEMPLATE_THEME'] + '/admin/index.html',
                            rooms=rooms, user_count=user_count, pro_count=pro_count, pro_story_count=pro_story_count,
-                           board_total=board_total,
+                           board_total=board_total,rooms_sum=rooms_sum,categories_sum=categories_sum,
                            pro_gallery_count=pro_gallery_count, board_question_total=board_question_total,
                            board_answer_total=board_answer_total,
                            categories=categories)
