@@ -96,8 +96,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     height: 500px;
 }
-.banner-line {
-    top: 0;
+.bg-line {
     height: 4px;
     background-repeat: repeat;
     background-image: url(/static/img/main/main_underline_bg.png);
@@ -220,7 +219,8 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
               width:143px; height:31px;
               margin-top:10px; margin-left:607px; }
  .search_field  { float:left;
-                  width:122px; height:31px; }
+                  width:122px; height:31px;
+                  background:url(/static/img/main/search_bg.jpg) no-repeat; }
  .search_btn    { float:left;
                   width:21px;
                   margin-top:10px; }
@@ -274,7 +274,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 100%;
     height: 49px;
     padding: 5px;
-    background-color:#3b2d28;
+    background-color: #1d2828;
 }
 .filter-container {
     width: 100%;
@@ -294,7 +294,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     box-sizing: border-box;
 }
 .filter-container .filter-title {
-    color: #ffffff;
+    color: #a6b1b1;
     font-size: 14px;
     padding-right: 9px;
     vertical-align: middle;
@@ -311,7 +311,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-size: 12px;
     padding: 2px 15px;
     border-radius: 15px;
-    background-color: #5B4E4A;
+    background-color: #576666;
     white-space: nowrap;
     margin: 0 auto;
 }

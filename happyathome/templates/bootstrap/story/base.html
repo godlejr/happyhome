@@ -7,7 +7,7 @@
     <div class="filter-container">
         <ul>
             <li>
-                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 정렬</div>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>정렬</div>
                 <div class="filter-body">
                     <div class="filter-selected">
                         {% if request.args.get('sort') == 'likes' %}
@@ -31,7 +31,7 @@
                 </div>
             </li>
             <li>
-                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 테마</div>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>테마</div>
                 <div class="filter-body">
                     <div class="filter-selected">{% if category %}{{ category.name }}{% else %}전체{% endif %}</div>
                     <div class="filter-menu">
@@ -48,7 +48,7 @@
                 </div>
             </li>
             <li>
-                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 주택</div>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>주택</div>
                 <div class="filter-body">
                     <div class="filter-selected">{% if residence %}{{ residence.name }}{% else %}전체{% endif %}</div>
                     <div class="filter-menu">
@@ -65,7 +65,7 @@
                 </div>
             </li>
             <li>
-                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/> 미디어</div>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>미디어</div>
                 <div class="filter-body">
                     <div class="filter-selected">
                         {% if request.args.get('media') == '1' %}
@@ -94,6 +94,7 @@
         </ul>
     </div>
 </div><!-- filter end -->
+<div class="bg-line"></div>
 
 {% block content_body %}{% endblock %}
 
