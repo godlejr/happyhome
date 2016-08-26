@@ -1383,24 +1383,27 @@ span.share-icon.active {
     background-color: #ffffff;
     border-top: 1px solid rgba(160, 160, 160, 0.2);
 }
-.card .card-info.gallery {
+.card.gallery {
+    border: 0;
+}
+.card.gallery .card-info {
     height: 102px;
     bottom: -64px;
 }
-.card .card-info.gallery .card-content {
+.card.gallery .card-info .card-content {
     height: 64px;
     padding: 0 0 0 40px;
     background-color: rgba(0, 0, 0, 0.4);
 }
-.card .card-info.gallery .card-content div {
+.card.gallery .card-info .card-content div {
     color: #ffffff;
 }
-.card .card-info.gallery .card-content .card-text {
+.card.gallery .card-info .card-content .card-text {
     padding: 12px 15px 12px 0;
     height: 60px;
     overflow: hidden;
 }
-.card .card-info.gallery .card-content .card-icon .icon {
+.card.gallery .card-info .card-content .card-icon .icon {
     padding: 0;
     margin: 3px 0;
 }
