@@ -126,9 +126,20 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     text-align: center;
 }
 .banner-menu .menu-item {
+    position: relative;
     display: inline-block;
     cursor: pointer;
     margin: 0 28px;
+}
+.banner-menu .menu-item .menu-desc {
+    position: absolute;
+    opacity: 0;
+    padding: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d6d7c6;
+    background-color: #1d2828;
+    white-space: nowrap;
 }
 .banner-menu .menu-item .str-menu {
     width: 96px;
