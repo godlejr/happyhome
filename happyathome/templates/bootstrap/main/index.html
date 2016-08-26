@@ -77,8 +77,19 @@
 <div id="container" class="index-container">
     <div class="content">
         <div class="tiles">
-            <div class="tile x2">
-                <a href="{{ url_for('magazines.detail', id=25) }}"><img src="{{ url_for('static', filename='img/main/mov-banner.jpg') }}" width="582" height="281"></a>
+            <div class="tile x2 vr360" onclick="document.location.href='{{ url_for('magazines.detail', id=139) }}'">
+                <div id="photo360"></div>
+                <div class="vr360-wrap">
+                    <div class="vr360-theme">프로인테리어</div>
+                    <div class="vr360-title">잠원 롯데캐슬</div>
+                </div>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+                <script src="{{ url_for('static', filename='js/carousel.min.js') }}"></script>
+                <script>
+                new Carousel().viewer("photo360", {
+                    panorama: "http://static.inotone.co.kr/data/img/LNsBXkiaYK8VZG8VbeMj6e.jpg"
+                });
+                </script>
             </div>
             <div class="tile x1">
                 <div class="card gallery" id="557" style="background-image:url(http://static.inotone.co.kr/data/img/AWEW5rR5o85qzNSHwc59gX.jpg)">

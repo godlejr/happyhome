@@ -190,6 +190,35 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     margin: 0 auto 40px auto;
     padding-left: 1px;
 }
+.tile.vr360 {
+    position: relative;
+}
+.tile #photo360 {
+    width: 582px;
+    height: 281px;
+}
+.tile .vr360-wrap {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    width: 582px;
+    height: 281px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.tile .vr360-wrap .vr360-theme {
+    color: #71c7d3;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 130px;
+}
+.tile .vr360-wrap .vr360-title {
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 10px;
+}
 .tile {
     float: left;
     margin: 10px;

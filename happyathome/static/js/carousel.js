@@ -1,5 +1,5 @@
 /*!
- * Copyright Inotone Co., lTD.
+ * Copyright Inotone Co., ltd.
  */
 var Carousel = (function() {
     var Carousel = function() {
@@ -16,36 +16,42 @@ var Carousel = (function() {
 
     Carousel.prototype = {
         viewer: function(viewerId, options) {
-            var like_icon = document.createElement("span"),
-                scrap_icon = document.createElement("span"),
-                share_icon = document.createElement("span"),
-                content_like = document.createElement("div"),
-                content_scrap = document.createElement("div"),
-                content_share = document.createElement("div");
+            var isLike = options.is_like || false,
+                isScrap = options.is_scrap || false,
+                setButton = options.action || false,
+                likeIcon = document.createElement("span"),
+                scrapIcon = document.createElement("span"),
+                shareIcon = document.createElement("span"),
+                contentLike = document.createElement("div"),
+                contentScrap = document.createElement("div"),
+                contentShare = document.createElement("div");
 
-            like_icon.classList.add('like-icon');
-            if (options.is_like) {
-                like_icon.classList.add('active');
+            likeIcon.classList.add('like-icon');
+            if (isLike) {
+                likeIcon.classList.add('active');
             }
 
-            scrap_icon.classList.add('scrap-icon');
-            if (options.is_scrap) {
-                scrap_icon.classList.add('active');
+            scrapIcon.classList.add('scrap-icon');
+            if (isScrap) {
+                scrapIcon.classList.add('active');
             }
-            share_icon.classList.add('share-icon');
-            content_like.classList.add('content-like');
-            content_like.appendChild(like_icon);
-            content_scrap.appendChild(scrap_icon);
-            content_scrap.classList.add('content-scrap');
-            content_share.appendChild(share_icon);
-            content_share.classList.add('content-share');
+
+            shareIcon.classList.add('share-icon');
+
+            contentLike.classList.add('content-like');
+            contentLike.appendChild(likeIcon);
+            contentScrap.appendChild(scrapIcon);
+            contentScrap.classList.add('content-scrap');
+            contentShare.appendChild(shareIcon);
+            contentShare.classList.add('content-share');
 
             this.photoWrap = document.getElementById(viewerId);
             this.photoWrap.style.position = "relative";
-            if (options.action) {
-                this.photoWrap.appendChild(content_like);
-                this.photoWrap.appendChild(content_scrap);
-                this.photoWrap.appendChild(content_share);
+
+            if (setButton) {
+                this.photoWrap.appendChild(contentLike);
+                this.photoWrap.appendChild(contentScrap);
+                this.photoWrap.appendChild(contentShare);
             }
 
             this.canvasWidth = this.photoWrap.offsetWidth;
@@ -135,7 +141,7 @@ var Carousel = (function() {
         },
         render: function() {
             if (this.autoFlow) {
-                this.longitude += 0.07;
+                this.longitude += 0.1;
             }
 
             this.latitude = Math.max(-85, Math.min(85, this.latitude));
