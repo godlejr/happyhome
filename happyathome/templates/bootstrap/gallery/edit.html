@@ -91,12 +91,12 @@ $photoFile.change(function() {
             return false;
         }
 
-        if (!checkFileSize(document.getElementById('photoFile'))) {
-            alert('사진 및 동영상 파일 사이즈가 30MB 이내만 업로드 할수 있습니다.');
-            return false;
-        }
-
         if (ext == 'jpg') {
+            if (!checkFileSize(document.getElementById('photoFile'), 1)) {
+                alert('사진 파일(JPG)은 1MB 이내의 사이즈만 업로드 할수 있습니다.');
+                return false;
+            }
+
             $photoPreviewLoading.show();
 
             var reader = new FileReader();
@@ -125,6 +125,11 @@ $photoFile.change(function() {
                 });
             }
         } else if (ext == 'mp4') {
+            if (!checkFileSize(document.getElementById('photoFile'), 30)) {
+                alert('동영상 파일(MP4)은 30MB 이내의 사이즈만 업로드 할수 있습니다.');
+                return false;
+            }
+
             var file = this.files[0],
                 type = file.type,
                 fileURL = URL.createObjectURL(file),
@@ -132,6 +137,7 @@ $photoFile.change(function() {
             $photoPreview.append(videoNode);
             $('#contentType').val('3');
         } else {
+            $(this).val('');
             alert('사진 및 동영상 파일(JPG/MP4)만 업로드 할수 있습니다.');
             return false;
         }
