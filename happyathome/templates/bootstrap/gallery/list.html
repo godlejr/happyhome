@@ -9,7 +9,7 @@
             </ul>
         </div>
         {% for card in cards %}
-            <div class="card" id="{{ card.id }}"
+            <div class="card gallery" id="{{ card.id }}"
                  {% if card.is_mov  %}
                     style="background-image:url({{ card.file.youtube_thumb_url }})"
                  {% else %}
