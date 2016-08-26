@@ -105,7 +105,7 @@ class Category(db.Model, BaseMixin):
         return self.name
 
     @hybrid_method
-    def story_count(self,category_id):
+    def get_count(self,category_id):
         count =  Magazine.query.filter(Magazine.category_id == category_id).count()
         return count
 
@@ -155,7 +155,7 @@ class Room(db.Model, BaseMixin):
     name = db.Column(db.Unicode(50), nullable=False)
 
     @hybrid_method
-    def gallery_count(self, room_id):
+    def get_count(self, room_id):
         count = Photo.query.filter(Photo.room_id == room_id).count()
         return count
 
