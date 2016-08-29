@@ -292,15 +292,11 @@ class Photo(db.Model, BaseMixin):
         return self.file.thumbnail_url
 
     @hybrid_property
-    def photo_url(self):
-        return self.file.photo_url
-
-    @hybrid_property
     def youtube_url(self):
         return self.file.youtube_url
 
     @hybrid_property
-    def url(self):
+    def file_url(self):
         return self.file.url
 
     @hybrid_method

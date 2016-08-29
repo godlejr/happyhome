@@ -77,7 +77,7 @@
                             {% if photo.is_youtube %}
                                 <iframe width="650" height="366" src="{{ photo.youtube_url }}" frameborder="0" allowfullscreen></iframe>
                             {% else %}
-                                <a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="{{ photo.url }}" /></a>
+                                <a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="{{ photo.file_url }}" /></a>
                             {% endif %}
                         </div>
                     {% endif %}

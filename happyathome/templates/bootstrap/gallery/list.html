@@ -9,7 +9,7 @@
             </ul>
         </div>
         {% for card in cards %}
-            <div class="card gallery" id="{{ card.id }}" style="background-image:url({{ card.thumbnail_url }})">
+            <div class="card gallery" id="{{ card.id }}" style="background-image:url({{ card.file_url }})">
                 <div class="card-media">
                     {% if card.is_vr %}
                         <span class="vr-icon"></span>

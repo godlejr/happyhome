@@ -31,7 +31,7 @@
                     <form method="POST" name="content_form" action="{{ url_for('photos.comment_new', id=post.id) }}">
                         {% if post.is_vr %}
                             <div class="content-photo photo-360" id="photo360" photo-id="{{ post.id }}">
-                                {% if post.user_id == session.user_id %}
+                                {% if post.user_id == current_user.id %}
                                     <div class="photo-edit"></div>
                                     <div class="photo-remove" photo-id="{{ post.id }}"></div>
                                 {% endif %}
@@ -40,13 +40,13 @@
                             <script>
                             new Carousel().viewer("photo360", {
                                 action: true,
-                                is_like: {% if post.is_active('PhotoLike', session.user_id) %}true{% else %}false{% endif %},
-                                is_scrap: {% if post.is_active('PhotoScrap', session.user_id) %}true{% else %}false{% endif %},
-                                panorama: "http://static.inotone.co.kr/data/img/{{ post.file.name }}"
+                                is_like: {% if post.is_active('PhotoLike', current_user.id) %}true{% else %}false{% endif %},
+                                is_scrap: {% if post.is_active('PhotoScrap', current_user.id) %}true{% else %}false{% endif %},
+                                panorama: "{{ post.file_url }}"
                             });
                             </script>
                         {% else %}
-                            <div class="content-photo{% if post.is_mov %} youtube{% endif %}" photo-id="{{ post.id }}">
+                            <div class="content-photo {% if post.is_youtube %}youtube{% endif %}" photo-id="{{ post.id }}">
                                 {% if post.user_id == current_user.id %}
                                     <div class="photo-edit"></div>
                                     <div class="photo-remove" photo-id="{{ post.id }}"></div>
@@ -55,7 +55,7 @@
                                 {% if post.is_youtube %}
                                     <iframe width="650" height="366" src="{{ post.youtube_url }}" frameborder="0" allowfullscreen></iframe>
                                 {% else %}
-                                    <img src="{{ post.url }}" />
+                                    <img src="{{ post.file_url }}" />
                                 {% endif %}
 
                                 <div class="content-like">
@@ -99,7 +99,7 @@
                                                 <span class="comment-avatar"  name="{{ comment.user_id }}"  style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
                                                 <a href="{{ url_for('users.info', id=comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a>
                                                 <span class="comment-date">{{ comment.created_date }}</span>
-                                                {% if session.user_id %}
+                                                {% if current_user.id %}
                                                     {% if post.user_id == current_user.id and comment.user_id != current_user.id %}
                                                         {% if comment.reply_count != 1 %}
                                                             <span class="comment-reply">답글</span>
@@ -122,8 +122,8 @@
                                             {% else %}
                                                 <div class="comment-reply-content">
                                                     <div class="comment-info" id="{{ comment.get_id }}" parent-id = "{{ comment.get_parent_id(comment.group_id) }}">
-                                                        <span class="comment-avatar"  name="{{ comment.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
-                                                        <a href="{{ url_for('users.info',id = comment.user.id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
+                                                        <span class="comment-avatar"  name="{{ comment.user_id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
+                                                        <a href="{{ url_for('users.info',id = comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
                                                         <span class="comment-date">{{ comment.created_date }}</span>
                                                         {% if comment.user_id == current_user.id %}
                                                             <span class="comment-edit" >수정</span>
@@ -149,9 +149,9 @@
             <div class="content-sidebar">
                 <div class="content-sidebody">
                     <div class="content-info">
-                        <div class="content-avatar" id="{{ post.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
+                        <div class="content-avatar" id="{{ post.user_id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
                         <div class="content-author">
-                            <div class="content-user"><a href="{{ url_for('users.info', id=post.user.id) }}">{{ post.user.name }}</a></div>
+                            <div class="content-user"><a href="{{ url_for('users.info', id=post.user_id) }}">{{ post.user.name }}</a></div>
                             <div class="content-score">
                                 <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}"/> <span class="count-text like">{{ post.like_photos|length }}</span></div>
                                 <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}"/> <span class="count-text scrap">{{ post.scrap_photos|length }}</span></div>
@@ -238,27 +238,27 @@ $('.content-share').click(function(){
 });
 
 $('.content-share-twitter').click(function(){
-    twitter( 'http://www.happyathome.co.kr/gallery/{{post.id}}' ,'{{ post.user.name }}');
+    twitter('http://www.happyathome.co.kr/gallery/{{ post.id }}' ,'{{ post.user.name }}');
 });
 
-twitter=function(url,text){
+twitter = function(url, text) {
 	window.open("https://twitter.com/intent/tweet?url=" + url  +"&text=" + text );
 };
 
 
 $('.comment-reply').click(function(){
-    if ($(this).text() == '답글'){
+    if ($(this).text() == '답글') {
         var id = $(this).parent().attr('id');
         $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text').show();
         $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text').val('');
         $(this).parent().next().next().next('.comment-finish-reply').show();
         $(this).text('취소');
-     }else{
+    } else {
         var id = $(this).parent().attr('id');
         $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text').hide();
         $(this).parent().next().next().next('.comment-finish-reply').hide();
         $(this).text('답글');
-     }
+    }
 });
 
 
