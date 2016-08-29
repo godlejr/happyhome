@@ -3260,7 +3260,9 @@ label.star:before {
     font-size: 14px;
     font-weight: 700;
 }
-
+.canvasjs-chart-credit {
+   display: none;
+}
 
 .table {
     margin: 20px auto;
@@ -3519,6 +3521,9 @@ a.btn-cancel {
     }
     .content-main {
         margin: 0 auto;
+    }
+    .canvasjs-chart-credit {
+        display: none;
     }
     .content-form {
         padding: 15px 20px;

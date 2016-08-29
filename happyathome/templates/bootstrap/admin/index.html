@@ -4,15 +4,22 @@
 <div class="content">
     <div class="content-body">
         <div class="content-board">
+            <div class="board-title">해피홈, 기간별 통계</div>
+            <div class="status-content" >
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+            </div>
+        </div>
+
+        <div class="content-board">
             <div class="board-title">컨텐츠 누적통계</div>
             <div class="status-content" >
                 <table class="content-table">
                     <tr>
                         <td>
-                            <div class="sub-title">스토리 카테고리별 컨텐츠 현황</div>
+                            <div class="sub-title">스토리 컨텐츠 현황</div>
                         </td>
                         <td>
-                            <div class="sub-title">갤러리 카테고리별 컨텐츠 현황</div>
+                            <div class="sub-title">갤러리 컨텐츠 현황</div>
                         </td>
                     </tr>
 
@@ -135,6 +142,84 @@
 </div>
 </div>
 
-</script>
+<script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+window.onload = function () {
+        CanvasJS.addCultureInfo("ko",
+            {
+              decimalSeparator: ",",// Observe ToolTip Number Format
+              digitGroupSeparator: ".", // Observe axisY labels
+              days: ["일", "월", "화", "수", "목", "금", "토"],
+              shortMonths: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"]
+            });
 
+		var chart = new CanvasJS.Chart("chartContainer",
+		{
+            culture:"ko",
+			title:{
+				text: "주간 회원 통계",
+				fontSize: 15
+			},
+            animationEnabled: true,
+			axisX:{
+				gridColor: "Silver",
+				tickColor: "silver",
+				valueFormatString: "MM/DD"
+			},
+            toolTip:{
+                shared:true
+            },
+			theme: "theme1",
+			axisY: {
+				gridColor: "Silver",
+				tickColor: "silver"
+			},
+			legend:{
+				verticalAlign: "center",
+				horizontalAlign: "right"
+			},
+			data: [
+			{   name: "누적 회원수",
+				type: "line",
+				showInLegend: true,
+				lineThickness: 2,
+				markerType: "square",
+				color: "#F08080",
+				dataPoints: [
+                    {% for daily_user in daily_users %}
+                        { x: new Date({{ daily_user.year|int }},{{ daily_user.month|int -1 }},{{ daily_user.day|int }}), y: {{ minus_user[loop.index-1] }} },
+                    {% endfor %}
+				]
+			},
+			{   name:"일별 가입 회원수",
+				type: "line",
+				showInLegend: true,
+				color: "#20B2AA",
+				lineThickness: 2,
+
+				dataPoints: [
+				    {% for join_user in join_users %}
+                        { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
+                    {% endfor %}
+				]
+			}
+			],
+          legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+              	e.dataSeries.visible = false;
+              }
+              else{
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          }
+		});
+
+chart.render();
+}
+
+</script>
 {% endblock body %}
