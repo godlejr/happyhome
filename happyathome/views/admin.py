@@ -21,7 +21,7 @@ class MyAdminIndexView(AdminIndexView):
                     substring(created_at,1,10) as date,
                     count(*)  as user_count
                     from 	users
-                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 7
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) < 7
                     group by date
         ''')
 
@@ -32,7 +32,7 @@ class MyAdminIndexView(AdminIndexView):
                     substring(created_at,1,10) as date,
                     count(*)  as user_count
                     from 	users
-                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 7
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) < 7
                     group by date
         ''')
 
@@ -43,7 +43,7 @@ class MyAdminIndexView(AdminIndexView):
                     substring(created_at,1,10) as date,
                     count(*)  as user_count
                     from 	users
-                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 7
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) < 7
                     group by date
         ''')
 
@@ -55,8 +55,6 @@ class MyAdminIndexView(AdminIndexView):
             minus_user.append((pro_count + user_count) - temp_user.user_count)
             minus_user.pop(0)
             minus_user.append(pro_count + user_count)
-
-
 
         rooms = Room.query
         categories = Category.query
