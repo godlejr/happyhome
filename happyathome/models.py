@@ -232,7 +232,7 @@ class File(db.Model, BaseMixin):
 
     @hybrid_property
     def youtube_thumbnail_url(self):
-        return 'https://i.ytimg.com/vi/%s/mqdefault.jpg' % self.cid if self.cid else None
+        return 'https://i.ytimg.com/vi/%s/hqdefault.jpg' % self.cid if self.cid else None
 
     @hybrid_property
     def photo_thumbnail_url(self):
