@@ -84,7 +84,7 @@ $('#photos').on('click', '.photo-remove', function(e) {
 
     var ext = $(this).val().split('.').pop().toLowerCase();
     if (ext.length > 0) {
-        if ($.inArray(ext, ['jpg', 'jpeg', 'mp4']) == -1) {
+        if ($.inArray(ext, ['jpg', 'mp4']) == -1) {
             alert('사진 및 동영상 파일(JPG/MP4)만 업로드 할수 있습니다.');
             $(this).val('');
             return false;

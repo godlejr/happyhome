@@ -253,15 +253,17 @@ def edit(id):
 @magazines.route('/<id>/delete')
 @login_required
 def delete(id):
-    db.session.query(Comment).filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session=False)
-    magazine = db.session.query(Magazine).filter_by(id=id)
-    photos = db.session.query(Photo).filter(Photo.magazine_id == id).all()
-
+    photos = Photo.query.filter_by(magazine_id=id, user=current_user).all()
     for photo in photos:
-        s3 = boto3.resource('s3')
-        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
-
-    magazine.delete()
+        if photo.is_youtube:
+            youtube = youtube_api.auth_account()
+            youtube.videos().delete(id=photo.file.cid).execute()
+        else:
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
+        File.query.filter_by(id=photo.file_id).delete()
+    Magazine.query.filter_by(id=id, user=current_user).delete()
+    Comment.query.filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session='fetch')
     db.session.commit()
 
     return redirect(url_for('magazines.list'))

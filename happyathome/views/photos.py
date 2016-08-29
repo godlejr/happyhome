@@ -254,8 +254,8 @@ def edit(id):
 @photos.route('/<id>/delete')
 @login_required
 def delete(id):
-    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session=False)
-    photo = Photo.query.filter_by(id=id, user_id=current_user.id).first()
+    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session='fetch')
+    photo = Photo.query.filter_by(id=id, user=current_user).first()
     photo_file = File.query.filter_by(id=photo.file_id).first()
 
     if photo.is_youtube:

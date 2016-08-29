@@ -15,16 +15,17 @@
         <div class="content-main">
 
             <div class="content-section">
-                {% if post.user_id == session.user_id %}
+                {% if post.user == current_user %}
                     <div class="content-edit"><i class="material-icons">mode_edit</i></div>
                     <div class="content-remove"><i class="material-icons">delete_forever</i></div>
                 {% endif %}
+
                 <div class="content-header">
                     <div class="magazine-title">
                         {{ post.title }}
                         <div class="content-button" magazine-id="{{ post.id }}">
-                            <span class="like-icon {% if post.is_active('MagazineLike', session.user_id) %}active{% endif %}"></span>
-                            <span class="scrap-icon {% if post.is_active('MagazineScrap', session.user_id) %}active{% endif %}"></span>
+                            <span class="like-icon {% if post.is_active('MagazineLike', current_user.id) %}active{% endif %}"></span>
+                            <span class="scrap-icon {% if post.is_active('MagazineScrap', current_user.id) %}active{% endif %}"></span>
                             <div class="content-share-set" hidden="hidden">
                                 <div class="content-share-facebook">
                                     <a href="https://www.facebook.com/sharer/sharer.php?u=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon"></span></a>
@@ -32,17 +33,16 @@
                                 <div class="content-share-kakao">
                                     <a href="https://story.kakao.com/share?url=http://www.happyathome.co.kr/story/{{ post.id }}" target="_blank"><span class="share-icon" id="kakaostory-share-button"></span></a>
                                 </div>
-                                <div class="content-share-twitter"><span class="share-icon"></span>
+                                <div class="content-share-twitter"><span class="share-icon"></span></div>
                             </div>
-                        </div>
                             <span class="share-icon"></span>
                         </div>
                     </div>
                     <div class="magazine-header">
                         <div class="magazine-info">
-                            <div class="magazine-avatar" id="{{post.user.id}}"  style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
+                            <div class="magazine-avatar" id="{{ post.user_id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
                             <div class="magazine-author">
-                                <div class="magazine-user" ><a href="{{ url_for('users.info',id = post.user.id) }}"> {{ post.user.name }} </a> <span>{{ post.created_date }}</span></div>
+                                <div class="magazine-user" ><a href="{{ url_for('users.info', id=post.user_id) }}">{{ post.user.name }}</a> <span>{{ post.created_date }}</span></div>
                                 <div class="content-score">
                                     <span class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> <span class="count-text like">{{ post.like_magazines|length }}</span></span>
                                     <span class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> <span class="count-text scrap">{{ post.scrap_magazines|length }}</span></span>
@@ -53,9 +53,9 @@
                         <div class="magazine-spec">
                             <table>
                                 <tr><th>건물</th><td>{{ post.residence.name }}</td></tr>
-                                <tr><th>크기</th><td>{{ post.size or '' }}</td></tr>
-                                <tr><th>위치</th><td>{{ post.location or '' }}</td></tr>
-                                <tr><th>비용</th><td>{{ post.cost or '' }}</td></tr>
+                                <tr><th>크기</th><td>{{ post.size|default('', true) }}</td></tr>
+                                <tr><th>위치</th><td>{{ post.location|default('', true) }}</td></tr>
+                                <tr><th>비용</th><td>{{ post.cost|default('', true) }}</td></tr>
                             </table>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
 
                         <script>
                         new Carousel().viewer("photo360-{{ photo.id }}", {
-                            panorama: "http://static.inotone.co.kr/data/img/{{ photo.file.name }}"
+                            panorama: "{{ photo.file_url }}"
                         });
                         </script>
                     {% else %}
@@ -173,8 +173,8 @@
                                                     <span class="comment-avatar" name="{{ comment.user_id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
                                                     <a href="{{ url_for('users.info',id = comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a>
                                                     <span class="comment-date">{{ comment.created_date }}</span>
-                                                    {% if session.user_id %}
-                                                        {% if post.user_id == current_user.id and comment.user_id != current_user.id %}
+                                                    {% if current_user.id %}
+                                                        {% if post.user == current_user and comment.user != current_user %}
                                                             {% if comment.reply_count != 1 %}
                                                                 <span class="comment-reply">답글</span>
                                                                 <span class="comment-reply-finish" hidden="hidden">답변완료</span>
@@ -183,7 +183,7 @@
                                                                 <span class="comment-reply" hidden="hidden">답글</span>
                                                             {% endif %}
                                                         {% endif %}
-                                                        {% if comment.user.id == current_user.id %}
+                                                        {% if comment.user == current_user %}
                                                             <span class="comment-edit">수정</span>
                                                             <span class="comment-remove">삭제</span>
                                                         {% endif %}
@@ -197,9 +197,9 @@
                                                 <div class="comment-reply-content">
                                                     <div class="comment-info" id="{{ comment.get_id }}" parent-id = "{{ comment.get_parent_id(comment.group_id) }}" >
                                                         <span class="comment-avatar" name="{{ comment.user_id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
-                                                        <a href="{{ url_for('users.info',id = comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
+                                                        <a href="{{ url_for('users.info', id=comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
                                                         <span class="comment-date">{{ comment.created_date }}</span>
-                                                        {% if comment.user_id == current_user.id %}
+                                                        {% if comment.user == current_user %}
                                                             <span class="comment-edit">수정</span>
                                                             <span class="comment-remove">삭제</span>
                                                         {% endif %}
@@ -223,48 +223,46 @@
 </div>
 
 <script>
-
-$('.content-button').find('.share-icon').mouseover(function(){
+$('.content-button').find('.share-icon').hover(
+    function() {
         $(this).toggleClass('active');
         $('.content-share-set').show();
-}).mouseout(function(){
+    },
+    function(){
         $(this).toggleClass('active');
         $('.content-share-set').hide();
+    }
+);
+
+$('.content-share-twitter').click(function() {
+    window.open("https://twitter.com/intent/tweet?url=http://www.happyathome.co.kr/story/{{ post.id }}&text={{ post.user.name }}");
 });
 
-$('.content-share-twitter').click(function(){
-    twitter( 'http://www.happyathome.co.kr/story/{{post.id}}' ,'{{ post.user.name }}');
-});
-
-twitter=function(url,text){
-	window.open("https://twitter.com/intent/tweet?url=" + url  +"&text=" + text );
-};
-
-$('.magazine-avatar').click(function(){
-    document.location.href ="{{ url_for('users.info',id='') }}" + $(this).attr('id');
+$('.magazine-avatar').click(function() {
+    document.location.href ="{{ url_for('users.info', id='') }}" + $(this).attr('id');
 });
 
 $('.comment-list').delegate('.comment-avatar', 'click', function() {
-    document.location.href ="{{ url_for('users.info',id='') }}" + $(this).attr('name');
+    document.location.href ="{{ url_for('users.info', id='') }}" + $(this).attr('name');
 });
 
-$('.comment-reply').click(function(){
-    if ($(this).text() == '답글'){
+$('.comment-reply').click(function() {
+    if ($(this).text() == '답글') {
         var id = $(this).parent().attr('id');
         $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text').show();
         $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text').val('');
         $(this).parent().next().next().next('.comment-finish-reply').show();
         $(this).text('취소');
-     }else{
+    } else {
         var id = $(this).parent().attr('id');
         $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text').hide();
         $(this).parent().next().next().next('.comment-finish-reply').hide();
         $(this).text('답글');
-     }
+    }
 });
 
 
-$('.comment-finish-reply').click(function(){
+$('.comment-finish-reply').click(function() {
     var self = this;
     var group_id = $(self).prev().prev().prev('.comment-info').attr('name');
     var id = $(self).prev().prev().prev('.comment-info').attr('id');
@@ -274,28 +272,32 @@ $('.comment-finish-reply').click(function(){
     var comment = $(document.getElementById(id)).next('.comment-content').next('.comment-edit-text');
     var content = comment.val();
     $.ajax({
-        type:"POST",
-        url:"{{ url_for('magazines.comment_reply') }}",
-        data:{
+        type: "POST",
+        url: "{{ url_for('magazines.comment_reply') }}",
+        data: {
             magazine_id: "{{ post.id }}",
             content: content,
             group_id: group_id
         }
-    }).success(function(data){
+    }).success(function(data) {
         $(self).hide();
         comment.hide();
         cancel.hide();
         reply_finish.show();
-        comment.parent().after('<li class="comment-box">'+'<div class="comment-reply-content">'+
-                                                        '<div class="comment-info" id="'+ data.comment_id +'" parent-id ="'+ data.group_id +'">' +
-                                                        '<span class="comment-avatar" name=' + data.user_id + ' style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename="' + data.avatar + '" ) }})"></span>'+
-                                                        '<a href="/user/' + data.user_id + '">'+'<span class="comment-user">'+ data.user_name + '</span>'+'</a>'+'<span class="comment-user">님의 답변</span>'+
-                                                        '<span class="comment-date">' + data.created_date + '</span>'+
-                                                        '<span class="comment-edit" cancel-id ="1" >수정</span>'+
-                                                        '<span class="comment-remove">삭제</span>' + '</div>' +
-                                                        '<div class="comment-content" >' + data.comment +'</div>'+
-                                                        '<button class="comment-finish" hidden="hidden" >완료</button>'+
-                                                        '</div>'+'</li>');
+        comment.parent().after(
+            '<li class="comment-box">' +
+                '<div class="comment-reply-content">'+
+                    '<div class="comment-info" id="'+ data.comment_id +'" parent-id ="'+ data.group_id +'">' +
+                    '<span class="comment-avatar" name=' + data.user_id + ' style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename="' + data.avatar + '" ) }})"></span>'+
+                    '<a href="/user/' + data.user_id + '">'+'<span class="comment-user">'+ data.user_name + '</span>'+'</a>'+'<span class="comment-user">님의 답변</span>'+
+                    '<span class="comment-date">' + data.created_date + '</span>'+
+                    '<span class="comment-edit" cancel-id ="1" >수정</span>'+
+                    '<span class="comment-remove">삭제</span>' + '</div>' +
+                    '<div class="comment-content" >' + data.comment +'</div>'+
+                    '<button class="comment-finish" hidden="hidden" >완료</button>'+
+                '</div>' +
+            '</li>'
+        );
     });
 });
 
@@ -304,13 +306,13 @@ $('.comment-list').delegate('.comment-remove', 'click', function() {
     var id = $(self).parent().attr('id');
 
     $.ajax({
-        type:"POST",
-        url:"{{ url_for('magazines.comment_remove') }}",
-        data:{
+        type: "POST",
+        url: "{{ url_for('magazines.comment_remove') }}",
+        data: {
             comment_id: id
         }
-    }).success(function(data){
-        if ( $(self).parent().attr('parent-id') ){
+    }).success(function(data) {
+        if ($(self).parent().attr('parent-id')) {
             var parent_id = $(self).parent().attr('parent-id');
             var parent_reply = $(document.getElementById(parent_id)).find('.comment-reply');
             var parent_reply_finish = $(document.getElementById(parent_id)).find('.comment-reply-finish');
@@ -321,7 +323,6 @@ $('.comment-list').delegate('.comment-remove', 'click', function() {
         $(self).parent().parent().remove();
     });
 });
-
 
 $('.comment-list').delegate('.comment-edit', 'click', function() {
     var id = $(this).parent().attr('id'),
@@ -338,21 +339,23 @@ $('.comment-list').delegate('.comment-edit', 'click', function() {
         finishObj.hide();
         $(this).text('수정');
     }
+
     return false;
 });
 
 $('.comment-list').delegate('.comment-finish', 'click', function() {
     var self = this;
     var id = $(self).parent().find('.comment-info').attr('id');
-    var comment = $(document.getElementById(id)).next()
+    var comment = $(document.getElementById(id)).next();
+
     $.ajax({
-        type:"POST",
+        type: "POST",
         url: "{{ url_for('magazines.comment_edit') }}",
-        data:{
-            comment_id: id
-            ,content: comment.val()
-            }
-    }).success(function(data){
+        data: {
+            comment_id: id,
+            content: comment.val()
+        }
+    }).success(function(data) {
             $(self).hide();
             var edit = $(self).parent().find('.comment-info').find('.comment-edit');
             edit.text('수정');
@@ -362,7 +365,7 @@ $('.comment-list').delegate('.comment-finish', 'click', function() {
 });
 
 $('.like-icon').click(function(event) {
-    {% if session.user_id %}
+    {% if current_user.id %}
         var self = this;
         $(self).toggleClass('active');
 
@@ -385,7 +388,7 @@ $('.like-icon').click(function(event) {
 });
 
 $('.scrap-icon').click(function(event) {
-    {% if session.user_id %}
+    {% if current_user.id %}
         var self = this;
         $(self).toggleClass('active');
 
