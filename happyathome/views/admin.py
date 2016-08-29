@@ -14,6 +14,42 @@ class MyAdminIndexView(AdminIndexView):
 
     @expose('/')
     def index(self):
+        join_yearly_users = db.session.execute('''
+            select  substring(created_at,1,4) as year,
+                    substring(created_at,6,2) as month,
+                    substring(created_at,9,2) as day,
+                    substring(created_at,1,10) as date,
+                    count(*)  as user_count
+                    from 	users
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 365
+                    and     level<>9
+                    GROUP BY month(created_at)
+            ''')
+
+        yearly_users = db.session.execute('''
+            select  substring(created_at,1,4) as year,
+                    substring(created_at,6,2) as month,
+                    substring(created_at,9,2) as day,
+                    substring(created_at,1,10) as date,
+                    count(*)  as user_count
+                    from 	users
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 365
+                    and     level<>9
+                    GROUP BY month(created_at)
+            ''')
+
+        temp_yearly_users = db.session.execute('''
+            select  substring(created_at,1,4) as year,
+                    substring(created_at,6,2) as month,
+                    substring(created_at,9,2) as day,
+                    substring(created_at,1,10) as date,
+                    count(*)  as user_count
+                    from 	users
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 365
+                    and     level<>9
+                    GROUP BY month(created_at)
+            ''')
+
         join_monthly_users = db.session.execute('''
         select  substring(created_at,1,4) as year,
                 substring(created_at,6,2) as month,
@@ -22,6 +58,7 @@ class MyAdminIndexView(AdminIndexView):
                 count(*)  as user_count
                 from 	users
                 WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 31
+                and     level<>9
                 GROUP BY WEEK(created_at)
         ''')
 
@@ -33,6 +70,7 @@ class MyAdminIndexView(AdminIndexView):
                 count(*)  as user_count
                 from 	users
                 WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 31
+                and     level<>9
                 GROUP BY WEEK(created_at)
         ''')
 
@@ -44,6 +82,7 @@ class MyAdminIndexView(AdminIndexView):
                 count(*)  as user_count
                 from 	users
                 WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 31
+                and     level<>9
                 GROUP BY WEEK(created_at)
         ''')
 
@@ -55,6 +94,7 @@ class MyAdminIndexView(AdminIndexView):
                     count(*)  as user_count
                     from 	users
                     WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) < 7
+                    and     level<>9
                     group by date
         ''')
 
@@ -66,6 +106,7 @@ class MyAdminIndexView(AdminIndexView):
                     count(*)  as user_count
                     from 	users
                     WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) < 7
+                    and     level<>9
                     group by date
         ''')
 
@@ -77,6 +118,7 @@ class MyAdminIndexView(AdminIndexView):
                     count(*)  as user_count
                     from 	users
                     WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) < 7
+                    and     level<>9
                     group by date
         ''')
 
@@ -95,6 +137,11 @@ class MyAdminIndexView(AdminIndexView):
             minus_monthly_user.pop(0)
             minus_monthly_user.append(pro_count + user_count)
 
+        minus_yearly_user = []
+        for temp_user in temp_yearly_users:
+            minus_yearly_user.append((pro_count + user_count) - temp_user.user_count)
+            minus_yearly_user.pop(0)
+            minus_yearly_user.append(pro_count + user_count)
 
         rooms = Room.query
         categories = Category.query
@@ -122,6 +169,7 @@ class MyAdminIndexView(AdminIndexView):
                            board_answer_total=board_answer_total, daily_users=daily_users, minus_daily_user=minus_daily_user,
                            join_daily_users=join_daily_users,
                            monthly_users=monthly_users, join_monthly_users=join_monthly_users,minus_monthly_user=minus_monthly_user,
+                           minus_yearly_user=minus_yearly_user,join_yearly_users=join_yearly_users,yearly_users=yearly_users,
                            categories=categories)
 
 

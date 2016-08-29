@@ -289,7 +289,6 @@ function monthly(){
                 {% for join_user in join_monthly_users %}
                     { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
                 {% endfor %}
-
             ]
         }
         ],
@@ -343,9 +342,9 @@ function yearly(){
             markerType: "square",
             color: "#F08080",
             dataPoints: [
-
-                { x: new Date(2016,8,7), y: 1 }
-
+                {% for yearly_user in yearly_users %}
+                    { x: new Date({{ yearly_user.year|int }},{{ yearly_user.month|int -1 }},{{ yearly_user.day|int }}), y: {{ minus_yearly_user[loop.index-1] }} },
+                {% endfor %}
             ]
         },
         {   name:"월별 가입 회원수",
@@ -355,8 +354,9 @@ function yearly(){
             lineThickness: 2,
 
             dataPoints: [
-                { x: new Date(2016,8,7), y: 1 }
-
+                {% for join_user in join_yearly_users %}
+                    { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
+                {% endfor %}
             ]
         }
         ],
