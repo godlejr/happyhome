@@ -66,6 +66,7 @@ var $photoId,
     $photoFileId,
     $photoFileName,
     $photoPreview,
+    $contentType,
     $photoPreviewLoading;
 
 $('#photos').on('click', '.photo-remove', function(e) {
@@ -78,19 +79,42 @@ $('#photos').on('click', '.photo-remove', function(e) {
     $photoPreviewLoading = $('#photoPreviewLoading-' + $photoId);
     $photoPreview = $('#photoPreview-' + $photoId);
     $photoFile = $('#photoFile-' + $photoId);
+    $contentType = $('#contentType-' + $photoId);
     $photoFile.click();
 }).on('change', '.photo-file', function() {
     $photoPreview.children().remove();
 
     var ext = $(this).val().split('.').pop().toLowerCase();
+
     if (ext.length > 0) {
-        if ($.inArray(ext, ['jpg', 'jpeg']) == -1) {
-            alert('사진 파일(JPG)만 업로드 할수 있습니다.');
+        if ($.inArray(ext, ['jpg', 'mp4']) == -1) {
+            alert('사진 및 동영상 파일(JPG/MP4)만 업로드 할수 있습니다.');
             $(this).val('');
             return false;
         }
 
-        loadPhoto($photoPreview[0], $photoFile[0]);
+        if (ext == 'mp4') {
+            if (!checkFileSize($(this)[0], 30)) {
+                alert('동영상 파일(MP4)은 30MB 이내의 사이즈만 업로드 할수 있습니다.');
+                $(this).val('');
+                return false;
+            }
+
+            var file = this.files[0],
+                type = file.type,
+                fileURL = URL.createObjectURL(file),
+                videoNode = $('<video>').width('100%').attr('src', fileURL);
+            $photoPreview.append(videoNode);
+            $contentType.val('3');
+        } else {
+            if (!checkFileSize($(this)[0], 1)) {
+                alert('사진 파일(JPG)은 1MB 이내의 사이즈만 업로드 할수 있습니다.');
+                $(this).val('');
+                return false;
+            }
+
+            loadPhoto($photoPreview[0], $photoFile[0]);
+        }
     }
 });
 
@@ -145,6 +169,12 @@ function loadPhoto(photoPreview, dataURL) {
         img.onload = function() {
             photoPreview.appendChild(this);
             photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);
+
+            if (this.naturalWidth / this.naturalHeight == 2) {
+                $contentType.val('2');
+            } else {
+                $contentType.val('1');
+            };
         };
     }
 }
@@ -160,13 +190,14 @@ function photoFileTmpl(id) {
     tmpl +=
         '<div class="photo-preview" id="photoPreview-' + id + '" id-value="' + id + '"></div>' +
         '<div class="photo-preview-loading" id="photoPreviewLoading-' + id + '"></div>' +
-        '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" />' +
+        '<input type="file" class="photo-file" id="photoFile-' + id + '" name="photo_file" accept="image/jpeg,video/mp4" />' +
         '<input type="hidden" id="photoFileId-' + id + '" name="file_id" />' +
         '<input type="hidden" id="photoFileName-' + id + '" name="file_name" />' +
-        '<select name="content_type" id="contentType">'+
-         '<option value="1" >사진</option>'+
-         '<option value="2" >VR/360</option>'+
-         '</select>'+
+        '<select name="content_type" id="contentType-' + id + '">'+
+            '<option value="1">사진</option>'+
+            '<option value="2">VR/360</option>'+
+            '<option value="3">동영상</option>'+
+        '</select>'+
         '<select id="photoRoom-' + id + '" name="room_id">' +
             '<option value="">공간을 선택해주세요</option>' +
             {% for room in rooms %}

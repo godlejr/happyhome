@@ -140,7 +140,7 @@ def new():
         if request.form['content_type'] == '3':
             photo_file = request.files['photo_file']
             photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1].lower())))
-            photo_path = os.path.join(current_app.config['UPLOAD_DIRECTORY'], photo_name)
+            photo_path = os.path.join(current_app.config['UPLOAD_TMP_DIRECTORY'], photo_name)
             photo_file.save(photo_path)
             file.size = os.stat(photo_path).st_size
         else:
@@ -160,11 +160,6 @@ def new():
         db.session.commit()
 
         if request.form['content_type'] == '3':
-            credentials = service_account.ServiceAccountCredentials.from_json_keyfile_name(
-                os.path.join(current_app.root_path, 'HappyAtHome-YouTube-b682b3e6d89a.json'),
-                scopes=current_app.config['YOUTUBE_API_SCOPES']
-            )
-
             body = dict(
                 snippet=dict(
                     title='해피홈 갤러리 동영상 (%s)' % photo.id,
@@ -194,29 +189,58 @@ def new():
 @photos.route('/<id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    photo = Photo.query.filter_by(user_id=session['user_id'], id=id).first()
-    pre_file = File.query.filter_by(id=photo.file_id).first()
+    photo = Photo.query.filter_by(id=id, user_id=current_user.id).first()
     rooms = Room.query.all()
     if request.method == 'POST':
         photo_name = request.form['file_name']
 
-        if pre_file.name != photo_name:
-            s3 = boto3.resource('s3')
-            s3.Object('static.inotone.co.kr', 'data/user/%s' % pre_file.name).delete()
+        if photo.is_youtube:
+            youtube = youtube_api.auth_account()
+            youtube.videos().delete(id=photo.file.cid).execute()
+        else:
+            if photo_name != photo.file.name:
+                s3 = boto3.resource('s3')
+                s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
 
-            pre_file.type = 1
-            pre_file.name = photo_name
-            pre_file.ext = photo_name.split('.')[1]
-            pre_file.size = 0
+        if request.form['content_type'] == '3':
+            photo_file = request.files['photo_file']
+            photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1].lower())))
+            photo_path = os.path.join(current_app.config['UPLOAD_TMP_DIRECTORY'], photo_name)
+            photo_file.save(photo_path)
+            photo.file.size = os.stat(photo_path).st_size
 
-            db.session.add(pre_file)
+            body = dict(
+                snippet=dict(
+                    title='해피홈 갤러리 동영상 (%s)' % photo.id,
+                    description=request.form['content']
+                ),
+                status=dict(
+                    privacyStatus='public'
+                )
+            )
+
+            youtube = youtube_api.auth_account()
+            insert_request = youtube.videos().insert(
+                part=','.join(body.keys()),
+                body=body,
+                media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
+            )
+
+            data = resumable_upload(insert_request)
+            if data.get('status') == '200':
+                photo.file.cid = data['response']['id']
+            else:
+                photo.file.cid = None
+        else:
+            photo.file.size = 0
+            photo.file.cid = None
 
         photo.user_id = session['user_id']
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
-
-        if request.form.getlist('content_type'):
-            db.session.query(File).filter_by(id=request.form['file_id']).update({'type': '2'})
+        photo.file.type = request.form['content_type']
+        photo.file.name = photo_name
+        photo.file.ext = photo_name.split('.')[1]
 
         db.session.add(photo)
         db.session.commit()
@@ -230,8 +254,8 @@ def edit(id):
 @photos.route('/<id>/delete')
 @login_required
 def delete(id):
-    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session=False)
-    photo = Photo.query.filter_by(id=id, user_id=current_user.id).first()
+    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session='fetch')
+    photo = Photo.query.filter_by(id=id, user=current_user).first()
     photo_file = File.query.filter_by(id=photo.file_id).first()
 
     if photo.is_youtube:

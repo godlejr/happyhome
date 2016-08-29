@@ -231,16 +231,24 @@ class File(db.Model, BaseMixin):
         return 'https://www.youtube.com/embed/%s' % self.cid if self.cid else None
 
     @hybrid_property
-    def youtube_thumbnail_url(self):
-        return 'https://i.ytimg.com/vi/%s/mqdefault.jpg' % self.cid if self.cid else None
+    def youtube_thumb_url(self):
+        return 'https://i.ytimg.com/vi/%s/hqdefault.jpg' % self.cid if self.cid else None
 
     @hybrid_property
-    def photo_thumbnail_url(self):
+    def photo_url(self):
         return 'http://static.inotone.co.kr/data/img/%s' % self.name if self.name else None
 
     @hybrid_property
-    def thumbnail_url(self):
-        return self.youtube_thumbnail_url if self.is_youtube else self.photo_thumbnail_url
+    def photo_thumb_url(self):
+        return 'http://static.inotone.co.kr/data/img/%s' % self.name if self.name else None
+
+    @hybrid_property
+    def thumb_url(self):
+        return self.youtube_thumb_url if self.is_youtube else self.photo_thumb_url
+
+    @hybrid_property
+    def url(self):
+        return self.youtube_url if self.is_youtube else self.photo_url
 
     def __repr__(self):
         return Markup('<img src="http://static.inotone.co.kr/data/img/%s" width="100" height="100">') % self.name
@@ -280,15 +288,23 @@ class Photo(db.Model, BaseMixin):
         return self.file.is_youtube
 
     @hybrid_property
-    def thumbnail_url(self):
-        return self.file.thumbnail_url
+    def thumb_url(self):
+        return self.file.thumb_url
+
+    @hybrid_property
+    def youtube_url(self):
+        return self.file.youtube_url
+
+    @hybrid_property
+    def file_url(self):
+        return self.file.url
 
     @hybrid_method
     def is_active(self, model, user_id):
         return getattr(sys.modules[__name__], model).query.filter_by(photo_id=self.id, user_id=user_id).first()
 
     def __repr__(self):
-        return "%s-[%s]%s-%s" % (self.user.name, self.magazine_id, self.magazine.title, self.id)
+        return "%s-%s" % (self.magazine.title, self.id)
 
 
 class PhotoLike(db.Model, BaseMixin):

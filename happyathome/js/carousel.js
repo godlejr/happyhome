@@ -3,7 +3,7 @@
  */
 var Carousel = (function() {
     var Carousel = function() {
-        this.fov = 75;
+        this.fov = 80;
         this.savedX = 0;
         this.savedY = 0;
         this.longitude = 0;

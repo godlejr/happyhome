@@ -4,7 +4,10 @@ import html2text
 import shortuuid
 from flask import Blueprint, render_template, request, redirect, jsonify, url_for, current_app, session
 from flask_login import login_required, current_user
+from googleapiclient.http import MediaFileUpload
 from happyathome.forms import Pagination
+from happyathome.lib import youtube_api
+from happyathome.lib.youtube_api import resumable_upload
 from happyathome.models import db, File, Magazine, Comment, MagazineComment, Category, Residence, Photo, Room, User, \
     del_or_create, MagazineLike, MagazineScrap
 from sqlalchemy import func
@@ -120,18 +123,44 @@ def new():
         photo_files = request.files.getlist('photo_file')
 
         for idx, photo_file in enumerate(photo_files):
-            photo_blob = photo_file.read()
-            photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1])))
-
-            s3 = boto3.resource('s3')
-            s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob,
-                                                                              ContentType=photo_file.content_type)
+            photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1].lower())))
 
             file = File()
             file.type = request.form.getlist('content_type')[idx]
             file.name = photo_name
             file.ext = photo_name.split('.')[1]
-            file.size = len(photo_blob)
+
+            if request.form.getlist('content_type')[idx] == '3':
+                photo_path = os.path.join(current_app.config['UPLOAD_TMP_DIRECTORY'], photo_name)
+                photo_file.save(photo_path)
+
+                body = dict(
+                    snippet=dict(
+                        title=request.form['title'],
+                        description=request.form.getlist('photo_content')[idx]
+                    ),
+                    status=dict(
+                        privacyStatus='public'
+                    )
+                )
+
+                youtube = youtube_api.auth_account()
+                insert_request = youtube.videos().insert(
+                    part=','.join(body.keys()),
+                    body=body,
+                    media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
+                )
+
+                data = resumable_upload(insert_request)
+                if data.get('status') == '200':
+                    file.cid = data['response']['id']
+                    file.size = os.stat(photo_path).st_size
+            else:
+                photo_blob = photo_file.read()
+                file.size = len(photo_blob)
+                s3 = boto3.resource('s3')
+                s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob,
+                                                                                  ContentType=photo_file.content_type)
 
             photo = Photo()
             photo.file = file
@@ -152,7 +181,7 @@ def new():
 @magazines.route('/<id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    magazine = Magazine.query.filter_by(id=id, user_id=current_user.id).first()
+    magazine = Magazine.query.filter_by(id=id, user=current_user).first()
     categories = Category.query.all()
     residences = Residence.query.all()
     rooms = Room.query.all()
@@ -176,7 +205,7 @@ def edit(id):
 
         photo_ids = request.form.getlist('photo_id')
         for idx, photo_id in enumerate(photo_ids):
-            photo = Photo.query.filter_by(id=photo_id, magazine_id=id, user_id=current_user.id).first()
+            photo = Photo.query.filter_by(id=photo_id, magazine_id=id, user=current_user).first()
             if not photo:
                 photo = Photo()
                 photo.magazine_id = id
@@ -207,7 +236,7 @@ def edit(id):
 
         photo_delete_ids = request.form.getlist('photo_delete_id')
         for photo_delete_id in photo_delete_ids:
-            photo = Photo.query.filter_by(id=photo_delete_id, user_id=current_user.id).first()
+            photo = Photo.query.filter_by(id=photo_delete_id, user=current_user).first()
             s3_file = s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name)
             if s3_file:
                 s3_file.delete()
@@ -219,6 +248,44 @@ def edit(id):
                            residences=residences,
                            rooms=rooms,
                            magazine=magazine)
+
+
+@magazines.route('/api/<id>', methods=['GET'])
+def api(id):
+    magazine = Magazine.query.filter_by(id=id, user=current_user).first()
+    photos = []
+    for photo in magazine.photos:
+        photos.append({
+            'id': photo.id,
+            'room_id': photo.room_id,
+            'fileUrl': photo.file_url,
+            'thumbUrl': photo.thumb_url,
+            'contentType': photo.file.type,
+            'content': photo.content
+        })
+    return jsonify({
+        'magazine_id': id,
+        'photos': photos
+    })
+
+
+@magazines.route('/<id>/delete')
+@login_required
+def delete(id):
+    photos = Photo.query.filter_by(magazine_id=id, user=current_user).all()
+    for photo in photos:
+        if photo.is_youtube:
+            youtube = youtube_api.auth_account()
+            youtube.videos().delete(id=photo.file.cid).execute()
+        else:
+            s3 = boto3.resource('s3')
+            s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
+        File.query.filter_by(id=photo.file_id).delete()
+    Magazine.query.filter_by(id=id, user=current_user).delete()
+    Comment.query.filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session='fetch')
+    db.session.commit()
+
+    return redirect(url_for('magazines.list'))
 
 
 @magazines.route('/like', methods=['GET', 'POST'])
@@ -325,22 +392,3 @@ def comment_remove():
         return jsonify({
             'ok': 1
         })
-
-
-@magazines.route('/<id>/delete')
-@login_required
-def delete(id):
-    db.session.query(Comment).filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session=False)
-    magazine = db.session.query(Magazine).filter_by(id=id)
-    photos = db.session.query(Photo).filter(Photo.magazine_id == id).all()
-
-    for photo in photos:
-        s3 = boto3.resource('s3')
-        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
-
-    magazine.delete()
-    db.session.commit()
-
-    return redirect(url_for('magazines.list'))
-
-

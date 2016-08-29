@@ -20,7 +20,7 @@
         <div class="user-title">갤러리</div>
         <div class="cards">
             {% for photo in photos %}
-                <div class="card" id="{{ photo.id }}" style="background-image:url({{ photo.thumbnail_url }})">
+                <div class="card" id="{{ photo.id }}" style="background-image:url({{ photo.thumb_url }})">
                     <div class="card-media">
                         {% if photo.is_vr  %}
                             <span class="vr-icon"></span>

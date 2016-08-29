@@ -6,16 +6,13 @@
         <div class="content-form">
             <form method="POST" id="photoForm" enctype="multipart/form-data">
                 <input type="file" class="photo-file" id="photoFile" name="photo_file" accept="image/jpeg,video/mp4"/>
-                <input type="hidden" id="photoFileName" name="file_name" />
-                <input type="hidden" id="preFileName" name="pre_file_name" value="{{ photo.file.name|default('', true) }}"/>
+                <input type="hidden" id="photoFileName" name="file_name" value="{{ photo.file.name|default('', true) }}" />
 
                 <legend>사진을 등록해주세요.</legend>
 
                 <div class="input-field">
                     <div class="photo-preview" id="photoPreview">
-                        {% if photo.file.name %}
-                            <img class="edit-profile-photo" src="{{ url_for_s3('S3_IMG_DIRECTORY', photo.file.name) }}">
-                        {% endif %}
+                        {% if photo.file_url %}<img class="edit-profile-photo" src="{{ photo.file_url }}">{% endif %}
                     </div>
                     <div class="photo-preview-loading"></div>
                 </div>

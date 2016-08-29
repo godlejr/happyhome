@@ -760,7 +760,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     border-bottom: 1px solid #eaebee;
 }
 .content-header .magazine-info {
-    width: calc(100% - 200px);
+    width: calc(100% - 300px);
     font-size: 12px;
     display: table-cell;
     vertical-align: middle;
@@ -771,7 +771,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
 }
 
 .content-header .magazine-spec {
-    width: 200px;
+    width: 300px;
     display: table-cell;
     vertical-align: middle;
 }
@@ -791,6 +791,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     font-size: 12px;
 }
 .content-header .magazine-spec th {
+    width: 20%;
     color: #9d9e9e;
     font-weight: 400;
     text-align: left;
