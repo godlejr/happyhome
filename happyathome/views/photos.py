@@ -8,6 +8,7 @@ from flask_login import login_required, current_user
 from googleapiclient import discovery
 from googleapiclient.http import MediaFileUpload
 from happyathome.forms import Pagination
+from happyathome.lib import youtube_api
 from happyathome.lib.youtube_api import initialize_upload, resumable_upload
 from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, \
     Magazine
@@ -164,34 +165,27 @@ def new():
                 scopes=current_app.config['YOUTUBE_API_SCOPES']
             )
 
-            delegated_credentials = credentials.create_delegated('dev@inotone.co.kr')
-
-            if delegated_credentials:
-                http_auth = delegated_credentials.authorize(httplib2.Http())
-                youtube = discovery.build(current_app.config['YOUTUBE_API_SERVICE_NAME'],
-                                          current_app.config['YOUTUBE_API_VERSION'],
-                                          http=http_auth)
-                body = dict(
-                    snippet=dict(
-                        title='해피홈 갤러리 동영상 (%s)' % photo.id,
-                        description=request.form['content']
-                    ),
-                    status=dict(
-                        privacyStatus='public'
-                    )
+            body = dict(
+                snippet=dict(
+                    title='해피홈 갤러리 동영상 (%s)' % photo.id,
+                    description=request.form['content']
+                ),
+                status=dict(
+                    privacyStatus='public'
                 )
+            )
 
-                # Call the API's videos.insert method to create and upload the video.
-                insert_request = youtube.videos().insert(
-                    part=','.join(body.keys()),
-                    body=body,
-                    media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
-                )
+            youtube = youtube_api.auth_account()
+            insert_request = youtube.videos().insert(
+                part=','.join(body.keys()),
+                body=body,
+                media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
+            )
 
-                data = resumable_upload(insert_request)
-                if data.get('status') == '200':
-                    File.query.filter_by(id=file.id).update({'cid': data['response']['id']})
-                    db.session.commit()
+            data = resumable_upload(insert_request)
+            if data.get('status') == '200':
+                File.query.filter_by(id=file.id).update({'cid': data['response']['id']})
+                db.session.commit()
 
         return redirect(url_for('photos.list'))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html', rooms=rooms, photo=photo)
@@ -241,18 +235,8 @@ def delete(id):
     photo_file = File.query.filter_by(id=photo.file_id).first()
 
     if photo.is_youtube:
-        credentials = service_account.ServiceAccountCredentials.from_json_keyfile_name(
-            os.path.join(current_app.root_path, 'HappyAtHome-YouTube-b682b3e6d89a.json'),
-            scopes=current_app.config['YOUTUBE_API_SCOPES']
-        )
-
-        delegated_credentials = credentials.create_delegated('dev@inotone.co.kr')
-
-        if delegated_credentials:
-            youtube = discovery.build(current_app.config['YOUTUBE_API_SERVICE_NAME'],
-                                      current_app.config['YOUTUBE_API_VERSION'],
-                                      http=credentials.authorize(httplib2.Http()))
-            res = youtube.videos().delete(id=photo.file.cid)
+        youtube = youtube_api.auth_account()
+        youtube.videos().delete(id=photo.file.cid).execute()
     else:
         s3 = boto3.resource('s3')
         s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
