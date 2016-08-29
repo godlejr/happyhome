@@ -5,7 +5,7 @@
     <div class="cards">
         {% for card in cards %}
             {% if card.photos %}
-            <div class="card" id="{{ card.id }}" style="background-image:url({{ card.photos[0].thumbnail_url }})">
+            <div class="card" id="{{ card.id }}" style="background-image:url({{ card.photos[0].thumb_url }})">
                 {% if card.has_vr %}
                     <div class="card-media"><span class="vr-icon"></span></div>
                 {% endif %}

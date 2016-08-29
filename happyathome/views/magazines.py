@@ -137,7 +137,7 @@ def new():
                 body = dict(
                     snippet=dict(
                         title=request.form['title'],
-                        description=request.form['content']
+                        description=request.form.getlist('photo_content')[idx]
                     ),
                     status=dict(
                         privacyStatus='public'
@@ -181,7 +181,7 @@ def new():
 @magazines.route('/<id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    magazine = Magazine.query.filter_by(id=id, user_id=current_user.id).first()
+    magazine = Magazine.query.filter_by(id=id, user=current_user).first()
     categories = Category.query.all()
     residences = Residence.query.all()
     rooms = Room.query.all()
@@ -205,7 +205,7 @@ def edit(id):
 
         photo_ids = request.form.getlist('photo_id')
         for idx, photo_id in enumerate(photo_ids):
-            photo = Photo.query.filter_by(id=photo_id, magazine_id=id, user_id=current_user.id).first()
+            photo = Photo.query.filter_by(id=photo_id, magazine_id=id, user=current_user).first()
             if not photo:
                 photo = Photo()
                 photo.magazine_id = id
@@ -236,7 +236,7 @@ def edit(id):
 
         photo_delete_ids = request.form.getlist('photo_delete_id')
         for photo_delete_id in photo_delete_ids:
-            photo = Photo.query.filter_by(id=photo_delete_id, user_id=current_user.id).first()
+            photo = Photo.query.filter_by(id=photo_delete_id, user=current_user).first()
             s3_file = s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name)
             if s3_file:
                 s3_file.delete()
@@ -248,6 +248,24 @@ def edit(id):
                            residences=residences,
                            rooms=rooms,
                            magazine=magazine)
+
+
+@magazines.route('/api/<id>', methods=['GET'])
+def api(id):
+    magazine = Magazine.query.filter_by(id=id, user=current_user).first()
+    photos = []
+    for photo in magazine.photos:
+        photos.append({
+            'id': photo.id,
+            'fileUrl': photo.file_url,
+            'thumbUrl': photo.thumb_url,
+            'contentType': photo.file.type,
+            'content': photo.content
+        })
+    return jsonify({
+        'magazine_id': id,
+        'photos': photos
+    })
 
 
 @magazines.route('/<id>/delete')

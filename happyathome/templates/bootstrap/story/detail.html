@@ -101,7 +101,7 @@
                         {% for category_magazine in category_magazines %}
                             {% if category_magazine.photos %}
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="{{ category_magazine.photos[0].thumbnail_url }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="{{ category_magazine.photos[0].thumb_url }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>
                                             <a href="{{ url_for('magazines.list', residence_id=category_magazine.residence.id) }}">{{ category_magazine.residence.name }}</a> |
@@ -121,7 +121,7 @@
                         {% for residence_magazine in residence_magazines %}
                             {% if residence_magazine.photos %}
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=residence_magazine.id) }}"><img src="{{ residence_magazine.photos[0].thumbnail_url }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=residence_magazine.id) }}"><img src="{{ residence_magazine.photos[0].thumb_url }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>
                                             <a href="{{ url_for('magazines.list', category_id=residence_magazine.category.id) }}">{{ residence_magazine.category.name }}</a> |
@@ -141,7 +141,7 @@
                         {% for user_magazine in user_magazines %}
                             {% if user_magazine.photos %}
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="{{ user_magazine.photos[0].thumbnail_url }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="{{ user_magazine.photos[0].thumb_url }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>
                                             <a href="{{ url_for('magazines.list', category_id=user_magazine.category.id) }}">{{ user_magazine.category.name }}</a> |
