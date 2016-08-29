@@ -73,8 +73,12 @@
                         });
                         </script>
                     {% else %}
-                        <div class="content-photo" photo-id="{{ post.id }}">
-                            <a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" /></a>
+                        <div class="content-photo" photo-id="{{ photo.id }}">
+                            {% if photo.is_youtube %}
+                                <iframe width="650" height="366" src="{{ photo.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                            {% else %}
+                                <a href="{{ url_for('photos.detail', id=photo.id) }}"><img src="{{ photo.url }}" /></a>
+                            {% endif %}
                         </div>
                     {% endif %}
                     <div class="content-text">{{ photo.content }}</div>
@@ -97,7 +101,7 @@
                         {% for category_magazine in category_magazines %}
                             {% if category_magazine.photos %}
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ category_magazine.photos[0].file.name }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=category_magazine.id) }}"><img src="{{ category_magazine.photos[0].thumbnail_url }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>
                                             <a href="{{ url_for('magazines.list', residence_id=category_magazine.residence.id) }}">{{ category_magazine.residence.name }}</a> |
@@ -117,7 +121,7 @@
                         {% for residence_magazine in residence_magazines %}
                             {% if residence_magazine.photos %}
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=residence_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ residence_magazine.photos[0].file.name }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=residence_magazine.id) }}"><img src="{{ residence_magazine.photos[0].thumbnail_url }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>
                                             <a href="{{ url_for('magazines.list', category_id=residence_magazine.category.id) }}">{{ residence_magazine.category.name }}</a> |
@@ -137,7 +141,7 @@
                         {% for user_magazine in user_magazines %}
                             {% if user_magazine.photos %}
                                 <div class="relative-list">
-                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="http://static.inotone.co.kr/data/img/{{ user_magazine.photos[0].file.name }}" width="60" height="60" /></a></div>
+                                    <div class="relative-image"><a href="{{ url_for('magazines.detail', id=user_magazine.id) }}"><img src="{{ user_magazine.photos[0].thumbnail_url }}" width="60" height="60" /></a></div>
                                     <div class="relative-body">
                                         <p>
                                             <a href="{{ url_for('magazines.list', category_id=user_magazine.category.id) }}">{{ user_magazine.category.name }}</a> |
@@ -166,20 +170,20 @@
                                         <li class="comment-box">
                                             {% if comment.depth == 0 %}
                                                 <div class="comment-info" id="{{ comment.id }}" name="{{ comment.group_id }}">
-                                                    <span class="comment-avatar" name="{{ comment.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
-                                                    <a href="{{ url_for('users.info',id = comment.user.id) }}"><span class="comment-user">{{ comment.user.name }}</span></a>
+                                                    <span class="comment-avatar" name="{{ comment.user_id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
+                                                    <a href="{{ url_for('users.info',id = comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a>
                                                     <span class="comment-date">{{ comment.created_date }}</span>
                                                     {% if session.user_id %}
-                                                        {% if post.user.id == session.user_id and comment.user_id != session.user_id %}
+                                                        {% if post.user_id == current_user.id and comment.user_id != current_user.id %}
                                                             {% if comment.reply_count != 1 %}
-                                                            <span class="comment-reply">답글</span>
-                                                            <span class="comment-reply-finish" hidden="hidden">답변완료</span>
+                                                                <span class="comment-reply">답글</span>
+                                                                <span class="comment-reply-finish" hidden="hidden">답변완료</span>
                                                             {% else %}
-                                                            <span class="comment-reply-finish">답변완료</span>
-                                                            <span class="comment-reply" hidden="hidden">답글</span>
+                                                                <span class="comment-reply-finish">답변완료</span>
+                                                                <span class="comment-reply" hidden="hidden">답글</span>
                                                             {% endif %}
                                                         {% endif %}
-                                                        {% if comment.user.id == session.user_id %}
+                                                        {% if comment.user.id == current_user.id %}
                                                             <span class="comment-edit">수정</span>
                                                             <span class="comment-remove">삭제</span>
                                                         {% endif %}
@@ -192,12 +196,12 @@
                                             {% else %}
                                                 <div class="comment-reply-content">
                                                     <div class="comment-info" id="{{ comment.get_id }}" parent-id = "{{ comment.get_parent_id(comment.group_id) }}" >
-                                                        <span class="comment-avatar" name="{{ comment.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
-                                                        <a href="{{ url_for('users.info',id = comment.user.id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
+                                                        <span class="comment-avatar" name="{{ comment.user_id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
+                                                        <a href="{{ url_for('users.info',id = comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
                                                         <span class="comment-date">{{ comment.created_date }}</span>
-                                                        {% if comment.user_id == session.user_id %}
-                                                        <span class="comment-edit">수정</span>
-                                                        <span class="comment-remove">삭제</span>
+                                                        {% if comment.user_id == current_user.id %}
+                                                            <span class="comment-edit">수정</span>
+                                                            <span class="comment-remove">삭제</span>
                                                         {% endif %}
                                                     </div>
                                                     <div class="comment-content" >{{ comment.content }}</div>

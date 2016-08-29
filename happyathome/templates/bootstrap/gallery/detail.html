@@ -52,17 +52,17 @@
                                     <div class="photo-remove" photo-id="{{ post.id }}"></div>
                                 {% endif %}
 
-                                {% if post.is_mov %}
-                                    <iframe width="650" height="366" src="{{ post.file.youtube_url }}" frameborder="0" allowfullscreen></iframe>
+                                {% if post.is_youtube %}
+                                    <iframe width="650" height="366" src="{{ post.youtube_url }}" frameborder="0" allowfullscreen></iframe>
                                 {% else %}
-                                    <img src="http://static.inotone.co.kr/data/img/{{ post.file.name }}" />
+                                    <img src="{{ post.url }}" />
                                 {% endif %}
 
                                 <div class="content-like">
-                                    <span class="like-icon{% if post.is_active('PhotoLike', session.user_id) %} active{% endif %}"></span>
+                                    <span class="like-icon {% if post.is_active('PhotoLike', current_user.id) %}active{% endif %}"></span>
                                 </div>
                                 <div class="content-scrap">
-                                    <span class="scrap-icon{% if post.is_active('PhotoScrap', session.user_id) %} active{% endif %}"></span>
+                                    <span class="scrap-icon {% if post.is_active('PhotoScrap', current_user.id) %}active{% endif %}"></span>
                                 </div>
 
                                 <div class="content-share" >
@@ -96,24 +96,24 @@
                                         <li>
                                             {% if comment.depth == 0 %}
                                             <div class="comment-info" id="{{ comment.id }}" name="{{ comment.group_id }}">
-                                                <span class="comment-avatar"  name="{{ comment.user.id }}"  style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
-                                                <a href="{{ url_for('users.info',id = comment.user.id) }}"><span class="comment-user">{{ comment.user.name }}</span></a>
+                                                <span class="comment-avatar"  name="{{ comment.user_id }}"  style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
+                                                <a href="{{ url_for('users.info', id=comment.user_id) }}"><span class="comment-user">{{ comment.user.name }}</span></a>
                                                 <span class="comment-date">{{ comment.created_date }}</span>
                                                 {% if session.user_id %}
-                                                        {% if post.user.id == session.user_id and comment.user_id != session.user_id %}
-                                                            {% if comment.reply_count != 1 %}
+                                                    {% if post.user_id == current_user.id and comment.user_id != current_user.id %}
+                                                        {% if comment.reply_count != 1 %}
                                                             <span class="comment-reply">답글</span>
                                                             <span class="comment-reply-finish" hidden="hidden">답변완료</span>
-                                                            {% else %}
+                                                        {% else %}
                                                             <span class="comment-reply-finish">답변완료</span>
                                                             <span class="comment-reply" hidden="hidden">답글</span>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                        {% if comment.user.id == session.user_id %}
-                                                            <span class="comment-edit" >수정</span>
-                                                            <span class="comment-remove">삭제</span>
                                                         {% endif %}
                                                     {% endif %}
+                                                    {% if comment.user.id == current_user.id %}
+                                                        <span class="comment-edit" >수정</span>
+                                                        <span class="comment-remove">삭제</span>
+                                                    {% endif %}
+                                                {% endif %}
                                             </div>
                                             <div class="comment-content">{{ comment.content }}</div>
                                             <textarea class="comment-edit-text" id="reply-hidden-form" hidden="hidden"></textarea>
@@ -125,9 +125,9 @@
                                                         <span class="comment-avatar"  name="{{ comment.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=comment.user.avatar) }}) "></span>
                                                         <a href="{{ url_for('users.info',id = comment.user.id) }}"><span class="comment-user">{{ comment.user.name }}</span></a><span class="comment-user">님의 답변</span>
                                                         <span class="comment-date">{{ comment.created_date }}</span>
-                                                        {% if comment.user_id == session.user_id %}
-                                                        <span class="comment-edit" >수정</span>
-                                                        <span class="comment-remove">삭제</span>
+                                                        {% if comment.user_id == current_user.id %}
+                                                            <span class="comment-edit" >수정</span>
+                                                            <span class="comment-remove">삭제</span>
                                                         {% endif %}
                                                     </div>
                                                     <div class="comment-content" >{{ comment.content }}</div>
@@ -151,11 +151,11 @@
                     <div class="content-info">
                         <div class="content-avatar" id="{{ post.user.id }}" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}) "></div>
                         <div class="content-author">
-                            <div class="content-user"><a href="{{ url_for('users.info',id = post.user.id) }}">{{ post.user.name }}</a></div>
+                            <div class="content-user"><a href="{{ url_for('users.info', id=post.user.id) }}">{{ post.user.name }}</a></div>
                             <div class="content-score">
-                                <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}" /> <span class="count-text like">{{ post.like_photos|length }}</span></div>
-                                <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}" /> <span class="count-text scrap">{{ post.scrap_photos|length }}</span></div>
-                                <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}" /> <span class="count-text comment">{{ post.comments|length }}</span></div>
+                                <div class="icon"><img src="{{ url_for('static', filename='img/main/like_i.png') }}"/> <span class="count-text like">{{ post.like_photos|length }}</span></div>
+                                <div class="icon"><img src="{{ url_for('static', filename='img/main/scrab_i.png') }}"/> <span class="count-text scrap">{{ post.scrap_photos|length }}</span></div>
+                                <div class="icon"><img src="{{ url_for('static', filename='img/main/comment_i.png') }}"/> <span class="count-text comment">{{ post.comments|length }}</span></div>
                                 <span cals>{{ post.created_date }}</span>
                             </div>
                         </div>
@@ -176,7 +176,7 @@
                                                 {% else %}
                                                     <div class="relative-photo"></div>
                                                 {% endif %}
-                                                <img src="http://static.inotone.co.kr/data/img/{{ photo.file.name }}" width="70" height="70" />
+                                                <img src="{{ photo.thumbnail_url }}" width="70" height="70" />
                                             </a>
                                         </div>
                                     </li>
@@ -200,7 +200,7 @@
                                             {% else %}
                                                 <div class="relative-photo"></div>
                                             {% endif %}
-                                            <img src="http://static.inotone.co.kr/data/img/{{ user_photo.file.name }}" width="70" height="70" />
+                                            <img src="{{ user_photo.thumbnail_url }}" width="70" height="70" />
                                         </a>
                                     </div>
                                 </li>
@@ -284,16 +284,20 @@ $('.comment-finish-reply').click(function(){
         comment.hide();
         cancel.hide();
         reply_finish.show();
-        comment.parent().after('<li class="comment-box">'+'<div class="comment-reply-content">'+
-                                                        '<div class="comment-info" id="'+ data.comment_id +'" parent-id ="'+ data.group_id +'">' +
-                                                        '<span class="comment-avatar" name=' + data.user_id + ' style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename="' + data.avatar + '" ) }})"></span>'+
-                                                        '<a href="/user/' + data.user_id + '">'+'<span class="comment-user">'+ data.user_name + '</span>'+'</a>'+'<span class="comment-user">님의 답변</span>'+
-                                                        '<span class="comment-date">' + data.created_date + '</span>'+
-                                                        '<span class="comment-edit" cancel-id ="1" >수정</span>'+
-                                                        '<span class="comment-remove">삭제</span>' + '</div>' +
-                                                        '<div class="comment-content" >' + data.comment +'</div>'+
-                                                        '<button class="comment-finish" hidden="hidden" >완료</button>'+
-                                                        '</div>'+'</li>');
+        comment.parent().after(
+            '<li class="comment-box">' +
+                '<div class="comment-reply-content">'+
+                    '<div class="comment-info" id="'+ data.comment_id +'" parent-id ="'+ data.group_id +'">' +
+                    '<span class="comment-avatar" name=' + data.user_id + ' style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename="' + data.avatar + '" ) }})"></span>'+
+                    '<a href="/user/' + data.user_id + '">'+'<span class="comment-user">'+ data.user_name + '</span>'+'</a>'+'<span class="comment-user">님의 답변</span>'+
+                    '<span class="comment-date">' + data.created_date + '</span>'+
+                    '<span class="comment-edit" cancel-id ="1" >수정</span>'+
+                    '<span class="comment-remove">삭제</span>' + '</div>' +
+                    '<div class="comment-content" >' + data.comment +'</div>'+
+                    '<button class="comment-finish" hidden="hidden" >완료</button>'+
+                '</div>' +
+            '</li>'
+        );
     });
 });
 

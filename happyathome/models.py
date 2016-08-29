@@ -235,12 +235,20 @@ class File(db.Model, BaseMixin):
         return 'https://i.ytimg.com/vi/%s/hqdefault.jpg' % self.cid if self.cid else None
 
     @hybrid_property
+    def photo_url(self):
+        return 'http://static.inotone.co.kr/data/img/%s' % self.name if self.name else None
+
+    @hybrid_property
     def photo_thumbnail_url(self):
         return 'http://static.inotone.co.kr/data/img/%s' % self.name if self.name else None
 
     @hybrid_property
     def thumbnail_url(self):
         return self.youtube_thumbnail_url if self.is_youtube else self.photo_thumbnail_url
+
+    @hybrid_property
+    def url(self):
+        return self.youtube_url if self.is_youtube else self.photo_url
 
     def __repr__(self):
         return Markup('<img src="http://static.inotone.co.kr/data/img/%s" width="100" height="100">') % self.name
@@ -282,6 +290,18 @@ class Photo(db.Model, BaseMixin):
     @hybrid_property
     def thumbnail_url(self):
         return self.file.thumbnail_url
+
+    @hybrid_property
+    def photo_url(self):
+        return self.file.photo_url
+
+    @hybrid_property
+    def youtube_url(self):
+        return self.file.youtube_url
+
+    @hybrid_property
+    def url(self):
+        return self.file.url
 
     @hybrid_method
     def is_active(self, model, user_id):
