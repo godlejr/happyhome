@@ -187,7 +187,7 @@ window.onload = function () {
 				color: "#F08080",
 				dataPoints: [
                     {% for daily_user in daily_users %}
-                        { x: new Date({{ daily_user.year|int }},{{ daily_user.month|int -1 }},{{ daily_user.day|int }}), y: 1 },
+                        { x: new Date({{ daily_user.year|int }},{{ daily_user.month|int -1 }},{{ daily_user.day|int }}), y: {{ minus_user[loop.index-1] }} },
                     {% endfor %}
 				]
 			},
@@ -198,17 +198,9 @@ window.onload = function () {
 				lineThickness: 2,
 
 				dataPoints: [
-				{ x: new Date(2010,0,3), y: 510 },
-				{ x: new Date(2010,0,5), y: 560 },
-				{ x: new Date(2010,0,7), y: 540 },
-				{ x: new Date(2010,0,9), y: 558 },
-				{ x: new Date(2010,0,11), y: 544 },
-				{ x: new Date(2010,0,13), y: 693 },
-				{ x: new Date(2010,0,15), y: 657 },
-				{ x: new Date(2010,0,17), y: 663 },
-				{ x: new Date(2010,0,19), y: 639 },
-				{ x: new Date(2010,0,21), y: 673 },
-				{ x: new Date(2010,0,23), y: 660 }
+				    {% for join_user in join_users %}
+                        { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
+                    {% endfor %}
 				]
 			}
 			],

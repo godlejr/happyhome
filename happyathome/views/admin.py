@@ -14,7 +14,29 @@ class MyAdminIndexView(AdminIndexView):
 
     @expose('/')
     def index(self):
+        join_users = db.session.execute('''
+            select  substring(created_at,1,4) as year,
+                    substring(created_at,6,2) as month,
+                    substring(created_at,9,2) as day,
+                    substring(created_at,1,10) as date,
+                    count(*)  as user_count
+                    from 	users
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 7
+                    group by date
+        ''')
+
         daily_users = db.session.execute('''
+            select  substring(created_at,1,4) as year,
+                    substring(created_at,6,2) as month,
+                    substring(created_at,9,2) as day,
+                    substring(created_at,1,10) as date,
+                    count(*)  as user_count
+                    from 	users
+                    WHERE 	TO_DAYS(NOW()) - TO_DAYS(created_at) <= 7
+                    group by date
+        ''')
+
+        temp_users = db.session.execute('''
             select  substring(created_at,1,4) as year,
                     substring(created_at,6,2) as month,
                     substring(created_at,9,2) as day,
@@ -28,7 +50,6 @@ class MyAdminIndexView(AdminIndexView):
         user_count = User.query.filter_by(level=1).count()
         pro_count = User.query.filter_by(level=2).count()
 
-        temp_users = daily_users
         minus_user = []
         for temp_user in temp_users:
             minus_user.append((pro_count + user_count) - temp_user.user_count)
@@ -60,7 +81,7 @@ class MyAdminIndexView(AdminIndexView):
                            rooms=rooms, user_count=user_count, pro_count=pro_count, pro_story_count=pro_story_count,
                            board_total=board_total, rooms_sum=rooms_sum, categories_sum=categories_sum,
                            pro_gallery_count=pro_gallery_count, board_question_total=board_question_total,
-                           board_answer_total=board_answer_total, daily_users=daily_users,minus_user=minus_user,
+                           board_answer_total=board_answer_total, daily_users=daily_users,minus_user=minus_user,join_users=join_users,
                            categories=categories)
 
 
