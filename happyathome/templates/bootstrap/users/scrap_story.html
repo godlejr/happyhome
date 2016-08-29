@@ -3,12 +3,12 @@
 {% block content_body %}
 <div class="content-body body-main">
     <div class="user-contents">
-        {% if user.id == session.user_id %}
+        {% if user.id == current_user.id %}
             <div class="user-menu">
                 <ul>
                     <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정
                     </li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경
-                    {% if user.level !=2 %}
+                    {% if not user.is_pro %}
                         </li><li href="{{ url_for('users.edit_professional', id=user.id) }}">사업자로 변경</li>
                     {% else %}
                         </li><li href="{{ url_for('users.edit_professional_info', id=user.id) }}">사업자정보 수정</li>
@@ -21,12 +21,14 @@
         <div class="cards">
             {% for magazinescrap in magazinescraps %}
                 <div class="card" href="{{ url_for('magazines.detail', id=magazinescrap.magazine_id) }}"
-                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazinescrap.magazine.photos[0].file.name) }})">
-                    {% if magazinescrap.magazine.has_vr %}
-                        <div class="card-media"><span class="vr-icon"></span></div>
-                    {% elif magazinescrap.magazine.has_mov %}
-                        <div class="card-media"><span class="mov-icon"></span></div>
-                    {% endif %}
+                     style="background-image:url({{ magazinescrap.magazine.photos[0].file_url }})">
+                    <div class="card-media">
+                        {% if magazinescrap.magazine.has_vr %}
+                            <span class="vr-icon"></span>
+                        {% elif magazinescrap.magazine.has_mov %}
+                            <span class="mov-icon"></span>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
