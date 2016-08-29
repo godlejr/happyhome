@@ -3,15 +3,15 @@
 {% block content_body %}
 <div class="content-body body-main">
     <div class="user-contents">
-        {% if session.user_id == user.id %}
+        {% if user == current_user %}
             <div class="user-menu">
                 <ul>
-                    <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정
-                    </li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경
-                    {% if user.level !=2 %}
-                        </li><li href="{{ url_for('users.edit_professional', id=user.id) }}">사업자로 변경</li>
+                    <li href="{{ url_for('users.edit_profile', id=current_user.id) }}">프로필 수정
+                    </li><li href="{{ url_for('users.edit_password', id=current_user.id) }}">비밀번호 변경
+                    {% if not current_user.is_pro %}
+                        </li><li href="{{ url_for('users.edit_professional', id=current_user.id) }}">사업자로 변경</li>
                     {% else %}
-                        </li><li href="{{ url_for('users.edit_professional_info', id=user.id) }}">사업자정보 수정</li>
+                        </li><li href="{{ url_for('users.edit_professional_info', id=current_user.id) }}">사업자정보 수정</li>
                     {% endif %}
                 </ul>
             </div>
@@ -22,11 +22,11 @@
             {% for magazine in magazines %}
                 {% if magazine.photos %}
                 <div class="card" id="{{ magazine.id }}"
-                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=magazine.photos[0].file.name) }})">
-                    {% if magazine.has_vr  %}
+                     style="background-image:url({{ magazine.photos[0].file_url }})">
+                    {% if magazine.has_vr %}
                         <div class="card-media"><span class="vr-icon"></span></div>
                     {% endif %}
-                    {% if magazine.has_mov  %}
+                    {% if magazine.has_mov %}
                         <div class="card-media"><span class="mov-icon"></span></div>
                     {% endif %}
                     <div class="card-title">{{ magazine.title }}</div>

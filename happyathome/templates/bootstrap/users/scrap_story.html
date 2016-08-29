@@ -22,13 +22,11 @@
             {% for magazinescrap in magazinescraps %}
                 <div class="card" href="{{ url_for('magazines.detail', id=magazinescrap.magazine_id) }}"
                      style="background-image:url({{ magazinescrap.magazine.photos[0].file_url }})">
-                    <div class="card-media">
-                        {% if magazinescrap.magazine.has_vr %}
-                            <span class="vr-icon"></span>
-                        {% elif magazinescrap.magazine.has_mov %}
-                            <span class="mov-icon"></span>
-                        {% endif %}
-                    </div>
+                    {% if magazinescrap.magazine.has_vr %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% elif magazinescrap.magazine.has_mov %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

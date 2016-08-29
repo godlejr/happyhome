@@ -22,13 +22,11 @@
             {% for magazinescrap in magazinescraps %}
                 <div class="card" href="{{ url_for('magazines.detail', id=magazinescrap.magazine_id) }}"
                      style="background-image:url({{ magazinescrap.magazine.photos[0].file_url }})">
-                    <div class="card-media">
-                        {% if magazinescrap.magazine.has_vr %}
-                            <span class="vr-icon"></span>
-                        {% elif magazinescrap.magazine.has_mov %}
-                            <span class="mov-icon"></span>
-                        {% endif %}
-                    </div>
+                    {% if magazinescrap.magazine.has_vr %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% elif magazinescrap.magazine.has_mov %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
@@ -38,13 +36,11 @@
             {% for photoscrap in photoscraps %}
                 <div class="card" href="{{ url_for('photos.detail', id=photoscrap.photo_id) }}"
                      style="background-image:url({{ photoscrap.photo.file_url }})">
-                    <div class="card-media">
-                        {% if photoscrap.photo.is_vr %}
-                            <span class="vr-icon"></span>
-                        {% elif photoscrap.photo.is_mov %}
-                            <span class="mov-icon"></span>
-                        {% endif %}
-                    </div>
+                    {% if photoscrap.photo.is_vr %}
+                        <div class="card-media"><span class="vr-icon"></span></div>
+                    {% elif photoscrap.photo.is_mov %}
+                        <div class="card-media"><span class="mov-icon"></span></div>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
