@@ -69,6 +69,19 @@
         <div class="edit_title">홈페이지</div>
         {{ form.homepage(class="edit_form_field" , placeholder=form.homepage.label.text) }}
     </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if form.homepage.errors %}
+    <div class="message">
+        <ul>
+            {% for message in form.homepage.errors %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <div class="edit_field">
         <div class="edit_title">소개</div>
         <textarea class="edit_textarea_form" placeholder="소개를 입력하세요" name="greeting"></textarea>
