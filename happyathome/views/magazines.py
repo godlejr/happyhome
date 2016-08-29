@@ -136,7 +136,7 @@ def new():
 
                 body = dict(
                     snippet=dict(
-                        title='해피홈 갤러리 동영상 (%s)' % photo.id,
+                        title=request.form['title'],
                         description=request.form['content']
                     ),
                     status=dict(
