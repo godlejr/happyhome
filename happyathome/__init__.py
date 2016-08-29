@@ -67,8 +67,9 @@ def create_app(config_name):
     app.register_blueprint(users_blueprint, url_prefix='/user')
     app.register_blueprint(search_blueprint, url_prefix='/search')
 
-    app.errorhandler(404)(lambda e: render_template('error/404.html'))
     app.errorhandler(403)(lambda e: redirect('/'))
+    app.errorhandler(404)(lambda e: render_template('error/404.html'))
+    app.errorhandler(500)(lambda e: render_template('error/404.html'))
 
     login_manager = LoginManager()
     login_manager.init_app(app)

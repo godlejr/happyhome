@@ -179,40 +179,15 @@ def facebook_login():
         user.email = userEmail
         user.name = userName
         user.password ="ABLFJBDALSJFBU10!@*#!2820"
-        user.level =1
+        user.level = 1
         db.session.add(user)
         db.session.flush()
         db.session.commit()
 
-        session['user_id'] = user.id
-        session['user_email'] = user.email
-        session['user_level'] = user.level
+    session['user_id'] = user.id
+    session['user_email'] = user.email
+    session['user_level'] = user.level
 
-        return jsonify({
-            'ok': 1
-        })
-    else:
-        session['user_id'] = user.id
-        session['user_email'] = user.email
-        session['user_level'] = user.level
-
-        return jsonify({
-            'ok': 1
-        })
-
-
-@main.route('/oauth2callback')
-def oauth2callback():
-    flow = client.flow_from_clientsecrets(
-        os.path.join(current_app.root_path, 'google_api_secrets.json'),
-        scope=current_app.config['YOUTUBE_API_SCOPE'],
-        redirect_uri=url_for('main.oauth2callback', _external=True))
-
-    if 'code' not in request.args:
-        auth_uri = flow.step1_get_authorize_url()
-        return redirect(auth_uri)
-    else:
-        auth_code = request.args.get('code')
-        credentials = flow.step2_exchange(auth_code)
-        session['credentials'] = credentials.to_json()
-        return redirect(url_for('main.index'))
+    return jsonify({
+        'ok': 1
+    })

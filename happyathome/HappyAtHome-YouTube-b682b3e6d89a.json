@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "happyathome-youtube",
+  "private_key_id": "b682b3e6d89a2a3ce1d8bf5686757d9e66d99b5e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC9RzarUv4AE+Sf\nr+Yp1UgFTy3jMxh5qXCNDTVnbfbJ7uivvfYcH+YjPk3yEKhM1EegZY7McI3lR+yT\nTkgS7mA5EpJrA9SSNLxzPfENYxE06FsUHI7R9P1g2t5jUwrcA3HSaYF39AVJbTzb\nEdzsq73TZUberBuNZRaandKu6X5DzbtKQJA5R4FyRmWn24Rgs4U3fyZ3o4mkk32J\nR8/lkyQJrOZhaZBxO+5HMo+TZd+eMHADHsvPTlnUBYBY/h0fqrbIU3GN4tuvMJki\n3+LAMWv1UTqmD4Kche8ea0Z3xlOV188EZEJSxEe6q5WhISZ55R16KN2FJsG7SGOB\n1S5SCeKlAgMBAAECggEAd/yR6m909wWlU5mFNZWvzzXPaAy3AkDoSXJLHWL3JDGg\nLfAk+NU75bGUZdQrbHDRaxuWN4FOYj+C+CqSw/V66BMe4FoQQhLON9vXWF4pxTla\nq1gjLXO5v9FfUuWMp8ZDPFiHq0v0ogRupI0hWKLSdhTopTXDTZH8j01nBlycH0xP\ndR4A9r9K0M4imxsFkGo242i1zE3oH5AX96HsqzDrn6hCVy/nTfrNpY9UplSFj/IL\nBHBJIVr9mAWdYvi5Pfz7zsuC8pR0hG78uPIp4fYZtvFaLhhFzazxF1BzKewM5BAc\nUhp1ao7zDv5wtIENtDPIzzDeJQ5ulI20jgavaLgB4QKBgQDnT6EAIYuAHdozxyad\nj/gG7znGMVTEcYIwHMnwALrt5uIJDY+RMisqgpL+EIyTUmFKloF1RrDfIB5rJlvP\nBonuKy1v3VjrhcZCbGTV+6/BxCVAtJ47ITjAGaDP0gSAUBD+4nOJjaHjuMlHQ16T\nrq3e/MyrgQdC2xtXeiPU8gJ+SQKBgQDRexLHgL1FZpUTvn9f2kp/u5IN/L9lhoY3\ngdy2Q0YDXq57gM7VrA7jOp0A8+7Cy2bd9FrzjLMmvtnrE7M7ElrJqarsINOK4942\ny0pYtqE6gXS68K6JRghbC2lkAVKx5HEXVtk6okrMFXH8tso+aoM71YJqiMysq/Ud\nKXvRNHRxfQKBgHcMkq6AlU2xD5bKjuNVL7BR+4g354rbaMfeaUhu98ZtqDREmHmA\nOps8bO76EX/ZTF2ZLLPxWCLeYwl+yo24rdC4xD/oylUdmrahFxzS1tiBXTL6Qt3n\n8U9dYVjUnKB1lOm6HwDStll/x4g38jtMEgzMS4KRe+06282f/UUh8YqRAoGALL4q\n3q3iv2YPxW3U6vZHH01C/vXTM64uEMEOEWgBFkss3Xg/tWfQrjwguMlhX/3t9M5y\ndr7ArS/qf8lvaNicx6ITveetB2dwWSfGs3geq85mzl8GCJAKzNd9JT0bGp/+f8uv\nDlUHwNt7w0yPmhFKAoeyGWsqvF7mNdpcdezMSkkCgYEA2MSYGNYKEBrZJgh3ibe/\nvE53porhitQoAoZF3nV3LX+iE6m3I0ftvxW/mQgiWUjpoj6WXtPPLCrbLL4rWm+4\nYlsZDCtIUaDV6F7cjQfZJs8GcDzx6O8BkH3fGNe3m1ZEGYKJbZtlZwlcEbM9JyPz\nGTHhOmN5zuJW/AMmhWzuduk=\n-----END PRIVATE KEY-----\n",
+  "client_email": "happy-home@happyathome-youtube.iam.gserviceaccount.com",
+  "client_id": "100352522200867355752",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/happy-home%40happyathome-youtube.iam.gserviceaccount.com"
+}

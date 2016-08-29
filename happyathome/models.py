@@ -159,27 +159,6 @@ class Room(db.Model, BaseMixin):
         count = Photo.query.filter(Photo.room_id == room_id).count()
         return count
 
-class File(db.Model, BaseMixin):
-    """파일 정보"""
-    __tablename__ = 'files'
-
-    type = db.Column(db.Integer, nullable=False, default=1)
-    cid = db.Column(db.Unicode(50))
-    name = db.Column(db.Unicode(255), nullable=False)
-    ext = db.Column(db.Unicode(255), nullable=False)
-    size = db.Column(db.Integer, nullable=False)
-
-    @hybrid_property
-    def youtube_url(self):
-        return 'https://www.youtube.com/embed/%s' % self.cid if self.cid else None
-
-    @hybrid_property
-    def youtube_thumb_url(self):
-        return 'https://i.ytimg.com/vi/%s/mqdefault.jpg' % self.cid if self.cid else None
-
-    def __repr__(self):
-        return Markup('<img src="http://static.inotone.co.kr/data/img/%s" width="100" height="100">') % self.name
-
 
 class Comment(db.Model, BaseMixin):
     """댓글 내역"""
@@ -221,6 +200,52 @@ class Comment(db.Model, BaseMixin):
         return db.session.query(Comment).filter(Comment.group_id == group_id).filter(Comment.depth == 0).first().id
 
 
+class File(db.Model, BaseMixin):
+    """파일 정보"""
+    __tablename__ = 'files'
+
+    type = db.Column(db.Integer, nullable=False, default=1)
+    cid = db.Column(db.Unicode(50))
+    name = db.Column(db.Unicode(255), nullable=False)
+    ext = db.Column(db.Unicode(255), nullable=False)
+    size = db.Column(db.Integer, nullable=False)
+
+    @hybrid_property
+    def is_photo(self):
+        return True if self.type == 1 else False
+
+    @hybrid_property
+    def is_vr(self):
+        return True if self.type == 2 else False
+
+    @hybrid_property
+    def is_mov(self):
+        return True if self.type == 3 else False
+
+    @hybrid_property
+    def is_youtube(self):
+        return True if self.type == 3 and self.cid else False
+
+    @hybrid_property
+    def youtube_url(self):
+        return 'https://www.youtube.com/embed/%s' % self.cid if self.cid else None
+
+    @hybrid_property
+    def youtube_thumbnail_url(self):
+        return 'https://i.ytimg.com/vi/%s/mqdefault.jpg' % self.cid if self.cid else None
+
+    @hybrid_property
+    def photo_thumbnail_url(self):
+        return 'http://static.inotone.co.kr/data/img/%s' % self.name if self.name else None
+
+    @hybrid_property
+    def thumbnail_url(self):
+        return self.youtube_thumbnail_url if self.is_youtube else self.photo_thumbnail_url
+
+    def __repr__(self):
+        return Markup('<img src="http://static.inotone.co.kr/data/img/%s" width="100" height="100">') % self.name
+
+
 class Photo(db.Model, BaseMixin):
     """사진 정보"""
     __tablename__ = 'photos'
@@ -240,19 +265,23 @@ class Photo(db.Model, BaseMixin):
 
     @hybrid_property
     def is_photo(self):
-        return True if not self.file or self.file.type not in (2, 3) else False
+        return True if not self.file or self.file.is_photo else False
 
     @hybrid_property
     def is_vr(self):
-        return True if self.file.type == 2 else False
+        return self.file.is_vr
 
     @hybrid_property
     def is_mov(self):
-        return True if self.file.type == 3 else False
+        return self.file.is_mov
 
     @hybrid_property
     def is_youtube(self):
-        return True if self.file.type == 3 and self.file.cid else False
+        return self.file.is_youtube
+
+    @hybrid_property
+    def thumbnail_url(self):
+        return self.file.thumbnail_url
 
     @hybrid_method
     def is_active(self, model, user_id):

@@ -24,6 +24,7 @@
                     <select name="content_type" id="contentType">
                         <option value="1" {% if photo.is_photo %}selected{% endif %}>사진</option>
                         <option value="2" {% if photo.is_vr %}selected{% endif %}>VR/360</option>
+                        <option value="3" {% if photo.is_mov %}selected{% endif %}>동영상</option>
                     </select>
 
                     <select id="room_id" name="room_id">

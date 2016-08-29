@@ -1,9 +1,27 @@
+import os
+
 import httplib2
+from flask import current_app
+from googleapiclient import discovery
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
+from oauth2client import service_account
 
 RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError)
 RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
+
+
+def auth_account():
+    credentials = service_account.ServiceAccountCredentials.from_json_keyfile_name(
+        os.path.join(current_app.root_path, 'HappyAtHome-YouTube-b682b3e6d89a.json'),
+        scopes=current_app.config['YOUTUBE_API_SCOPES']
+    )
+    delegated_credentials = credentials.create_delegated('dev@inotone.co.kr')
+    youtube = discovery.build(current_app.config['YOUTUBE_API_SERVICE_NAME'],
+                              current_app.config['YOUTUBE_API_VERSION'],
+                              http=delegated_credentials.authorize(httplib2.Http()))
+
+    return youtube
 
 
 def initialize_upload(youtube, options={}):

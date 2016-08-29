@@ -3,12 +3,12 @@
 {% block content_body %}
 <div class="content-body body-main">
     <div class="user-contents">
-        {% if session.user_id == user.id %}
+        {% if user.id == current_user.id %}
             <div class="user-menu">
                 <ul>
                     <li href="{{ url_for('users.edit_profile', id=user.id) }}">프로필 수정
                     </li><li href="{{ url_for('users.edit_password', id=user.id) }}">비밀번호 변경
-                    {% if user.level !=2 %}
+                    {% if user.level != 2 %}
                         </li><li href="{{ url_for('users.edit_professional', id=user.id) }}">사업자로 변경</li>
                     {% else %}
                         </li><li href="{{ url_for('users.edit_professional_info', id=user.id) }}">사업자정보 수정</li>
@@ -20,13 +20,14 @@
         <div class="user-title">갤러리</div>
         <div class="cards">
             {% for photo in photos %}
-                <div class="card" id="{{ photo.id }}"
-                     style="background-image:url({{ url_for_s3('S3_IMG_DIRECTORY', filename=photo.file.name) }})">
-                    {% if photo.is_vr  %}
-                        <div class="card-media"><span class="vr-icon"></span></div>
-                    {% elif photo.is_mov  %}
-                        <div class="card-media"><span class="mov-icon"></span></div>
-                    {% endif %}
+                <div class="card" id="{{ photo.id }}" style="background-image:url({{ photo.thumbnail_url }})">
+                    <div class="card-media">
+                        {% if photo.is_vr  %}
+                            <span class="vr-icon"></span>
+                        {% elif photo.is_mov  %}
+                            <span class="mov-icon"></span>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>
