@@ -180,11 +180,13 @@ function loadPhoto(photoPreview, dataURL) {
 
 function loadPhotoPreview(photo) {
     var img = new Image(),
+        photoRoom = document.getElementById('photoRoom-' + photo.id),
         contentType = document.getElementById('contentType-' + photo.id),
         photoPreview = document.getElementById('photoPreview-' + photo.id);
 
     img.src = photo.thumbUrl;
     img.onload = function() {
+        photoRoom.value = photo.room_id;
         contentType.value = photo.contentType;
         photoPreview.appendChild(this);
         photoPreview.style.width = photoPreview.offsetHeight * (this.width / this.height);

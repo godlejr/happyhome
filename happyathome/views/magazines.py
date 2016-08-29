@@ -257,6 +257,7 @@ def api(id):
     for photo in magazine.photos:
         photos.append({
             'id': photo.id,
+            'room_id': photo.room_id,
             'fileUrl': photo.file_url,
             'thumbUrl': photo.thumb_url,
             'contentType': photo.file.type,
