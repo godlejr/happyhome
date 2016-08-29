@@ -4,9 +4,31 @@
 <div class="content">
     <div class="content-body">
         <div class="content-board">
-            <div class="board-title">해피홈, 기간별 통계</div>
-            <div class="status-content" >
-                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+            <div class="board-title">기간별 통계</div>
+            <div class="status-content">
+                <div id='show-me'>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills nav-jt" style="max-width:350px;">
+                        <li class="active"><a data-toggle="tab" href="#tab1">주간</a>
+                        </li>
+                        <li><a data-toggle="tab" id="bs-tab2" href="#tab2">월간</a>
+                        </li>
+                        <li><a data-toggle="tab" id="bs-tab3" href="#tab3">연간</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" style="max-width:350px;">
+                        <div id="tab1" class="tab-pane fade active in"  style="position:relative;">
+                            <div id="week_user_chart" style="position:absolute; top:50px; left:0px; height: 300px; width: 100%;"></div>
+                        </div>
+                        <div id="tab2" class="tab-pane"  style="position:relative;">
+                            <div id="month_user_chart" style="position:absolute; top:50px; left:0px; height: 300px; width: 100%;"></div>
+                        </div>
+                        <div id="tab3" class="tab-pane"  style="position:relative;">
+                            <div id="year_user_chart" style="position:absolute; top:50px; left:0px; height: 300px; width: 100%;"></div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
@@ -143,83 +165,236 @@
 </div>
 
 <script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
-window.onload = function () {
-        CanvasJS.addCultureInfo("ko",
-            {
-              decimalSeparator: ",",// Observe ToolTip Number Format
-              digitGroupSeparator: ".", // Observe axisY labels
-              days: ["일", "월", "화", "수", "목", "금", "토"],
-              shortMonths: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"]
-            });
 
-		var chart = new CanvasJS.Chart("chartContainer",
-		{
-            culture:"ko",
-			title:{
-				text: "주간 회원 통계",
-				fontSize: 15
-			},
-            animationEnabled: true,
-			axisX:{
-				gridColor: "Silver",
-				tickColor: "silver",
-				valueFormatString: "MM/DD"
-			},
-            toolTip:{
-                shared:true
-            },
-			theme: "theme1",
-			axisY: {
-				gridColor: "Silver",
-				tickColor: "silver"
-			},
-			legend:{
-				verticalAlign: "center",
-				horizontalAlign: "right"
-			},
-			data: [
-			{   name: "누적 회원수",
-				type: "line",
-				showInLegend: true,
-				lineThickness: 2,
-				markerType: "square",
-				color: "#F08080",
-				dataPoints: [
-                    {% for daily_user in daily_users %}
-                        { x: new Date({{ daily_user.year|int }},{{ daily_user.month|int -1 }},{{ daily_user.day|int }}), y: {{ minus_user[loop.index-1] }} },
-                    {% endfor %}
-				]
-			},
-			{   name:"일별 가입 회원수",
-				type: "line",
-				showInLegend: true,
-				color: "#20B2AA",
-				lineThickness: 2,
+CanvasJS.addCultureInfo("ko",
+    {
+      decimalSeparator: ",",// Observe ToolTip Number Format
+      digitGroupSeparator: ".", // Observe axisY labels
+      days: ["일", "월", "화", "수", "목", "금", "토"],
+      shortMonths: ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"]
+    });
 
-				dataPoints: [
-				    {% for join_user in join_users %}
-                        { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
-                    {% endfor %}
-				]
-			}
-			],
-          legend:{
+var week_user_chart = new CanvasJS.Chart("week_user_chart",
+{
+    culture:"ko",
+    title:{
+        text: "주간 회원 통계",
+        fontSize: 15
+    },
+    animationEnabled: true,
+    axisX:{
+        gridColor: "Silver",
+        tickColor: "silver",
+        valueFormatString: "MM/DD"
+    },
+    toolTip:{
+        shared:true
+    },
+    theme: "theme1",
+    axisY: {
+        gridColor: "Silver",
+        tickColor: "silver"
+    },
+    legend:{
+        verticalAlign: "center",
+        horizontalAlign: "right"
+    },
+    data: [
+    {   name: "누적 회원수",
+        type: "line",
+        showInLegend: true,
+        lineThickness: 2,
+        markerType: "square",
+        color: "#F08080",
+        dataPoints: [
+            {% for daily_user in daily_users %}
+                { x: new Date({{ daily_user.year|int }},{{ daily_user.month|int -1 }},{{ daily_user.day|int }}), y: {{ minus_daily_user[loop.index-1] }} },
+            {% endfor %}
+        ]
+    },
+    {   name:"일별 가입 회원수",
+        type: "line",
+        showInLegend: true,
+        color: "#20B2AA",
+        lineThickness: 2,
+
+        dataPoints: [
+            {% for join_user in join_daily_users %}
+                { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
+            {% endfor %}
+        ]
+    }],
+    legend:{
+        cursor:"pointer",
+        itemclick:function(e){
+            if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+            }
+            else{
+            e.dataSeries.visible = true;
+            }
+            week_user_chart.render();
+        }
+    }
+});
+week_user_chart.render();
+
+function monthly(){
+    var month_user_chart = new CanvasJS.Chart("month_user_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "월간 회원 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM/DD"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
+        {   name: "누적 회원수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+                {% for monthly_user in monthly_users %}
+                    { x: new Date({{ monthly_user.year|int }},{{ monthly_user.month|int -1 }},{{ monthly_user.day|int }}), y: {{ minus_monthly_user[loop.index-1] }} },
+                {% endfor %}
+            ]
+        },
+        {   name:"주별 가입 회원수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+            dataPoints: [
+                {% for join_user in join_monthly_users %}
+                    { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
+                {% endfor %}
+
+            ]
+        }
+        ],
+        legend:{
             cursor:"pointer",
             itemclick:function(e){
-              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-              	e.dataSeries.visible = false;
-              }
-              else{
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
                 e.dataSeries.visible = true;
-              }
-              chart.render();
+                }
+                month_user_chart.render();
             }
-          }
-		});
-
-chart.render();
+        }
+    });
+    month_user_chart.render();
 }
+
+function yearly(){
+    var year_user_chart = new CanvasJS.Chart("year_user_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "연간 회원 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM/DD"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
+        {   name: "누적 회원수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+
+                { x: new Date(2016,8,7), y: 1 }
+
+            ]
+        },
+        {   name:"월별 가입 회원수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+
+            dataPoints: [
+                { x: new Date(2016,8,7), y: 1 }
+
+            ]
+        }
+        ],
+        legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
+                e.dataSeries.visible = true;
+                }
+                year_user_chart.render();
+            }
+        }
+    });
+    year_user_chart.render();
+}
+
+$(document).ready(function(){
+    $('.nav-jt a[id=bs-tab2]').click(function(){
+        $(this).tab('show');
+    });
+
+    $('.nav-jt a[id=bs-tab2]').on('shown.bs.tab',function(e){
+        monthly();
+        $('.nav a[id=bs-tab2]').off();//to remove the binded event after initial rendering
+    });
+
+    $('.nav-jt a[id=bs-tab3]').click(function(){
+        $(this).tab('show');
+    });
+
+    $('.nav-jt a[id=bs-tab3]').on('shown.bs.tab',function(e){
+        yearly();
+        $('.nav a[id=bs-tab3]').off();//to remove the binded event after initial rendering
+    });
+});
 
 </script>
 {% endblock body %}
