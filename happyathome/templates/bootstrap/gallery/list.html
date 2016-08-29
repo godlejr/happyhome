@@ -9,18 +9,14 @@
             </ul>
         </div>
         {% for card in cards %}
-            <div class="card gallery" id="{{ card.id }}"
-                 {% if card.is_mov  %}
-                    style="background-image:url({{ card.file.youtube_thumb_url }})"
-                 {% else %}
-                    style="background-image:url(http://static.inotone.co.kr/data/img/{{ card.file.name }})"
-                 {% endif %}
-            >
-                {% if card.is_vr  %}
-                    <div class="card-media"><span class="vr-icon"></span></div>
-                {% elif card.is_mov  %}
-                    <div class="card-media"><span class="mov-icon"></span></div>
-                {% endif %}
+            <div class="card gallery" id="{{ card.id }}" style="background-image:url({{ card.thumbnail_url }})">
+                <div class="card-media">
+                    {% if card.is_vr %}
+                        <span class="vr-icon"></span>
+                    {% elif card.is_mov %}
+                        <span class="mov-icon"></span>
+                    {% endif %}
+                </div>
                 <div class="card-info gallery">
                     <div class="card-author">
                         <a href="{{ url_for('users.info',id = card.user.id) }}"><div class="card-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=card.user.avatar) }}) "></div></a>
@@ -44,8 +40,7 @@
 
 <script>
 $('select.form-control').change(function() {
-    document.location.href = "{{ url_for('photos.list') }}" +
-                             "?room_id=" + $('#rooms').val();
+    document.location.href = "{{ url_for('photos.list') }}?room_id=" + $('#rooms').val();
 });
 
 $('.card').click(function() {

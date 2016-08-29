@@ -6,12 +6,15 @@ import shortuuid
 from flask import session
 from flask_login import login_required, current_user
 from googleapiclient import discovery
+from googleapiclient.http import MediaFileUpload
 from happyathome.forms import Pagination
-from happyathome.lib.youtube_api import initialize_upload
+from happyathome.lib.youtube_api import initialize_upload, resumable_upload
 from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, \
     Magazine
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
 from oauth2client import client
+from oauth2client import service_account
+from oauth2client.file import Storage
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
@@ -156,21 +159,36 @@ def new():
         db.session.commit()
 
         if request.form['content_type'] == '3':
-            if 'credentials' not in session:
-                return redirect(url_for('main.oauth2callback'))
+            credentials = service_account.ServiceAccountCredentials.from_json_keyfile_name(
+                os.path.join(current_app.root_path, 'HappyAtHome-YouTube-b682b3e6d89a.json'),
+                scopes=current_app.config['YOUTUBE_API_SCOPES']
+            )
 
-            credentials = client.OAuth2Credentials.from_json(session['credentials'])
-            if credentials.access_token_expired:
-                return redirect(url_for('main.oauth2callback'))
-            else:
+            delegated_credentials = credentials.create_delegated('dev@inotone.co.kr')
+
+            if delegated_credentials:
+                http_auth = delegated_credentials.authorize(httplib2.Http())
                 youtube = discovery.build(current_app.config['YOUTUBE_API_SERVICE_NAME'],
                                           current_app.config['YOUTUBE_API_VERSION'],
-                                          http=credentials.authorize(httplib2.Http()))
-                data = initialize_upload(youtube, {
-                    'title': '해피홈 갤러리 동영상 (%s)' % photo.id,
-                    'description': request.form['content'],
-                    'filepath': photo_path
-                })
+                                          http=http_auth)
+                body = dict(
+                    snippet=dict(
+                        title='해피홈 갤러리 동영상 (%s)' % photo.id,
+                        description=request.form['content']
+                    ),
+                    status=dict(
+                        privacyStatus='public'
+                    )
+                )
+
+                # Call the API's videos.insert method to create and upload the video.
+                insert_request = youtube.videos().insert(
+                    part=','.join(body.keys()),
+                    body=body,
+                    media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
+                )
+
+                data = resumable_upload(insert_request)
                 if data.get('status') == '200':
                     File.query.filter_by(id=file.id).update({'cid': data['response']['id']})
                     db.session.commit()
@@ -220,15 +238,17 @@ def edit(id):
 def delete(id):
     Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session=False)
     photo = Photo.query.filter_by(id=id, user_id=current_user.id).first()
+    photo_file = File.query.filter_by(id=photo.file_id).first()
 
     if photo.is_youtube:
-        if 'credentials' not in session:
-            return redirect(url_for('main.oauth2callback'))
+        credentials = service_account.ServiceAccountCredentials.from_json_keyfile_name(
+            os.path.join(current_app.root_path, 'HappyAtHome-YouTube-b682b3e6d89a.json'),
+            scopes=current_app.config['YOUTUBE_API_SCOPES']
+        )
 
-        credentials = client.OAuth2Credentials.from_json(session['credentials'])
-        if credentials.access_token_expired:
-            return redirect(url_for('main.oauth2callback'))
-        else:
+        delegated_credentials = credentials.create_delegated('dev@inotone.co.kr')
+
+        if delegated_credentials:
             youtube = discovery.build(current_app.config['YOUTUBE_API_SERVICE_NAME'],
                                       current_app.config['YOUTUBE_API_VERSION'],
                                       http=credentials.authorize(httplib2.Http()))
@@ -238,6 +258,7 @@ def delete(id):
         s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
 
     db.session.delete(photo)
+    db.session.delete(photo_file)
     db.session.commit()
 
     return redirect(url_for('photos.list'))
