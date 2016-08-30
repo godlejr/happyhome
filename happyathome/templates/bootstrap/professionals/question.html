@@ -70,7 +70,7 @@
             {% endfor %}
         </div>
         <div class="content-list">
-            <div class="user-title">프로 Q&A ({{ 0 }})</div>
+            <div class="user-title">전문가 Q&A ({{ 0 }})</div>
             {% for qna in pro_qna %}
                 <div class="qna-list">
                     <div class="qna-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=qna.photos[0].photo.file_name) }})"></div>
