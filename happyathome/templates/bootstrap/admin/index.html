@@ -803,4 +803,9 @@ $(document).ready(function(){
 });
 
 </script>
+<script>
+$('.navbar-brand').click(function(){
+    document.location.href =  "{{ url_for('main.index') }}";
+});
+</script>
 {% endblock body %}
