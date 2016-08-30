@@ -3552,7 +3552,9 @@ a.btn-cancel {
         display: none;
     }
     .cards.col-4 .card {
-        width: auto;
+        width: 100%;
+        max-width: 320px;
+        max-height: 320px;
     }
     .content-main {
         margin: 0 auto;
