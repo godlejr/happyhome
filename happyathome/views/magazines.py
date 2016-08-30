@@ -300,7 +300,7 @@ def delete(id):
         else:
             s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
         File.query.filter_by(id=photo.file_id).delete()
-    Comment.query.filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session='fetch')
+    Comment.query.filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session=False)
     db.session.delete(magazine)
     db.session.commit()
 

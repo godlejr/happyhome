@@ -266,8 +266,8 @@ class Photo(db.Model, BaseMixin):
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
 
     user = db.relationship('User', backref=backref('user_photos'))
-    file = db.relationship('File', backref=backref('file_photos'))
     room = db.relationship('Room', backref=backref('room_photos'))
+    file = db.relationship('File', backref=backref('file_photos'))
     magazine = db.relationship('Magazine', back_populates='photos')
     comments = db.relationship('PhotoComment', back_populates='photo')
 
@@ -314,8 +314,8 @@ class PhotoLike(db.Model, BaseMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
 
-    user = db.relationship('User', backref='like_users')
-    photo = db.relationship('Photo', backref='like_photos')
+    user = db.relationship('User', backref=backref('like_users'))
+    photo = db.relationship('Photo', backref=backref('like_photos', cascade='all,delete'))
 
 
 class PhotoScrap(db.Model, BaseMixin):
@@ -326,7 +326,7 @@ class PhotoScrap(db.Model, BaseMixin):
     photo_id = db.Column(db.Integer, db.ForeignKey('photos.id'))
 
     user = db.relationship('User', backref='scrap_users')
-    photo = db.relationship('Photo', backref='scrap_photos')
+    photo = db.relationship('Photo', backref=backref('scrap_photos', cascade='all,delete'))
 
 
 class PhotoComment(db.Model, BaseMixin):
@@ -357,8 +357,8 @@ class Magazine(db.Model, BaseMixin):
     user = db.relationship('User', backref=backref('user_magazines'))
     category = db.relationship('Category', backref=backref('category_magazines'))
     residence = db.relationship('Residence', backref=backref('residence_magazines'))
-    photos = db.relationship('Photo', back_populates='magazine')
-    comments = db.relationship('MagazineComment', back_populates='magazine')
+    photos = db.relationship('Photo', back_populates='magazine', cascade='all,delete')
+    comments = db.relationship('MagazineComment', back_populates='magazine', cascade='all,delete')
 
     @hybrid_property
     def vr_count(self):
@@ -391,8 +391,8 @@ class MagazineLike(db.Model, BaseMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
 
-    user = db.relationship('User', backref='magazine_like_users')
-    magazine = db.relationship('Magazine', backref='like_magazines')
+    user = db.relationship('User', backref=backref('magazine_like_users'))
+    magazine = db.relationship('Magazine', backref=backref('like_magazines', cascade='all,delete'))
 
 
 class MagazineScrap(db.Model, BaseMixin):
@@ -402,8 +402,8 @@ class MagazineScrap(db.Model, BaseMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     magazine_id = db.Column(db.Integer, db.ForeignKey('magazines.id'))
 
-    user = db.relationship('User', backref='magazine_scrap_users')
-    magazine = db.relationship('Magazine', backref='scrap_magazines')
+    user = db.relationship('User', backref=backref('magazine_scrap_users'))
+    magazine = db.relationship('Magazine', backref=backref('scrap_magazines', cascade='all,delete'))
 
 
 class MagazineComment(db.Model, BaseMixin):

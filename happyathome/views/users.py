@@ -24,12 +24,14 @@ def utility_processor():
 
 @users.route('/')
 @users.route('/<id>')
-@login_required
 def info(id=None):
     if not id:
         return redirect(url_for('users.info', id=current_user.id))
 
     user = User.query.filter_by(id=id).first()
+    if user.is_pro:
+        return redirect(url_for('professionals.detail', id=id))
+
     magazine_count =  Magazine.query.filter_by(user_id=id).count()
     photo_count = Photo.query.filter_by(user_id=id).count()
     photoscrap_count = PhotoScrap.query.filter_by(user_id=id).count()

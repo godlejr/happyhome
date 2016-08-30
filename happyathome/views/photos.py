@@ -222,11 +222,8 @@ def edit(id):
 @login_required
 def delete(id):
     photo = Photo.query.filter_by(id=id).first()
-    if current_user.id != photo.user_id:
+    if photo.user_id != current_user.id:
         return redirect(url_for('photos.detail', id=id))
-
-    photo_file = File.query.filter_by(id=photo.file_id).first()
-    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session='fetch')
 
     if photo.is_youtube:
         youtube = youtube_api.auth_account()
@@ -235,8 +232,8 @@ def delete(id):
         s3 = boto3.resource('s3')
         s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
 
-    db.session.delete(photo)
-    db.session.delete(photo_file)
+    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session=False)
+    File.query.filter_by(id=photo.file_id).delete()
     db.session.commit()
 
     return redirect(url_for('photos.list'))
