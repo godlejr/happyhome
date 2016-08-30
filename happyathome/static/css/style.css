@@ -3508,6 +3508,40 @@ a.btn-cancel {
     .cards-cols-opt {
         display: none;
     }
+    .tile.x1,
+    .tile.x2,
+    .tile.x3,
+    .tile.y2 {
+        float: none;
+        width: 100%;
+        max-width: 320px;
+        max-height: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .tile.y2 {
+        max-height: 663px;
+    }
+    .tile.y2 img,
+    .tile.x2 img {
+        width: 100%;
+        height: auto;
+    }
+    .tile.banner-mid {
+        display: none;
+    }
+    .tile #photo360 {
+        width: 320px;
+        height: 240px;
+        float: none;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .tile .vr360-wrap {
+        width: 100%;
+        height: 100%;
+    }
     .card {
         float: none;
         width: 100%;
