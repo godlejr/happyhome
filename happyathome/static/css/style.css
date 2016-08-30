@@ -145,6 +145,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 96px;
     height: 96px;
     background-image: url(/static/img/main/str-menu.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 .banner-menu .menu-item .str-menu:hover {
     background-image: url(/static/img/main/str-menu-over.png);
@@ -153,6 +156,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 96px;
     height: 96px;
     background-image: url(/static/img/main/gal-menu.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 .banner-menu .menu-item .gal-menu:hover {
     background-image: url(/static/img/main/gal-menu-over.png);
@@ -161,6 +167,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 96px;
     height: 96px;
     background-image: url(/static/img/main/pro-menu.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 .banner-menu .menu-item .pro-menu:hover {
     background-image: url(/static/img/main/pro-menu-over.png);
@@ -169,6 +178,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 96px;
     height: 96px;
     background-image: url(/static/img/main/qna-menu.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 .banner-menu .menu-item .qna-menu:hover {
     background-image: url(/static/img/main/qna-menu-over.png);
@@ -177,6 +189,9 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
     width: 96px;
     height: 96px;
     background-image: url(/static/img/main/evt-menu.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 .banner-menu .menu-item .evt-menu:hover {
     background-image: url(/static/img/main/evt-menu-over.png);
@@ -298,7 +313,7 @@ ol,ul,li { list-style:none; margin:0; padding:0; vertical-align:top; }
                  width: 100%; height: 500px;
                  background-color:#1d2828; }
  .rolling-banner  { position:relative; padding:0; margin:0 auto;
-                 width: 100%; height: 500px;
+                 width: 100%; height: 100%;
                  background-color:#1d2828; }
  .rolling-banner .banner-item {
     display: none;
@@ -3483,6 +3498,37 @@ a.btn-cancel {
 }
 
 @media screen and (max-width: 830px) {
+    .top-banner  {
+        height: 240px;
+    }
+    .rolling-banner .banner-item {
+        height: 240px;
+        background-size: auto 240px;
+    }
+    .index-menu {
+        height: 240px;
+    }
+    .banner-menu {
+        top: 135px;
+    }
+    .banner-menu .menu-item {
+        margin: 0 2px;
+    }
+    .banner-menu .menu-item .str-menu,
+    .banner-menu .menu-item .gal-menu,
+    .banner-menu .menu-item .pro-menu,
+    .banner-menu .menu-item .qna-menu,
+    .banner-menu .menu-item .evt-menu {
+        width: 60px;
+        height: 60px;
+    }
+    .banner-menu .menu-item .menu-desc {
+        padding: 2px;
+        font-size: 9px;
+    }
+    .banner-write {
+        display: none;
+    }
     .top {
         width: 100%;
     }
@@ -3562,7 +3608,6 @@ a.btn-cancel {
     .canvasjs-chart-credit {
         display: none;
     }
-
 
     .content-form {
         padding: 15px 20px;
