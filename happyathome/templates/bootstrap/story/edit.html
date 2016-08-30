@@ -66,7 +66,8 @@
 var $photoId,
     $photoFile,
     $photoPreview,
-    $photoPreviewLoading;
+    $photoPreviewLoading,
+    $contentType;
 
 $('#photos').on('click', '.photo-remove', function(e) {
     $('#photoDelete').append($('<input/>', {
@@ -80,6 +81,7 @@ $('#photos').on('click', '.photo-remove', function(e) {
 
     $photoId = $(this).attr('id-value');
 
+    $contentType = $('#contentType-' + $photoId);
     $photoPreviewLoading = $('#photoPreviewLoading-' + $photoId);
     $photoPreview = $('#photoPreview-' + $photoId);
     $photoFile = $('#photoFile-' + $photoId);
@@ -114,6 +116,7 @@ $('#photos').on('click', '.photo-remove', function(e) {
                 $(this).val('');
                 return false;
             }
+
             loadPhoto($photoPreview[0], $photoFile[0]);
         }
     }
@@ -194,8 +197,8 @@ function loadPhotoPreview(photo) {
 }
 
 function photoFileTmpl(id, photo, removable) {
-    photo = photo || {};
-    removable = removable || false;
+    photo = photo || { content: '' };
+    removable = removable || true;
 
     var tmpl = '<div class="input-field" id="photoField-' + id + '">';
 
@@ -238,9 +241,9 @@ window.onbeforeunload = function(e) {
 $.ajax({
     url: "{{ url_for('magazines.api', id=magazine.id) }}"
 }).success(function(data) {
-    for (var i = 0, removable = false; i < data.photos.length; i++) {
+    for (var i = 0, removable = true; i < data.photos.length; i++) {
         if (i == 1)
-            removable = true;
+            removable = false;
         $(photoFileTmpl(data.photos[i].id, data.photos[i], removable)).appendTo("#photos");
         loadPhotoPreview(data.photos[i]);
     }

@@ -26,7 +26,7 @@ def utility_processor():
 @magazines.route('/', defaults={'page': 1})
 @magazines.route('/page/<int:page>')
 def list(page):
-    cards = db.session.query(Magazine)
+    cards = Magazine.query
     media = request.args.get('media', '')
     category_id = request.args.get('category_id', '')
     residence_id = request.args.get('residence_id', '')
@@ -48,10 +48,7 @@ def list(page):
     if sort == 'likes':
         cards = cards.outerjoin(MagazineLike).\
             group_by(Magazine.id).\
-            order_by(func.count(MagazineLike.magazine_id).desc()).\
-            limit(12).\
-            offset(offset).\
-            all()
+            order_by(func.count(MagazineLike.magazine_id).desc()).limit(12).offset(offset).all()
     elif sort == 'recent':
         cards = cards.order_by(Magazine.id.desc()).limit(12).offset(offset).all()
     else:
@@ -76,34 +73,39 @@ def list(page):
 
 @magazines.route('/<id>')
 def detail(id):
-    post = db.session.query(Magazine).filter_by(id=id).first()
+    post = Magazine.query.filter_by(id=id).first()
     post.hits += 1
     db.session.commit()
 
     comments = Comment.query.filter(Comment.magazines.any(magazine_id=id)).order_by(Comment.group_id.desc()).order_by(Comment.depth.asc()).all()
-    category = Category.query.filter(Category.id == post.category_id).first()
+
+    category = Category.query.filter_by(id=post.category_id).first()
     category_magazines = Magazine.query.filter(Magazine.category_id == category.id).filter(Magazine.id != post.id).limit(4).all()
 
-    residence = Residence.query.filter(Residence.id == post.residence_id).first()
+    residence = Residence.query.filter_by(id=post.residence_id).first()
     residence_magazines = Magazine.query.filter(Magazine.residence_id == residence.id).filter(Magazine.id != post.id).limit(4).all()
 
-    user = User.query.filter(User.id == post.user_id).first()
-    user_magazines = Magazine.query.filter(Magazine.user_id == user.id ).filter(Magazine.id != post.id).limit(4).all()
+    user = User.query.filter_by(id=post.user_id).first()
+    user_magazines = Magazine.query.filter(Magazine.user_id == user.id).filter(Magazine.id != post.id).limit(4).all()
 
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/story/detail.html', post=post,
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/story/detail.html',
+                           post=post,
                            comments=comments,
-                           category_magazines=category_magazines, residence_magazines=residence_magazines,
-                           user_magazines=user_magazines
-                           )
+                           category_magazines=category_magazines,
+                           residence_magazines=residence_magazines,
+                           user_magazines=user_magazines)
 
 
 @magazines.route('/new', methods=['GET', 'POST'])
 @login_required
 def new():
+    rooms = Room.query.all()
     categories = Category.query.all()
     residences = Residence.query.all()
-    rooms = Room.query.all()
+
     if request.method == 'POST':
+        s3 = boto3.resource('s3')
+
         h = html2text.HTML2Text()
         h.ignore_links = True
         h.ignore_images = True
@@ -121,7 +123,6 @@ def new():
         magazine.content_txt = h.handle(request.form['content'])
 
         photo_files = request.files.getlist('photo_file')
-
         for idx, photo_file in enumerate(photo_files):
             photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1].lower())))
 
@@ -133,35 +134,21 @@ def new():
             if request.form.getlist('content_type')[idx] == '3':
                 photo_path = os.path.join(current_app.config['UPLOAD_TMP_DIRECTORY'], photo_name)
                 photo_file.save(photo_path)
+                file.size = os.stat(photo_path).st_size
 
-                body = dict(
-                    snippet=dict(
-                        title=request.form['title'],
-                        description=request.form.getlist('photo_content')[idx]
-                    ),
-                    status=dict(
-                        privacyStatus='public'
-                    )
+                options = dict(
+                    title=request.form['title'],
+                    description=request.form.getlist('photo_content')[idx],
+                    file_path=photo_path,
+                    file=file
                 )
-
                 youtube = youtube_api.auth_account()
-                insert_request = youtube.videos().insert(
-                    part=','.join(body.keys()),
-                    body=body,
-                    media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
-                )
-
-                data = resumable_upload(insert_request)
-                if data.get('status') == '200':
-                    file.cid = data['response']['id']
-                    file.size = os.stat(photo_path).st_size
+                youtube_api.initialize_upload(youtube, options)
             else:
                 photo_blob = photo_file.read()
                 file.size = len(photo_blob)
-                s3 = boto3.resource('s3')
                 s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob,
                                                                                   ContentType=photo_file.content_type)
-
             photo = Photo()
             photo.file = file
             photo.user_id = session['user_id']
@@ -181,12 +168,17 @@ def new():
 @magazines.route('/<id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    magazine = Magazine.query.filter_by(id=id, user=current_user).first()
+    magazine = Magazine.query.filter_by(id=id).first()
+    if magazine.user_id != current_user.id:
+        return redirect(url_for('magazines.detail', id=id))
+
+    rooms = Room.query.all()
     categories = Category.query.all()
     residences = Residence.query.all()
-    rooms = Room.query.all()
+
     if request.method == 'POST':
         s3 = boto3.resource('s3')
+        youtube = youtube_api.auth_account()
 
         h = html2text.HTML2Text()
         h.ignore_links = True
@@ -205,43 +197,61 @@ def edit(id):
 
         photo_ids = request.form.getlist('photo_id')
         for idx, photo_id in enumerate(photo_ids):
-            photo = Photo.query.filter_by(id=photo_id, magazine_id=id, user=current_user).first()
+            photo = Photo.query.filter_by(id=photo_id, magazine_id=id, user_id=current_user.id).first()
             if not photo:
                 photo = Photo()
                 photo.magazine_id = id
                 photo.user_id = current_user.id
             photo.room_id = request.form.getlist('room_id')[idx]
             photo.content = request.form.getlist('photo_content')[idx]
-
             photo_file = request.files.getlist('photo_file')[idx]
-            if photo_file:
-                photo_blob = photo_file.read()
-                photo_name = secure_filename(''.join((shortuuid.uuid(), '.jpg')))
 
-                s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob, ContentType='image/jpeg')
-                if photo.file:
-                    s3_file = s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name)
-                    if s3_file:
-                        s3_file.delete()
+            if photo_file:
+                photo_name = secure_filename(''.join((shortuuid.uuid(), os.path.splitext(photo_file.filename)[1].lower())))
 
                 file = File()
                 file.type = request.form.getlist('content_type')[idx]
                 file.name = photo_name
-                file.ext = 'jpg'
-                file.size = len(photo_blob)
+                file.ext = photo_name.split('.')[1]
 
+                if request.form.getlist('content_type')[idx] == '3':
+                    photo_path = os.path.join(current_app.config['UPLOAD_TMP_DIRECTORY'], photo_name)
+                    photo_file.save(photo_path)
+                    file.size = os.stat(photo_path).st_size
+
+                    options = dict(
+                        title=request.form['title'],
+                        description=request.form.getlist('photo_content')[idx],
+                        file_path=photo_path,
+                        file=file
+                    )
+                    youtube = youtube_api.auth_account()
+                    youtube_api.initialize_upload(youtube, options)
+                else:
+                    photo_blob = photo_file.read()
+                    file.size = len(photo_blob)
+                    s3.Object('static.inotone.co.kr', 'data/img/%s' % photo_name).put(Body=photo_blob,
+                                                                                      ContentType=photo_file.content_type)
+
+                if photo.file:
+                    if photo.is_youtube:
+                        youtube.videos().delete(id=photo.file.cid).execute()
+                    else:
+                        s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
                 photo.file = file
             db.session.add(photo)
-        db.session.commit()
 
         photo_delete_ids = request.form.getlist('photo_delete_id')
         for photo_delete_id in photo_delete_ids:
-            photo = Photo.query.filter_by(id=photo_delete_id, user=current_user).first()
-            s3_file = s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name)
-            if s3_file:
-                s3_file.delete()
+            photo = Photo.query.filter_by(id=photo_delete_id, magazine_id=id, user_id=current_user.id).first()
+            if photo.is_youtube:
+                youtube.videos().delete(id=photo.file.cid).execute()
+            else:
+                s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
+            File.query.filter_by(id=photo.file_id).delete()
             db.session.delete(photo)
         db.session.commit()
+
         return redirect(url_for('magazines.detail', id=id))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/story/edit.html',
                            categories=categories,
@@ -251,8 +261,12 @@ def edit(id):
 
 
 @magazines.route('/api/<id>', methods=['GET'])
+@login_required
 def api(id):
-    magazine = Magazine.query.filter_by(id=id, user=current_user).first()
+    magazine = Magazine.query.filter_by(id=id).first()
+    if magazine.user_id != current_user.id:
+        return redirect(url_for('magazines.detail', id=id))
+
     photos = []
     for photo in magazine.photos:
         photos.append({
@@ -272,17 +286,22 @@ def api(id):
 @magazines.route('/<id>/delete')
 @login_required
 def delete(id):
-    photos = Photo.query.filter_by(magazine_id=id, user=current_user).all()
+    magazine = Magazine.query.filter_by(id=id).first()
+    if magazine.user_id != current_user.id:
+        return redirect(url_for('magazines.detail', id=id))
+
+    s3 = boto3.resource('s3')
+    youtube = youtube_api.auth_account()
+
+    photos = Photo.query.filter_by(magazine_id=id, user_id=current_user.id).all()
     for photo in photos:
         if photo.is_youtube:
-            youtube = youtube_api.auth_account()
             youtube.videos().delete(id=photo.file.cid).execute()
         else:
-            s3 = boto3.resource('s3')
             s3.Object('static.inotone.co.kr', 'data/img/%s' % photo.file.name).delete()
         File.query.filter_by(id=photo.file_id).delete()
-    Magazine.query.filter_by(id=id, user=current_user).delete()
     Comment.query.filter(Comment.magazines.any(Magazine.id == id)).delete(synchronize_session='fetch')
+    db.session.delete(magazine)
     db.session.commit()
 
     return redirect(url_for('magazines.list'))
@@ -292,8 +311,10 @@ def delete(id):
 @login_required
 def like():
     magazine_id = request.form.get('magazine_id', '')
+
     if request.method == 'POST':
-        del_or_create(db.session, MagazineLike, user_id=session['user_id'], magazine_id=magazine_id)
+        del_or_create(db.session, MagazineLike, user_id=current_user.id, magazine_id=magazine_id)
+
     return jsonify({
         'magazine_id': magazine_id,
         'count': MagazineLike.query.filter_by(magazine_id=magazine_id).count()
@@ -304,8 +325,10 @@ def like():
 @login_required
 def scrap():
     magazine_id = request.form.get('magazine_id', '')
+
     if request.method == 'POST':
-        del_or_create(db.session, MagazineScrap, user_id=session['user_id'], magazine_id=magazine_id)
+        del_or_create(db.session, MagazineScrap, user_id=current_user.id, magazine_id=magazine_id)
+
     return jsonify({
         'magazine_id': magazine_id,
         'count': MagazineScrap.query.filter_by(magazine_id=magazine_id).count()
@@ -321,12 +344,10 @@ def comment_new(id):
             comment.user_id = session['user_id']
             comment.group_id = comment.max1_group_id
             comment.content = request.form['comment']
-            db.session.add(comment)
-            db.session.commit()
 
             magazine_comment = MagazineComment()
             magazine_comment.magazine_id = id
-            magazine_comment.comment_id = comment.id
+            magazine_comment.comment = comment
 
             db.session.add(magazine_comment)
             db.session.commit()
@@ -339,27 +360,25 @@ def comment_reply():
     if request.method == 'POST':
         if request.form.get('content') != "":
             comment = Comment()
-            comment.user_id = session['user_id']
+            comment.user_id = current_user.id
             comment.group_id = request.form.get('group_id')
             comment.content = request.form.get('content')
             comment.depth = 1
-            db.session.add(comment)
-            db.session.commit()
 
             magazine_comment = MagazineComment()
             magazine_comment.magazine_id = request.form.get('magazine_id')
-            magazine_comment.comment_id = comment.id
+            magazine_comment.comment = comment
 
             db.session.add(magazine_comment)
             db.session.commit()
 
-            user = db.session.query(User).filter(User.id == session['user_id']).first();
+            user = User.query.filter_by(id=current_user.id).first()
 
             return jsonify({
-                'comment_id':comment.id,
-                'user_id':session['user_id'],
-                'user_name':user.name,
-                'created_date':comment.created_date,
+                'comment_id': comment.id,
+                'user_id': user.id,
+                'user_name': user.name,
+                'created_date': comment.created_date,
                 'comment': comment.content,
                 'group_id': comment.get_parent_id(comment.group_id),
                 'avatar': user.avatar
@@ -371,10 +390,8 @@ def comment_reply():
 def comment_edit():
     if request.method == 'POST':
         if request.form.get('content') != "":
-            comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
+            comment = Comment.query.filter_by(id=request.form.get('comment_id'), user_id=current_user.id).first()
             comment.content = request.form.get('content')
-
-            db.session.add(comment)
             db.session.commit()
 
             return jsonify({
@@ -386,7 +403,8 @@ def comment_edit():
 @login_required
 def comment_remove():
     if request.method == 'POST':
-        db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).update({ 'deleted' : True })
+        comment = Comment.query.filter_by(id=request.form.get('comment_id'), user_id=current_user.id).first()
+        comment.deleted = True
         db.session.commit()
 
         return jsonify({

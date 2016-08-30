@@ -66,8 +66,8 @@ var $photoId,
     $photoFileId,
     $photoFileName,
     $photoPreview,
-    $contentType,
-    $photoPreviewLoading;
+    $photoPreviewLoading,
+    $contentType;
 
 $('#photos').on('click', '.photo-remove', function(e) {
     $('#photoField-' + $(this).attr('id-value')).remove();
@@ -76,10 +76,10 @@ $('#photos').on('click', '.photo-remove', function(e) {
 
     $photoId = $(this).attr('id-value');
 
+    $contentType = $('#contentType-' + $photoId);
     $photoPreviewLoading = $('#photoPreviewLoading-' + $photoId);
     $photoPreview = $('#photoPreview-' + $photoId);
     $photoFile = $('#photoFile-' + $photoId);
-    $contentType = $('#contentType-' + $photoId);
     $photoFile.click();
 }).on('change', '.photo-file', function() {
     $photoPreview.children().remove();

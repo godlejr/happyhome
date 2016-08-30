@@ -148,7 +148,6 @@ def new():
 
         db.session.add(photo)
         db.session.flush()
-        db.session.commit()
 
         if request.form['content_type'] == '3':
             options = dict(
@@ -160,7 +159,7 @@ def new():
 
             youtube = youtube_api.auth_account()
             youtube_api.initialize_upload(youtube, options)
-            db.session.commit()
+        db.session.commit()
 
         return redirect(url_for('photos.list'))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html', rooms=rooms, photo=photo)
@@ -170,7 +169,7 @@ def new():
 @login_required
 def edit(id):
     photo = Photo.query.filter_by(id=id).first()
-    if current_user.id != photo.user_id:
+    if photo.user_id != current_user.id:
         return redirect(url_for('photos.detail', id=id))
 
     rooms = Room.query.all()
