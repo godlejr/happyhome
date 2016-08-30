@@ -6,6 +6,7 @@ from flask_login import login_required
 from happyathome.forms import Pagination
 from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment, MagazineScrap, Review, \
     Business, Sido
+from sqlalchemy import func
 from werkzeug.utils import redirect
 
 professionals = Blueprint('professionals', __name__)
@@ -22,16 +23,11 @@ def utility_processor():
 @professionals.route('/page/<int:page>')
 def list(page):
     area_id = request.args.get('area_id')
-
+    sort_id = request.args.get('sort_id')
     business_id = request.args.get('business_id')
     business = Business.query.filter_by(id=business_id).first()
     businesses = Business.query.all()
-
-    posts = db.session.query(Professional)
-    if business_id:
-        posts = posts.filter(Professional.business_id == business_id)
-    if area_id:
-        posts = posts.join(Sido, Professional.sido_code == Sido.sido_code).filter(Sido.area_id == area_id)
+    posts = Professional.query
 
     pagination = Pagination(page, 6, posts.count())
     if page != 1:
@@ -39,7 +35,15 @@ def list(page):
     else:
         offset = 0
 
-    posts = posts.order_by(Professional.id.desc()).limit(6).offset(offset).all()
+    if business_id:
+        posts = posts.filter(Professional.business_id == business_id).order_by(Professional.id.desc()).limit(6).offset(offset).all()
+    elif area_id:
+        posts = posts.join(Sido, Professional.sido_code == Sido.sido_code).filter(Sido.area_id == area_id).order_by(Professional.id.desc()).limit(6).offset(offset).all()
+    elif sort_id:
+        posts = posts.order_by(Professional.id.desc()).limit(6).offset(offset).all()
+    else:
+        posts = posts.outerjoin(Photo, Photo.user_id == Professional.user_id). \
+            group_by(Professional.user_id).order_by(func.count(Photo.id).desc()).limit(6).offset(offset).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/professionals/list.html',
                            posts=posts,

@@ -7,30 +7,6 @@
     <div class="filter-container">
         <ul>
             <li>
-                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>정렬</div>
-                <div class="filter-body">
-                    <div class="filter-selected">
-                        {% if request.args.get('sort') == 'likes' %}
-                            인기순
-                        {% elif request.args.get('sort') == 'recent' %}
-                            최신순
-                        {% else %}
-                            조회순
-                        {% endif %}
-                    </div>
-                    <div class="filter-menu">
-                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
-                        <div class="filter-items">
-                            <ul>
-                                <li class="filter-item"><a href="{{ url_for('magazines.list') }}">조회순</a></li>
-                                <li class="filter-item"><a href="{{ url_for('magazines.list', sort='likes') }}">인기순</a></li>
-                                <li class="filter-item"><a href="{{ url_for('magazines.list', sort='recent') }}">최신순</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li>
                 <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>테마</div>
                 <div class="filter-body">
                     <div class="filter-selected">{% if category %}{{ category.name }}{% else %}전체{% endif %}</div>
@@ -86,6 +62,30 @@
                                 <li class="filter-item"><a href="{{ url_for('magazines.list', media=1) }}">사진</a></li>
                                 <li class="filter-item"><a href="{{ url_for('magazines.list', media=2) }}">VR360</a></li>
                                 <li class="filter-item"><a href="{{ url_for('magazines.list', media=3) }}">동영상</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+             <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>정렬</div>
+                <div class="filter-body">
+                    <div class="filter-selected">
+                        {% if request.args.get('sort') == 'likes' %}
+                            인기순
+                        {% elif request.args.get('sort') == 'recent' %}
+                            최신순
+                        {% else %}
+                            조회순
+                        {% endif %}
+                    </div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list') }}">조회순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list', sort='likes') }}">인기순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('magazines.list', sort='recent') }}">최신순</a></li>
                             </ul>
                         </div>
                     </div>

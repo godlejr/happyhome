@@ -66,6 +66,27 @@
                     </div>
                 </div>
             </li>
+            <li>
+                <div class="filter-title"><img src="{{ url_for('static', filename='img/main/filter-arrow-icon.png') }}"/>정렬</div>
+                <div class="filter-body">
+                    <div class="filter-selected">
+                        {% if request.args.get('sort_id') == '1' %}
+                            최신순
+                        {% else %}
+                            활동순
+                        {% endif %}
+                    </div>
+                    <div class="filter-menu">
+                        <div class="filter-items-arrow"><img src="{{ url_for('static', filename='img/story/filter_a.png') }}" alt="" /></div>
+                        <div class="filter-items">
+                            <ul>
+                                <li class="filter-item"><a href="{{ url_for('professionals.list') }}">활동순</a></li>
+                                <li class="filter-item"><a href="{{ url_for('professionals.list', sort_id=1) }}">최신순</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
         </ul>
     </div>
 </div><!-- filter end -->
