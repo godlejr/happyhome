@@ -34,13 +34,17 @@ class BaseMixin(object):
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
-    @property
+    @hybrid_property
     def created_date(self):
         return self.created_at.strftime('%Y-%m-%d')
 
-    @property
+    @hybrid_property
     def updated_date(self):
         return self.updated_at.strftime('%Y-%m-%d')
+
+    @hybrid_method
+    def get_id(self):
+        return self.id
 
 
 class User(db.Model, BaseMixin):

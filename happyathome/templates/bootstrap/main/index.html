@@ -60,7 +60,7 @@
             <div class="content-body">
                 <div class="index-menu">
                     <div class="brand-logo"><a href="/"><img src="{{ url_for('static', filename='img/main/brand-logo.png') }}" width="86" height="26"></a></div>
-                    <div class="banner-write"><a href="{{ url_for('users.info', id=current_user.id) }}"><img src="{{ url_for('static', filename='img/main/write.png') }}" width="66" height="91"></a></div>
+                    <div class="banner-write"><a href="{{ url_for('users.info') }}"><img src="{{ url_for('static', filename='img/main/write.png') }}" width="66" height="91"></a></div>
                     <div class="banner-menu">
                         <div class="menu-item" href="{{ url_for('magazines.list') }}"><div class="str-menu"></div><div class="menu-desc">테마별 / 주택별 프로젝트</div></div>
                         <div class="menu-item" href="{{ url_for('photos.list') }}"><div class="gal-menu"></div><div class="menu-desc">공간별 사진</div></div>

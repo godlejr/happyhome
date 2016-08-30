@@ -26,7 +26,10 @@ def utility_processor():
 @users.route('/<id>')
 def info(id=None):
     if not id:
-        return redirect(url_for('users.info', id=current_user.id))
+        if current_user.get_id():
+            return redirect(url_for('users.info', id=current_user.id))
+        else:
+            return redirect(url_for('main.login', next=url_for('users.info')))
 
     user = User.query.filter_by(id=id).first()
     if user.is_pro:
