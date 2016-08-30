@@ -1,21 +1,13 @@
 import base64
 import os
 import boto3
-import httplib2
 import shortuuid
 from flask import session
 from flask_login import login_required, current_user
-from googleapiclient import discovery
-from googleapiclient.http import MediaFileUpload
 from happyathome.forms import Pagination
 from happyathome.lib import youtube_api
-from happyathome.lib.youtube_api import initialize_upload, resumable_upload
-from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, \
-    Magazine
+from happyathome.models import db, del_or_create, Photo, File, Comment, PhotoComment, Room, PhotoLike, PhotoScrap, User, Magazine
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
-from oauth2client import client
-from oauth2client import service_account
-from oauth2client.file import Storage
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
 
@@ -39,8 +31,8 @@ def list(page):
     room_id = request.args.get('room_id', '')
     sort = request.args.get('sort', '')
 
+    cards = Photo.query
     rooms = Room.query.all()
-    cards = db.session.query(Photo)
     room = Room.query.filter_by(id=room_id).first()
 
     if media:
@@ -58,7 +50,8 @@ def list(page):
 
     if sort == 'likes':
         cards = cards.outerjoin(PhotoLike). \
-            group_by(Photo.id).order_by(func.count(PhotoLike.photo_id).desc()). \
+            group_by(Photo.id). \
+            order_by(func.count(PhotoLike.photo_id).desc()). \
             limit(12).offset(offset).all()
     elif sort == 'recent':
         cards = cards.order_by(Photo.id.desc()).limit(12).offset(offset).all()
@@ -83,14 +76,12 @@ def detail(id):
 
     comments = Comment.query.filter(Comment.photos.any(photo_id=id)).order_by(Comment.group_id.desc(),
                                                                               Comment.depth.asc()).order_by().all()
-    user_photos = db.session.query(Photo). \
+    user_photos = Photo.query. \
         filter(Photo.id != id). \
         filter(Photo.user_id == post.user_id). \
-        order_by(Photo.hits.desc()). \
-        limit(8). \
-        all()
+        order_by(Photo.hits.desc()).limit(8).all()
     if post.magazine_id:
-        magazine_photos = db.session.query(Photo).filter(Photo.magazine_id == post.magazine_id).all()
+        magazine_photos = Photo.query.filter_by(magazine_id=post.magazine_id).all()
 
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/detail.html',
                            post=post,
@@ -151,7 +142,7 @@ def new():
         file.ext = photo_name.split('.')[1]
 
         photo.file = file
-        photo.user_id = session['user_id']
+        photo.user_id = current_user.id
         photo.room_id = request.form['room_id']
         photo.content = request.form['content']
 
@@ -160,27 +151,16 @@ def new():
         db.session.commit()
 
         if request.form['content_type'] == '3':
-            body = dict(
-                snippet=dict(
-                    title='해피홈 갤러리 동영상 (%s)' % photo.id,
-                    description=request.form['content']
-                ),
-                status=dict(
-                    privacyStatus='public'
-                )
+            options = dict(
+                title='해피홈 갤러리 동영상 (%s)' % photo.id,
+                description=request.form['content'],
+                file_path=photo_path,
+                file=file
             )
 
             youtube = youtube_api.auth_account()
-            insert_request = youtube.videos().insert(
-                part=','.join(body.keys()),
-                body=body,
-                media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
-            )
-
-            data = resumable_upload(insert_request)
-            if data.get('status') == '200':
-                File.query.filter_by(id=file.id).update({'cid': data['response']['id']})
-                db.session.commit()
+            youtube_api.initialize_upload(youtube, options)
+            db.session.commit()
 
         return redirect(url_for('photos.list'))
     return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html', rooms=rooms, photo=photo)
@@ -189,7 +169,10 @@ def new():
 @photos.route('/<id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    photo = Photo.query.filter_by(id=id, user_id=current_user.id).first()
+    photo = Photo.query.filter_by(id=id).first()
+    if current_user.id != photo.user_id:
+        return redirect(url_for('photos.detail', id=id))
+
     rooms = Room.query.all()
     if request.method == 'POST':
         photo_name = request.form['file_name']
@@ -209,28 +192,15 @@ def edit(id):
             photo_file.save(photo_path)
             photo.file.size = os.stat(photo_path).st_size
 
-            body = dict(
-                snippet=dict(
-                    title='해피홈 갤러리 동영상 (%s)' % photo.id,
-                    description=request.form['content']
-                ),
-                status=dict(
-                    privacyStatus='public'
-                )
+            options = dict(
+                title='해피홈 갤러리 동영상 (%s)' % photo.id,
+                description=request.form['content'],
+                file_path=photo_path,
+                file=photo.file
             )
 
             youtube = youtube_api.auth_account()
-            insert_request = youtube.videos().insert(
-                part=','.join(body.keys()),
-                body=body,
-                media_body=MediaFileUpload(photo_path, chunksize=-1, resumable=True)
-            )
-
-            data = resumable_upload(insert_request)
-            if data.get('status') == '200':
-                photo.file.cid = data['response']['id']
-            else:
-                photo.file.cid = None
+            youtube_api.initialize_upload(youtube, options)
         else:
             photo.file.size = 0
             photo.file.cid = None
@@ -246,17 +216,18 @@ def edit(id):
         db.session.commit()
 
         return redirect(url_for('photos.detail', id=id))
-    return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html',
-                           rooms=rooms,
-                           photo=photo)
+    return render_template(current_app.config['TEMPLATE_THEME'] + '/gallery/edit.html', rooms=rooms, photo=photo)
 
 
 @photos.route('/<id>/delete')
 @login_required
 def delete(id):
-    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session='fetch')
-    photo = Photo.query.filter_by(id=id, user=current_user).first()
+    photo = Photo.query.filter_by(id=id).first()
+    if current_user.id != photo.user_id:
+        return redirect(url_for('photos.detail', id=id))
+
     photo_file = File.query.filter_by(id=photo.file_id).first()
+    Comment.query.filter(Comment.photos.any(Photo.id == id)).delete(synchronize_session='fetch')
 
     if photo.is_youtube:
         youtube = youtube_api.auth_account()
@@ -279,15 +250,12 @@ def comment_new(id):
         if request.form['comment'] != "":
             comment = Comment()
             comment.group_id = comment.max1_group_id
-            comment.user_id = session['user_id']
+            comment.user_id = current_user.id
             comment.content = request.form['comment']
-
-            db.session.add(comment)
-            db.session.commit()
 
             photo_comment = PhotoComment()
             photo_comment.photo_id = id
-            photo_comment.comment_id = comment.id
+            photo_comment.comment = comment
 
             db.session.add(photo_comment)
             db.session.commit()
@@ -299,7 +267,7 @@ def comment_new(id):
 def like():
     photo_id = request.form.get('photo_id', '')
     if request.method == 'POST':
-        del_or_create(db.session, PhotoLike, user_id=session['user_id'], photo_id=photo_id)
+        del_or_create(db.session, PhotoLike, user_id=current_user.id, photo_id=photo_id)
     return jsonify({
         'photo_id': photo_id,
         'count': PhotoLike.query.filter_by(photo_id=photo_id).count()
@@ -311,7 +279,7 @@ def like():
 def scrap():
     photo_id = request.form.get('photo_id', '')
     if request.method == 'POST':
-        del_or_create(db.session, PhotoScrap, user_id=session['user_id'], photo_id=photo_id)
+        del_or_create(db.session, PhotoScrap, user_id=current_user.id, photo_id=photo_id)
     return jsonify({
         'photo_id': photo_id,
         'count': PhotoScrap.query.filter_by(photo_id=photo_id).count()
@@ -324,25 +292,23 @@ def comment_reply():
     if request.method == 'POST':
         if request.form.get('content') != "":
             comment = Comment()
-            comment.user_id = session['user_id']
+            comment.user_id = current_user.id
             comment.group_id = request.form.get('group_id')
             comment.content = request.form.get('content')
             comment.depth = 1
-            db.session.add(comment)
-            db.session.commit()
 
             photo_comment = PhotoComment()
             photo_comment.photo_id = request.form.get('photo_id')
-            photo_comment.comment_id = comment.id
+            photo_comment.comment = comment
 
             db.session.add(photo_comment)
             db.session.commit()
 
-            user = db.session.query(User).filter(User.id == session['user_id']).first();
+            user = User.query.filter_by(id=current_user.id).first()
 
             return jsonify({
                 'comment_id': comment.id,
-                'user_id': session['user_id'],
+                'user_id': current_user.id,
                 'user_name': user.name,
                 'created_date': comment.created_date,
                 'comment': comment.content,
@@ -356,14 +322,12 @@ def comment_reply():
 def comment_edit():
     if request.method == 'POST':
         if request.form.get('content') != "":
-            comment = db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).first()
-            comment.content = request.form.get('content')
-
-            db.session.add(comment)
+            Comment.query.filter_by(id=request.form.get('comment_id'), user_id=current_user.id).\
+                update({'content': request.form.get('content')})
             db.session.commit()
 
             return jsonify({
-                'comment': comment.content
+                'comment': request.form.get('content')
             })
 
 
@@ -371,7 +335,7 @@ def comment_edit():
 @login_required
 def comment_remove():
     if request.method == 'POST':
-        db.session.query(Comment).filter(Comment.id == request.form.get('comment_id')).update({'deleted': True})
+        Comment.query.filter_by(id=request.form.get('comment_id'), user_id=current_user.id).update({'deleted': True})
         db.session.commit()
 
         return jsonify({

@@ -5,6 +5,7 @@ from flask import current_app
 from googleapiclient import discovery
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
+from happyathome.models import File
 from oauth2client import service_account
 
 RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError)
@@ -25,9 +26,7 @@ def auth_account():
 
 
 def initialize_upload(youtube, options={}):
-    tags = None
-    if options.get('keywords'):
-        tags = options.get('keywords').split(",")
+    tags = options.get('keywords').split(',') if options.get('keywords') else None
 
     body = dict(
         snippet=dict(
@@ -44,21 +43,20 @@ def initialize_upload(youtube, options={}):
     insert_request = youtube.videos().insert(
         part=",".join(body.keys()),
         body=body,
-        media_body=MediaFileUpload(options.get('filepath'), chunksize=-1, resumable=True)
+        media_body=MediaFileUpload(options.get('file_path'), chunksize=-1, resumable=True)
     )
 
-    return resumable_upload(insert_request)
+    resumable_upload(insert_request, options.get('file'))
 
 
-def resumable_upload(insert_request):
+def resumable_upload(insert_request, file):
     response = None
     error = None
-    rtn = None
     while response is None:
         try:
             status, response = insert_request.next_chunk()
             if 'id' in response:
-                rtn = response
+                file.cid = response['id']
             else:
                 error = "The upload failed with an unexpected response: %s" % response
         except HttpError as e:
@@ -66,7 +64,3 @@ def resumable_upload(insert_request):
                 error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
         except RETRIABLE_EXCEPTIONS as e:
             error = "A retriable error occurred: %s" % e
-    if rtn:
-        return dict(status='200', response=rtn)
-    else:
-        return dict(status='500', response=error)
