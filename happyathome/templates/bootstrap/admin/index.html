@@ -18,13 +18,19 @@
                     </ul>
                     <div class="tab-content" style="max-width:350px;">
                         <div id="tab1" class="tab-pane fade active in"  style="position:relative;">
-                            <div id="week_user_chart" style="position:absolute; top:50px; left:0px; height: 300px; width: 100%;"></div>
+                            <div id="week_user_chart" style="position:absolute; top:50px; left:0px; height: 230px; width: 100%;"></div>
+                            <div id="week_story_chart" style="position:absolute; top:290px; left:0px; height: 230px; width: 100%;"></div>
+                            <div id="week_gallery_chart" style="position:absolute; top:520px; left:0px; height: 230px; width: 100%;"></div>
                         </div>
                         <div id="tab2" class="tab-pane"  style="position:relative;">
-                            <div id="month_user_chart" style="position:absolute; top:50px; left:0px; height: 300px; width: 100%;"></div>
+                            <div id="month_user_chart" style="position:absolute; top:50px; left:0px; height: 230px; width: 100%;"></div>
+                            <div id="month_story_chart" style="position:absolute; top:290px; left:0px; height: 230px; width: 100%;"></div>
+                            <div id="month_gallery_chart" style="position:absolute; top:520px; left:0px; height: 230px; width: 100%;"></div>
                         </div>
                         <div id="tab3" class="tab-pane"  style="position:relative;">
-                            <div id="year_user_chart" style="position:absolute; top:50px; left:0px; height: 300px; width: 100%;"></div>
+                            <div id="year_user_chart" style="position:absolute; top:50px; left:0px; height: 230px; width: 100%;"></div>
+                            <div id="year_story_chart" style="position:absolute; top:290px; left:0px; height: 230px; width: 100%;"></div>
+                            <div id="year_gallery_chart" style="position:absolute; top:520px; left:0px; height: 230px; width: 100%;"></div>
                         </div>
                     </div>
 
@@ -241,6 +247,139 @@ var week_user_chart = new CanvasJS.Chart("week_user_chart",
 });
 week_user_chart.render();
 
+var week_story_chart = new CanvasJS.Chart("week_story_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "주간 스토리 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM/DD"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
+        {   name: "누적 스토리수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+                {% for daily_story in daily_stories %}
+                    { x: new Date({{ daily_story.year|int }},{{ daily_story.month|int -1 }},{{ daily_story.day|int }}), y: {{ minus_daily_story[loop.index-1] }} },
+                {% endfor %}
+            ]
+        },
+        {   name:"일별 등록 스토리 수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+
+            dataPoints: [
+                {% for join_story in join_daily_stories %}
+                    { x: new Date({{ join_story.year|int }},{{ join_story.month|int -1 }},{{ join_story.day|int }}), y: {{ join_story.story_count|int }} },
+                {% endfor %}
+            ]
+        }
+        ],
+        legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
+                e.dataSeries.visible = true;
+                }
+                week_story_chart.render();
+            }
+        }
+    });
+week_story_chart.render();
+
+var week_gallery_chart = new CanvasJS.Chart("week_gallery_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "주간 갤러리 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM/DD"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
+        {   name: "누적 갤러리수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+                {% for daily_gallery in daily_galleries %}
+                    { x: new Date({{ daily_gallery.year|int }},{{ daily_gallery.month|int -1 }},{{ daily_gallery.day|int }}), y: {{ minus_daily_gallery[loop.index-1] }} },
+                {% endfor %}
+            ]
+        },
+        {   name:"일별 등록 갤러리 수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+
+            dataPoints: [
+                {% for join_gallery in join_daily_galleries %}
+                    { x: new Date({{ join_gallery.year|int }},{{ join_gallery.month|int -1 }},{{ join_gallery.day|int }}), y: {{ join_gallery.gallery_count|int }} },
+                {% endfor %}
+            ]
+        }
+        ],
+        legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
+                e.dataSeries.visible = true;
+                }
+                week_gallery_chart.render();
+            }
+        }
+    });
+week_gallery_chart.render();
+
+
 function monthly(){
     var month_user_chart = new CanvasJS.Chart("month_user_chart",
     {
@@ -289,7 +428,6 @@ function monthly(){
                 {% for join_user in join_monthly_users %}
                     { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
                 {% endfor %}
-
             ]
         }
         ],
@@ -307,14 +445,12 @@ function monthly(){
         }
     });
     month_user_chart.render();
-}
 
-function yearly(){
-    var year_user_chart = new CanvasJS.Chart("year_user_chart",
+    var month_story_chart = new CanvasJS.Chart("month_story_chart",
     {
         culture:"ko",
         title:{
-            text: "연간 회원 통계",
+            text: "월간 스토리 통계",
             fontSize: 15
         },
         animationEnabled: true,
@@ -336,6 +472,140 @@ function yearly(){
             horizontalAlign: "right"
         },
         data: [
+        {   name: "누적 스토리수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+                {% for monthly_story in monthly_stories %}
+                    { x: new Date({{ monthly_story.year|int }},{{ monthly_story.month|int -1 }},{{ monthly_story.day|int }}), y: {{ minus_monthly_story[loop.index-1] }} },
+                {% endfor %}
+            ]
+        },
+        {   name:"주별 등록 스토리 수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+
+            dataPoints: [
+                {% for join_story in join_monthly_stories %}
+                    { x: new Date({{ join_story.year|int }},{{ join_story.month|int -1 }},{{ join_story.day|int }}), y: {{ join_story.story_count|int }} },
+                {% endfor %}
+            ]
+        }
+        ],
+        legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
+                e.dataSeries.visible = true;
+                }
+                month_story_chart.render();
+            }
+        }
+    });
+    month_story_chart.render();
+
+    var month_gallery_chart = new CanvasJS.Chart("month_gallery_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "월간 갤러리 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM/DD"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
+        {   name: "누적 갤러리수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+                {% for monthly_gallery in monthly_galleries %}
+                    { x: new Date({{ monthly_gallery.year|int }},{{ monthly_gallery.month|int -1 }},{{ monthly_gallery.day|int }}), y: {{ minus_monthly_gallery[loop.index-1] }} },
+                {% endfor %}
+            ]
+        },
+        {   name:"주별 등록 갤러리 수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+
+            dataPoints: [
+                {% for join_gallery in join_monthly_galleries %}
+                    { x: new Date({{ join_gallery.year|int }},{{ join_gallery.month|int -1 }},{{ join_gallery.day|int }}), y: {{ join_gallery.gallery_count|int }} },
+                {% endfor %}
+            ]
+        }
+        ],
+        legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
+                e.dataSeries.visible = true;
+                }
+                month_gallery_chart.render();
+            }
+        }
+    });
+month_gallery_chart.render();
+}
+
+function yearly(){
+    var year_user_chart = new CanvasJS.Chart("year_user_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "연간 회원 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM월"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
         {   name: "누적 회원수",
             type: "line",
             showInLegend: true,
@@ -343,9 +613,9 @@ function yearly(){
             markerType: "square",
             color: "#F08080",
             dataPoints: [
-
-                { x: new Date(2016,8,7), y: 1 }
-
+                {% for yearly_user in yearly_users %}
+                    { x: new Date({{ yearly_user.year|int }},{{ yearly_user.month|int -1 }},{{ yearly_user.day|int }}), y: {{ minus_yearly_user[loop.index-1] }} },
+                {% endfor %}
             ]
         },
         {   name:"월별 가입 회원수",
@@ -355,8 +625,9 @@ function yearly(){
             lineThickness: 2,
 
             dataPoints: [
-                { x: new Date(2016,8,7), y: 1 }
-
+                {% for join_user in join_yearly_users %}
+                    { x: new Date({{ join_user.year|int }},{{ join_user.month|int -1 }},{{ join_user.day|int }}), y: {{ join_user.user_count|int }} },
+                {% endfor %}
             ]
         }
         ],
@@ -374,7 +645,142 @@ function yearly(){
         }
     });
     year_user_chart.render();
+
+    var year_story_chart = new CanvasJS.Chart("year_story_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "연간 스토리 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM월"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
+        {   name: "누적 스토리수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+                {% for yearly_story in yearly_stories %}
+                    { x: new Date({{ yearly_story.year|int }},{{ yearly_story.month|int -1 }},{{ yearly_story.day|int }}), y: {{ minus_yearly_story[loop.index-1] }} },
+                {% endfor %}
+            ]
+        },
+        {   name:"월별 등록 스토리 수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+
+            dataPoints: [
+                {% for join_story in join_yearly_stories %}
+                    { x: new Date({{ join_story.year|int }},{{ join_story.month|int -1 }},{{ join_story.day|int }}), y: {{ join_story.story_count|int }} },
+                {% endfor %}
+            ]
+        }
+        ],
+        legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
+                e.dataSeries.visible = true;
+                }
+                year_story_chart.render();
+            }
+        }
+    });
+    year_story_chart.render();
+
+ var year_gallery_chart = new CanvasJS.Chart("year_gallery_chart",
+    {
+        culture:"ko",
+        title:{
+            text: "연간 갤러리 통계",
+            fontSize: 15
+        },
+        animationEnabled: true,
+        axisX:{
+            gridColor: "Silver",
+            tickColor: "silver",
+            valueFormatString: "MM월"
+        },
+        toolTip:{
+            shared:true
+        },
+        theme: "theme1",
+        axisY: {
+            gridColor: "Silver",
+            tickColor: "silver"
+        },
+        legend:{
+            verticalAlign: "center",
+            horizontalAlign: "right"
+        },
+        data: [
+        {   name: "누적 갤러리수",
+            type: "line",
+            showInLegend: true,
+            lineThickness: 2,
+            markerType: "square",
+            color: "#F08080",
+            dataPoints: [
+                {% for yearly_gallery in yearly_galleries %}
+                    { x: new Date({{ yearly_gallery.year|int }},{{ yearly_gallery.month|int -1 }},{{ yearly_gallery.day|int }}), y: {{ minus_yearly_gallery[loop.index-1] }} },
+                {% endfor %}
+            ]
+        },
+        {   name:"월별 등록 갤러리 수",
+            type: "line",
+            showInLegend: true,
+            color: "#20B2AA",
+            lineThickness: 2,
+
+            dataPoints: [
+                {% for join_gallery in join_yearly_galleries %}
+                    { x: new Date({{ join_gallery.year|int }},{{ join_gallery.month|int -1 }},{{ join_gallery.day|int }}), y: {{ join_gallery.gallery_count|int }} },
+                {% endfor %}
+            ]
+        }
+        ],
+        legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+                }
+                else{
+                e.dataSeries.visible = true;
+                }
+                year_gallery_chart.render();
+            }
+        }
+    });
+year_gallery_chart.render();
 }
+
+
+
 
 $(document).ready(function(){
     $('.nav-jt a[id=bs-tab2]').click(function(){
