@@ -40,7 +40,7 @@ def create_app(config_name):
     toolbar.init_app(app)
 
     # admin
-    admin = Admin(app, name='Happy@Home', template_mode='bootstrap3', index_view=MyAdminIndexView())
+    admin = Admin(app, name='Happy@Home', template_mode='bootstrap3', index_view=MyAdminIndexView(), url='/')
     admin.add_view(UserAdmin(User, db.session, name='사용자관리', endpoint='user'))
     admin.add_view(ClassAdminCategory(Category, db.session, name='테마', category='분류 관리', endpoint='category'))
     admin.add_view(ClassAdminResidence(Residence, db.session, name='장소', category='분류 관리', endpoint='residence'))
