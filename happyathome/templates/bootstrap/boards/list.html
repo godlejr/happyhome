@@ -23,7 +23,7 @@
                                 <strong>A.</strong>
                             {% endif %}
                             <span class="board-title">{{ post.title }}</span>
-                            <span class="user-avatar" style="background-image:url({{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }})"></span>
+                            <span class="user-avatar"><img src="{{ url_for_s3('S3_USER_DIRECTORY', filename=post.user.avatar) }}" width="26" height="26"></span>
                             <span class="user-name">{{ post.user.name }}</span>
                             <span class="board-date">{{ post.created_date }}</span>
                             {% if current_user.id %}

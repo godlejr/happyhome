@@ -3206,11 +3206,10 @@ label.star:before {
 .board-title {
     width: 100%;
     color: #000000;
-    font-size: 20px;
     font-weight: 700;
     box-sizing: border-box;
     vertical-align: middle;
-    margin-right: 20px;
+    margin-right: 5px;
 }
 
 .board-list {
@@ -3439,17 +3438,10 @@ button.btn-danger {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
-.content-board .user-avatar {
-    display: inline-block;
-    cursor: pointer;
-    vertical-align: middle;
-    width: 26px;
-    height: 26px;
-    border: 1px solid #ebeaef;
+.content-board .user-avatar img {
     border-radius: 50%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    border: 1px solid #ededed;
+    vertical-align: middle;
 }
 .content-board .user-name {
     font-size: 12px;
@@ -3458,11 +3450,9 @@ button.btn-danger {
 .content-board .board-date {
     color: #a0a0a0;
     font-size: 12px;
-    margin-left: 15px;
 }
 .content-board .board-control {
     font-size: 12px;
-    margin-left: 15px;
 }
 
 .error-body {
