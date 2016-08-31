@@ -1,5 +1,5 @@
 from flask import current_app, Blueprint, render_template, request, session, url_for, redirect
-from flask_login import login_required
+from flask_login import login_required, current_user
 from happyathome.forms import Pagination
 from happyathome.models import db, Board, User
 
@@ -31,9 +31,10 @@ def list(id, page):
 def new(board_id):
     if request.method == 'POST':
         post = Board()
+        post.user_id = current_user.id
         post.board_id = board_id
         post.group_id = post.max1_group_id
-        post.user_id = session['user_id']
+        post.title = request.form['board_title']
         post.content = request.form['board_content']
         db.session.add(post)
         db.session.commit()
@@ -43,14 +44,18 @@ def new(board_id):
 @boards.route('/<board_id>/<post_id>/reply', methods=['POST'])
 @login_required
 def reply(board_id, post_id):
-    user = User.query.filter_by(id=session['user_id']).first()
+    user = User.query.filter_by(id=current_user.id).first()
+    if not user.is_pro and not user.is_admin:
+        return redirect(url_for('boards.list', id=board_id))
+
     board = Board.query.filter_by(id=post_id).first()
-    if request.method == 'POST' and user.is_pro:
+    if request.method == 'POST':
         post = Board()
         post.user_id = user.id
         post.board_id = board.board_id
         post.group_id = board.group_id
         post.depth = board.max1_depth
+        post.title = request.form['reply_title']
         post.content = request.form['reply_content']
         db.session.add(post)
         db.session.commit()

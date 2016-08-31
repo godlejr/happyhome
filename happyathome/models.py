@@ -479,6 +479,7 @@ class Board(db.Model, BaseMixin):
     depth = db.Column(db.Integer, default=0)
     sort = db.Column(db.Integer, default=0)
     deleted = db.Column(db.Boolean, default=0)
+    title = db.Column(db.Unicode(255))
     content = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_boards'))

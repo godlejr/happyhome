@@ -3208,6 +3208,9 @@ label.star:before {
     color: #000000;
     font-size: 20px;
     font-weight: 700;
+    box-sizing: border-box;
+    vertical-align: middle;
+    margin-right: 20px;
 }
 
 .board-list {
@@ -3360,9 +3363,9 @@ button.btn-danger {
 .content-board .input-field {
     margin-top: 40px;
 }
-.content-board form textarea {
+.content-board textarea {
     display: inline-block;
-    width: calc(100% - 62px);
+    width: calc(100% - 60px);
     height: 60px;
     vertical-align: middle;
     border: 0;
@@ -3370,7 +3373,7 @@ button.btn-danger {
     box-sizing: border-box;
     padding: 10px;
 }
-.content-board form button {
+.content-board button {
     display: inline-block;
     width: 60px;
     height: 60px;
