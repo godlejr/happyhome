@@ -1359,10 +1359,16 @@ span.share-icon.active {
     width: 26px;
     height: 26px;
     border-radius: 50%;
-    background-color: #ffffff;
     background-size: cover;
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+.card .card-avatar img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    vertical-align: middle;
 }
 .card .card-user {
     float: left;
