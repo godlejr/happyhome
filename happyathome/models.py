@@ -1,4 +1,6 @@
 import sys
+
+from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
 from markupsafe import Markup
 from sqlalchemy import func
@@ -51,7 +53,7 @@ class User(db.Model, BaseMixin):
     """사용자 계정 정보
 
     :param str email: Email 주소 사용자 ID로 사용
-    :param str password: 엄호화된 패스워드
+    :param str password: 암호화된 패스워드
     """
     __tablename__ = 'users'
 
@@ -61,8 +63,8 @@ class User(db.Model, BaseMixin):
     authenticated = db.Column(db.Boolean, default=1)
     accesscode = db.Column(db.Unicode(255), nullable=False, unique=True)
     level = db.Column(db.Integer)
-    cover = db.Column(db.Unicode(255), default='cover.jpg',nullable=False)
-    avatar = db.Column(db.Unicode(255), default='avatar.png',nullable=False )
+    cover = db.Column(db.Unicode(255), default='cover.jpg', nullable=False)
+    avatar = db.Column(db.Unicode(255), default='avatar.png', nullable=False)
 
     follow = db.relationship('Follow', back_populates='user')
 
@@ -78,6 +80,10 @@ class User(db.Model, BaseMixin):
     def is_authenticated(self):
         """Email 인증 여부 확인"""
         return True if self.authenticated else False
+
+    @hybrid_property
+    def avatar_url(self):
+        return ''.join((current_app.config['S3_BUCKET_NAME'], current_app.config['S3_USER_DIRECTORY'], '%s')) % self.avatar
 
     @hybrid_method
     def follow_check(self, session_id, follow_id):

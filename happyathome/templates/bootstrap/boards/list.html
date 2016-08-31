@@ -50,6 +50,14 @@
             </div>
 
             <div class="pagination-nav">{{ func.render_pagination('boards.list', pagination, id=board_id) }}</div>
+
+            {% if current_user.id and not current_user.is_pro %}
+                <div class="qna-desc">
+                    <img src="{{ url_for('static', filename='img/board/qna-desc.jpg') }}" width="651" height="87"><br>
+                    <br>
+                    <button id="regPro" class="btn-submit">전문가 등록 신청</button>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -72,6 +80,26 @@ $('#boardForm').submit(function() {
     {% else %}
         document.location.href = "{{ url_for('main.login', next=request.path) }}";
     {% endif %}
+});
+
+$('.board-list').click(function() {
+    var boardContent = $(this).find('.board-content')
+
+    if (boardContent.css('height') == '50px') {
+        boardContent.animate({
+            height: boardContent.get(0).scrollHeight
+        }, 400, function() {
+            $(this).height('auto');
+        });
+    } else {
+        boardContent.animate({
+            height: '50px'
+        });
+    }
+});
+
+$('#regPro').click(function() {
+    document.location.href = "{{ url_for('users.edit_professional', id=current_user.id) }}";
 });
 
 {% if not current_user.id %}
