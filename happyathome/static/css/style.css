@@ -3415,7 +3415,7 @@ button.btn-danger {
 
 
 .content-board .board-list {
-    padding: 15px 0 15px 20px;
+    padding: 15px 0 15px 25px;
     width: 100%;
     margin-top: 0;
     border-bottom: 1px solid #ededed;
@@ -3426,6 +3426,19 @@ button.btn-danger {
 }
 .content-board .board-list .board-author {
     width: 100%;
+}
+.content-board .form-title {
+    display: inline-block;
+    width: 100%;
+    padding: 9px;
+    color: #000000;
+    font-weight: 700;
+    box-sizing: border-box;
+    vertical-align: middle;
+    border-top: 1px solid #e8e8e8;
+    border-left: 1px solid #e8e8e8;
+    border-right: 1px solid #e8e8e8;
+    border-bottom: 0;
 }
 .content-board .board-content {
     padding-top: 10px;
