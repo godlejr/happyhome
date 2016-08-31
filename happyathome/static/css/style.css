@@ -2603,7 +2603,8 @@ span.share-icon.active {
     text-align:center;
 }
 .login-form {
-    width: 370px;
+    width: 100%;
+    max-width: 380px;
     margin: 30px auto;
     padding: 30px 40px;
     background: #fff;
@@ -2611,6 +2612,7 @@ span.share-icon.active {
     border-left: 1px solid #eeeeee;
     border-right: 1px solid #eeeeee;
     border-bottom: 1px solid #eeeeee;
+    box-sizing: border-box;
 }
 .login-form input[type=text],
 .login-form input[type=password]{
@@ -2635,7 +2637,7 @@ span.share-icon.active {
     vertical-align: middle;
 }
 .login-check li{
-    margin-right: 70px;
+    margin-right: 30px;
 }
 
 .login-check label {
@@ -2656,7 +2658,7 @@ span.share-icon.active {
 }
 .agreement {
     margin: 0 auto 30px auto;
-    font-size: 14px;
+    font-size: 13px;
 }
 .agreement a {
     color: #3B9D6A;
