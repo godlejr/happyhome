@@ -475,12 +475,23 @@ class Professional(db.Model, BaseMixin):
         return score_integer
 
 
+class BoardCategory(db.Model, BaseMixin):
+    """Q&A 카테고리 정보"""
+    __tablename__ = 'board_categories'
+
+    name = db.Column(db.Unicode(50), nullable=False)
+
+    def __repr__(self):
+        return '[%s]%s' % (self.id, self.name)
+
+
 class Board(db.Model, BaseMixin):
-    """댓글 내역"""
+    """Q&A 게시판"""
     __tablename__ = 'boards'
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     board_id = db.Column(db.Integer)
+    category_id = db.Column(db.Integer, db.ForeignKey('board_categories.id'))
     group_id = db.Column(db.Integer)
     depth = db.Column(db.Integer, default=0)
     sort = db.Column(db.Integer, default=0)
@@ -489,6 +500,7 @@ class Board(db.Model, BaseMixin):
     content = db.Column(db.Text)
 
     user = db.relationship('User', backref=backref('user_boards'))
+    category = db.relationship('BoardCategory', backref=backref('category_boards'))
 
     @hybrid_property
     def is_reply(self):

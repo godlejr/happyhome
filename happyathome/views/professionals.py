@@ -2,7 +2,7 @@ import datetime
 
 from flask import Blueprint, render_template, current_app, request, url_for, jsonify
 from flask import session
-from flask_login import login_required
+from flask_login import login_required, current_user
 from happyathome.forms import Pagination
 from happyathome.models import db, User, Professional, Magazine, Photo, PhotoScrap, Comment, MagazineScrap, Review, \
     Business, Sido
@@ -364,9 +364,10 @@ def review_new(id):
 def review_edit():
     if request.method == 'POST':
         if request.form.get('content') != "":
-            review = db.session.query(Review).filter(Review.id == request.form.get('review_id')).first()
+            review = Review.query.filter_by(id=request.form.get('review_id')).first()
+            if review.user_id != current_user.id:
+                return redirect(url_for('professionals.list'))
             review.content = request.form.get('content')
-
             db.session.add(review)
             db.session.commit()
 
@@ -379,7 +380,11 @@ def review_edit():
 @login_required
 def review_remove():
     if request.method == 'POST':
-        db.session.query(Review).filter(Review.id == request.form.get('review_id')).delete()
+        review = Review.query.filter_by(id=request.form.get('review_id')).first()
+        if review.user_id != current_user.id:
+            return redirect(url_for('professionals.list'))
+
+        db.session.delete(review)
         db.session.commit()
 
         return jsonify({

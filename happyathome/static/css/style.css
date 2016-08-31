@@ -3380,7 +3380,7 @@ button.btn-danger {
     box-sizing: border-box;
     padding: 10px;
 }
-.content-board #boardForm button {
+.content-board .btn-board {
     display: inline-block;
     width: 60px;
     height: 60px;
@@ -3389,9 +3389,13 @@ button.btn-danger {
     border: 1px solid #e8e8e8;
     background-color: #ffffff;
 }
-.content-board .board-lists {
+.content-board .board-categories {
     width: 100%;
     margin-top: 40px;
+    text-align: right;
+}
+.content-board .board-lists {
+    width: 100%;
     border-top: 1px solid #ededed;
 }
 .content-board .content {
@@ -3425,7 +3429,6 @@ button.btn-danger {
     line-height: 30px;
 }
 
-
 .content-board .board-list {
     cursor: pointer;
     padding: 15px 0 15px 25px;
@@ -3444,9 +3447,22 @@ button.btn-danger {
 .content-board .board-list .board-author {
     width: 100%;
 }
+.content-board .form-category {
+    display: block;
+    float: left;
+    width: 150px;
+    padding: 8px;
+    color: #a9a9a9;
+    font-weight: 700;
+    box-sizing: border-box;
+    border-top: 1px solid #e8e8e8;
+    border-left: 1px solid #e8e8e8;
+    border-right: 0;
+    border-bottom: 0;
+}
 .content-board .form-title {
-    display: inline-block;
-    width: 100%;
+    display: block;
+    width: calc(100% - 150px);
     padding: 9px;
     color: #000000;
     font-weight: 700;
@@ -3457,6 +3473,15 @@ button.btn-danger {
     border-right: 1px solid #e8e8e8;
     border-bottom: 0;
 }
+.content-board .board-category {
+    vertical-align: middle;
+}
+.content-board .board-category {
+    color: #a9a9a9;
+    font-size: 12px;
+    font-weight: 700;
+    vertical-align: middle;
+}
 .content-board .board-content {
     padding-top: 10px;
     padding-left: 54px;
@@ -3464,6 +3489,7 @@ button.btn-danger {
     font-size: 12px;
     width: 100%;
     height: 50px;
+    min-height: 50px;
     overflow: hidden;
     line-height: 170%;
     text-align: justify;
@@ -3486,7 +3512,10 @@ button.btn-danger {
 .content-board .board-control {
     font-size: 12px;
 }
-
+.content-board .reply-content {
+    margin-top: 10px;
+    padding-left: 54px;
+}
 .error-body {
     width: 100%;
     margin: 0 auto;

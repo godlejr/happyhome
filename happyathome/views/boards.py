@@ -1,7 +1,7 @@
 from flask import current_app, Blueprint, render_template, request, session, url_for, redirect
 from flask_login import login_required, current_user
 from happyathome.forms import Pagination
-from happyathome.models import db, Board, User
+from happyathome.models import db, Board, User, BoardCategory
 
 boards = Blueprint('boards', __name__)
 
@@ -16,14 +16,20 @@ def utility_processor():
 @boards.route('/<id>', defaults={'page': 1})
 @boards.route('/<id>/page/<int:page>')
 def list(id, page):
+    board_categories = BoardCategory.query.all()
     posts = Board.query.filter_by(board_id=id)
+    category_id = request.args.get('category_id')
+    if category_id:
+        posts = posts.filter_by(category_id=category_id)
     pagination = Pagination(page, 10, posts.count())
     offset = (10 * (page - 1)) if page != 1 else 0
     posts = posts.order_by(Board.group_id.desc(), Board.depth.asc(), Board.sort.asc()).limit(10).offset(offset).all()
     return render_template(current_app.config['TEMPLATE_THEME'] + '/boards/list.html',
                            board_id=id,
                            posts=posts,
-                           pagination=pagination)
+                           board_categories=board_categories,
+                           pagination=pagination,
+                           query_string=request.query_string.decode('utf-8'))
 
 
 @boards.route('/<board_id>/new', methods=['GET', 'POST'])
@@ -34,6 +40,7 @@ def new(board_id):
         post.user_id = current_user.id
         post.board_id = board_id
         post.group_id = post.max1_group_id
+        post.category_id = request.form['board_category']
         post.title = request.form['board_title']
         post.content = request.form['board_content']
         db.session.add(post)
@@ -55,7 +62,8 @@ def reply(board_id, post_id):
         post.board_id = board.board_id
         post.group_id = board.group_id
         post.depth = board.max1_depth
-        post.title = request.form['reply_title']
+        post.category_id = board.category_id
+        post.title = 'Re: %s' % board.title
         post.content = request.form['reply_content']
         db.session.add(post)
         db.session.commit()
@@ -65,8 +73,11 @@ def reply(board_id, post_id):
 @boards.route('/<board_id>/<post_id>/delete')
 @login_required
 def delete(board_id, post_id):
-    post = Board.query.filter_by(user_id=session['user_id'], board_id=board_id, id=post_id)
+    post = Board.query.filter_by(board_id=board_id, id=post_id)
     board = post.first()
+
+    if board.user_id != current_user.id:
+        return redirect(url_for('boards.list', id=board_id))
 
     if board and board.is_reply:
         post.delete()
