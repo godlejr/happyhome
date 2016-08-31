@@ -1950,14 +1950,16 @@ span.share-icon.active {
     border-bottom: 1px solid skyblue;
 }
 
- .edit_title{
+.edit_title{
     padding-bottom: 6px;
     font-size: 15px;
     font-weight: 700;
     letter-spacing: -1px;
- }
-
- .edit_form_field{
+}
+.edit_title span {
+    font-size: 13px;
+}
+.edit_form_field{
     border: 0px;
     padding: 15px;
     font-size: 15px;
@@ -1966,9 +1968,9 @@ span.share-icon.active {
     width: 100%;
     max-width: 554px;
     border-bottom: 1px solid skyblue;
- }
+}
 
- .edit_textarea_form{
+.edit_textarea_form{
     border: 0;
     width: 100%;
     max-width: 554px;
@@ -1978,35 +1980,35 @@ span.share-icon.active {
     font-size: 15px;
     line-height: 21px;
     letter-spacing: -1px;
- }
+}
 
- .edit_memo{
+.edit_memo{
     padding: 6px 6px 0;
     letter-spacing: -0.5px;
     font-size: 13px;
     font-weight: 500;
- }
+}
 
- .edit_radio_label{
+.edit_radio_label{
     display: inline-block;
     float: left;
     width: 44%;
     padding: 0px 0px 0px 20px;
     letter-spacing: -1px;
- }
+}
 
- .edit_gender{
+.edit_gender{
     float:left;
     font-size: 15px;
- }
+}
 
- .edit_button{
+.edit_button{
     float: right;
     width: 18px;
     height: 18px;
     border-radius: 9px;
     border: 1px solid #939598
- }
+}
 
 .edit_radio_field{
    height: 48px;
