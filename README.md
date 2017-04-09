@@ -1,5 +1,5 @@
 **서버 환경**
-* ID: ubuntu
+* ubuntu
 
 **AWS 환경**
 * Server: EC2 (Ubuntu v16.04 LTS)
