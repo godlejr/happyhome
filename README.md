@@ -1,5 +1,5 @@
 **서버 환경**
-* ubuntu
+* ubuntu(nginx, tomcat8)
 
 **AWS 환경**
 * Server: EC2 (Ubuntu v16.04 LTS)
@@ -8,8 +8,3 @@
 * Session: Redis,
 * Language: Python v3.5.2,
 * Framework: Flask v0.11.1
-
-**서비스 경로**
-* MySQL: 
-* Redis: redis://00.00.00.00/0
-* S3
