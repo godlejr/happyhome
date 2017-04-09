@@ -1,4 +1,4 @@
-**happyhome skeleton**
+**해피홈 skeleton**
 
 **서버 환경**
 * ubuntu(nginx, tomcat8)
