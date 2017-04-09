@@ -20,7 +20,7 @@ class Config(object):
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USERNAME = 'dev@inotone.co.kr'
-    MAIL_PASSWORD = '1miglobal'
+    MAIL_PASSWORD = 'xxxxxxxx'
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
 
@@ -34,8 +34,8 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'mysql://root:1miglobal@inotone.cjj0w56trea4.ap-northeast-2.rds.amazonaws.com/happyathome'
     SOCIAL_FACEBOOK = {
-        'consumer_key': '1743693419236952',
-        'consumer_secret': '8462ffb5095aad6600f6acc6ad4146ea'
+        'consumer_key': 'xxxxxxxx',
+        'consumer_secret': 'xxxxxxxxx'
     }
 
 
@@ -43,7 +43,7 @@ class ProductionConfig(Config):
     DEBUG = False
     REDIS_URL = '52.78.113.21'
     TEMPLATE_THEME = 'bootstrap'
-    SECRET_KEY = os.getenv('SECRET_KEY') or 'OvPU1Vj0SRi3wdFz+glCQgRoSwbWneW4'
+    SECRET_KEY = os.getenv('SECRET_KEY') or 'xxxxxxxxxx'
 
 
 class StagingConfig(Config):
