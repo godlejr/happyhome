@@ -1,7 +1,7 @@
-**해피홈 skeleton**
+**해피홈**
 
 **서버 환경**
-* ubuntu(nginx, tomcat8)
+* ubuntu(nginx, gunicorn)
 
 **AWS 환경**
 * Server: EC2 (Ubuntu v16.04 LTS)
